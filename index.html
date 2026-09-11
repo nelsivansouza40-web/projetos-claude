@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f4c81">
+  <title>Inspeções SSMA</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header id="topbar">
+    <div class="brand">
+      <strong>FORMULÁRIO INTEGRADO DE INSPEÇÕES SSMA</strong>
+      <span class="subtitle">Funciona sem internet · sincroniza automaticamente</span>
+    </div>
+    <div class="topbar-actions">
+      <span id="conn-status" class="conn"></span>
+      <button id="btn-settings" class="icon-btn" title="Configurações">⚙</button>
+    </div>
+  </header>
+
+  <div id="sync-bar" hidden></div>
+
+  <main id="view"></main>
+
+  <script src="js/db.js"></script>
+  <script src="js/checklists.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
