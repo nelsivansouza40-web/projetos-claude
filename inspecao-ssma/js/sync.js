@@ -1,0 +1,177 @@
+/*
+ * Motor de sincronização.
+ * A inspeção é sempre salva localmente primeiro (offline-first).
+ * Quando há conexão, os dados (texto) e depois as fotos são enviados,
+ * cada foto de forma independente, para tolerar quedas de conexão no meio
+ * do envio. O status é reavaliado a cada tentativa.
+ */
+
+const Sync = {
+  running: false,
+  listeners: [],
+
+  onChange(fn) {
+    this.listeners.push(fn);
+  },
+
+  notify() {
+    this.listeners.forEach((fn) => {
+      try { fn(); } catch (e) { console.error(e); }
+    });
+  },
+
+  async getEndpoint() {
+    return DB.getSetting('endpointUrl');
+  },
+
+  async setEndpoint(url) {
+    return DB.setSetting('endpointUrl', url);
+  },
+
+  isOnline() {
+    return navigator.onLine;
+  },
+
+  async syncAll() {
+    if (this.running) return;
+    if (!this.isOnline()) return;
+    const endpoint = await this.getEndpoint();
+    if (!endpoint) return;
+
+    this.running = true;
+    this.notify();
+    try {
+      const inspections = await DB.getAllInspections();
+      for (const insp of inspections) {
+        if (insp.syncStatus === 'synced') continue;
+        await this.syncInspection(insp.id, endpoint);
+      }
+    } finally {
+      this.running = false;
+      this.notify();
+    }
+  },
+
+  async syncInspection(inspectionId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let insp = await DB.getInspection(inspectionId);
+    if (!insp) return;
+
+    insp.syncStatus = 'sincronizando';
+    insp.syncError = '';
+    await DB.putInspection(insp);
+    this.notify();
+
+    try {
+      // 1) Envia os dados (texto) da inspeção, sem fotos.
+      if (!insp.metaSynced) {
+        const payload = {
+          action: 'upsertInspection',
+          inspection: buildInspectionMetaPayload(insp)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados da inspeção.');
+        }
+        insp.metaSynced = true;
+        insp.remoteRef = resp.remoteRef || insp.remoteRef || null;
+        await DB.putInspection(insp);
+      }
+
+      // 2) Envia cada foto pendente, individualmente.
+      const photos = await DB.getPhotosByInspection(inspectionId);
+      const pendentes = photos.filter((p) => !p.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: insp.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: insp.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      // 3) Reavalia status final.
+      const todasFotos = await DB.getPhotosByInspection(inspectionId);
+      const tudoSincronizado = insp.metaSynced && todasFotos.every((p) => p.synced);
+      insp.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
+      insp.syncError = '';
+      insp.updatedAt = Date.now();
+      await DB.putInspection(insp);
+    } catch (err) {
+      insp = await DB.getInspection(inspectionId);
+      insp.syncStatus = 'erro';
+      insp.syncError = err.message || String(err);
+      await DB.putInspection(insp);
+      this.notify();
+      throw err;
+    }
+    this.notify();
+  }
+};
+
+function buildInspectionMetaPayload(insp) {
+  return {
+    id: insp.id,
+    createdAt: insp.createdAt,
+    updatedAt: insp.updatedAt,
+    identificacao: insp.data.identificacao,
+    tipoInspecao: insp.data.tipoInspecao,
+    checklist: insp.data.checklist.map((item) => ({
+      id: item.id,
+      texto: item.texto,
+      resposta: item.resposta,
+      observacao: item.observacao,
+      medida: item.medida,
+      personalizado: !!item.personalizado
+    })),
+    fechamento: insp.data.fechamento
+  };
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result;
+      const base64 = result.substring(result.indexOf(',') + 1);
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function postJson(url, payload) {
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  });
+  if (!resp.ok) {
+    throw new Error('Erro HTTP ' + resp.status + ' ao contatar o servidor.');
+  }
+  return resp.json();
+}
+
+window.addEventListener('online', () => {
+  Sync.syncAll().catch((e) => console.warn('Falha na sincronização automática:', e));
+});
