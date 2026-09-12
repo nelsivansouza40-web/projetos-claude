@@ -685,12 +685,16 @@ async function renderDetail(id) {
       ${fotosFechamento.length ? `<div class="thumbs">${fotosFechamento.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     </div>
     <div class="form-actions">
+      <button id="btn-relatorio" class="btn-secondary">Gerar relatório (PDF)</button>
+    </div>
+    <div class="form-actions">
       ${insp.syncStatus !== 'synced' ? '<button id="btn-sync-one" class="btn-primary">Sincronizar esta inspeção</button>' : ''}
       <button id="btn-excluir" class="btn-danger">Excluir inspeção</button>
     </div>
   `;
 
   document.getElementById('btn-back-home').addEventListener('click', renderHome);
+  document.getElementById('btn-relatorio').addEventListener('click', () => renderReport(id));
 
   const btnSyncOne = document.getElementById('btn-sync-one');
   if (btnSyncOne) btnSyncOne.addEventListener('click', async () => {

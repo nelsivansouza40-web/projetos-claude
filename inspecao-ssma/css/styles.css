@@ -243,3 +243,105 @@ main#view {
 @media (max-width: 420px) {
   .brand .subtitle { display: none; }
 }
+
+/* ---------------- Relatório técnico (impressão / PDF) ---------------- */
+
+.rep-doc {
+  --rep-good: #0ca30c;
+  --rep-critical: #d03b3b;
+  --rep-warning: #fab219;
+  --rep-muted: #898781;
+  --rep-ink: #0b0b0b;
+  --rep-ink-secondary: #52514e;
+  --rep-border: #c3c2b7;
+  background: #fff;
+  color: var(--rep-ink);
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 14mm;
+  border: 1px solid var(--cinza-borda);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.rep-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  border-bottom: 3px solid var(--azul);
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+.rep-titulo { display: flex; align-items: center; gap: 12px; }
+.rep-logo { width: 40px; height: 40px; border-radius: 8px; }
+.rep-titulo h2 { margin: 0; font-size: 1.15rem; color: var(--azul-escuro); }
+.rep-titulo p { margin: 2px 0 0; color: var(--rep-ink-secondary); font-size: 0.8rem; }
+
+.rep-controle { border-collapse: collapse; font-size: 0.75rem; }
+.rep-controle th, .rep-controle td { border: 1px solid var(--rep-border); padding: 3px 8px; text-align: left; }
+.rep-controle th { background: var(--cinza-bg); font-weight: 600; white-space: nowrap; }
+
+.rep-secao { margin-bottom: 18px; }
+.rep-secao h3 { font-size: 0.95rem; color: var(--azul-escuro); border-bottom: 1px solid var(--rep-border); padding-bottom: 4px; margin-bottom: 10px; }
+
+.rep-tabela-ident, .rep-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.rep-tabela-ident th, .rep-tabela-ident td, .rep-table th, .rep-table td {
+  border: 1px solid var(--rep-border); padding: 5px 8px; text-align: left; vertical-align: top;
+}
+.rep-tabela-ident th { background: var(--cinza-bg); width: 18%; font-weight: 600; }
+.rep-table th { background: var(--cinza-bg); }
+.rep-td-status { font-weight: 600; white-space: nowrap; }
+.rep-status-ok { color: var(--rep-good); }
+.rep-status-nc { color: var(--rep-critical); }
+.rep-status-na { color: var(--rep-muted); }
+
+.rep-bar {
+  display: flex;
+  width: 100%;
+  height: 22px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--rep-border);
+  background: var(--cinza-bg);
+}
+.rep-bar-seg { border-right: 2px solid #fff; }
+.rep-bar-seg:last-child { border-right: none; }
+.rep-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; font-size: 0.78rem; }
+.rep-legend-item { display: flex; align-items: center; gap: 6px; }
+.rep-legend-swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+.rep-foto-bloco {
+  border: 1px solid var(--rep-border);
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  break-inside: avoid;
+}
+.rep-foto-bloco.rep-nc { border-left: 4px solid var(--rep-critical); }
+.rep-foto-bloco.rep-ok { border-left: 4px solid var(--rep-good); }
+.rep-foto-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.82rem; flex-wrap: wrap; }
+.rep-status-pill { font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--cinza-bg); white-space: nowrap; }
+.rep-fotos-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.rep-foto { width: 140px; height: 140px; object-fit: cover; border-radius: 6px; border: 1px solid var(--rep-border); }
+.rep-hint { color: var(--rep-ink-secondary); font-style: italic; }
+
+.rep-parecer { text-align: justify; }
+
+.rep-assinaturas { margin-top: 24px; }
+.rep-assinatura-grid { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 20px; }
+.rep-assinatura { flex: 1; min-width: 220px; text-align: center; font-size: 0.78rem; }
+.rep-linha-assinatura { border-top: 1px solid var(--rep-ink); margin-bottom: 6px; height: 36px; }
+
+.rep-rodape { margin-top: 24px; border-top: 1px solid var(--rep-border); padding-top: 8px; font-size: 0.7rem; color: var(--rep-ink-secondary); text-align: center; }
+
+@media print {
+  .no-print, #topbar, #sync-bar { display: none !important; }
+  body { background: #fff; padding: 0; }
+  main#view { max-width: none; padding: 0; margin: 0; }
+  .rep-doc { border: none; border-radius: 0; max-width: none; padding: 0; }
+  .rep-quebra { break-before: auto; }
+  .rep-foto-bloco { break-inside: avoid; }
+  @page { size: A4; margin: 14mm; }
+}
