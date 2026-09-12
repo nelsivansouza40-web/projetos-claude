@@ -214,11 +214,13 @@ function criarOuAtualizarDashboard() {
   const colSituacaoLetra = columnToLetter(colSituacao);
 
   // Fórmula única (matricial) que calcula a situação de todas as linhas de uma vez.
+  // Usa ";" como separador de argumentos (planilha em português usa vírgula
+  // como separador decimal, então o Sheets exige ";" nas fórmulas).
   sheetInsp.getRange(colSituacaoLetra + '2').setFormula(
-    '=ARRAYFORMULA(IF($A$2:$A$' + LINHA_FINAL + '="","",' +
-    'IF(' + colStatusLetra + '$2:' + colStatusLetra + '$' + LINHA_FINAL + '="Resolvida","Resolvida",' +
-    'IF(' + COL_PRAZO + '$2:' + COL_PRAZO + '$' + LINHA_FINAL + '="","Sem Prazo",' +
-    'IF(' + COL_PRAZO + '$2:' + COL_PRAZO + '$' + LINHA_FINAL + '<TODAY(),"Em Atraso","Dentro do Prazo")))))'
+    '=ARRAYFORMULA(IF($A$2:$A$' + LINHA_FINAL + '="";"";' +
+    'IF(' + colStatusLetra + '$2:' + colStatusLetra + '$' + LINHA_FINAL + '="Resolvida";"Resolvida";' +
+    'IF(' + COL_PRAZO + '$2:' + COL_PRAZO + '$' + LINHA_FINAL + '="";"Sem Prazo";' +
+    'IF(' + COL_PRAZO + '$2:' + COL_PRAZO + '$' + LINHA_FINAL + '<TODAY();"Em Atraso";"Dentro do Prazo")))))'
   );
 
   // Recria a aba do painel do zero.
@@ -235,10 +237,10 @@ function criarOuAtualizarDashboard() {
   const linhaKpi = 4;
   const REF_INSP = 'Inspecoes!';
   const kpis = [
-    ['Total de Ações', '=COUNTIF(' + REF_INSP + COL_PRAZO + '2:' + COL_PRAZO + LINHA_FINAL + ',"<>")'],
-    ['Resolvidas', '=COUNTIF(' + REF_INSP + colStatusLetra + '2:' + colStatusLetra + LINHA_FINAL + ',"Resolvida")'],
-    ['Dentro do Prazo', '=COUNTIF(' + REF_INSP + colSituacaoLetra + '2:' + colSituacaoLetra + LINHA_FINAL + ',"Dentro do Prazo")'],
-    ['Em Atraso', '=COUNTIF(' + REF_INSP + colSituacaoLetra + '2:' + colSituacaoLetra + LINHA_FINAL + ',"Em Atraso")']
+    ['Total de Ações', '=COUNTIF(' + REF_INSP + COL_PRAZO + '2:' + COL_PRAZO + LINHA_FINAL + ';"<>")'],
+    ['Resolvidas', '=COUNTIF(' + REF_INSP + colStatusLetra + '2:' + colStatusLetra + LINHA_FINAL + ';"Resolvida")'],
+    ['Dentro do Prazo', '=COUNTIF(' + REF_INSP + colSituacaoLetra + '2:' + colSituacaoLetra + LINHA_FINAL + ';"Dentro do Prazo")'],
+    ['Em Atraso', '=COUNTIF(' + REF_INSP + colSituacaoLetra + '2:' + colSituacaoLetra + LINHA_FINAL + ';"Em Atraso")']
   ];
   kpis.forEach((kpi, i) => {
     const col = 1 + i * 2; // A, C, E, G
