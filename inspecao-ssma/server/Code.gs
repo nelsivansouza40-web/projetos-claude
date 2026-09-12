@@ -17,6 +17,15 @@
  *  - { action: "ping" }                          -> teste de conexão
  *  - { action: "upsertInspection", inspection }  -> dados textuais da inspeção
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
+ *
+ * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
+ * depois de sincronizar ao menos uma inspeção, rode a função
+ * `criarOuAtualizarDashboard` uma vez pelo próprio editor do Apps Script
+ * (menu de funções no topo > selecione o nome > Executar). Isso cria as
+ * colunas "Status da Ação" e "Situação do Prazo" na aba Inspecoes e uma
+ * aba "Dashboard" com os indicadores e um gráfico. Marque manualmente
+ * "Resolvida" na coluna "Status da Ação" quando a medida for concluída;
+ * o resto (prazo vencido ou não) é calculado sozinho todo dia.
  */
 
 const DRIVE_FOLDER_NAME = 'Inspeções SSMA - Fotos';
@@ -161,4 +170,113 @@ function uploadPhoto(inspectionId, photo) {
   file.setName((photo.questionRef || 'foto') + '_' + photo.id + '_' + file.getName());
 
   return { ok: true, fileUrl: file.getUrl() };
+}
+
+/**
+ * Cria (ou recria) a aba "Dashboard" com os indicadores de ações:
+ * Resolvidas, Pendentes, Dentro do Prazo e Em Atraso, mais um gráfico.
+ * Rode esta função manualmente pelo editor do Apps Script sempre que
+ * quiser reconstruir o painel do zero. Ela não altera dados já lançados
+ * pelo app, só acrescenta duas colunas de controle na aba Inspecoes
+ * (se ainda não existirem) e (re)monta a aba Dashboard.
+ */
+function criarOuAtualizarDashboard() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheetInsp = ss.getSheetByName(SHEET_INSPECOES);
+  if (!sheetInsp) {
+    throw new Error('A aba "Inspecoes" ainda não existe. Sincronize ao menos uma inspeção pelo app antes de criar o dashboard.');
+  }
+
+  const LINHA_FINAL = 2000; // quantidade de linhas cobertas pelas fórmulas do painel
+  const COL_PRAZO = 'P';    // coluna "Prazo" no layout atual da aba Inspecoes
+
+  // Garante as colunas de controle de ação, sem mexer nas colunas já usadas pelo app.
+  const cabecalho = sheetInsp.getRange(1, 1, 1, sheetInsp.getLastColumn()).getValues()[0];
+  let colStatus = cabecalho.indexOf('Status da Ação') + 1;
+  let colSituacao = cabecalho.indexOf('Situação do Prazo') + 1;
+
+  if (!colStatus) {
+    colStatus = sheetInsp.getLastColumn() + 1;
+    sheetInsp.getRange(1, colStatus).setValue('Status da Ação');
+    sheetInsp.getRange(2, colStatus, LINHA_FINAL - 1, 1).setDataValidation(
+      SpreadsheetApp.newDataValidation()
+        .requireValueInList(['Pendente', 'Resolvida'], true)
+        .setAllowInvalid(false)
+        .build()
+    );
+  }
+  if (!colSituacao) {
+    colSituacao = sheetInsp.getLastColumn() + 1;
+    sheetInsp.getRange(1, colSituacao).setValue('Situação do Prazo');
+  }
+
+  const colStatusLetra = columnToLetter(colStatus);
+  const colSituacaoLetra = columnToLetter(colSituacao);
+
+  // Fórmula única (matricial) que calcula a situação de todas as linhas de uma vez.
+  sheetInsp.getRange(colSituacaoLetra + '2').setFormula(
+    '=ARRAYFORMULA(IF($A$2:$A$' + LINHA_FINAL + '="","",' +
+    'IF(' + colStatusLetra + '$2:' + colStatusLetra + '$' + LINHA_FINAL + '="Resolvida","Resolvida",' +
+    'IF(' + COL_PRAZO + '$2:' + COL_PRAZO + '$' + LINHA_FINAL + '="","Sem Prazo",' +
+    'IF(' + COL_PRAZO + '$2:' + COL_PRAZO + '$' + LINHA_FINAL + '<TODAY(),"Em Atraso","Dentro do Prazo")))))'
+  );
+
+  // Recria a aba do painel do zero.
+  const existente = ss.getSheetByName('Dashboard');
+  if (existente) ss.deleteSheet(existente);
+  const dash = ss.insertSheet('Dashboard', 0);
+
+  dash.getRange('A1').setValue('Painel de Ações — Inspeções SSMA').setFontSize(16).setFontWeight('bold');
+  dash.getRange('A2')
+    .setValue('Marque "Resolvida" na coluna "Status da Ação" da aba Inspecoes quando a medida for concluída. Os prazos vencidos são calculados automaticamente todo dia.')
+    .setFontStyle('italic').setFontColor('#666666').setWrap(true);
+  dash.getRange('A2:H2').merge();
+
+  const linhaKpi = 4;
+  const REF_INSP = 'Inspecoes!';
+  const kpis = [
+    ['Total de Ações', '=COUNTIF(' + REF_INSP + COL_PRAZO + '2:' + COL_PRAZO + LINHA_FINAL + ',"<>")'],
+    ['Resolvidas', '=COUNTIF(' + REF_INSP + colStatusLetra + '2:' + colStatusLetra + LINHA_FINAL + ',"Resolvida")'],
+    ['Dentro do Prazo', '=COUNTIF(' + REF_INSP + colSituacaoLetra + '2:' + colSituacaoLetra + LINHA_FINAL + ',"Dentro do Prazo")'],
+    ['Em Atraso', '=COUNTIF(' + REF_INSP + colSituacaoLetra + '2:' + colSituacaoLetra + LINHA_FINAL + ',"Em Atraso")']
+  ];
+  kpis.forEach((kpi, i) => {
+    const col = 1 + i * 2; // A, C, E, G
+    dash.getRange(linhaKpi, col).setValue(kpi[0]).setFontWeight('bold');
+    dash.getRange(linhaKpi + 1, col).setFormula(kpi[1]).setFontSize(28).setFontWeight('bold');
+  });
+  // Pendentes = Dentro do Prazo + Em Atraso (colunas E e G da linha de valores).
+  dash.getRange(linhaKpi, 9).setValue('Pendentes').setFontWeight('bold');
+  dash.getRange(linhaKpi + 1, 9).setFormula('=E' + (linhaKpi + 1) + '+G' + (linhaKpi + 1)).setFontSize(28).setFontWeight('bold');
+  dash.setColumnWidths(1, 9, 130);
+
+  // Fonte de dados do gráfico (situações mutuamente exclusivas, somam o total).
+  const linhaGrafico = linhaKpi + 4;
+  dash.getRange(linhaGrafico, 1, 4, 2).setValues([
+    ['Situação', 'Quantidade'],
+    ['Resolvida', '=C' + (linhaKpi + 1)],
+    ['Dentro do Prazo', '=E' + (linhaKpi + 1)],
+    ['Em Atraso', '=G' + (linhaKpi + 1)]
+  ]);
+
+  const chart = dash.newChart()
+    .asPieChart()
+    .addRange(dash.getRange(linhaGrafico, 1, 4, 2))
+    .setPosition(linhaKpi, 11, 0, 0)
+    .setOption('title', 'Distribuição das Ações')
+    .setOption('colors', ['#1e7e34', '#0f4c81', '#b02a2a'])
+    .setOption('width', 420)
+    .setOption('height', 300)
+    .build();
+  dash.insertChart(chart);
+}
+
+function columnToLetter(coluna) {
+  let letra = '';
+  while (coluna > 0) {
+    const resto = (coluna - 1) % 26;
+    letra = String.fromCharCode(65 + resto) + letra;
+    coluna = Math.floor((coluna - resto) / 26);
+  }
+  return letra;
 }
