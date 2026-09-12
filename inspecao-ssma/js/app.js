@@ -103,6 +103,7 @@ async function renderHome() {
             </div>
             <div class="insp-card-side">
               <span class="badge ${s.cls}">${s.text}</span>
+              <button type="button" class="btn-excluir-card" data-id="${insp.id}" title="Excluir">🗑</button>
             </div>
           </li>
         `;
@@ -121,6 +122,26 @@ async function renderHome() {
   view.querySelectorAll('.insp-card').forEach((el) => {
     el.addEventListener('click', () => openInspection(el.dataset.id));
   });
+  view.querySelectorAll('.btn-excluir-card').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      excluirInspecao(btn.dataset.id);
+    });
+  });
+}
+
+async function excluirInspecao(id) {
+  const insp = await DB.getInspection(id);
+  if (!insp) return;
+  const rotulo = insp.completo
+    ? 'esta inspeção'
+    : 'este rascunho';
+  if (!confirm(`Excluir ${rotulo} e todas as suas fotos do dispositivo? Esta ação não pode ser desfeita.`)) return;
+  const photos = await DB.getPhotosByInspection(id);
+  for (const p of photos) await DB.deletePhoto(p.id);
+  await DB.deleteInspection(id);
+  renderHome();
+  updateSyncBar();
 }
 
 async function openInspection(id) {

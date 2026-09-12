@@ -140,6 +140,13 @@ main#view {
 .badge-ok { background: #d1e7dd; color: #0a3622; }
 .badge-erro { background: #f8d7da; color: #58151c; }
 
+.insp-card-side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.btn-excluir-card {
+  background: none; border: none; cursor: pointer; font-size: 0.95rem;
+  color: #8a929b; padding: 2px 4px; line-height: 1;
+}
+.btn-excluir-card:hover { color: var(--vermelho); }
+
 .empty-state { color: #6b7280; text-align: center; padding: 32px 8px; }
 
 .form-section { display: flex; flex-direction: column; gap: 14px; background: #fff; padding: 16px; border-radius: 10px; border: 1px solid var(--cinza-borda); }
