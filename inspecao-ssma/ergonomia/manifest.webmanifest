@@ -1,0 +1,16 @@
+{
+  "name": "Gestão Ergonômica — PGR",
+  "short_name": "Ergonomia PGR",
+  "description": "AEP, AET, correlação com o inventário PGR e plano de ação, conforme NR-1 e NR-17, com uso offline e sincronização automática.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#4a3aa7",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
