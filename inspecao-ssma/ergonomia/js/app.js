@@ -272,7 +272,7 @@ async function renderEstrutura(estabId, orgId) {
 
   renderNivelEstrutura({
     container: document.getElementById('col-processos'),
-    titulo: 'Processos', store: 'processos', parentField: 'estabelecimentoId', parentId: estabId,
+    titulo: 'Processos', singular: 'processo', store: 'processos', parentField: 'estabelecimentoId', parentId: estabId,
     itens: processos,
     onSelecionar: (processo) => renderNivelSetor(processo, orgId, estabId)
   });
@@ -284,14 +284,14 @@ function cardNivel(item, nomeCampo) {
 }
 
 function renderNivelEstrutura(cfg) {
-  const { container, titulo, store, parentField, parentId, itens, onSelecionar, campo = 'nome' } = cfg;
+  const { container, titulo, singular, store, parentField, parentId, itens, onSelecionar, campo = 'nome' } = cfg;
   container.innerHTML = `
     <div class="screen-header"><h2>${titulo}</h2><button class="btn-secondary btn-add-nivel">+ Adicionar</button></div>
     <ul class="insp-list">${itens.length ? itens.map((i) => cardNivel(i, campo)).join('') : '<li class="empty-state">Nenhum registrado.</li>'}</ul>
     <div id="sub-nivel"></div>`;
 
   container.querySelector('.btn-add-nivel').addEventListener('click', async () => {
-    const nome = prompt(`Nome ${titulo.slice(0, -1).toLowerCase()}:`);
+    const nome = prompt(`Nome ${singular || titulo.slice(0, -1).toLowerCase()}:`);
     if (!nome || !nome.trim()) return;
     const registro = { id: uuid(), [parentField]: parentId, [campo]: nome.trim(), synced: false, createdAt: Date.now() };
     await DB[store].put(registro);
@@ -322,7 +322,7 @@ async function renderNivelSetor(processo, orgId, estabId) {
   sub.innerHTML = '<div id="col-setores"></div>';
   renderNivelEstrutura({
     container: document.getElementById('col-setores'),
-    titulo: 'Setores', store: 'setores', parentField: 'processoId', parentId: processo.id,
+    titulo: 'Setores', singular: 'setor', store: 'setores', parentField: 'processoId', parentId: processo.id,
     itens: setores,
     onSelecionar: (setor) => renderNivelFuncao(setor, orgId, estabId)
   });
@@ -334,7 +334,7 @@ async function renderNivelFuncao(setor, orgId, estabId) {
   sub.innerHTML = '<div id="col-funcoes"></div>';
   renderNivelEstrutura({
     container: document.getElementById('col-funcoes'),
-    titulo: 'Funções', store: 'funcoes', parentField: 'setorId', parentId: setor.id,
+    titulo: 'Funções', singular: 'função', store: 'funcoes', parentField: 'setorId', parentId: setor.id,
     itens: funcoes,
     onSelecionar: (funcao) => renderNivelAtividade(funcao, orgId, estabId)
   });
@@ -346,7 +346,7 @@ async function renderNivelAtividade(funcao, orgId, estabId) {
   sub.innerHTML = '<div id="col-atividades"></div>';
   renderNivelEstrutura({
     container: document.getElementById('col-atividades'),
-    titulo: 'Atividades', store: 'atividades', parentField: 'funcaoId', parentId: funcao.id, campo: 'descricao',
+    titulo: 'Atividades', singular: 'atividade', store: 'atividades', parentField: 'funcaoId', parentId: funcao.id, campo: 'descricao',
     itens: atividades,
     onSelecionar: (atividade) => renderSituacoesLista(atividade.id, orgId, estabId)
   });
