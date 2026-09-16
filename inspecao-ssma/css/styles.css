@@ -111,6 +111,7 @@ main#view {
 .btn-secondary { background: #e7edf3; color: var(--azul-escuro); margin: 10px 0; }
 .btn-link { background: none; color: var(--azul); padding: 6px 4px; }
 .btn-danger { background: #fff; color: var(--vermelho); border: 1px solid var(--vermelho); }
+.btn-pequeno { padding: 6px 12px; font-size: 0.8rem; margin: 0; }
 
 .insp-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
 .insp-card {
@@ -333,6 +334,13 @@ main#view {
 .rep-assinatura-grid { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 20px; }
 .rep-assinatura { flex: 1; min-width: 220px; text-align: center; font-size: 0.78rem; }
 .rep-linha-assinatura { border-top: 1px solid var(--rep-ink); margin-bottom: 6px; height: 36px; }
+.rep-assinatura-img { display: block; max-width: 100%; height: 60px; object-fit: contain; margin: 0 auto 6px auto; }
+.rep-assinatura-controles { margin-top: 8px; }
+.rep-assinatura-pad { margin-top: 8px; text-align: left; }
+.rep-canvas-assinatura {
+  display: block; width: 100%; height: 110px; border: 1px dashed var(--cinza-borda);
+  border-radius: 6px; background: #fff; touch-action: none; cursor: crosshair;
+}
 
 .rep-rodape { margin-top: 24px; border-top: 1px solid var(--rep-border); padding-top: 8px; font-size: 0.7rem; color: var(--rep-ink-secondary); text-align: center; }
 

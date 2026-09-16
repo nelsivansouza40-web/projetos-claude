@@ -173,10 +173,133 @@ async function montarFotosComplementares(fotosIds) {
   `;
 }
 
+function formatarDataAgora() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, '0');
+  return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()}`;
+}
+
+function blocoAssinatura(insp, campo, rotulo, nome) {
+  const dataUrl = (insp.data.assinaturas || {})[campo] || '';
+  return `
+    <div class="rep-assinatura">
+      ${dataUrl
+        ? `<img src="${dataUrl}" class="rep-assinatura-img" alt="Assinatura — ${escapeHtml(rotulo)}">`
+        : '<div class="rep-linha-assinatura"></div>'}
+      <p>${escapeHtml(nome || rotulo)}<br>${escapeHtml(rotulo)} — Data: ${dataUrl ? formatarDataAgora() : '____/____/______'}</p>
+      <div class="no-print rep-assinatura-controles">
+        <button type="button" class="btn-secondary btn-pequeno btn-assinar" data-campo="${campo}">${dataUrl ? 'Assinar novamente' : 'Assinar digitalmente'}</button>
+      </div>
+      <div class="no-print rep-assinatura-pad" data-campo="${campo}" hidden>
+        <canvas class="rep-canvas-assinatura"></canvas>
+        <div class="form-actions">
+          <button type="button" class="btn-link btn-limpar-pad">Limpar</button>
+          <button type="button" class="btn-link btn-cancelar-pad">Cancelar</button>
+          <button type="button" class="btn-primary btn-pequeno btn-confirmar-pad">Confirmar assinatura</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function iniciarCanvasAssinaturaRelatorio(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  const larguraCss = rect.width || 300;
+  const alturaCss = 110;
+  canvas.width = larguraCss * 2;
+  canvas.height = alturaCss * 2;
+  canvas.style.height = alturaCss + 'px';
+  delete canvas.dataset.assinado;
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(2, 2);
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = '#0f4c81';
+
+  let desenhando = false;
+  function posicao(e) {
+    const r = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - r.left) * (canvas.width / r.width) / 2,
+      y: (clientY - r.top) * (canvas.height / r.height) / 2
+    };
+  }
+  function iniciarTraco(e) {
+    e.preventDefault();
+    desenhando = true;
+    const p = posicao(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  }
+  function moverTraco(e) {
+    if (!desenhando) return;
+    e.preventDefault();
+    const p = posicao(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    canvas.dataset.assinado = '1';
+  }
+  function pararTraco() { desenhando = false; }
+
+  canvas.addEventListener('mousedown', iniciarTraco);
+  canvas.addEventListener('mousemove', moverTraco);
+  window.addEventListener('mouseup', pararTraco);
+  canvas.addEventListener('touchstart', iniciarTraco, { passive: false });
+  canvas.addEventListener('touchmove', moverTraco, { passive: false });
+  canvas.addEventListener('touchend', pararTraco);
+}
+
+function ligarAssinaturas(insp, id) {
+  view.querySelectorAll('.btn-assinar').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const campo = btn.dataset.campo;
+      const pad = view.querySelector(`.rep-assinatura-pad[data-campo="${campo}"]`);
+      pad.hidden = false;
+      btn.closest('.rep-assinatura-controles').hidden = true;
+      iniciarCanvasAssinaturaRelatorio(pad.querySelector('canvas'));
+    });
+  });
+
+  view.querySelectorAll('.btn-cancelar-pad').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const pad = btn.closest('.rep-assinatura-pad');
+      pad.hidden = true;
+      pad.previousElementSibling.hidden = false;
+    });
+  });
+
+  view.querySelectorAll('.btn-limpar-pad').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const pad = btn.closest('.rep-assinatura-pad');
+      iniciarCanvasAssinaturaRelatorio(pad.querySelector('canvas'));
+    });
+  });
+
+  view.querySelectorAll('.btn-confirmar-pad').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const pad = btn.closest('.rep-assinatura-pad');
+      const canvas = pad.querySelector('canvas');
+      const campo = pad.dataset.campo;
+      if (!canvas.dataset.assinado) {
+        alert('Desenhe a assinatura no quadro antes de confirmar.');
+        return;
+      }
+      const dataUrl = canvas.toDataURL('image/png');
+      insp.data.assinaturas = insp.data.assinaturas || {};
+      insp.data.assinaturas[campo] = dataUrl;
+      await salvarRascunho(insp);
+      renderReport(id);
+    });
+  });
+}
+
 async function renderReport(id) {
   state.screen = 'report';
   const insp = await DB.getInspection(id);
   if (!insp) return renderHome();
+  insp.data.assinaturas = insp.data.assinaturas || {};
 
   const id_ = insp.data.identificacao;
   const f = insp.data.fechamento;
@@ -261,14 +384,8 @@ async function renderReport(id) {
       <section class="rep-secao rep-assinaturas">
         <h3>7. Encerramento</h3>
         <div class="rep-assinatura-grid">
-          <div class="rep-assinatura">
-            <div class="rep-linha-assinatura"></div>
-            <p>${escapeHtml(id_.inspetor || 'Inspetor responsável')}<br>Inspetor responsável — Data: ____/____/______</p>
-          </div>
-          <div class="rep-assinatura">
-            <div class="rep-linha-assinatura"></div>
-            <p>${escapeHtml(id_.responsavelArea || 'Responsável da área')}<br>Responsável da área — Data: ____/____/______</p>
-          </div>
+          ${blocoAssinatura(insp, 'inspetor', 'Inspetor responsável', id_.inspetor)}
+          ${blocoAssinatura(insp, 'responsavelArea', 'Responsável da área', id_.responsavelArea)}
         </div>
       </section>
 
@@ -280,4 +397,5 @@ async function renderReport(id) {
 
   document.getElementById('btn-back-detail').addEventListener('click', () => renderDetail(id));
   document.getElementById('btn-imprimir').addEventListener('click', () => window.print());
+  ligarAssinaturas(insp, id);
 }

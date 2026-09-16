@@ -192,6 +192,10 @@ function novaInspecaoVazia() {
         observacoesFinais: '',
         necessitaReinspecao: '',
         fotosComplementaresIds: []
+      },
+      assinaturas: {
+        inspetor: '',
+        responsavelArea: ''
       }
     }
   };
