@@ -1,5 +1,5 @@
 /* Service Worker do app de Gestão Ergonômica — cache do app shell para uso offline. */
-const CACHE_VERSION = 'ergopgr-v1';
+const CACHE_VERSION = 'ergopgr-v2';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './css/styles.css',
   './js/db.js', './js/ui.js', './js/risco.js', './js/blocos-aep.js', './js/metodos-ergo.js',
@@ -9,7 +9,9 @@ const APP_SHELL = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_VERSION).then((cache) => cache.addAll(APP_SHELL)));
+  event.waitUntil(caches.open(CACHE_VERSION).then((cache) =>
+    Promise.all(APP_SHELL.map((url) => fetch(url, { cache: 'reload' }).then((resp) => cache.put(url, resp))))
+  ));
   self.skipWaiting();
 });
 

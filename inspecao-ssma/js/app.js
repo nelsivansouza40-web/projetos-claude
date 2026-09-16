@@ -785,7 +785,10 @@ document.getElementById('btn-settings').addEventListener('click', renderSettings
 async function init() {
   if ('serviceWorker' in navigator) {
     try {
-      await navigator.serviceWorker.register('sw.js');
+      const reg = await navigator.serviceWorker.register('sw.js');
+      // Força checar por uma versão mais nova a cada abertura do app, em vez de
+      // depender só da checagem automática do navegador (que pode demorar a acontecer).
+      reg.update().catch(() => {});
     } catch (e) {
       console.warn('Falha ao registrar service worker:', e);
     }

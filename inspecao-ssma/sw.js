@@ -3,7 +3,7 @@
  * internet, servindo os arquivos a partir do cache local do dispositivo.
  * Dados de inspeções e fotos ficam no IndexedDB (não neste cache).
  */
-const CACHE_VERSION = 'ssma-v2';
+const CACHE_VERSION = 'ssma-v3';
 const APP_SHELL = [
   './',
   './index.html',
@@ -20,7 +20,11 @@ const APP_SHELL = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_VERSION).then((cache) => cache.addAll(APP_SHELL))
+    caches.open(CACHE_VERSION).then((cache) =>
+      Promise.all(APP_SHELL.map((url) =>
+        fetch(url, { cache: 'reload' }).then((resp) => cache.put(url, resp))
+      ))
+    )
   );
   self.skipWaiting();
 });

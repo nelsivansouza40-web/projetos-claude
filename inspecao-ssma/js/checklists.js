@@ -4,8 +4,9 @@
  * Normas Regulamentadoras vigentes aplicáveis a cada modalidade (NR-6,
  * NR-10, NR-11, NR-12, NR-18, NR-23, NR-24, NR-25, NR-26, NR-33, NR-35,
  * entre outras citadas nos itens). Termos tecnicamente obsoletos (como
- * "ato inseguro" e "PCMAT" isolado, hoje absorvido pelo Programa de
- * Gerenciamento de Riscos - PGR) foram removidos ou atualizados.
+ * "ato inseguro" e o antigo plano específico de segurança do canteiro
+ * de obras, hoje absorvido pelo Programa de Gerenciamento de Riscos -
+ * PGR) foram removidos ou atualizados.
  *
  * Os itens continuam sendo um ponto de partida técnico: devem ser
  * revisados e ajustados pelo profissional responsável conforme o
