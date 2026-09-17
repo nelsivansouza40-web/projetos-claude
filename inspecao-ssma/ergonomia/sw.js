@@ -1,5 +1,5 @@
 /* Service Worker do app de Gestão Ergonômica — cache do app shell para uso offline. */
-const CACHE_VERSION = 'ergopgr-v5';
+const CACHE_VERSION = 'ergopgr-v6';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './css/styles.css',
   './js/db.js', './js/ui.js', './js/risco.js', './js/blocos-aep.js', './js/metodos-ergo.js',
