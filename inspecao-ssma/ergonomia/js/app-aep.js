@@ -123,12 +123,20 @@ async function renderAepFatorForm(aepId, bloco, orgId, fatorId, sugestaoTexto) {
     </form>`;
   ligarMenuTopo();
   const fotoIds = (fator.fotoIds || []).slice();
-  renderThumbsGaleria(document.getElementById('thumbs-fator'), fotoIds);
+  function atualizarGaleriaFator() {
+    renderThumbsGaleria(document.getElementById('thumbs-fator'), fotoIds, async (photoId) => {
+      await DB.fotos.delete(photoId);
+      const i = fotoIds.indexOf(photoId);
+      if (i >= 0) fotoIds.splice(i, 1);
+      atualizarGaleriaFator();
+    });
+  }
+  atualizarGaleriaFator();
   document.getElementById('btn-voltar').addEventListener('click', () => renderAepForm(aepId, orgId));
   ['input-foto-fator-camera', 'input-foto-fator-galeria'].forEach((elId) => {
     document.getElementById(elId).addEventListener('change', async (e) => {
       await adicionarFotos('fator-aep', fatorId || 'temp', fotoIds, e.target.files);
-      renderThumbsGaleria(document.getElementById('thumbs-fator'), fotoIds);
+      atualizarGaleriaFator();
     });
   });
 

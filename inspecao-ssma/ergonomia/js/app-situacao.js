@@ -79,12 +79,20 @@ async function renderSituacaoForm(atividadeId, orgId, situacao, estabId) {
     </form>`;
   ligarMenuTopo();
   const fotoIds = (situacao && situacao.fotoIds) ? situacao.fotoIds.slice() : [];
-  renderThumbsGaleria(document.getElementById('thumbs-situacao'), fotoIds);
+  function atualizarGaleriaSituacao() {
+    renderThumbsGaleria(document.getElementById('thumbs-situacao'), fotoIds, async (photoId) => {
+      await DB.fotos.delete(photoId);
+      const i = fotoIds.indexOf(photoId);
+      if (i >= 0) fotoIds.splice(i, 1);
+      atualizarGaleriaSituacao();
+    });
+  }
+  atualizarGaleriaSituacao();
   document.getElementById('btn-voltar').addEventListener('click', () => renderSituacoesLista(atividadeId, orgId, estabId));
   ['input-foto-situacao-camera', 'input-foto-situacao-galeria'].forEach((elId) => {
     document.getElementById(elId).addEventListener('change', async (e) => {
       await adicionarFotos('situacao', situacao ? situacao.id : 'temp', fotoIds, e.target.files);
-      renderThumbsGaleria(document.getElementById('thumbs-situacao'), fotoIds);
+      atualizarGaleriaSituacao();
     });
   });
   document.getElementById('form-situacao').addEventListener('submit', async (e) => {

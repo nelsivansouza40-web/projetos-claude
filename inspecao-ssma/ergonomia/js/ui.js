@@ -62,7 +62,7 @@ function badgeClassificacao(classificacao) {
   return mapa[classificacao] || 'badge-rascunho';
 }
 
-async function renderThumbsGaleria(el, fotoIds) {
+async function renderThumbsGaleria(el, fotoIds, onRemover) {
   if (!el) return;
   if (!fotoIds || !fotoIds.length) { el.innerHTML = ''; return; }
   el.innerHTML = fotoIds.map((id) => `<div class="thumb" data-photo="${id}"></div>`).join('');
@@ -71,7 +71,10 @@ async function renderThumbsGaleria(el, fotoIds) {
     const box = el.querySelector(`[data-photo="${id}"]`);
     if (!foto || !box) continue;
     const url = URL.createObjectURL(foto.blob);
-    box.innerHTML = `<img src="${url}" alt="Evidência"><span class="thumb-sync ${foto.synced ? 'ok' : ''}">${foto.synced ? '✓' : '⏳'}</span><button type="button" class="btn-remover-foto" data-photo-id="${id}">✕</button>`;
+    box.innerHTML = `<img src="${url}" alt="Evidência"><span class="thumb-sync ${foto.synced ? 'ok' : ''}">${foto.synced ? '✓' : '⏳'}</span>${onRemover ? `<button type="button" class="btn-remover-foto" data-photo-id="${id}">✕</button>` : ''}`;
+    if (onRemover) {
+      box.querySelector('.btn-remover-foto').addEventListener('click', () => onRemover(id));
+    }
   }
 }
 

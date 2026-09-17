@@ -77,12 +77,20 @@ async function renderPlanoForm(orgId, plano) {
     </form>`;
   ligarMenuTopo();
   const fotoIds = (plano && plano.fotoIds) ? plano.fotoIds.slice() : [];
-  renderThumbsGaleria(document.getElementById('thumbs-plano'), fotoIds);
+  function atualizarGaleriaPlano() {
+    renderThumbsGaleria(document.getElementById('thumbs-plano'), fotoIds, async (photoId) => {
+      await DB.fotos.delete(photoId);
+      const i = fotoIds.indexOf(photoId);
+      if (i >= 0) fotoIds.splice(i, 1);
+      atualizarGaleriaPlano();
+    });
+  }
+  atualizarGaleriaPlano();
   document.getElementById('btn-voltar').addEventListener('click', () => renderPlanosLista(orgId));
   ['input-foto-plano-camera', 'input-foto-plano-galeria'].forEach((elId) => {
     document.getElementById(elId).addEventListener('change', async (e) => {
       await adicionarFotos('plano', plano ? plano.id : 'temp', fotoIds, e.target.files);
-      renderThumbsGaleria(document.getElementById('thumbs-plano'), fotoIds);
+      atualizarGaleriaPlano();
     });
   });
   document.getElementById('form-plano').addEventListener('submit', async (e) => {

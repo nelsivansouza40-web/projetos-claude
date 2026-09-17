@@ -385,16 +385,6 @@ function renderChecklistItems(container, insp) {
       });
     });
 
-    card.querySelectorAll('.btn-remover-foto').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const photoId = btn.dataset.photoId;
-        await DB.deletePhoto(photoId);
-        item.photoIds = item.photoIds.filter((id) => id !== photoId);
-        await salvarRascunho(insp);
-        renderChecklistItems(container, insp);
-      });
-    });
-
     const btnRemoveItem = card.querySelector('.btn-remover-item');
     if (btnRemoveItem) btnRemoveItem.addEventListener('click', async () => {
       if (!confirm('Remover este item personalizado?')) return;
@@ -404,7 +394,17 @@ function renderChecklistItems(container, insp) {
       renderChecklistItems(container, insp);
     });
 
-    renderThumbnails(card.querySelector('.thumbs'), item.photoIds);
+    renderThumbnails(card.querySelector('.thumbs'), item.photoIds).then(() => {
+      card.querySelectorAll('.btn-remover-foto').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const photoId = btn.dataset.photoId;
+          await DB.deletePhoto(photoId);
+          item.photoIds = item.photoIds.filter((id) => id !== photoId);
+          await salvarRascunho(insp);
+          renderChecklistItems(container, insp);
+        });
+      });
+    });
   });
 }
 
