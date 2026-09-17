@@ -112,7 +112,7 @@ async function renderAepFatorForm(aepId, bloco, orgId, fatorId, sugestaoTexto) {
     <div class="screen-header"><button id="btn-voltar" class="btn-link">← Voltar</button><h1>${escapeHtml(blocoInfo.titulo)}</h1></div>
     <form id="form-fator" class="form-section">
       ${renderFormFields(schema, fator)}
-      <label class="file-label">Evidência fotográfica<input type="file" accept="image/*" capture="environment" multiple id="input-foto-fator"></label>
+      <label class="file-label">Evidência fotográfica<input type="file" accept="image/*" multiple id="input-foto-fator"></label>
       <div class="thumbs" id="thumbs-fator"></div>
       <h3>Necessidade de AET (NR-17, item 17.3.2)</h3>
       ${CONDICOES_AET.map((c) => `<label class="check-linha"><input type="checkbox" name="${c.name}" ${fator[c.name] ? 'checked' : ''}> ${escapeHtml(c.label)}</label>`).join('')}

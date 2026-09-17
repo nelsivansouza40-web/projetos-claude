@@ -70,7 +70,7 @@ async function renderSituacaoForm(atividadeId, orgId, situacao, estabId) {
       <h3>Trabalho prescrito</h3>${renderFormFields(SITUACAO_SCHEMA_PRESCRITO, situacao)}
       <h3>Trabalho real</h3>${renderFormFields(SITUACAO_SCHEMA_REAL, situacao)}
       <h3>Participação e evidências</h3>${renderFormFields(SITUACAO_SCHEMA_PARTICIPACAO, situacao)}
-      <label class="file-label">Adicionar fotos / evidências<input type="file" accept="image/*" capture="environment" multiple id="input-foto-situacao"></label>
+      <label class="file-label">Adicionar fotos / evidências<input type="file" accept="image/*" multiple id="input-foto-situacao"></label>
       <div class="thumbs" id="thumbs-situacao"></div>
       <div class="form-actions"><button type="submit" class="btn-primary">Salvar situação</button></div>
     </form>`;

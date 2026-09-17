@@ -427,7 +427,7 @@ function renderChecklistItem(item, idx) {
       <div class="radio-group">${radiosHtml}</div>
       <div class="checklist-details">
         <label class="file-label">Foto / evidência
-          <input type="file" accept="image/*" capture="environment" multiple class="input-foto">
+          <input type="file" accept="image/*" multiple class="input-foto">
         </label>
         <div class="thumbs"></div>
         <label>Observação / desvio identificado
@@ -517,7 +517,7 @@ function renderStepFechamento(content, insp) {
 
       <label>Evidência fotográfica complementar</label>
       <label class="file-label">Adicionar fotos
-        <input type="file" accept="image/*" capture="environment" multiple id="input-foto-fechamento">
+        <input type="file" accept="image/*" multiple id="input-foto-fechamento">
       </label>
       <div class="thumbs" id="thumbs-fechamento"></div>
 

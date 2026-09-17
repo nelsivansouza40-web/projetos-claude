@@ -68,7 +68,7 @@ async function renderPlanoForm(orgId, plano) {
     <div class="screen-header"><button id="btn-voltar" class="btn-link">← Voltar</button><h1>${plano ? 'Editar' : 'Nova'} ação — ${escapeHtml(codigo)}</h1></div>
     <form id="form-plano" class="form-section">
       ${renderFormFields(schema, plano)}
-      <label class="file-label">Evidências<input type="file" accept="image/*" capture="environment" multiple id="input-foto-plano"></label>
+      <label class="file-label">Evidências<input type="file" accept="image/*" multiple id="input-foto-plano"></label>
       <div class="thumbs" id="thumbs-plano"></div>
       <div class="form-actions"><button type="submit" class="btn-primary">Salvar</button></div>
     </form>`;
