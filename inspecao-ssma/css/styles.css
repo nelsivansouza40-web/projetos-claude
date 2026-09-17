@@ -210,6 +210,7 @@ main#view {
   cursor: pointer; width: fit-content;
 }
 .file-label input { display: none; }
+.foto-botoes { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
 .thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--cinza-borda); }

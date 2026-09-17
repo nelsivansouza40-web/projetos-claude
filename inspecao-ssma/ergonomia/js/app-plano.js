@@ -68,7 +68,10 @@ async function renderPlanoForm(orgId, plano) {
     <div class="screen-header"><button id="btn-voltar" class="btn-link">← Voltar</button><h1>${plano ? 'Editar' : 'Nova'} ação — ${escapeHtml(codigo)}</h1></div>
     <form id="form-plano" class="form-section">
       ${renderFormFields(schema, plano)}
-      <label class="file-label">Evidências<input type="file" accept="image/*" multiple id="input-foto-plano"></label>
+      <div class="foto-botoes">
+        <label class="file-label">📷 Tirar foto<input type="file" accept="image/*" capture="environment" id="input-foto-plano-camera"></label>
+        <label class="file-label">🖼️ Da galeria<input type="file" accept="image/*" multiple id="input-foto-plano-galeria"></label>
+      </div>
       <div class="thumbs" id="thumbs-plano"></div>
       <div class="form-actions"><button type="submit" class="btn-primary">Salvar</button></div>
     </form>`;
@@ -76,9 +79,11 @@ async function renderPlanoForm(orgId, plano) {
   const fotoIds = (plano && plano.fotoIds) ? plano.fotoIds.slice() : [];
   renderThumbsGaleria(document.getElementById('thumbs-plano'), fotoIds);
   document.getElementById('btn-voltar').addEventListener('click', () => renderPlanosLista(orgId));
-  document.getElementById('input-foto-plano').addEventListener('change', async (e) => {
-    await adicionarFotos('plano', plano ? plano.id : 'temp', fotoIds, e.target.files);
-    renderThumbsGaleria(document.getElementById('thumbs-plano'), fotoIds);
+  ['input-foto-plano-camera', 'input-foto-plano-galeria'].forEach((elId) => {
+    document.getElementById(elId).addEventListener('change', async (e) => {
+      await adicionarFotos('plano', plano ? plano.id : 'temp', fotoIds, e.target.files);
+      renderThumbsGaleria(document.getElementById('thumbs-plano'), fotoIds);
+    });
   });
   document.getElementById('form-plano').addEventListener('submit', async (e) => {
     e.preventDefault();

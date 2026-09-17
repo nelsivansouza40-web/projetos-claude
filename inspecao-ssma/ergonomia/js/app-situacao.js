@@ -70,7 +70,10 @@ async function renderSituacaoForm(atividadeId, orgId, situacao, estabId) {
       <h3>Trabalho prescrito</h3>${renderFormFields(SITUACAO_SCHEMA_PRESCRITO, situacao)}
       <h3>Trabalho real</h3>${renderFormFields(SITUACAO_SCHEMA_REAL, situacao)}
       <h3>Participação e evidências</h3>${renderFormFields(SITUACAO_SCHEMA_PARTICIPACAO, situacao)}
-      <label class="file-label">Adicionar fotos / evidências<input type="file" accept="image/*" multiple id="input-foto-situacao"></label>
+      <div class="foto-botoes">
+        <label class="file-label">📷 Tirar foto<input type="file" accept="image/*" capture="environment" id="input-foto-situacao-camera"></label>
+        <label class="file-label">🖼️ Da galeria<input type="file" accept="image/*" multiple id="input-foto-situacao-galeria"></label>
+      </div>
       <div class="thumbs" id="thumbs-situacao"></div>
       <div class="form-actions"><button type="submit" class="btn-primary">Salvar situação</button></div>
     </form>`;
@@ -78,9 +81,11 @@ async function renderSituacaoForm(atividadeId, orgId, situacao, estabId) {
   const fotoIds = (situacao && situacao.fotoIds) ? situacao.fotoIds.slice() : [];
   renderThumbsGaleria(document.getElementById('thumbs-situacao'), fotoIds);
   document.getElementById('btn-voltar').addEventListener('click', () => renderSituacoesLista(atividadeId, orgId, estabId));
-  document.getElementById('input-foto-situacao').addEventListener('change', async (e) => {
-    await adicionarFotos('situacao', situacao ? situacao.id : 'temp', fotoIds, e.target.files);
-    renderThumbsGaleria(document.getElementById('thumbs-situacao'), fotoIds);
+  ['input-foto-situacao-camera', 'input-foto-situacao-galeria'].forEach((elId) => {
+    document.getElementById(elId).addEventListener('change', async (e) => {
+      await adicionarFotos('situacao', situacao ? situacao.id : 'temp', fotoIds, e.target.files);
+      renderThumbsGaleria(document.getElementById('thumbs-situacao'), fotoIds);
+    });
   });
   document.getElementById('form-situacao').addEventListener('submit', async (e) => {
     e.preventDefault();

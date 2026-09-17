@@ -112,7 +112,10 @@ async function renderAepFatorForm(aepId, bloco, orgId, fatorId, sugestaoTexto) {
     <div class="screen-header"><button id="btn-voltar" class="btn-link">← Voltar</button><h1>${escapeHtml(blocoInfo.titulo)}</h1></div>
     <form id="form-fator" class="form-section">
       ${renderFormFields(schema, fator)}
-      <label class="file-label">Evidência fotográfica<input type="file" accept="image/*" multiple id="input-foto-fator"></label>
+      <div class="foto-botoes">
+        <label class="file-label">📷 Tirar foto<input type="file" accept="image/*" capture="environment" id="input-foto-fator-camera"></label>
+        <label class="file-label">🖼️ Da galeria<input type="file" accept="image/*" multiple id="input-foto-fator-galeria"></label>
+      </div>
       <div class="thumbs" id="thumbs-fator"></div>
       <h3>Necessidade de AET (NR-17, item 17.3.2)</h3>
       ${CONDICOES_AET.map((c) => `<label class="check-linha"><input type="checkbox" name="${c.name}" ${fator[c.name] ? 'checked' : ''}> ${escapeHtml(c.label)}</label>`).join('')}
@@ -122,9 +125,11 @@ async function renderAepFatorForm(aepId, bloco, orgId, fatorId, sugestaoTexto) {
   const fotoIds = (fator.fotoIds || []).slice();
   renderThumbsGaleria(document.getElementById('thumbs-fator'), fotoIds);
   document.getElementById('btn-voltar').addEventListener('click', () => renderAepForm(aepId, orgId));
-  document.getElementById('input-foto-fator').addEventListener('change', async (e) => {
-    await adicionarFotos('fator-aep', fatorId || 'temp', fotoIds, e.target.files);
-    renderThumbsGaleria(document.getElementById('thumbs-fator'), fotoIds);
+  ['input-foto-fator-camera', 'input-foto-fator-galeria'].forEach((elId) => {
+    document.getElementById(elId).addEventListener('change', async (e) => {
+      await adicionarFotos('fator-aep', fatorId || 'temp', fotoIds, e.target.files);
+      renderThumbsGaleria(document.getElementById('thumbs-fator'), fotoIds);
+    });
   });
 
   document.getElementById('form-fator').addEventListener('submit', async (e) => {

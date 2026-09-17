@@ -377,11 +377,12 @@ function renderChecklistItems(container, insp) {
       await salvarRascunho(insp);
     });
 
-    const fileInput = card.querySelector('.input-foto');
-    if (fileInput) fileInput.addEventListener('change', async (e) => {
-      await adicionarFotos(insp, item.photoIds, e.target.files, `item:${item.id}`);
-      await salvarRascunho(insp);
-      renderChecklistItems(container, insp);
+    card.querySelectorAll('.input-foto-camera, .input-foto-galeria').forEach((fileInput) => {
+      fileInput.addEventListener('change', async (e) => {
+        await adicionarFotos(insp, item.photoIds, e.target.files, `item:${item.id}`);
+        await salvarRascunho(insp);
+        renderChecklistItems(container, insp);
+      });
     });
 
     card.querySelectorAll('.btn-remover-foto').forEach((btn) => {
@@ -426,9 +427,14 @@ function renderChecklistItem(item, idx) {
       </div>
       <div class="radio-group">${radiosHtml}</div>
       <div class="checklist-details">
-        <label class="file-label">Foto / evidência
-          <input type="file" accept="image/*" multiple class="input-foto">
-        </label>
+        <div class="foto-botoes">
+          <label class="file-label">📷 Tirar foto
+            <input type="file" accept="image/*" capture="environment" class="input-foto-camera">
+          </label>
+          <label class="file-label">🖼️ Da galeria
+            <input type="file" accept="image/*" multiple class="input-foto-galeria">
+          </label>
+        </div>
         <div class="thumbs"></div>
         <label>Observação / desvio identificado
           <textarea class="txt-observacao" rows="2">${escapeHtml(item.observacao)}</textarea>
@@ -516,9 +522,14 @@ function renderStepFechamento(content, insp) {
       </label>
 
       <label>Evidência fotográfica complementar</label>
-      <label class="file-label">Adicionar fotos
-        <input type="file" accept="image/*" multiple id="input-foto-fechamento">
-      </label>
+      <div class="foto-botoes">
+        <label class="file-label">📷 Tirar foto
+          <input type="file" accept="image/*" capture="environment" id="input-foto-fechamento-camera">
+        </label>
+        <label class="file-label">🖼️ Da galeria
+          <input type="file" accept="image/*" multiple id="input-foto-fechamento-galeria">
+        </label>
+      </div>
       <div class="thumbs" id="thumbs-fechamento"></div>
 
       <label>Observações finais
@@ -540,10 +551,12 @@ function renderStepFechamento(content, insp) {
 
   renderThumbnailsFechamento(insp);
 
-  document.getElementById('input-foto-fechamento').addEventListener('change', async (e) => {
-    await adicionarFotos(insp, f.fotosComplementaresIds, e.target.files, 'fechamento');
-    await salvarRascunho(insp);
-    renderThumbnailsFechamento(insp);
+  ['input-foto-fechamento-camera', 'input-foto-fechamento-galeria'].forEach((elId) => {
+    document.getElementById(elId).addEventListener('change', async (e) => {
+      await adicionarFotos(insp, f.fotosComplementaresIds, e.target.files, 'fechamento');
+      await salvarRascunho(insp);
+      renderThumbnailsFechamento(insp);
+    });
   });
 
   document.getElementById('btn-fechamento-back').addEventListener('click', async () => {

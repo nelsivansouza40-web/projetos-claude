@@ -86,6 +86,7 @@ main#view { max-width: 720px; margin: 0 auto; padding: 16px; }
 
 .file-label { display: inline-flex; align-items: center; justify-content: center; background: #e9e6f7; color: var(--roxo-escuro); border-radius: 8px; padding: 8px 12px; font-size: 0.8rem; cursor: pointer; width: fit-content; }
 .file-label input { display: none; }
+.foto-botoes { display: flex; gap: 8px; flex-wrap: wrap; }
 .thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
 .thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--cinza-borda); }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
