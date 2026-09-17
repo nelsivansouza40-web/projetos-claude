@@ -1,5 +1,10 @@
 /* Lógica de interface do aplicativo. Sem dependências externas. */
 
+// Sobe este número a cada publicação, para conseguir identificar pelo próprio
+// app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
+// ainda está com uma cópia antiga presa no cache do navegador.
+const APP_VERSION = 'v10';
+
 const state = {
   screen: 'home',
   inspectionId: null,
@@ -770,9 +775,33 @@ async function renderSettings() {
         precisar reabrir o aplicativo.
       </p>
     </div>
+    <div class="form-section">
+      <h3>Versão instalada neste aparelho</h3>
+      <p class="hint">Versão do aplicativo: <strong>${APP_VERSION}</strong></p>
+      <p class="hint" id="info-cache">Verificando versão salva no cache…</p>
+      <button id="btn-forcar-atualizacao" class="btn-secondary">Forçar verificação de atualização</button>
+    </div>
   `;
 
   document.getElementById('btn-back-home').addEventListener('click', renderHome);
+
+  (async () => {
+    const infoEl = document.getElementById('info-cache');
+    if (!infoEl) return;
+    if (!('caches' in window)) { infoEl.textContent = 'Este navegador não informa o cache instalado.'; return; }
+    const chaves = await caches.keys();
+    infoEl.textContent = chaves.length ? 'Cache instalado: ' + chaves.join(', ') : 'Nenhum cache instalado ainda.';
+  })();
+
+  document.getElementById('btn-forcar-atualizacao').addEventListener('click', async () => {
+    const resEl = document.getElementById('info-cache');
+    if (!('serviceWorker' in navigator)) return;
+    const reg = await navigator.serviceWorker.getRegistration();
+    if (!reg) { resEl.textContent = 'Nenhum Service Worker registrado.'; return; }
+    resEl.textContent = 'Verificando atualização…';
+    await reg.update();
+    setTimeout(() => location.reload(), 800);
+  });
 
   document.getElementById('btn-salvar-endpoint').addEventListener('click', async () => {
     const url = document.getElementById('input-endpoint').value.trim();

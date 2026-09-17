@@ -1,5 +1,10 @@
 /* App de Gestão Ergonômica integrada ao PGR — interface e navegação. */
 
+// Sobe este número a cada publicação, para conseguir identificar pelo próprio
+// app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
+// ainda está com uma cópia antiga presa no cache do navegador.
+const APP_VERSION = 'v10';
+
 const state = { screen: 'home' };
 const view = document.getElementById('view');
 const connStatusEl = document.getElementById('conn-status');
