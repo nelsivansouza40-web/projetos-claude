@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v11';
+const APP_VERSION = 'v12';
 
 const state = {
   screen: 'home',
@@ -51,15 +51,21 @@ function updateConnBadge() {
 
 async function updateSyncBar() {
   const inspections = await DB.getAllInspections();
-  const pendentes = inspections.filter((i) => i.completo && i.syncStatus !== 'synced');
-  if (pendentes.length === 0) {
+  const registrosDDS = await DB.getAllDDS();
+  const pendentesInsp = inspections.filter((i) => i.completo && i.syncStatus !== 'synced');
+  const pendentesDDS = registrosDDS.filter((d) => d.completo && d.syncStatus !== 'synced');
+  const totalPendentes = pendentesInsp.length + pendentesDDS.length;
+  if (totalPendentes === 0) {
     syncBarEl.hidden = true;
     return;
   }
   syncBarEl.hidden = false;
   const online = navigator.onLine;
+  const partes = [];
+  if (pendentesInsp.length) partes.push(`${pendentesInsp.length} inspeção(ões)`);
+  if (pendentesDDS.length) partes.push(`${pendentesDDS.length} DDS`);
   syncBarEl.innerHTML = `
-    <span>${pendentes.length} inspeção(ões) aguardando sincronização${online ? '' : ' (offline)'}</span>
+    <span>${partes.join(' e ')} aguardando sincronização${online ? '' : ' (offline)'}</span>
     <button id="btn-sync-now" ${online ? '' : 'disabled'}>Sincronizar agora</button>
   `;
   const btn = document.getElementById('btn-sync-now');
@@ -75,8 +81,17 @@ async function updateSyncBar() {
       await refreshChrome();
       if (state.screen === 'home') renderHome();
       if (state.screen === 'detail') renderDetail(state.inspectionId);
+      if (state.screen === 'dds-home') renderDDSHome();
+      if (state.screen === 'dds-detail') renderDDSDetail(state.ddsId);
     });
   }
+}
+
+function setActiveTab(tab) {
+  const tabInsp = document.getElementById('tab-inspecoes');
+  const tabDDS = document.getElementById('tab-dds');
+  if (tabInsp) tabInsp.classList.toggle('active', tab === 'inspecoes');
+  if (tabDDS) tabDDS.classList.toggle('active', tab === 'dds');
 }
 
 async function refreshChrome() {
@@ -92,6 +107,7 @@ Sync.onChange(refreshChrome);
 
 async function renderHome() {
   state.screen = 'home';
+  setActiveTab('inspecoes');
   const inspections = await DB.getAllInspections();
 
   const itemsHtml = inspections.length
@@ -825,6 +841,8 @@ async function renderSettings() {
 }
 
 document.getElementById('btn-settings').addEventListener('click', renderSettings);
+document.getElementById('tab-inspecoes').addEventListener('click', renderHome);
+document.getElementById('tab-dds').addEventListener('click', renderDDSHome);
 
 /* ---------------- INICIALIZAÇÃO ---------------- */
 

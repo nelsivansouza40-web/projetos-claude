@@ -13,10 +13,12 @@
  * 5. Copie a URL gerada e cole nas Configurações do aplicativo, no campo
  *    "Endereço de sincronização".
  *
- * O app envia três tipos de requisição (todas via POST, JSON no corpo):
+ * O app envia estes tipos de requisição (todas via POST, JSON no corpo):
  *  - { action: "ping" }                          -> teste de conexão
  *  - { action: "upsertInspection", inspection }  -> dados textuais da inspeção
+ *  - { action: "upsertDDS", dds }                -> dados textuais do DDS
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
+ *    (inspectionId também é usado para fotos de DDS, com o próprio ID do DDS)
  *
  * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
  * depois de sincronizar ao menos uma inspeção, rode a função
@@ -31,6 +33,8 @@
 const DRIVE_FOLDER_NAME = 'Inspeções SSMA - Fotos';
 const SHEET_INSPECOES = 'Inspecoes';
 const SHEET_ITENS = 'Itens_Checklist';
+const SHEET_DDS = 'DDS';
+const SHEET_DDS_PARTICIPANTES = 'DDS_Participantes';
 
 function doPost(e) {
   let body;
@@ -46,6 +50,8 @@ function doPost(e) {
         return jsonResponse({ ok: true });
       case 'upsertInspection':
         return jsonResponse(upsertInspection(body.inspection));
+      case 'upsertDDS':
+        return jsonResponse(upsertDDS(body.dds));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -147,6 +153,64 @@ function upsertInspection(insp) {
   });
 
   return { ok: true, remoteRef: inspFolder.getId() };
+}
+
+function upsertDDS(dds) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folderName = dds.id + ' - DDS - ' + (dds.identificacao.empresa || 'sem-empresa');
+  const ddsFolder = getOrCreateDriveFolder(folderName, rootFolder);
+
+  const sheetDDS = getOrCreateSheet(SHEET_DDS, [
+    'ID', 'Data', 'Hora', 'Empresa', 'Unidade', 'Área', 'Ministrante',
+    'Tema', 'Conteúdo Abordado', 'Duração (min)', 'Observações',
+    'Qtd. Participantes', 'Recebido em', 'Pasta Drive'
+  ]);
+
+  const id = dds.id;
+  const linha = [
+    id,
+    dds.identificacao.data,
+    dds.identificacao.hora,
+    dds.identificacao.empresa,
+    dds.identificacao.unidade,
+    dds.identificacao.area,
+    dds.identificacao.ministrante,
+    dds.tema,
+    dds.conteudo,
+    dds.duracaoMinutos,
+    dds.observacoes,
+    (dds.participantes || []).length,
+    new Date(),
+    ddsFolder.getUrl()
+  ];
+
+  const idCol = 1;
+  const data = sheetDDS.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetDDS.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetDDS.appendRow(linha);
+  }
+
+  const sheetParticipantes = getOrCreateSheet(SHEET_DDS_PARTICIPANTES, [
+    'DDS ID', 'Participante ID', 'Nome', 'Função', 'Assinado', 'Recebido em'
+  ]);
+  const existentes = sheetParticipantes.getDataRange().getValues();
+  (dds.participantes || []).forEach((p) => {
+    let jaExiste = false;
+    for (let i = 1; i < existentes.length; i++) {
+      if (existentes[i][0] === id && existentes[i][1] === p.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetParticipantes.appendRow([id, p.id, p.nome, p.funcao, p.assinado, new Date()]);
+    }
+  });
+
+  return { ok: true, remoteRef: ddsFolder.getId() };
 }
 
 function uploadPhoto(inspectionId, photo) {

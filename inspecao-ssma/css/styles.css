@@ -58,6 +58,26 @@ body {
   cursor: pointer;
 }
 
+#module-nav {
+  display: flex;
+  background: var(--azul-escuro);
+}
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  padding: 10px 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+.tab-btn.active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
 #sync-bar {
   background: #fff3cd;
   color: #664d03;
@@ -233,6 +253,25 @@ main#view {
 
 .hint { font-size: 0.8rem; color: #6b7280; }
 
+.lista-participantes { display: flex; flex-direction: column; gap: 10px; }
+.participante-card {
+  background: #f9fafb; border: 1px solid var(--cinza-borda); border-radius: 10px; padding: 10px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.participante-linha { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.participante-linha input {
+  flex: 1; min-width: 120px; font-size: 0.9rem; padding: 8px; border-radius: 8px; border: 1px solid var(--cinza-borda);
+}
+.rep-assinatura-compacta { text-align: left; font-size: 0.78rem; }
+.rep-assinatura-compacta .rep-linha-assinatura { max-width: 260px; }
+.rep-assinatura-compacta .rep-assinatura-img { margin: 0 0 6px 0; }
+
+.lista-presenca { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.lista-presenca li {
+  background: #fff; border: 1px solid var(--cinza-borda); border-radius: 8px; padding: 8px 12px;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.88rem;
+}
+
 .detail-block { background: #fff; border: 1px solid var(--cinza-borda); border-radius: 10px; padding: 14px; margin-bottom: 12px; font-size: 0.88rem; }
 .detail-item { background: #fff; border: 1px solid var(--cinza-borda); border-radius: 10px; padding: 12px; margin-bottom: 8px; font-size: 0.88rem; }
 .detail-resposta { font-weight: 700; margin: 4px 0; }
@@ -343,10 +382,14 @@ main#view {
   border-radius: 6px; background: #fff; touch-action: none; cursor: crosshair;
 }
 
+.rep-table-presenca .rep-td-assinatura { width: 160px; }
+.rep-assinatura-mini { display: block; max-width: 140px; height: 34px; object-fit: contain; }
+.rep-linha-assinatura-mini { border-top: 1px solid var(--rep-ink); height: 24px; max-width: 140px; }
+
 .rep-rodape { margin-top: 24px; border-top: 1px solid var(--rep-border); padding-top: 8px; font-size: 0.7rem; color: var(--rep-ink-secondary); text-align: center; }
 
 @media print {
-  .no-print, #topbar, #sync-bar { display: none !important; }
+  .no-print, #topbar, #module-nav, #sync-bar { display: none !important; }
   body { background: #fff; padding: 0; }
   main#view { max-width: none; padding: 0; margin: 0; }
   .rep-doc { border: none; border-radius: 0; max-width: none; padding: 0; }
