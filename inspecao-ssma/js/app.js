@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v14';
+const APP_VERSION = 'v15';
 
 const state = {
   screen: 'home',
@@ -825,12 +825,23 @@ async function renderSettings() {
 
   document.getElementById('btn-forcar-atualizacao').addEventListener('click', async () => {
     const resEl = document.getElementById('info-cache');
-    if (!('serviceWorker' in navigator)) return;
-    const reg = await navigator.serviceWorker.getRegistration();
-    if (!reg) { resEl.textContent = 'Nenhum Service Worker registrado.'; return; }
-    resEl.textContent = 'Verificando atualização…';
-    await reg.update();
-    setTimeout(() => location.reload(), 800);
+    const btn = document.getElementById('btn-forcar-atualizacao');
+    btn.disabled = true;
+    resEl.textContent = 'Limpando cache e buscando a versão mais recente…';
+    try {
+      if ('caches' in window) {
+        const chaves = await caches.keys();
+        await Promise.all(chaves.map((k) => caches.delete(k)));
+      }
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.unregister()));
+      }
+    } catch (e) {
+      console.warn('Falha ao limpar cache/Service Worker:', e);
+    }
+    resEl.textContent = 'Recarregando…';
+    location.reload();
   });
 
   document.getElementById('btn-salvar-endpoint').addEventListener('click', async () => {
