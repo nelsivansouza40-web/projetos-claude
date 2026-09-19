@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 let dbPromise = null;
 
 function openDB() {
@@ -21,6 +21,9 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('dds')) {
         db.createObjectStore('dds', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('diagnosticos')) {
+        db.createObjectStore('diagnosticos', { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => resolve(e.target.result);
@@ -94,6 +97,24 @@ const DB = {
   },
   async deleteDDS(id) {
     const store = await storeTx('dds', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putDiagnostico(diag) {
+    const store = await storeTx('diagnosticos', 'readwrite');
+    await reqToPromise(store.put(diag));
+    return diag;
+  },
+  async getDiagnostico(id) {
+    const store = await storeTx('diagnosticos', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllDiagnosticos() {
+    const store = await storeTx('diagnosticos', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deleteDiagnostico(id) {
+    const store = await storeTx('diagnosticos', 'readwrite');
     return reqToPromise(store.delete(id));
   },
   async getSetting(key) {

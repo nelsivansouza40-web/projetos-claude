@@ -17,8 +17,10 @@
  *  - { action: "ping" }                          -> teste de conexão
  *  - { action: "upsertInspection", inspection }  -> dados textuais da inspeção
  *  - { action: "upsertDDS", dds }                -> dados textuais do DDS
+ *  - { action: "upsertDiagnostico", diagnostico } -> dados textuais do diagnóstico
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
- *    (inspectionId também é usado para fotos de DDS, com o próprio ID do DDS)
+ *    (inspectionId também é usado para fotos de DDS e de Diagnóstico, com
+ *    o próprio ID do registro correspondente)
  *
  * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
  * depois de sincronizar ao menos uma inspeção, rode a função
@@ -35,6 +37,8 @@ const SHEET_INSPECOES = 'Inspecoes';
 const SHEET_ITENS = 'Itens_Checklist';
 const SHEET_DDS = 'DDS';
 const SHEET_DDS_PARTICIPANTES = 'DDS_Participantes';
+const SHEET_DIAGNOSTICO = 'Diagnosticos';
+const SHEET_DIAGNOSTICO_ITENS = 'Diagnostico_Itens';
 
 function doPost(e) {
   let body;
@@ -52,6 +56,8 @@ function doPost(e) {
         return jsonResponse(upsertInspection(body.inspection));
       case 'upsertDDS':
         return jsonResponse(upsertDDS(body.dds));
+      case 'upsertDiagnostico':
+        return jsonResponse(upsertDiagnostico(body.diagnostico));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -211,6 +217,66 @@ function upsertDDS(dds) {
   });
 
   return { ok: true, remoteRef: ddsFolder.getId() };
+}
+
+function upsertDiagnostico(diag) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folderName = diag.id + ' - Diagnostico - ' + (diag.identificacao.empresa || 'sem-empresa');
+  const diagFolder = getOrCreateDriveFolder(folderName, rootFolder);
+
+  const sheetDiag = getOrCreateSheet(SHEET_DIAGNOSTICO, [
+    'ID', 'Data', 'Hora', 'Empresa', 'Unidade', 'Escopo',
+    'Responsável Diagnóstico', 'Responsável Área', 'Score Geral (%)',
+    'Plano de Ação', 'Observações', 'Recebido em', 'Pasta Drive'
+  ]);
+
+  const id = diag.id;
+  const linha = [
+    id,
+    diag.identificacao.data,
+    diag.identificacao.hora,
+    diag.identificacao.empresa,
+    diag.identificacao.unidade,
+    diag.identificacao.escopo,
+    diag.identificacao.responsavelDiagnostico,
+    diag.identificacao.responsavelArea,
+    diag.scoreGeral,
+    diag.planoAcao,
+    diag.observacoesFinais,
+    new Date(),
+    diagFolder.getUrl()
+  ];
+
+  const idCol = 1;
+  const data = sheetDiag.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetDiag.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetDiag.appendRow(linha);
+  }
+
+  const sheetItens = getOrCreateSheet(SHEET_DIAGNOSTICO_ITENS, [
+    'Diagnóstico ID', 'Categoria', 'Score Categoria (%)', 'Item ID', 'Questão',
+    'Resposta', 'Observação', 'Recebido em'
+  ]);
+  const itensExistentes = sheetItens.getDataRange().getValues();
+  (diag.categorias || []).forEach((cat) => {
+    (cat.itens || []).forEach((item) => {
+      let jaExiste = false;
+      for (let i = 1; i < itensExistentes.length; i++) {
+        if (itensExistentes[i][0] === id && itensExistentes[i][3] === item.id) { jaExiste = true; break; }
+      }
+      if (!jaExiste) {
+        sheetItens.appendRow([id, cat.nome, cat.score, item.id, item.texto, item.resposta, item.observacao, new Date()]);
+      }
+    });
+  });
+
+  return { ok: true, remoteRef: diagFolder.getId() };
 }
 
 function uploadPhoto(inspectionId, photo) {

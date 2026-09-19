@@ -218,6 +218,7 @@ main#view {
 .radio-ok:has(input:checked) { background: #d1e7dd; border-color: var(--verde); }
 .radio-nc:has(input:checked) { background: #f8d7da; border-color: var(--vermelho); }
 .radio-na:has(input:checked) { background: #e7edf3; border-color: #6b7280; }
+.radio-parcial:has(input:checked) { background: #fff3cd; border-color: var(--amarelo); }
 
 .checklist-details { display: flex; flex-direction: column; gap: 8px; }
 .checklist-details label { font-size: 0.78rem; font-weight: 600; color: #5a6572; display: flex; flex-direction: column; gap: 4px; }
@@ -252,6 +253,17 @@ main#view {
 .resumo-stats .alerta { color: var(--amarelo); }
 
 .hint { font-size: 0.8rem; color: #6b7280; }
+
+.diag-categoria { margin-bottom: 18px; }
+.diag-categoria-header {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.diag-categoria-header h3 { margin: 0; font-size: 1rem; color: var(--azul-escuro); }
+.diag-score-mini {
+  font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  background: #e7edf3; color: var(--azul-escuro); white-space: nowrap;
+}
+.resumo-categorias { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem; margin-top: 8px; }
 
 .lista-participantes { display: flex; flex-direction: column; gap: 10px; }
 .participante-card {

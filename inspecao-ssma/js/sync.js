@@ -51,6 +51,11 @@ const Sync = {
         if (dds.syncStatus === 'synced') continue;
         await this.syncDDS(dds.id, endpoint);
       }
+      const registrosDiag = await DB.getAllDiagnosticos();
+      for (const diag of registrosDiag) {
+        if (diag.syncStatus === 'synced') continue;
+        await this.syncDiagnostico(diag.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -205,8 +210,105 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncDiagnostico(diagId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let diag = await DB.getDiagnostico(diagId);
+    if (!diag) return;
+
+    diag.syncStatus = 'sincronizando';
+    diag.syncError = '';
+    await DB.putDiagnostico(diag);
+    this.notify();
+
+    try {
+      // 1) Envia os dados (texto) do diagnóstico, sem fotos.
+      if (!diag.metaSynced) {
+        const payload = {
+          action: 'upsertDiagnostico',
+          diagnostico: buildDiagnosticoMetaPayload(diag)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados do diagnóstico.');
+        }
+        diag.metaSynced = true;
+        diag.remoteRef = resp.remoteRef || diag.remoteRef || null;
+        await DB.putDiagnostico(diag);
+      }
+
+      // 2) Envia cada foto pendente, individualmente.
+      const photos = await DB.getPhotosByInspection(diagId);
+      const pendentes = photos.filter((p) => !p.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: diag.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: diag.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      // 3) Reavalia status final.
+      const todasFotos = await DB.getPhotosByInspection(diagId);
+      const tudoSincronizado = diag.metaSynced && todasFotos.every((p) => p.synced);
+      diag.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
+      diag.syncError = '';
+      diag.updatedAt = Date.now();
+      await DB.putDiagnostico(diag);
+    } catch (err) {
+      diag = await DB.getDiagnostico(diagId);
+      diag.syncStatus = 'erro';
+      diag.syncError = err.message || String(err);
+      await DB.putDiagnostico(diag);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildDiagnosticoMetaPayload(diag) {
+  return {
+    id: diag.id,
+    createdAt: diag.createdAt,
+    updatedAt: diag.updatedAt,
+    identificacao: diag.data.identificacao,
+    planoAcao: diag.data.planoAcao,
+    observacoesFinais: diag.data.observacoesFinais,
+    scoreGeral: calcularScoreGeral(diag.data.categorias),
+    categorias: diag.data.categorias.map((cat) => ({
+      nome: cat.nome,
+      score: calcularScoreCategoria(cat.itens),
+      itens: cat.itens.map((item) => ({
+        id: item.id,
+        texto: item.texto,
+        resposta: item.resposta,
+        observacao: item.observacao
+      }))
+    }))
+  };
+}
 
 function buildDDSMetaPayload(dds) {
   return {
