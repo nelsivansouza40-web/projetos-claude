@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 let dbPromise = null;
 
 function openDB() {
@@ -24,6 +24,12 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('diagnosticos')) {
         db.createObjectStore('diagnosticos', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('cipaGestoes')) {
+        db.createObjectStore('cipaGestoes', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('cipaReunioes')) {
+        db.createObjectStore('cipaReunioes', { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => resolve(e.target.result);
@@ -115,6 +121,42 @@ const DB = {
   },
   async deleteDiagnostico(id) {
     const store = await storeTx('diagnosticos', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putCipaGestao(gestao) {
+    const store = await storeTx('cipaGestoes', 'readwrite');
+    await reqToPromise(store.put(gestao));
+    return gestao;
+  },
+  async getCipaGestao(id) {
+    const store = await storeTx('cipaGestoes', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllCipaGestoes() {
+    const store = await storeTx('cipaGestoes', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deleteCipaGestao(id) {
+    const store = await storeTx('cipaGestoes', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putCipaReuniao(reuniao) {
+    const store = await storeTx('cipaReunioes', 'readwrite');
+    await reqToPromise(store.put(reuniao));
+    return reuniao;
+  },
+  async getCipaReuniao(id) {
+    const store = await storeTx('cipaReunioes', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllCipaReunioes() {
+    const store = await storeTx('cipaReunioes', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deleteCipaReuniao(id) {
+    const store = await storeTx('cipaReunioes', 'readwrite');
     return reqToPromise(store.delete(id));
   },
   async getSetting(key) {

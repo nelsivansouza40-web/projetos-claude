@@ -18,9 +18,11 @@
  *  - { action: "upsertInspection", inspection }  -> dados textuais da inspeção
  *  - { action: "upsertDDS", dds }                -> dados textuais do DDS
  *  - { action: "upsertDiagnostico", diagnostico } -> dados textuais do diagnóstico
+ *  - { action: "upsertCipaGestao", gestao }      -> membros e mandato da CIPA
+ *  - { action: "upsertCipaReuniao", reuniao }    -> ata de reunião da CIPA
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
- *    (inspectionId também é usado para fotos de DDS e de Diagnóstico, com
- *    o próprio ID do registro correspondente)
+ *    (inspectionId também é usado para fotos de DDS, Diagnóstico e reuniões
+ *    de CIPA, com o próprio ID do registro correspondente)
  *
  * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
  * depois de sincronizar ao menos uma inspeção, rode a função
@@ -39,6 +41,10 @@ const SHEET_DDS = 'DDS';
 const SHEET_DDS_PARTICIPANTES = 'DDS_Participantes';
 const SHEET_DIAGNOSTICO = 'Diagnosticos';
 const SHEET_DIAGNOSTICO_ITENS = 'Diagnostico_Itens';
+const SHEET_CIPA_GESTAO = 'CIPA_Gestao';
+const SHEET_CIPA_MEMBROS = 'CIPA_Membros';
+const SHEET_CIPA_REUNIOES = 'CIPA_Reunioes';
+const SHEET_CIPA_PARTICIPANTES = 'CIPA_Participantes';
 
 function doPost(e) {
   let body;
@@ -58,6 +64,10 @@ function doPost(e) {
         return jsonResponse(upsertDDS(body.dds));
       case 'upsertDiagnostico':
         return jsonResponse(upsertDiagnostico(body.diagnostico));
+      case 'upsertCipaGestao':
+        return jsonResponse(upsertCipaGestao(body.gestao));
+      case 'upsertCipaReuniao':
+        return jsonResponse(upsertCipaReuniao(body.reuniao));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -277,6 +287,108 @@ function upsertDiagnostico(diag) {
   });
 
   return { ok: true, remoteRef: diagFolder.getId() };
+}
+
+function upsertCipaGestao(gestao) {
+  const sheetGestao = getOrCreateSheet(SHEET_CIPA_GESTAO, [
+    'ID', 'Empresa', 'Unidade', 'Início do Mandato', 'Fim do Mandato',
+    'Qtd. Membros', 'Recebido em'
+  ]);
+
+  const id = gestao.id;
+  const linha = [
+    id,
+    gestao.empresa,
+    gestao.unidade,
+    gestao.mandatoInicio,
+    gestao.mandatoFim,
+    (gestao.membros || []).length,
+    new Date()
+  ];
+
+  const idCol = 1;
+  const data = sheetGestao.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetGestao.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetGestao.appendRow(linha);
+  }
+
+  const sheetMembros = getOrCreateSheet(SHEET_CIPA_MEMBROS, [
+    'Gestão ID', 'Membro ID', 'Nome', 'Função', 'Representação', 'Tipo', 'Setor', 'Recebido em'
+  ]);
+  // Remove os membros antigos desta gestão antes de regravar (a lista pode
+  // ser editada livremente no app, então mantemos a planilha em espelho).
+  const dataMembros = sheetMembros.getDataRange().getValues();
+  for (let i = dataMembros.length - 1; i >= 1; i--) {
+    if (dataMembros[i][0] === id) sheetMembros.deleteRow(i + 1);
+  }
+  (gestao.membros || []).forEach((m) => {
+    sheetMembros.appendRow([id, m.id, m.nome, m.funcao, m.representacao, m.tipo, m.setor, new Date()]);
+  });
+
+  return { ok: true, remoteRef: id };
+}
+
+function upsertCipaReuniao(reuniao) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folderName = reuniao.id + ' - CIPA Reuniao - ' + (reuniao.identificacao.numeroAta || 'sem-numero');
+  const reuniaoFolder = getOrCreateDriveFolder(folderName, rootFolder);
+
+  const sheetReunioes = getOrCreateSheet(SHEET_CIPA_REUNIOES, [
+    'ID', 'Data', 'Hora', 'Local', 'Número da Ata', 'Tipo',
+    'Análise de Acidentes', 'Resultados de Inspeções', 'Plano de Trabalho',
+    'Assuntos Gerais', 'Deliberações', 'Recebido em', 'Pasta Drive'
+  ]);
+
+  const id = reuniao.id;
+  const linha = [
+    id,
+    reuniao.identificacao.data,
+    reuniao.identificacao.hora,
+    reuniao.identificacao.local,
+    reuniao.identificacao.numeroAta,
+    reuniao.identificacao.tipo,
+    reuniao.pauta.analiseAcidentes,
+    reuniao.pauta.resultadosInspecoes,
+    reuniao.pauta.planoTrabalho,
+    reuniao.pauta.assuntosGerais,
+    reuniao.deliberacoes,
+    new Date(),
+    reuniaoFolder.getUrl()
+  ];
+
+  const idCol = 1;
+  const data = sheetReunioes.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetReunioes.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetReunioes.appendRow(linha);
+  }
+
+  const sheetParticipantes = getOrCreateSheet(SHEET_CIPA_PARTICIPANTES, [
+    'Reunião ID', 'Participante ID', 'Nome', 'Função', 'Assinado', 'Recebido em'
+  ]);
+  const existentes = sheetParticipantes.getDataRange().getValues();
+  (reuniao.participantes || []).forEach((p) => {
+    let jaExiste = false;
+    for (let i = 1; i < existentes.length; i++) {
+      if (existentes[i][0] === id && existentes[i][1] === p.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetParticipantes.appendRow([id, p.id, p.nome, p.funcao, p.assinado, new Date()]);
+    }
+  });
+
+  return { ok: true, remoteRef: reuniaoFolder.getId() };
 }
 
 function uploadPhoto(inspectionId, photo) {

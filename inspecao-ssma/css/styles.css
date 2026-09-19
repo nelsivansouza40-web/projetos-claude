@@ -254,6 +254,8 @@ main#view {
 
 .hint { font-size: 0.8rem; color: #6b7280; }
 
+.cipa-gestao-resumo { border-left: 4px solid var(--azul); margin-bottom: 18px; }
+
 .diag-categoria { margin-bottom: 18px; }
 .diag-categoria-header {
   display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px;
@@ -271,8 +273,9 @@ main#view {
   display: flex; flex-direction: column; gap: 8px;
 }
 .participante-linha { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.participante-linha input {
+.participante-linha input, .participante-linha select {
   flex: 1; min-width: 120px; font-size: 0.9rem; padding: 8px; border-radius: 8px; border: 1px solid var(--cinza-borda);
+  font-family: inherit; color: var(--texto);
 }
 .rep-assinatura-compacta { text-align: left; font-size: 0.78rem; }
 .rep-assinatura-compacta .rep-linha-assinatura { max-width: 260px; }

@@ -56,6 +56,16 @@ const Sync = {
         if (diag.syncStatus === 'synced') continue;
         await this.syncDiagnostico(diag.id, endpoint);
       }
+      const gestoesCipa = await DB.getAllCipaGestoes();
+      for (const gestao of gestoesCipa) {
+        if (gestao.syncStatus === 'synced') continue;
+        await this.syncCipaGestao(gestao.id, endpoint);
+      }
+      const reunioesCipa = await DB.getAllCipaReunioes();
+      for (const reuniao of reunioesCipa) {
+        if (reuniao.syncStatus === 'synced') continue;
+        await this.syncCipaReuniao(reuniao.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -285,8 +295,159 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncCipaGestao(gestaoId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let gestao = await DB.getCipaGestao(gestaoId);
+    if (!gestao) return;
+
+    gestao.syncStatus = 'sincronizando';
+    gestao.syncError = '';
+    await DB.putCipaGestao(gestao);
+    this.notify();
+
+    try {
+      const payload = {
+        action: 'upsertCipaGestao',
+        gestao: buildCipaGestaoMetaPayload(gestao)
+      };
+      const resp = await postJson(endpoint, payload);
+      if (!resp || resp.ok !== true) {
+        throw new Error((resp && resp.error) || 'Falha ao enviar dados da gestão de CIPA.');
+      }
+      gestao.metaSynced = true;
+      gestao.remoteRef = resp.remoteRef || gestao.remoteRef || null;
+      gestao.syncStatus = 'synced';
+      gestao.syncError = '';
+      gestao.updatedAt = Date.now();
+      await DB.putCipaGestao(gestao);
+    } catch (err) {
+      gestao = await DB.getCipaGestao(gestaoId);
+      gestao.syncStatus = 'erro';
+      gestao.syncError = err.message || String(err);
+      await DB.putCipaGestao(gestao);
+      this.notify();
+      throw err;
+    }
+    this.notify();
+  },
+
+  async syncCipaReuniao(reuniaoId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let reuniao = await DB.getCipaReuniao(reuniaoId);
+    if (!reuniao) return;
+
+    reuniao.syncStatus = 'sincronizando';
+    reuniao.syncError = '';
+    await DB.putCipaReuniao(reuniao);
+    this.notify();
+
+    try {
+      // 1) Envia os dados (texto) da reunião, sem fotos.
+      if (!reuniao.metaSynced) {
+        const payload = {
+          action: 'upsertCipaReuniao',
+          reuniao: buildCipaReuniaoMetaPayload(reuniao)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados da reunião de CIPA.');
+        }
+        reuniao.metaSynced = true;
+        reuniao.remoteRef = resp.remoteRef || reuniao.remoteRef || null;
+        await DB.putCipaReuniao(reuniao);
+      }
+
+      // 2) Envia cada foto pendente, individualmente.
+      const photos = await DB.getPhotosByInspection(reuniaoId);
+      const pendentes = photos.filter((p) => !p.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: reuniao.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: reuniao.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      // 3) Reavalia status final.
+      const todasFotos = await DB.getPhotosByInspection(reuniaoId);
+      const tudoSincronizado = reuniao.metaSynced && todasFotos.every((p) => p.synced);
+      reuniao.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
+      reuniao.syncError = '';
+      reuniao.updatedAt = Date.now();
+      await DB.putCipaReuniao(reuniao);
+    } catch (err) {
+      reuniao = await DB.getCipaReuniao(reuniaoId);
+      reuniao.syncStatus = 'erro';
+      reuniao.syncError = err.message || String(err);
+      await DB.putCipaReuniao(reuniao);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildCipaGestaoMetaPayload(gestao) {
+  return {
+    id: gestao.id,
+    createdAt: gestao.createdAt,
+    updatedAt: gestao.updatedAt,
+    empresa: gestao.data.empresa,
+    unidade: gestao.data.unidade,
+    mandatoInicio: gestao.data.mandatoInicio,
+    mandatoFim: gestao.data.mandatoFim,
+    membros: gestao.data.membros.map((m) => ({
+      id: m.id,
+      nome: m.nome,
+      funcao: m.funcao,
+      representacao: m.representacao,
+      tipo: m.tipo,
+      setor: m.setor
+    }))
+  };
+}
+
+function buildCipaReuniaoMetaPayload(reuniao) {
+  return {
+    id: reuniao.id,
+    createdAt: reuniao.createdAt,
+    updatedAt: reuniao.updatedAt,
+    identificacao: reuniao.data.identificacao,
+    pauta: reuniao.data.pauta,
+    deliberacoes: reuniao.data.deliberacoes,
+    participantes: reuniao.data.participantes.map((p) => ({
+      id: p.id,
+      nome: p.nome,
+      funcao: p.funcao,
+      assinado: !!p.assinatura
+    }))
+  };
+}
 
 function buildDiagnosticoMetaPayload(diag) {
   return {
