@@ -460,6 +460,21 @@ function renderDiagStepRevisao(content, diag) {
   });
 }
 
+function validarDiagParaRelatorio(diag) {
+  const problemas = [];
+  diag.data.categorias.forEach((cat) => {
+    cat.itens.forEach((item, idx) => {
+      const num = idx + 1;
+      if (!item.resposta) {
+        problemas.push(`"${cat.nome}", item ${num}: está sem resposta.`);
+      } else if (item.resposta === 'Não Atende' && !item.observacao) {
+        problemas.push(`"${cat.nome}", item ${num}: está Não Atende, mas não tem observação.`);
+      }
+    });
+  });
+  return problemas;
+}
+
 /* ---------------- DETALHE ---------------- */
 
 async function renderDiagDetail(id) {
@@ -514,7 +529,14 @@ async function renderDiagDetail(id) {
   `;
 
   document.getElementById('btn-back-diag-home').addEventListener('click', renderDiagHome);
-  document.getElementById('btn-relatorio-diag').addEventListener('click', () => renderDiagReport(id));
+  document.getElementById('btn-relatorio-diag').addEventListener('click', () => {
+    const problemas = validarDiagParaRelatorio(diag);
+    if (problemas.length) {
+      alert('Não é possível gerar o relatório ainda:\n\n- ' + problemas.join('\n- ') + '\n\nToque em "Editar diagnóstico" para corrigir.');
+      return;
+    }
+    renderDiagReport(id);
+  });
   document.getElementById('btn-editar-diag').addEventListener('click', async () => {
     diag.metaSynced = false;
     diag.syncStatus = 'pendente';

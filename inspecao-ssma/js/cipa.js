@@ -527,6 +527,17 @@ function renderParticipantesCipa(container, reuniao) {
   });
 }
 
+function validarReuniaoCipaParaRelatorio(reuniao) {
+  const problemas = [];
+  if (!reuniao.data.participantes.length) {
+    problemas.push('Nenhum participante foi registrado na lista de presença.');
+  }
+  reuniao.data.participantes.forEach((p) => {
+    if (!p.assinatura) problemas.push(`Participante "${p.nome || 'sem nome'}" ainda não assinou.`);
+  });
+  return problemas;
+}
+
 /* ---------------- DETALHE ---------------- */
 
 async function renderReuniaoCipaDetail(id) {
@@ -580,7 +591,14 @@ async function renderReuniaoCipaDetail(id) {
   `;
 
   document.getElementById('btn-back-cipa-reuniao-home').addEventListener('click', renderCipaHome);
-  document.getElementById('btn-relatorio-cipa').addEventListener('click', () => renderReuniaoCipaReport(id));
+  document.getElementById('btn-relatorio-cipa').addEventListener('click', () => {
+    const problemas = validarReuniaoCipaParaRelatorio(reuniao);
+    if (problemas.length) {
+      alert('Não é possível gerar a ata ainda:\n\n- ' + problemas.join('\n- ') + '\n\nToque em "Editar reunião" para corrigir.');
+      return;
+    }
+    renderReuniaoCipaReport(id);
+  });
   document.getElementById('btn-editar-cipa-reuniao').addEventListener('click', async () => {
     reuniao.metaSynced = false;
     reuniao.syncStatus = 'pendente';

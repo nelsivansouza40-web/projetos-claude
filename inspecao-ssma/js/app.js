@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v16';
+const APP_VERSION = 'v17';
 
 const state = {
   screen: 'home',
@@ -686,6 +686,19 @@ async function renderStepRevisao(content, insp) {
   });
 }
 
+function validarInspecaoParaRelatorio(insp) {
+  const problemas = [];
+  insp.data.checklist.forEach((item, idx) => {
+    const num = String(idx + 1).padStart(2, '0');
+    if (!item.resposta) {
+      problemas.push(`Item ${num} ("${item.texto}") está sem resposta.`);
+    } else if (item.resposta === 'Não Conforme' && !item.observacao && item.photoIds.length === 0) {
+      problemas.push(`Item ${num} ("${item.texto}") está Não Conforme, mas não tem observação nem foto.`);
+    }
+  });
+  return problemas;
+}
+
 /* ---------------- DETALHE DE INSPEÇÃO CONCLUÍDA ---------------- */
 
 async function renderDetail(id) {
@@ -747,7 +760,14 @@ async function renderDetail(id) {
   `;
 
   document.getElementById('btn-back-home').addEventListener('click', renderHome);
-  document.getElementById('btn-relatorio').addEventListener('click', () => renderReport(id));
+  document.getElementById('btn-relatorio').addEventListener('click', () => {
+    const problemas = validarInspecaoParaRelatorio(insp);
+    if (problemas.length) {
+      alert('Não é possível gerar o relatório ainda:\n\n- ' + problemas.join('\n- ') + '\n\nToque em "Editar inspeção" para corrigir.');
+      return;
+    }
+    renderReport(id);
+  });
   document.getElementById('btn-editar-inspecao').addEventListener('click', async () => {
     insp.metaSynced = false;
     insp.syncStatus = 'pendente';

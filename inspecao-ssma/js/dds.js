@@ -340,6 +340,17 @@ function renderParticipantes(container, dds) {
   });
 }
 
+function validarDDSParaRelatorio(dds) {
+  const problemas = [];
+  if (!dds.data.participantes.length) {
+    problemas.push('Nenhum participante foi registrado na lista de presença.');
+  }
+  dds.data.participantes.forEach((p) => {
+    if (!p.assinatura) problemas.push(`Participante "${p.nome || 'sem nome'}" ainda não assinou.`);
+  });
+  return problemas;
+}
+
 /* ---------------- DETALHE ---------------- */
 
 async function renderDDSDetail(id) {
@@ -387,7 +398,14 @@ async function renderDDSDetail(id) {
   `;
 
   document.getElementById('btn-back-dds-home').addEventListener('click', renderDDSHome);
-  document.getElementById('btn-relatorio-dds').addEventListener('click', () => renderDDSReport(id));
+  document.getElementById('btn-relatorio-dds').addEventListener('click', () => {
+    const problemas = validarDDSParaRelatorio(dds);
+    if (problemas.length) {
+      alert('Não é possível gerar o relatório ainda:\n\n- ' + problemas.join('\n- ') + '\n\nToque em "Editar DDS" para corrigir.');
+      return;
+    }
+    renderDDSReport(id);
+  });
   document.getElementById('btn-editar-dds').addEventListener('click', async () => {
     dds.metaSynced = false;
     dds.syncStatus = 'pendente';
