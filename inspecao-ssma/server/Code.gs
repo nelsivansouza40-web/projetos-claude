@@ -22,9 +22,10 @@
  *  - { action: "upsertCipaReuniao", reuniao }    -> ata de reunião da CIPA
  *  - { action: "upsertPTAPR", ptapr }            -> dados da Permissão de Trabalho/APR
  *  - { action: "upsertCertificado", certificado } -> dados de certificado/treinamento
+ *  - { action: "upsertPET", pet }                -> Permissão de Entrada e Trabalho em Espaço Confinado
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
- *    de CIPA, PT/APR e certificados, com o próprio ID do registro
+ *    de CIPA, PT/APR, certificados e PET, com o próprio ID do registro
  *    correspondente)
  *
  * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
@@ -52,6 +53,10 @@ const SHEET_PTAPR = 'PTAPR';
 const SHEET_PTAPR_ITENS = 'PTAPR_Itens';
 const SHEET_PTAPR_EQUIPE = 'PTAPR_Equipe';
 const SHEET_CERTIFICADOS = 'Certificados';
+const SHEET_PET = 'PET';
+const SHEET_PET_ITENS = 'PET_Itens';
+const SHEET_PET_LEITURAS = 'PET_Leituras';
+const SHEET_PET_EQUIPE = 'PET_Equipe';
 
 function doPost(e) {
   let body;
@@ -79,6 +84,8 @@ function doPost(e) {
         return jsonResponse(upsertPTAPR(body.ptapr));
       case 'upsertCertificado':
         return jsonResponse(upsertCertificado(body.certificado));
+      case 'upsertPET':
+        return jsonResponse(upsertPET(body.pet));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -521,6 +528,100 @@ function upsertCertificado(cert) {
   }
 
   return { ok: true, remoteRef: certFolder.getId() };
+}
+
+function upsertPET(pet) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folderName = pet.id + ' - PET - ' + (pet.identificacao.localEspaco || 'sem-identificacao');
+  const petFolder = getOrCreateDriveFolder(folderName, rootFolder);
+
+  const sheetPET = getOrCreateSheet(SHEET_PET, [
+    'ID', 'Data', 'Hora Início', 'Empresa', 'Unidade', 'Área', 'Espaço Confinado',
+    'Descrição do Espaço', 'Atividade', 'Supervisor de Entrada', 'Vigia',
+    'Validade Início', 'Validade Fim', 'Data Encerramento', 'Hora Encerramento',
+    'Área Liberada', 'Observações Encerramento', 'Recebido em', 'Pasta Drive'
+  ]);
+
+  const id = pet.id;
+  const enc = pet.encerramento || {};
+  const linha = [
+    id,
+    pet.identificacao.data,
+    pet.identificacao.hora,
+    pet.identificacao.empresa,
+    pet.identificacao.unidade,
+    pet.identificacao.area,
+    pet.identificacao.localEspaco,
+    pet.identificacao.descricaoEspaco,
+    pet.identificacao.atividade,
+    pet.identificacao.supervisorEntrada,
+    pet.identificacao.vigia,
+    pet.identificacao.validadeInicio,
+    pet.identificacao.validadeFim,
+    enc.data,
+    enc.hora,
+    enc.areaLiberada,
+    enc.observacoes,
+    new Date(),
+    petFolder.getUrl()
+  ];
+
+  const idCol = 1;
+  const data = sheetPET.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetPET.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetPET.appendRow(linha);
+  }
+
+  const sheetItens = getOrCreateSheet(SHEET_PET_ITENS, [
+    'PET ID', 'Item ID', 'Questão', 'Resposta', 'Observação', 'Recebido em'
+  ]);
+  const itensExistentes = sheetItens.getDataRange().getValues();
+  (pet.checklist || []).forEach((item) => {
+    let jaExiste = false;
+    for (let i = 1; i < itensExistentes.length; i++) {
+      if (itensExistentes[i][0] === id && itensExistentes[i][1] === item.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetItens.appendRow([id, item.id, item.texto, item.resposta, item.observacao, new Date()]);
+    }
+  });
+
+  const sheetLeituras = getOrCreateSheet(SHEET_PET_LEITURAS, [
+    'PET ID', 'Leitura ID', 'Horário', 'O2 (%)', 'LII (%)', 'CO (ppm)', 'H2S (ppm)',
+    'Responsável', 'Observação', 'Recebido em'
+  ]);
+  const leiturasExistentes = sheetLeituras.getDataRange().getValues();
+  (pet.leituras || []).forEach((l) => {
+    let jaExiste = false;
+    for (let i = 1; i < leiturasExistentes.length; i++) {
+      if (leiturasExistentes[i][0] === id && leiturasExistentes[i][1] === l.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetLeituras.appendRow([id, l.id, l.horario, l.oxigenio, l.explosividade, l.monoxido, l.sulfidrico, l.responsavel, l.observacao, new Date()]);
+    }
+  });
+
+  const sheetEquipe = getOrCreateSheet(SHEET_PET_EQUIPE, [
+    'PET ID', 'Membro ID', 'Nome', 'Função', 'Assinado', 'Recebido em'
+  ]);
+  const equipeExistente = sheetEquipe.getDataRange().getValues();
+  (pet.equipe || []).forEach((p) => {
+    let jaExiste = false;
+    for (let i = 1; i < equipeExistente.length; i++) {
+      if (equipeExistente[i][0] === id && equipeExistente[i][1] === p.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetEquipe.appendRow([id, p.id, p.nome, p.funcao, p.assinado, new Date()]);
+    }
+  });
+
+  return { ok: true, remoteRef: petFolder.getId() };
 }
 
 function uploadPhoto(inspectionId, photo) {

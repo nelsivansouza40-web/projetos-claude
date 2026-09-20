@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 6;
+const DB_VERSION = 7;
 let dbPromise = null;
 
 function openDB() {
@@ -36,6 +36,9 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('certificados')) {
         db.createObjectStore('certificados', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('pet')) {
+        db.createObjectStore('pet', { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => resolve(e.target.result);
@@ -199,6 +202,24 @@ const DB = {
   },
   async deleteCertificado(id) {
     const store = await storeTx('certificados', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putPET(pet) {
+    const store = await storeTx('pet', 'readwrite');
+    await reqToPromise(store.put(pet));
+    return pet;
+  },
+  async getPET(id) {
+    const store = await storeTx('pet', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllPET() {
+    const store = await storeTx('pet', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deletePET(id) {
+    const store = await storeTx('pet', 'readwrite');
     return reqToPromise(store.delete(id));
   },
   async getSetting(key) {

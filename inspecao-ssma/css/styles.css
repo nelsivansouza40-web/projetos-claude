@@ -61,15 +61,20 @@ body {
 #module-nav {
   display: flex;
   background: var(--azul-escuro);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+#module-nav::-webkit-scrollbar { display: none; }
 .tab-btn {
-  flex: 1;
+  flex: 0 0 auto;
   background: none;
   border: none;
   color: rgba(255,255,255,0.75);
-  padding: 10px 8px;
+  padding: 10px 14px;
   font-size: 0.85rem;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
   border-bottom: 3px solid transparent;
 }
@@ -231,6 +236,20 @@ main#view {
 }
 .checkbox-pill input { margin: 0; }
 .checkbox-pill:has(input:checked) { background: #cfe2ff; border-color: var(--azul); }
+
+.leitura-card {
+  background: #f9fafb; border: 1px solid var(--cinza-borda); border-radius: 10px; padding: 10px;
+  display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;
+}
+.leitura-card.leitura-alerta { border-color: var(--vermelho); background: #fff7f7; }
+.campo-leitura {
+  flex: 1; min-width: 90px; display: flex; flex-direction: column; gap: 4px;
+  font-size: 0.78rem; font-weight: 600; color: #5a6572;
+}
+.campo-leitura input {
+  font-size: 0.9rem; padding: 8px; border-radius: 8px; border: 1px solid var(--cinza-borda); font-weight: 400; color: var(--texto);
+}
+.leitura-aviso { color: var(--vermelho); font-size: 0.8rem; font-weight: 600; margin: 0; }
 
 .checklist-details { display: flex; flex-direction: column; gap: 8px; }
 .checklist-details label { font-size: 0.78rem; font-weight: 600; color: #5a6572; display: flex; flex-direction: column; gap: 4px; }

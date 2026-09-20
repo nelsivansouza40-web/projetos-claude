@@ -76,6 +76,11 @@ const Sync = {
         if (cert.syncStatus === 'synced') continue;
         await this.syncCertificado(cert.id, endpoint);
       }
+      const registrosPET = await DB.getAllPET();
+      for (const pet of registrosPET) {
+        if (pet.syncStatus === 'synced') continue;
+        await this.syncPET(pet.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -569,8 +574,115 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncPET(petId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let pet = await DB.getPET(petId);
+    if (!pet) return;
+
+    pet.syncStatus = 'sincronizando';
+    pet.syncError = '';
+    await DB.putPET(pet);
+    this.notify();
+
+    try {
+      // 1) Envia os dados (texto) da PET, sem fotos.
+      if (!pet.metaSynced) {
+        const payload = {
+          action: 'upsertPET',
+          pet: buildPETMetaPayload(pet)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados da PET.');
+        }
+        pet.metaSynced = true;
+        pet.remoteRef = resp.remoteRef || pet.remoteRef || null;
+        await DB.putPET(pet);
+      }
+
+      // 2) Envia cada foto pendente, individualmente.
+      const photos = await DB.getPhotosByInspection(petId);
+      const pendentes = photos.filter((p) => !p.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: pet.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: pet.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      // 3) Reavalia status final.
+      const todasFotos = await DB.getPhotosByInspection(petId);
+      const tudoSincronizado = pet.metaSynced && todasFotos.every((p) => p.synced);
+      pet.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
+      pet.syncError = '';
+      pet.updatedAt = Date.now();
+      await DB.putPET(pet);
+    } catch (err) {
+      pet = await DB.getPET(petId);
+      pet.syncStatus = 'erro';
+      pet.syncError = err.message || String(err);
+      await DB.putPET(pet);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildPETMetaPayload(pet) {
+  return {
+    id: pet.id,
+    createdAt: pet.createdAt,
+    updatedAt: pet.updatedAt,
+    identificacao: pet.data.identificacao,
+    checklist: pet.data.checklist.map((item) => ({
+      id: item.id,
+      texto: item.texto,
+      resposta: item.resposta,
+      observacao: item.observacao
+    })),
+    leituras: pet.data.leituras.map((l) => ({
+      id: l.id,
+      horario: l.horario,
+      oxigenio: l.oxigenio,
+      explosividade: l.explosividade,
+      monoxido: l.monoxido,
+      sulfidrico: l.sulfidrico,
+      responsavel: l.responsavel,
+      observacao: l.observacao
+    })),
+    equipe: pet.data.equipe.map((p) => ({
+      id: p.id,
+      nome: p.nome,
+      funcao: p.funcao,
+      assinado: !!p.assinatura
+    })),
+    encerramento: pet.data.encerramento
+  };
+}
 
 function buildCertificadoMetaPayload(cert) {
   return {
