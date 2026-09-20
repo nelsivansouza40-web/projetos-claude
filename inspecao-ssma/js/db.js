@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 5;
+const DB_VERSION = 6;
 let dbPromise = null;
 
 function openDB() {
@@ -33,6 +33,9 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('ptapr')) {
         db.createObjectStore('ptapr', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('certificados')) {
+        db.createObjectStore('certificados', { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => resolve(e.target.result);
@@ -178,6 +181,24 @@ const DB = {
   },
   async deletePTAPR(id) {
     const store = await storeTx('ptapr', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putCertificado(cert) {
+    const store = await storeTx('certificados', 'readwrite');
+    await reqToPromise(store.put(cert));
+    return cert;
+  },
+  async getCertificado(id) {
+    const store = await storeTx('certificados', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllCertificados() {
+    const store = await storeTx('certificados', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deleteCertificado(id) {
+    const store = await storeTx('certificados', 'readwrite');
     return reqToPromise(store.delete(id));
   },
   async getSetting(key) {

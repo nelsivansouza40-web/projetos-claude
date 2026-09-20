@@ -21,9 +21,11 @@
  *  - { action: "upsertCipaGestao", gestao }      -> membros e mandato da CIPA
  *  - { action: "upsertCipaReuniao", reuniao }    -> ata de reunião da CIPA
  *  - { action: "upsertPTAPR", ptapr }            -> dados da Permissão de Trabalho/APR
+ *  - { action: "upsertCertificado", certificado } -> dados de certificado/treinamento
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
- *    de CIPA e PT/APR, com o próprio ID do registro correspondente)
+ *    de CIPA, PT/APR e certificados, com o próprio ID do registro
+ *    correspondente)
  *
  * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
  * depois de sincronizar ao menos uma inspeção, rode a função
@@ -49,6 +51,7 @@ const SHEET_CIPA_PARTICIPANTES = 'CIPA_Participantes';
 const SHEET_PTAPR = 'PTAPR';
 const SHEET_PTAPR_ITENS = 'PTAPR_Itens';
 const SHEET_PTAPR_EQUIPE = 'PTAPR_Equipe';
+const SHEET_CERTIFICADOS = 'Certificados';
 
 function doPost(e) {
   let body;
@@ -74,6 +77,8 @@ function doPost(e) {
         return jsonResponse(upsertCipaReuniao(body.reuniao));
       case 'upsertPTAPR':
         return jsonResponse(upsertPTAPR(body.ptapr));
+      case 'upsertCertificado':
+        return jsonResponse(upsertCertificado(body.certificado));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -473,6 +478,49 @@ function upsertPTAPR(pt) {
   });
 
   return { ok: true, remoteRef: ptFolder.getId() };
+}
+
+function upsertCertificado(cert) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folderName = cert.id + ' - Certificado - ' + (cert.colaborador || 'sem-nome');
+  const certFolder = getOrCreateDriveFolder(folderName, rootFolder);
+
+  const sheetCert = getOrCreateSheet(SHEET_CERTIFICADOS, [
+    'ID', 'Colaborador', 'Função', 'Setor', 'Tipo', 'Instituição',
+    'Carga Horária', 'Nº Certificado', 'Data Emissão', 'Data Validade',
+    'Observações', 'Recebido em', 'Pasta Drive'
+  ]);
+
+  const id = cert.id;
+  const linha = [
+    id,
+    cert.colaborador,
+    cert.funcao,
+    cert.setor,
+    cert.tipo,
+    cert.instituicao,
+    cert.cargaHoraria,
+    cert.numeroCertificado,
+    cert.dataEmissao,
+    cert.dataValidade,
+    cert.observacoes,
+    new Date(),
+    certFolder.getUrl()
+  ];
+
+  const idCol = 1;
+  const data = sheetCert.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetCert.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetCert.appendRow(linha);
+  }
+
+  return { ok: true, remoteRef: certFolder.getId() };
 }
 
 function uploadPhoto(inspectionId, photo) {

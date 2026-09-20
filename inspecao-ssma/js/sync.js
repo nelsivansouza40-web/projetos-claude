@@ -71,6 +71,11 @@ const Sync = {
         if (pt.syncStatus === 'synced') continue;
         await this.syncPTAPR(pt.id, endpoint);
       }
+      const registrosCert = await DB.getAllCertificados();
+      for (const cert of registrosCert) {
+        if (cert.syncStatus === 'synced') continue;
+        await this.syncCertificado(cert.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -489,8 +494,101 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncCertificado(certId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let cert = await DB.getCertificado(certId);
+    if (!cert) return;
+
+    cert.syncStatus = 'sincronizando';
+    cert.syncError = '';
+    await DB.putCertificado(cert);
+    this.notify();
+
+    try {
+      // 1) Envia os dados (texto) do certificado, sem fotos.
+      if (!cert.metaSynced) {
+        const payload = {
+          action: 'upsertCertificado',
+          certificado: buildCertificadoMetaPayload(cert)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados do certificado.');
+        }
+        cert.metaSynced = true;
+        cert.remoteRef = resp.remoteRef || cert.remoteRef || null;
+        await DB.putCertificado(cert);
+      }
+
+      // 2) Envia cada foto pendente, individualmente.
+      const photos = await DB.getPhotosByInspection(certId);
+      const pendentes = photos.filter((p) => !p.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: cert.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: cert.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      // 3) Reavalia status final.
+      const todasFotos = await DB.getPhotosByInspection(certId);
+      const tudoSincronizado = cert.metaSynced && todasFotos.every((p) => p.synced);
+      cert.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
+      cert.syncError = '';
+      cert.updatedAt = Date.now();
+      await DB.putCertificado(cert);
+    } catch (err) {
+      cert = await DB.getCertificado(certId);
+      cert.syncStatus = 'erro';
+      cert.syncError = err.message || String(err);
+      await DB.putCertificado(cert);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildCertificadoMetaPayload(cert) {
+  return {
+    id: cert.id,
+    createdAt: cert.createdAt,
+    updatedAt: cert.updatedAt,
+    colaborador: cert.data.colaborador,
+    funcao: cert.data.funcao,
+    setor: cert.data.setor,
+    tipo: descricaoTipoCertificado(cert),
+    instituicao: cert.data.instituicao,
+    cargaHoraria: cert.data.cargaHoraria,
+    numeroCertificado: cert.data.numeroCertificado,
+    dataEmissao: cert.data.dataEmissao,
+    dataValidade: cert.data.dataValidade,
+    observacoes: cert.data.observacoes
+  };
+}
 
 function buildPTAPRMetaPayload(pt) {
   return {
