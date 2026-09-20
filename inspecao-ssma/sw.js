@@ -3,7 +3,7 @@
  * internet, servindo os arquivos a partir do cache local do dispositivo.
  * Dados de inspeções e fotos ficam no IndexedDB (não neste cache).
  */
-const CACHE_VERSION = 'ssma-v17';
+const CACHE_VERSION = 'ssma-v18';
 const APP_SHELL = [
   './',
   './index.html',
@@ -12,11 +12,13 @@ const APP_SHELL = [
   './js/db.js',
   './js/checklists.js',
   './js/diagnostico-checklist.js',
+  './js/ptapr-checklist.js',
   './js/sync.js',
   './js/report.js',
   './js/dds.js',
   './js/diagnostico.js',
   './js/cipa.js',
+  './js/ptapr.js',
   './js/app.js',
   './icons/icon-192.png',
   './icons/icon-512.png'

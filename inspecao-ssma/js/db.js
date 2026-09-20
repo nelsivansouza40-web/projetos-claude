@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 let dbPromise = null;
 
 function openDB() {
@@ -30,6 +30,9 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('cipaReunioes')) {
         db.createObjectStore('cipaReunioes', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('ptapr')) {
+        db.createObjectStore('ptapr', { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => resolve(e.target.result);
@@ -157,6 +160,24 @@ const DB = {
   },
   async deleteCipaReuniao(id) {
     const store = await storeTx('cipaReunioes', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putPTAPR(pt) {
+    const store = await storeTx('ptapr', 'readwrite');
+    await reqToPromise(store.put(pt));
+    return pt;
+  },
+  async getPTAPR(id) {
+    const store = await storeTx('ptapr', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllPTAPR() {
+    const store = await storeTx('ptapr', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deletePTAPR(id) {
+    const store = await storeTx('ptapr', 'readwrite');
     return reqToPromise(store.delete(id));
   },
   async getSetting(key) {

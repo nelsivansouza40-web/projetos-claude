@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v17';
+const APP_VERSION = 'v18';
 
 const state = {
   screen: 'home',
@@ -54,11 +54,13 @@ async function updateSyncBar() {
   const registrosDDS = await DB.getAllDDS();
   const registrosDiag = await DB.getAllDiagnosticos();
   const registrosCipaReunioes = await DB.getAllCipaReunioes();
+  const registrosPTAPR = await DB.getAllPTAPR();
   const pendentesInsp = inspections.filter((i) => i.completo && i.syncStatus !== 'synced');
   const pendentesDDS = registrosDDS.filter((d) => d.completo && d.syncStatus !== 'synced');
   const pendentesDiag = registrosDiag.filter((d) => d.completo && d.syncStatus !== 'synced');
   const pendentesCipa = registrosCipaReunioes.filter((r) => r.completo && r.syncStatus !== 'synced');
-  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length;
+  const pendentesPTAPR = registrosPTAPR.filter((p) => p.completo && p.syncStatus !== 'synced');
+  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length;
   if (totalPendentes === 0) {
     syncBarEl.hidden = true;
     return;
@@ -67,6 +69,7 @@ async function updateSyncBar() {
   const online = navigator.onLine;
   const partes = [];
   if (pendentesInsp.length) partes.push(`${pendentesInsp.length} inspeção(ões)`);
+  if (pendentesPTAPR.length) partes.push(`${pendentesPTAPR.length} PT/APR`);
   if (pendentesDDS.length) partes.push(`${pendentesDDS.length} DDS`);
   if (pendentesDiag.length) partes.push(`${pendentesDiag.length} diagnóstico(s)`);
   if (pendentesCipa.length) partes.push(`${pendentesCipa.length} reunião(ões) de CIPA`);
@@ -93,16 +96,20 @@ async function updateSyncBar() {
       if (state.screen === 'diag-detail') renderDiagDetail(state.diagId);
       if (state.screen === 'cipa-home') renderCipaHome();
       if (state.screen === 'cipa-reuniao-detail') renderReuniaoCipaDetail(state.cipaReuniaoId);
+      if (state.screen === 'ptapr-home') renderPTAPRHome();
+      if (state.screen === 'ptapr-detail') renderPTAPRDetail(state.ptaprId);
     });
   }
 }
 
 function setActiveTab(tab) {
   const tabInsp = document.getElementById('tab-inspecoes');
+  const tabPTAPR = document.getElementById('tab-ptapr');
   const tabDDS = document.getElementById('tab-dds');
   const tabDiag = document.getElementById('tab-diagnostico');
   const tabCipa = document.getElementById('tab-cipa');
   if (tabInsp) tabInsp.classList.toggle('active', tab === 'inspecoes');
+  if (tabPTAPR) tabPTAPR.classList.toggle('active', tab === 'ptapr');
   if (tabDDS) tabDDS.classList.toggle('active', tab === 'dds');
   if (tabDiag) tabDiag.classList.toggle('active', tab === 'diagnostico');
   if (tabCipa) tabCipa.classList.toggle('active', tab === 'cipa');
@@ -899,6 +906,7 @@ document.getElementById('tab-inspecoes').addEventListener('click', renderHome);
 document.getElementById('tab-dds').addEventListener('click', renderDDSHome);
 document.getElementById('tab-diagnostico').addEventListener('click', renderDiagHome);
 document.getElementById('tab-cipa').addEventListener('click', renderCipaHome);
+document.getElementById('tab-ptapr').addEventListener('click', renderPTAPRHome);
 
 /* ---------------- INICIALIZAÇÃO ---------------- */
 

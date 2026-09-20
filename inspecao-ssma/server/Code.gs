@@ -20,9 +20,10 @@
  *  - { action: "upsertDiagnostico", diagnostico } -> dados textuais do diagnóstico
  *  - { action: "upsertCipaGestao", gestao }      -> membros e mandato da CIPA
  *  - { action: "upsertCipaReuniao", reuniao }    -> ata de reunião da CIPA
+ *  - { action: "upsertPTAPR", ptapr }            -> dados da Permissão de Trabalho/APR
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
- *    (inspectionId também é usado para fotos de DDS, Diagnóstico e reuniões
- *    de CIPA, com o próprio ID do registro correspondente)
+ *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
+ *    de CIPA e PT/APR, com o próprio ID do registro correspondente)
  *
  * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
  * depois de sincronizar ao menos uma inspeção, rode a função
@@ -45,6 +46,9 @@ const SHEET_CIPA_GESTAO = 'CIPA_Gestao';
 const SHEET_CIPA_MEMBROS = 'CIPA_Membros';
 const SHEET_CIPA_REUNIOES = 'CIPA_Reunioes';
 const SHEET_CIPA_PARTICIPANTES = 'CIPA_Participantes';
+const SHEET_PTAPR = 'PTAPR';
+const SHEET_PTAPR_ITENS = 'PTAPR_Itens';
+const SHEET_PTAPR_EQUIPE = 'PTAPR_Equipe';
 
 function doPost(e) {
   let body;
@@ -68,6 +72,8 @@ function doPost(e) {
         return jsonResponse(upsertCipaGestao(body.gestao));
       case 'upsertCipaReuniao':
         return jsonResponse(upsertCipaReuniao(body.reuniao));
+      case 'upsertPTAPR':
+        return jsonResponse(upsertPTAPR(body.ptapr));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -389,6 +395,84 @@ function upsertCipaReuniao(reuniao) {
   });
 
   return { ok: true, remoteRef: reuniaoFolder.getId() };
+}
+
+function upsertPTAPR(pt) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folderName = pt.id + ' - PTAPR - ' + (pt.identificacao.empresa || 'sem-empresa');
+  const ptFolder = getOrCreateDriveFolder(folderName, rootFolder);
+
+  const sheetPT = getOrCreateSheet(SHEET_PTAPR, [
+    'ID', 'Data', 'Hora Início', 'Empresa', 'Unidade', 'Área', 'Local Específico',
+    'Atividade', 'Emitente', 'Supervisor Área', 'Tipos de Trabalho',
+    'Medidas de Controle', 'Data Encerramento', 'Hora Encerramento',
+    'Área Organizada', 'Observações Encerramento', 'Recebido em', 'Pasta Drive'
+  ]);
+
+  const id = pt.id;
+  const enc = pt.encerramento || {};
+  const linha = [
+    id,
+    pt.identificacao.data,
+    pt.identificacao.hora,
+    pt.identificacao.empresa,
+    pt.identificacao.unidade,
+    pt.identificacao.area,
+    pt.identificacao.localEspecifico,
+    pt.identificacao.atividade,
+    pt.identificacao.emitente,
+    pt.identificacao.supervisorArea,
+    (pt.tiposTrabalho || []).join(', '),
+    pt.medidasControle,
+    enc.data,
+    enc.hora,
+    enc.areaOrganizada,
+    enc.observacoes,
+    new Date(),
+    ptFolder.getUrl()
+  ];
+
+  const idCol = 1;
+  const data = sheetPT.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetPT.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetPT.appendRow(linha);
+  }
+
+  const sheetItens = getOrCreateSheet(SHEET_PTAPR_ITENS, [
+    'PTAPR ID', 'Item ID', 'Questão', 'Resposta', 'Observação', 'Recebido em'
+  ]);
+  const itensExistentes = sheetItens.getDataRange().getValues();
+  (pt.checklist || []).forEach((item) => {
+    let jaExiste = false;
+    for (let i = 1; i < itensExistentes.length; i++) {
+      if (itensExistentes[i][0] === id && itensExistentes[i][1] === item.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetItens.appendRow([id, item.id, item.texto, item.resposta, item.observacao, new Date()]);
+    }
+  });
+
+  const sheetEquipe = getOrCreateSheet(SHEET_PTAPR_EQUIPE, [
+    'PTAPR ID', 'Membro ID', 'Nome', 'Função', 'Assinado', 'Recebido em'
+  ]);
+  const equipeExistente = sheetEquipe.getDataRange().getValues();
+  (pt.equipe || []).forEach((p) => {
+    let jaExiste = false;
+    for (let i = 1; i < equipeExistente.length; i++) {
+      if (equipeExistente[i][0] === id && equipeExistente[i][1] === p.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetEquipe.appendRow([id, p.id, p.nome, p.funcao, p.assinado, new Date()]);
+    }
+  });
+
+  return { ok: true, remoteRef: ptFolder.getId() };
 }
 
 function uploadPhoto(inspectionId, photo) {

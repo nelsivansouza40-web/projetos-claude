@@ -66,6 +66,11 @@ const Sync = {
         if (reuniao.syncStatus === 'synced') continue;
         await this.syncCipaReuniao(reuniao.id, endpoint);
       }
+      const registrosPTAPR = await DB.getAllPTAPR();
+      for (const pt of registrosPTAPR) {
+        if (pt.syncStatus === 'synced') continue;
+        await this.syncPTAPR(pt.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -409,8 +414,107 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncPTAPR(ptId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let pt = await DB.getPTAPR(ptId);
+    if (!pt) return;
+
+    pt.syncStatus = 'sincronizando';
+    pt.syncError = '';
+    await DB.putPTAPR(pt);
+    this.notify();
+
+    try {
+      // 1) Envia os dados (texto) da PT/APR, sem fotos.
+      if (!pt.metaSynced) {
+        const payload = {
+          action: 'upsertPTAPR',
+          ptapr: buildPTAPRMetaPayload(pt)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados da PT/APR.');
+        }
+        pt.metaSynced = true;
+        pt.remoteRef = resp.remoteRef || pt.remoteRef || null;
+        await DB.putPTAPR(pt);
+      }
+
+      // 2) Envia cada foto pendente, individualmente.
+      const photos = await DB.getPhotosByInspection(ptId);
+      const pendentes = photos.filter((p) => !p.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: pt.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: pt.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      // 3) Reavalia status final.
+      const todasFotos = await DB.getPhotosByInspection(ptId);
+      const tudoSincronizado = pt.metaSynced && todasFotos.every((p) => p.synced);
+      pt.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
+      pt.syncError = '';
+      pt.updatedAt = Date.now();
+      await DB.putPTAPR(pt);
+    } catch (err) {
+      pt = await DB.getPTAPR(ptId);
+      pt.syncStatus = 'erro';
+      pt.syncError = err.message || String(err);
+      await DB.putPTAPR(pt);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildPTAPRMetaPayload(pt) {
+  return {
+    id: pt.id,
+    createdAt: pt.createdAt,
+    updatedAt: pt.updatedAt,
+    identificacao: pt.data.identificacao,
+    tiposTrabalho: pt.data.tiposTrabalho,
+    checklist: pt.data.checklist.map((item) => ({
+      id: item.id,
+      texto: item.texto,
+      resposta: item.resposta,
+      observacao: item.observacao
+    })),
+    medidasControle: pt.data.medidasControle,
+    equipe: pt.data.equipe.map((p) => ({
+      id: p.id,
+      nome: p.nome,
+      funcao: p.funcao,
+      assinado: !!p.assinatura
+    })),
+    encerramento: pt.data.encerramento
+  };
+}
 
 function buildCipaGestaoMetaPayload(gestao) {
   return {
