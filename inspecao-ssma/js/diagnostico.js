@@ -504,6 +504,7 @@ async function renderDiagDetail(id) {
     ${diag.data.observacoesFinais ? `<h3>Observações</h3><div class="detail-block"><p>${escapeHtml(diag.data.observacoesFinais)}</p></div>` : ''}
     ${photos.length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${photos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     <div class="form-actions">
+      <button id="btn-editar-diag" class="btn-secondary">✏️ Editar diagnóstico</button>
       <button id="btn-relatorio-diag" class="btn-secondary">Gerar relatório (PDF)</button>
     </div>
     <div class="form-actions">
@@ -514,6 +515,14 @@ async function renderDiagDetail(id) {
 
   document.getElementById('btn-back-diag-home').addEventListener('click', renderDiagHome);
   document.getElementById('btn-relatorio-diag').addEventListener('click', () => renderDiagReport(id));
+  document.getElementById('btn-editar-diag').addEventListener('click', async () => {
+    diag.metaSynced = false;
+    diag.syncStatus = 'pendente';
+    await salvarRascunhoDiagnostico(diag);
+    state.diagId = id;
+    state.step = 0;
+    renderDiagForm();
+  });
 
   const btnSyncOne = document.getElementById('btn-sync-one-diag');
   if (btnSyncOne) btnSyncOne.addEventListener('click', async () => {

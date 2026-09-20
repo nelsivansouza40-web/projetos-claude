@@ -570,6 +570,7 @@ async function renderReuniaoCipaDetail(id) {
     <h3>Lista de presença (${reuniao.data.participantes.length})</h3>
     ${participantesHtml}
     <div class="form-actions">
+      <button id="btn-editar-cipa-reuniao" class="btn-secondary">✏️ Editar reunião</button>
       <button id="btn-relatorio-cipa" class="btn-secondary">Gerar ata (PDF)</button>
     </div>
     <div class="form-actions">
@@ -580,6 +581,13 @@ async function renderReuniaoCipaDetail(id) {
 
   document.getElementById('btn-back-cipa-reuniao-home').addEventListener('click', renderCipaHome);
   document.getElementById('btn-relatorio-cipa').addEventListener('click', () => renderReuniaoCipaReport(id));
+  document.getElementById('btn-editar-cipa-reuniao').addEventListener('click', async () => {
+    reuniao.metaSynced = false;
+    reuniao.syncStatus = 'pendente';
+    await salvarRascunhoReuniaoCipa(reuniao);
+    state.cipaReuniaoId = id;
+    renderReuniaoCipaForm();
+  });
 
   const btnSyncOne = document.getElementById('btn-sync-one-cipa');
   if (btnSyncOne) btnSyncOne.addEventListener('click', async () => {

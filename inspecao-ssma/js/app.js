@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v15';
+const APP_VERSION = 'v16';
 
 const state = {
   screen: 'home',
@@ -737,6 +737,7 @@ async function renderDetail(id) {
       ${fotosFechamento.length ? `<div class="thumbs">${fotosFechamento.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     </div>
     <div class="form-actions">
+      <button id="btn-editar-inspecao" class="btn-secondary">✏️ Editar inspeção</button>
       <button id="btn-relatorio" class="btn-secondary">Gerar relatório (PDF)</button>
     </div>
     <div class="form-actions">
@@ -747,6 +748,14 @@ async function renderDetail(id) {
 
   document.getElementById('btn-back-home').addEventListener('click', renderHome);
   document.getElementById('btn-relatorio').addEventListener('click', () => renderReport(id));
+  document.getElementById('btn-editar-inspecao').addEventListener('click', async () => {
+    insp.metaSynced = false;
+    insp.syncStatus = 'pendente';
+    await salvarRascunho(insp);
+    state.inspectionId = id;
+    state.step = 0;
+    renderForm();
+  });
 
   const btnSyncOne = document.getElementById('btn-sync-one');
   if (btnSyncOne) btnSyncOne.addEventListener('click', async () => {
