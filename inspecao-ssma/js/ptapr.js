@@ -37,7 +37,9 @@ function novaPTAPRVazia() {
         localEspecifico: '',
         atividade: '',
         emitente: '',
-        supervisorArea: ''
+        supervisorArea: '',
+        responsavelAtividade: '',
+        sesmt: ''
       },
       tiposTrabalho: [],
       checklist: gerarChecklistPTAPR(),
@@ -52,7 +54,9 @@ function novaPTAPRVazia() {
       },
       assinaturas: {
         emitente: '',
-        supervisorArea: ''
+        supervisorArea: '',
+        responsavelAtividade: '',
+        sesmt: ''
       }
     }
   };
@@ -211,6 +215,12 @@ function renderPTAPRStepIdentificacao(content, pt) {
       <label>Supervisor / Responsável pela área
         <input type="text" name="supervisorArea" value="${escapeHtml(id.supervisorArea)}">
       </label>
+      <label>Responsável pela atividade
+        <input type="text" name="responsavelAtividade" value="${escapeHtml(id.responsavelAtividade)}">
+      </label>
+      <label>SESMT
+        <input type="text" name="sesmt" value="${escapeHtml(id.sesmt)}">
+      </label>
       <label>Tipo(s) de trabalho *</label>
       <div class="tipos-trabalho-grid">${tiposHtml}</div>
       <div class="form-actions">
@@ -237,7 +247,9 @@ function renderPTAPRStepIdentificacao(content, pt) {
       localEspecifico: (fd.get('localEspecifico') || '').trim(),
       atividade: fd.get('atividade').trim(),
       emitente: fd.get('emitente').trim(),
-      supervisorArea: (fd.get('supervisorArea') || '').trim()
+      supervisorArea: (fd.get('supervisorArea') || '').trim(),
+      responsavelAtividade: (fd.get('responsavelAtividade') || '').trim(),
+      sesmt: (fd.get('sesmt') || '').trim()
     };
     pt.data.tiposTrabalho = tiposSelecionados;
     await salvarRascunhoPTAPR(pt);
@@ -336,8 +348,8 @@ function renderPTAPRStepEquipe(content, pt) {
 
   content.innerHTML = `
     <div class="lista-participantes">
-      <h3>Equipe executante</h3>
-      <p class="hint">Cada membro deve assinar confirmando ciência dos riscos e das medidas de controle desta PT/APR.</p>
+      <h3>Participantes / Executantes</h3>
+      <p class="hint">Cada participante/executante deve assinar confirmando ciência dos riscos e das medidas de controle desta PT/APR.</p>
       <div id="ptapr-equipe-container"></div>
       <button type="button" id="btn-add-equipe-ptapr" class="btn-secondary">+ Adicionar membro da equipe</button>
     </div>
@@ -597,7 +609,7 @@ async function renderPTAPRDetail(id) {
     ${checklistHtml}
     ${pt.data.medidasControle ? `<h3>Medidas de controle adicionais</h3><div class="detail-block"><p>${escapeHtml(pt.data.medidasControle)}</p></div>` : ''}
     ${photos.length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${photos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
-    <h3>Equipe executante (${pt.data.equipe.length})</h3>
+    <h3>Participantes / Executantes (${pt.data.equipe.length})</h3>
     ${equipeHtml}
     <h3>Encerramento</h3>
     ${enc.data
@@ -794,6 +806,7 @@ async function renderPTAPRReport(id) {
           <tr><th>Área / Setor</th><td>${escapeHtml(ident.area)}</td><th>Local específico</th><td>${escapeHtml(ident.localEspecifico || '—')}</td></tr>
           <tr><th>Data</th><td>${formatarDataBR(ident.data)}</td><th>Hora de início</th><td>${escapeHtml(ident.hora)}</td></tr>
           <tr><th>Emitente</th><td>${escapeHtml(ident.emitente)}</td><th>Supervisor da área</th><td>${escapeHtml(ident.supervisorArea || '—')}</td></tr>
+          <tr><th>Responsável pela atividade</th><td>${escapeHtml(ident.responsavelAtividade || '—')}</td><th>SESMT</th><td>${escapeHtml(ident.sesmt || '—')}</td></tr>
           <tr><th>Tipo(s) de trabalho</th><td colspan="3">${pt.data.tiposTrabalho.map((t) => escapeHtml(t)).join(', ') || '—'}</td></tr>
         </table>
       </section>
@@ -810,7 +823,7 @@ async function renderPTAPRReport(id) {
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>4. Equipe executante — ciência dos riscos</h3>
+        <h3>4. Participantes / Executantes — ciência dos riscos</h3>
         ${montarEquipePTAPR(pt.data.equipe)}
       </section>
 
@@ -819,6 +832,8 @@ async function renderPTAPRReport(id) {
         <div class="rep-assinatura-grid">
           ${blocoAssinatura(pt, 'emitente', 'Emitente da PT', ident.emitente)}
           ${blocoAssinatura(pt, 'supervisorArea', 'Supervisor da área', ident.supervisorArea)}
+          ${blocoAssinatura(pt, 'responsavelAtividade', 'Responsável pela atividade', ident.responsavelAtividade)}
+          ${blocoAssinatura(pt, 'sesmt', 'SESMT', ident.sesmt)}
         </div>
       </section>
 

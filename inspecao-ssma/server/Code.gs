@@ -416,8 +416,8 @@ function upsertPTAPR(pt) {
 
   const sheetPT = getOrCreateSheet(SHEET_PTAPR, [
     'ID', 'Data', 'Hora Início', 'Empresa', 'Unidade', 'Área', 'Local Específico',
-    'Atividade', 'Emitente', 'Supervisor Área', 'Tipos de Trabalho',
-    'Medidas de Controle', 'Data Encerramento', 'Hora Encerramento',
+    'Atividade', 'Emitente', 'Supervisor Área', 'Responsável pela Atividade', 'SESMT',
+    'Tipos de Trabalho', 'Medidas de Controle', 'Data Encerramento', 'Hora Encerramento',
     'Área Organizada', 'Observações Encerramento', 'Recebido em', 'Pasta Drive'
   ]);
 
@@ -434,6 +434,8 @@ function upsertPTAPR(pt) {
     pt.identificacao.atividade,
     pt.identificacao.emitente,
     pt.identificacao.supervisorArea,
+    pt.identificacao.responsavelAtividade,
+    pt.identificacao.sesmt,
     (pt.tiposTrabalho || []).join(', '),
     pt.medidasControle,
     enc.data,
