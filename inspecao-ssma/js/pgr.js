@@ -426,20 +426,51 @@ function montarResumoRiscosPGR(perigos) {
   `;
 }
 
-function montarPerigoRelatorioPGR(item, idx) {
-  const antes = classificarRiscoPGR(item.severidade, item.probabilidade);
-  const depois = classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual);
+function montarInventarioRiscosPGR(perigos) {
+  if (!perigos.length) return '<p class="rep-hint">Nenhum perigo cadastrado.</p>';
+  const linhas = perigos.map((item, idx) => {
+    const antes = classificarRiscoPGR(item.severidade, item.probabilidade);
+    const depois = classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual);
+    return `
+      <tr>
+        <td>${idx + 1}</td>
+        <td>${escapeHtml(item.perigo)}</td>
+        <td>${escapeHtml(item.tipoRisco)}</td>
+        <td>${escapeHtml(item.setor || '—')}${item.funcao ? ' / ' + escapeHtml(item.funcao) : ''}</td>
+        <td>${escapeHtml(item.medidasExistentes || '—')}</td>
+        <td class="rep-td-status rep-status-${antes.cls === 'badge-ok' ? 'ok' : antes.cls === 'badge-pendente' ? 'na' : 'nc'}">${antes.nivel}${antes.valor ? ' (' + antes.valor + ')' : ''}</td>
+        <td class="rep-td-status rep-status-${depois.cls === 'badge-ok' ? 'ok' : depois.cls === 'badge-pendente' ? 'na' : 'nc'}">${depois.nivel}${depois.valor ? ' (' + depois.valor + ')' : ''}</td>
+      </tr>
+    `;
+  }).join('');
   return `
-    <div class="detail-block" style="margin-bottom:14px;">
-      <p><strong>${idx + 1}. ${escapeHtml(item.perigo)}</strong> — ${escapeHtml(item.tipoRisco)}</p>
-      <p>Setor/Função: ${escapeHtml(item.setor || '—')} / ${escapeHtml(item.funcao || '—')} · Fonte: ${escapeHtml(item.fonte || '—')}</p>
-      <table class="rep-tabela-ident">
-        <tr><th>Risco antes das medidas</th><td>${antes.nivel}${antes.valor ? ' (' + antes.valor + ')' : ''}</td><th>Risco residual</th><td>${depois.nivel}${depois.valor ? ' (' + depois.valor + ')' : ''}</td></tr>
-      </table>
-      ${item.medidasExistentes ? `<p><strong>Medidas existentes:</strong> ${escapeHtml(item.medidasExistentes)}</p>` : ''}
-      ${item.medidasPropostas ? `<p><strong>Medidas propostas:</strong> ${escapeHtml(item.medidasPropostas)}</p>` : ''}
-      <p>Responsável: ${escapeHtml(item.responsavel || '—')} · Prazo: ${item.prazo ? formatarDataBR(item.prazo) : '—'} · Status: ${escapeHtml(item.status || '—')}</p>
-    </div>
+    <table class="rep-table">
+      <thead><tr><th>Nº</th><th>Perigo / Risco</th><th>Tipo</th><th>Setor / Função</th><th>Medidas de controle existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>
+  `;
+}
+
+function montarPlanoAcaoPGR(perigos) {
+  const comAcao = perigos
+    .map((item, idx) => ({ item, numero: idx + 1 }))
+    .filter(({ item }) => item.medidasPropostas || item.responsavel || item.prazo);
+  if (!comAcao.length) return '<p class="rep-hint">Nenhuma ação corretiva ou preventiva registrada.</p>';
+  const linhas = comAcao.map(({ item, numero }) => `
+    <tr>
+      <td>${numero}</td>
+      <td>${escapeHtml(item.medidasPropostas || '—')}</td>
+      <td>${escapeHtml(item.responsavel || '—')}</td>
+      <td>${item.prazo ? formatarDataBR(item.prazo) : '—'}</td>
+      <td>${escapeHtml(item.status || '—')}</td>
+    </tr>
+  `).join('');
+  return `
+    <table class="rep-table">
+      <thead><tr><th>Nº</th><th>Ação corretiva / preventiva</th><th>Responsável</th><th>Prazo</th><th>Status</th></tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>
+    <p class="rep-hint">O número da ação corresponde ao número do perigo no Inventário de Riscos.</p>
   `;
 }
 
@@ -491,7 +522,8 @@ async function renderPGRReport(id) {
 
   const codigo = gerarCodigoPGR(p);
   const geradoEm = new Date().toLocaleString('pt-BR');
-  const perigosHtml = p.data.perigos.map((item, idx) => montarPerigoRelatorioPGR(item, idx)).join('');
+  const inventarioHtml = montarInventarioRiscosPGR(p.data.perigos);
+  const planoAcaoHtml = montarPlanoAcaoPGR(p.data.perigos);
 
   view.innerHTML = `
     <div class="screen-header no-print">
@@ -531,12 +563,17 @@ async function renderPGRReport(id) {
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>3. Inventário de perigos e riscos</h3>
-        ${perigosHtml}
+        <h3>3. Inventário de Riscos</h3>
+        ${inventarioHtml}
+      </section>
+
+      <section class="rep-secao rep-quebra">
+        <h3>4. Plano de Ação</h3>
+        ${planoAcaoHtml}
       </section>
 
       <section class="rep-secao rep-assinaturas">
-        <h3>4. Responsável técnico</h3>
+        <h3>5. Responsável técnico</h3>
         <div class="rep-assinatura-grid">
           ${blocoAssinatura(p, 'responsavelPGR', 'Responsável técnico pelo PGR', p.data.responsavelPGR)}
         </div>

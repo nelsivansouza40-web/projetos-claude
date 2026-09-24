@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v30';
+const APP_VERSION = 'v31';
 
 const state = {
   screen: 'home',
@@ -1266,7 +1266,10 @@ async function init() {
   updateConnBadge();
   await aplicarImagemFundoTopbar();
   await updateSyncBar();
-  await renderHome();
+  // Só renderiza a tela inicial se o usuário ainda não tiver navegado para
+  // outro lugar enquanto essas leituras assíncronas rodavam — sem essa
+  // checagem, essa chamada atrasada substituía a tela atual sem aviso.
+  if (state.screen === 'home') await renderHome();
   Sync.syncAll().catch(() => {});
 }
 
