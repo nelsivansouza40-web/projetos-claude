@@ -70,7 +70,9 @@ const SHEET_VEICULO = 'Veiculos';
 const SHEET_VEICULO_ITENS = 'Veiculos_Itens';
 const SHEET_VEICULO_AVARIAS = 'Veiculos_Avarias';
 const SHEET_PGR = 'PGR';
+const SHEET_PGR_GHES = 'PGR_GHEs';
 const SHEET_PGR_PERIGOS = 'PGR_Perigos';
+const SHEET_PGR_TREINAMENTOS = 'PGR_Treinamentos';
 
 function doPost(e) {
   let body;
@@ -884,8 +886,19 @@ function upsertPGR(p) {
     sheetPGR.appendRow(linha);
   }
 
+  const sheetGHEs = getOrCreateSheet(SHEET_PGR_GHES, [
+    'PGR ID', 'GHE ID', 'Nome', 'Setor', 'Função', 'Nº de Trabalhadores', 'Recebido em'
+  ]);
+  const dataGHEs = sheetGHEs.getDataRange().getValues();
+  for (let i = dataGHEs.length - 1; i >= 1; i--) {
+    if (dataGHEs[i][0] === id) sheetGHEs.deleteRow(i + 1);
+  }
+  (p.ghes || []).forEach((g) => {
+    sheetGHEs.appendRow([id, g.id, g.nome, g.setor, g.funcao, g.numTrabalhadores, new Date()]);
+  });
+
   const sheetPerigos = getOrCreateSheet(SHEET_PGR_PERIGOS, [
-    'PGR ID', 'Perigo ID', 'Setor', 'Função', 'Perigo', 'Fonte', 'Tipo de Risco',
+    'PGR ID', 'Perigo ID', 'GHE', 'Perigo', 'Fonte', 'Tipo de Risco',
     'Severidade', 'Probabilidade', 'Nível de Risco', 'Medidas Existentes',
     'Medidas Propostas', 'Severidade Residual', 'Probabilidade Residual',
     'Nível de Risco Residual', 'Responsável', 'Prazo', 'Status', 'Recebido em'
@@ -898,10 +911,25 @@ function upsertPGR(p) {
   }
   (p.perigos || []).forEach((item) => {
     sheetPerigos.appendRow([
-      id, item.id, item.setor, item.funcao, item.perigo, item.fonte, item.tipoRisco,
+      id, item.id, item.ghe, item.perigo, item.fonte, item.tipoRisco,
       item.severidade, item.probabilidade, item.nivelRisco, item.medidasExistentes,
       item.medidasPropostas, item.severidadeResidual, item.probabilidadeResidual,
       item.nivelRiscoResidual, item.responsavel, item.prazo, item.status, new Date()
+    ]);
+  });
+
+  const sheetTreinamentos = getOrCreateSheet(SHEET_PGR_TREINAMENTOS, [
+    'PGR ID', 'Treinamento ID', 'Treinamento / Norma', 'Público-alvo (GHE)',
+    'Carga Horária', 'Periodicidade', 'Responsável', 'Data Prevista', 'Status', 'Recebido em'
+  ]);
+  const dataTreinamentos = sheetTreinamentos.getDataRange().getValues();
+  for (let i = dataTreinamentos.length - 1; i >= 1; i--) {
+    if (dataTreinamentos[i][0] === id) sheetTreinamentos.deleteRow(i + 1);
+  }
+  (p.treinamentos || []).forEach((item) => {
+    sheetTreinamentos.appendRow([
+      id, item.id, item.nome, item.ghe, item.cargaHoraria, item.periodicidade,
+      item.responsavel, item.dataPrevista, item.status, new Date()
     ]);
   });
 

@@ -8,8 +8,7 @@
 function novoPerigoPGR() {
   return {
     id: uuid(),
-    setor: '',
-    funcao: '',
+    gheId: '',
     perigo: '',
     fonte: '',
     tipoRisco: TIPOS_RISCO_PGR[0],
@@ -21,6 +20,29 @@ function novoPerigoPGR() {
     probabilidadeResidual: '',
     responsavel: '',
     prazo: '',
+    status: 'Pendente'
+  };
+}
+
+function novoGHEPGR() {
+  return {
+    id: uuid(),
+    nome: '',
+    setor: '',
+    funcao: '',
+    numTrabalhadores: ''
+  };
+}
+
+function novoTreinamentoPGR() {
+  return {
+    id: uuid(),
+    nome: '',
+    gheId: '',
+    cargaHoraria: '',
+    periodicidade: PERIODICIDADES_TREINAMENTO_PGR[0],
+    responsavel: '',
+    dataPrevista: '',
     status: 'Pendente'
   };
 }
@@ -42,12 +64,29 @@ function novoPGRVazio() {
       unidade: '',
       responsavelPGR: '',
       dataElaboracao: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
+      ghes: [],
       perigos: [],
+      treinamentos: [],
       assinaturas: {
         responsavelPGR: ''
       }
     }
   };
+}
+
+function nomeGHEPGR(ghes, gheId) {
+  const g = ghes.find((x) => x.id === gheId);
+  if (!g) return '';
+  const partes = [g.nome];
+  const complemento = [g.setor, g.funcao].filter(Boolean).join(' / ');
+  if (complemento) partes.push(`(${complemento})`);
+  return partes.join(' ');
+}
+
+function opcoesGHEPGR(ghes, selecionado) {
+  return `<option value="">Selecione um GHE…</option>` + ghes.map((g) =>
+    `<option value="${g.id}" ${selecionado === g.id ? 'selected' : ''}>${escapeHtml(nomeGHEPGR(ghes, g.id) || 'Sem nome')}</option>`
+  ).join('');
 }
 
 async function salvarPGR(p) {
@@ -152,6 +191,8 @@ async function renderPGRDetail(id) {
   state.pgrId = id;
   const p = await DB.getPGR(id);
   if (!p) return renderPGRHome();
+  p.data.ghes = p.data.ghes || [];
+  p.data.treinamentos = p.data.treinamentos || [];
   const s = statusLabel(p);
 
   view.innerHTML = `
@@ -178,10 +219,24 @@ async function renderPGRDetail(id) {
     </div>
 
     <div class="lista-participantes">
+      <h3>Grupos Homogêneos de Exposição (GHE)</h3>
+      <p class="hint">Agrupe os trabalhadores com exposições semelhantes. Cada perigo do inventário e cada treinamento do cronograma são vinculados a um GHE.</p>
+      <div id="pgr-ghes-container"></div>
+      <button type="button" id="btn-add-ghe-pgr" class="btn-secondary">+ Adicionar GHE</button>
+    </div>
+
+    <div class="lista-participantes">
       <h3>Perigos identificados</h3>
       <p class="hint">Para cada perigo, avalie a severidade e a probabilidade antes das medidas de controle e, depois de definir as medidas propostas, avalie novamente o risco residual.</p>
       <div id="pgr-perigos-container"></div>
       <button type="button" id="btn-add-perigo-pgr" class="btn-secondary">+ Adicionar perigo</button>
+    </div>
+
+    <div class="lista-participantes">
+      <h3>Cronograma de Treinamento</h3>
+      <p class="hint">Treinamentos previstos ou já realizados para cada GHE, conforme as medidas de controle definidas.</p>
+      <div id="pgr-treinamentos-container"></div>
+      <button type="button" id="btn-add-treinamento-pgr" class="btn-secondary">+ Adicionar treinamento</button>
     </div>
 
     <div class="form-actions">
@@ -204,13 +259,37 @@ async function renderPGRDetail(id) {
   inputResponsavel.addEventListener('blur', async () => { p.data.responsavelPGR = inputResponsavel.value.trim(); await salvarPGR(p); });
   inputData.addEventListener('change', async () => { p.data.dataElaboracao = inputData.value; await salvarPGR(p); });
 
+  const ghesContainer = document.getElementById('pgr-ghes-container');
   const perigosContainer = document.getElementById('pgr-perigos-container');
+  const treinamentosContainer = document.getElementById('pgr-treinamentos-container');
+
+  // Os selects de perigo e de treinamento mostram o nome dos GHEs cadastrados,
+  // então precisam ser redesenhados sempre que a lista de GHEs mudar.
+  function refrescarDependentesDeGHE() {
+    renderPerigosPGR(perigosContainer, p);
+    renderTreinamentosPGR(treinamentosContainer, p);
+  }
+
+  renderGHEsPGR(ghesContainer, p, refrescarDependentesDeGHE);
   renderPerigosPGR(perigosContainer, p);
+  renderTreinamentosPGR(treinamentosContainer, p);
+
+  document.getElementById('btn-add-ghe-pgr').addEventListener('click', async () => {
+    p.data.ghes.push(novoGHEPGR());
+    await salvarPGR(p);
+    renderGHEsPGR(ghesContainer, p, refrescarDependentesDeGHE);
+  });
 
   document.getElementById('btn-add-perigo-pgr').addEventListener('click', async () => {
     p.data.perigos.push(novoPerigoPGR());
     await salvarPGR(p);
     renderPerigosPGR(perigosContainer, p);
+  });
+
+  document.getElementById('btn-add-treinamento-pgr').addEventListener('click', async () => {
+    p.data.treinamentos.push(novoTreinamentoPGR());
+    await salvarPGR(p);
+    renderTreinamentosPGR(treinamentosContainer, p);
   });
 
   document.getElementById('btn-relatorio-pgr').addEventListener('click', () => {
@@ -243,17 +322,14 @@ async function renderPGRDetail(id) {
   });
 }
 
-function renderPerigoPGR(item, idx) {
+function renderPerigoPGR(item, idx, ghes) {
   const antes = classificarRiscoPGR(item.severidade, item.probabilidade);
   const depois = classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual);
   return `
     <div class="leitura-card" data-idx="${idx}">
       <div class="participante-linha">
-        <label class="campo-leitura">Setor
-          <input type="text" class="in-setor" value="${escapeHtml(item.setor)}">
-        </label>
-        <label class="campo-leitura">Função
-          <input type="text" class="in-funcao" value="${escapeHtml(item.funcao)}">
+        <label class="campo-leitura">GHE (Grupo Homogêneo de Exposição)
+          <select class="in-ghe-perigo">${opcoesGHEPGR(ghes, item.gheId)}</select>
         </label>
         <button type="button" class="btn-remover-item btn-remover-perigo" title="Remover perigo">✕</button>
       </div>
@@ -321,16 +397,22 @@ function renderPerigoPGR(item, idx) {
 
 function renderPerigosPGR(container, p) {
   const perigos = p.data.perigos;
+  const ghes = p.data.ghes;
   container.innerHTML = perigos.length
-    ? perigos.map((item, idx) => renderPerigoPGR(item, idx)).join('')
+    ? perigos.map((item, idx) => renderPerigoPGR(item, idx, ghes)).join('')
     : '<p class="empty-state">Nenhum perigo cadastrado ainda.</p>';
 
   perigos.forEach((item, idx) => {
     const card = container.querySelector(`.leitura-card[data-idx="${idx}"]`);
     if (!card) return;
 
+    card.querySelector('.in-ghe-perigo').addEventListener('change', async (e) => {
+      item.gheId = e.target.value;
+      await salvarPGR(p);
+    });
+
     const camposTexto = [
-      ['.in-setor', 'setor'], ['.in-funcao', 'funcao'], ['.in-perigo', 'perigo'], ['.in-fonte', 'fonte'],
+      ['.in-perigo', 'perigo'], ['.in-fonte', 'fonte'],
       ['.in-medidas-existentes', 'medidasExistentes'], ['.in-medidas-propostas', 'medidasPropostas'],
       ['.in-responsavel-perigo', 'responsavel']
     ];
@@ -385,6 +467,160 @@ function renderPerigosPGR(container, p) {
   });
 }
 
+/* ---------------- GHE (GRUPOS HOMOGÊNEOS DE EXPOSIÇÃO) ---------------- */
+
+function renderGHEPGR(item, idx) {
+  return `
+    <div class="leitura-card" data-idx="${idx}">
+      <div class="participante-linha">
+        <label class="campo-leitura">Nome do GHE *
+          <input type="text" class="in-ghe-nome" placeholder="Ex.: Pedreiros — Obra Central" value="${escapeHtml(item.nome)}">
+        </label>
+        <button type="button" class="btn-remover-item btn-remover-ghe" title="Remover GHE">✕</button>
+      </div>
+      <div class="participante-linha">
+        <label class="campo-leitura">Setor
+          <input type="text" class="in-ghe-setor" value="${escapeHtml(item.setor)}">
+        </label>
+        <label class="campo-leitura">Função
+          <input type="text" class="in-ghe-funcao" value="${escapeHtml(item.funcao)}">
+        </label>
+        <label class="campo-leitura">Nº de trabalhadores
+          <input type="number" class="in-ghe-num-trabalhadores" min="1" value="${escapeHtml(item.numTrabalhadores)}">
+        </label>
+      </div>
+    </div>
+  `;
+}
+
+function renderGHEsPGR(container, p, aoMudar) {
+  const ghes = p.data.ghes;
+  container.innerHTML = ghes.length
+    ? ghes.map((item, idx) => renderGHEPGR(item, idx)).join('')
+    : '<p class="empty-state">Nenhum GHE cadastrado ainda.</p>';
+
+  ghes.forEach((item, idx) => {
+    const card = container.querySelector(`.leitura-card[data-idx="${idx}"]`);
+    if (!card) return;
+
+    const camposTexto = [
+      ['.in-ghe-nome', 'nome'], ['.in-ghe-setor', 'setor'], ['.in-ghe-funcao', 'funcao']
+    ];
+    camposTexto.forEach(([seletor, campo]) => {
+      const el = card.querySelector(seletor);
+      el.addEventListener('blur', async () => {
+        item[campo] = el.value.trim();
+        await salvarPGR(p);
+        aoMudar();
+      });
+    });
+    card.querySelector('.in-ghe-num-trabalhadores').addEventListener('blur', async (e) => {
+      item.numTrabalhadores = e.target.value;
+      await salvarPGR(p);
+    });
+
+    card.querySelector('.btn-remover-ghe').addEventListener('click', async () => {
+      if (!confirm('Remover este GHE? Perigos e treinamentos vinculados a ele ficarão sem GHE.')) return;
+      p.data.ghes.splice(idx, 1);
+      p.data.perigos.forEach((h) => { if (h.gheId === item.id) h.gheId = ''; });
+      p.data.treinamentos.forEach((t) => { if (t.gheId === item.id) t.gheId = ''; });
+      await salvarPGR(p);
+      renderGHEsPGR(container, p, aoMudar);
+      aoMudar();
+    });
+  });
+}
+
+/* ---------------- CRONOGRAMA DE TREINAMENTO ---------------- */
+
+function renderTreinamentoPGR(item, idx, ghes) {
+  return `
+    <div class="leitura-card" data-idx="${idx}">
+      <div class="participante-linha">
+        <label class="campo-leitura">Treinamento / Norma *
+          <input type="text" class="in-treinamento-nome" placeholder="Ex.: NR-35 — Trabalho em Altura" value="${escapeHtml(item.nome)}">
+        </label>
+        <button type="button" class="btn-remover-item btn-remover-treinamento" title="Remover treinamento">✕</button>
+      </div>
+      <label class="campo-leitura">Público-alvo (GHE)
+        <select class="in-treinamento-ghe">${opcoesGHEPGR(ghes, item.gheId)}</select>
+      </label>
+      <div class="participante-linha">
+        <label class="campo-leitura">Carga horária (h)
+          <input type="number" class="in-treinamento-carga" min="1" value="${escapeHtml(item.cargaHoraria)}">
+        </label>
+        <label class="campo-leitura">Periodicidade
+          <select class="in-treinamento-periodicidade">${PERIODICIDADES_TREINAMENTO_PGR.map((per) => `<option ${item.periodicidade === per ? 'selected' : ''}>${escapeHtml(per)}</option>`).join('')}</select>
+        </label>
+      </div>
+      <div class="participante-linha">
+        <label class="campo-leitura">Responsável
+          <input type="text" class="in-treinamento-responsavel" value="${escapeHtml(item.responsavel)}">
+        </label>
+        <label class="campo-leitura">Data prevista
+          <input type="date" class="in-treinamento-data" value="${escapeHtml(item.dataPrevista)}">
+        </label>
+        <label class="campo-leitura">Status
+          <select class="in-treinamento-status">
+            <option ${item.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+            <option ${item.status === 'Em andamento' ? 'selected' : ''}>Em andamento</option>
+            <option ${item.status === 'Concluída' ? 'selected' : ''}>Concluída</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  `;
+}
+
+function renderTreinamentosPGR(container, p) {
+  const treinamentos = p.data.treinamentos;
+  const ghes = p.data.ghes;
+  container.innerHTML = treinamentos.length
+    ? treinamentos.map((item, idx) => renderTreinamentoPGR(item, idx, ghes)).join('')
+    : '<p class="empty-state">Nenhum treinamento cadastrado ainda.</p>';
+
+  treinamentos.forEach((item, idx) => {
+    const card = container.querySelector(`.leitura-card[data-idx="${idx}"]`);
+    if (!card) return;
+
+    card.querySelector('.in-treinamento-nome').addEventListener('blur', async (e) => {
+      item.nome = e.target.value.trim();
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-treinamento-ghe').addEventListener('change', async (e) => {
+      item.gheId = e.target.value;
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-treinamento-carga').addEventListener('blur', async (e) => {
+      item.cargaHoraria = e.target.value;
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-treinamento-periodicidade').addEventListener('change', async (e) => {
+      item.periodicidade = e.target.value;
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-treinamento-responsavel').addEventListener('blur', async (e) => {
+      item.responsavel = e.target.value.trim();
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-treinamento-data').addEventListener('change', async (e) => {
+      item.dataPrevista = e.target.value;
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-treinamento-status').addEventListener('change', async (e) => {
+      item.status = e.target.value;
+      await salvarPGR(p);
+    });
+
+    card.querySelector('.btn-remover-treinamento').addEventListener('click', async () => {
+      if (!confirm('Remover este treinamento do cronograma?')) return;
+      p.data.treinamentos.splice(idx, 1);
+      await salvarPGR(p);
+      renderTreinamentosPGR(container, p);
+    });
+  });
+}
+
 /* ---------------- VALIDAÇÃO PARA O RELATÓRIO ---------------- */
 
 function validarPGRParaRelatorio(p) {
@@ -426,7 +662,7 @@ function montarResumoRiscosPGR(perigos) {
   `;
 }
 
-function montarInventarioRiscosPGR(perigos) {
+function montarInventarioRiscosPGR(perigos, ghes) {
   if (!perigos.length) return '<p class="rep-hint">Nenhum perigo cadastrado.</p>';
   const linhas = perigos.map((item, idx) => {
     const antes = classificarRiscoPGR(item.severidade, item.probabilidade);
@@ -436,7 +672,7 @@ function montarInventarioRiscosPGR(perigos) {
         <td>${idx + 1}</td>
         <td>${escapeHtml(item.perigo)}</td>
         <td>${escapeHtml(item.tipoRisco)}</td>
-        <td>${escapeHtml(item.setor || '—')}${item.funcao ? ' / ' + escapeHtml(item.funcao) : ''}</td>
+        <td>${escapeHtml(nomeGHEPGR(ghes, item.gheId) || '—')}</td>
         <td>${escapeHtml(item.medidasExistentes || '—')}</td>
         <td class="rep-td-status rep-status-${antes.cls === 'badge-ok' ? 'ok' : antes.cls === 'badge-pendente' ? 'na' : 'nc'}">${antes.nivel}${antes.valor ? ' (' + antes.valor + ')' : ''}</td>
         <td class="rep-td-status rep-status-${depois.cls === 'badge-ok' ? 'ok' : depois.cls === 'badge-pendente' ? 'na' : 'nc'}">${depois.nivel}${depois.valor ? ' (' + depois.valor + ')' : ''}</td>
@@ -445,7 +681,29 @@ function montarInventarioRiscosPGR(perigos) {
   }).join('');
   return `
     <table class="rep-table">
-      <thead><tr><th>Nº</th><th>Perigo / Risco</th><th>Tipo</th><th>Setor / Função</th><th>Medidas de controle existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
+      <thead><tr><th>Nº</th><th>Perigo / Risco</th><th>Tipo</th><th>GHE</th><th>Medidas de controle existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>
+  `;
+}
+
+function montarCronogramaTreinamentoPGR(treinamentos, ghes) {
+  if (!treinamentos.length) return '<p class="rep-hint">Nenhum treinamento cadastrado.</p>';
+  const linhas = treinamentos.map((item, idx) => `
+    <tr>
+      <td>${idx + 1}</td>
+      <td>${escapeHtml(item.nome || '—')}</td>
+      <td>${escapeHtml(nomeGHEPGR(ghes, item.gheId) || 'Todos os GHEs')}</td>
+      <td>${item.cargaHoraria ? item.cargaHoraria + 'h' : '—'}</td>
+      <td>${escapeHtml(item.periodicidade || '—')}</td>
+      <td>${escapeHtml(item.responsavel || '—')}</td>
+      <td>${item.dataPrevista ? formatarDataBR(item.dataPrevista) : '—'}</td>
+      <td>${escapeHtml(item.status || '—')}</td>
+    </tr>
+  `).join('');
+  return `
+    <table class="rep-table">
+      <thead><tr><th>Nº</th><th>Treinamento / Norma</th><th>Público-alvo</th><th>Carga horária</th><th>Periodicidade</th><th>Responsável</th><th>Data prevista</th><th>Status</th></tr></thead>
       <tbody>${linhas}</tbody>
     </table>
   `;
@@ -519,11 +777,14 @@ async function renderPGRReport(id) {
   const p = await DB.getPGR(id);
   if (!p) return renderPGRHome();
   p.data.assinaturas = p.data.assinaturas || {};
+  p.data.ghes = p.data.ghes || [];
+  p.data.treinamentos = p.data.treinamentos || [];
 
   const codigo = gerarCodigoPGR(p);
   const geradoEm = new Date().toLocaleString('pt-BR');
-  const inventarioHtml = montarInventarioRiscosPGR(p.data.perigos);
+  const inventarioHtml = montarInventarioRiscosPGR(p.data.perigos, p.data.ghes);
   const planoAcaoHtml = montarPlanoAcaoPGR(p.data.perigos);
+  const cronogramaHtml = montarCronogramaTreinamentoPGR(p.data.treinamentos, p.data.ghes);
 
   view.innerHTML = `
     <div class="screen-header no-print">
@@ -572,8 +833,13 @@ async function renderPGRReport(id) {
         ${planoAcaoHtml}
       </section>
 
+      <section class="rep-secao rep-quebra">
+        <h3>5. Cronograma de Treinamento</h3>
+        ${cronogramaHtml}
+      </section>
+
       <section class="rep-secao rep-assinaturas">
-        <h3>5. Responsável técnico</h3>
+        <h3>6. Responsável técnico</h3>
         <div class="rep-assinatura-grid">
           ${blocoAssinatura(p, 'responsavelPGR', 'Responsável técnico pelo PGR', p.data.responsavelPGR)}
         </div>

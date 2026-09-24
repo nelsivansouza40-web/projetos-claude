@@ -2,6 +2,8 @@
 
 const TIPOS_RISCO_PGR = ['Físico', 'Químico', 'Biológico', 'Ergonômico', 'Acidente'];
 
+const PERIODICIDADES_TREINAMENTO_PGR = ['Admissional', 'Anual', 'Bienal', 'Trienal', 'Quando houver mudança', 'Eventual'];
+
 /* Escala de 1 a 5 para severidade e probabilidade, base de uma matriz de
  * risco 5x5 (Severidade x Probabilidade), método comum em PGRs alinhados
  * à ISO 31000 / GRO da NR-01. */

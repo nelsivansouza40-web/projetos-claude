@@ -901,6 +901,7 @@ const Sync = {
 };
 
 function buildPGRMetaPayload(p) {
+  const ghes = p.data.ghes || [];
   return {
     id: p.id,
     createdAt: p.createdAt,
@@ -909,10 +910,16 @@ function buildPGRMetaPayload(p) {
     unidade: p.data.unidade,
     responsavelPGR: p.data.responsavelPGR,
     dataElaboracao: p.data.dataElaboracao,
+    ghes: ghes.map((g) => ({
+      id: g.id,
+      nome: g.nome,
+      setor: g.setor,
+      funcao: g.funcao,
+      numTrabalhadores: g.numTrabalhadores
+    })),
     perigos: p.data.perigos.map((item) => ({
       id: item.id,
-      setor: item.setor,
-      funcao: item.funcao,
+      ghe: nomeGHEPGR(ghes, item.gheId),
       perigo: item.perigo,
       fonte: item.fonte,
       tipoRisco: item.tipoRisco,
@@ -926,6 +933,16 @@ function buildPGRMetaPayload(p) {
       nivelRiscoResidual: classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual).nivel,
       responsavel: item.responsavel,
       prazo: item.prazo,
+      status: item.status
+    })),
+    treinamentos: (p.data.treinamentos || []).map((item) => ({
+      id: item.id,
+      nome: item.nome,
+      ghe: nomeGHEPGR(ghes, item.gheId) || 'Todos os GHEs',
+      cargaHoraria: item.cargaHoraria,
+      periodicidade: item.periodicidade,
+      responsavel: item.responsavel,
+      dataPrevista: item.dataPrevista,
       status: item.status
     }))
   };
