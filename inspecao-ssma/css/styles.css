@@ -165,6 +165,7 @@ main#view {
 .badge-sync { background: #cfe2ff; color: #084298; }
 .badge-ok { background: #d1e7dd; color: #0a3622; }
 .badge-erro { background: #f8d7da; color: #58151c; }
+.badge-alto { background: #ffe0b2; color: #7a4100; }
 
 .insp-card-side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 .btn-excluir-card {
@@ -253,6 +254,14 @@ main#view {
 
 .croqui-container { max-width: 280px; margin: 0 auto 12px; }
 .croqui-svg { width: 100%; height: auto; display: block; cursor: crosshair; border-radius: 10px; touch-action: manipulation; }
+
+.matriz-risco-mini { display: flex; flex-direction: column; gap: 2px; max-width: 220px; margin: 8px 0; }
+.matriz-linha { display: flex; gap: 2px; }
+.matriz-celula {
+  flex: 1; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; border-radius: 4px; color: #33475b;
+}
+.matriz-celula-ativa { outline: 3px solid var(--azul); outline-offset: -3px; font-weight: 700; }
 
 .checklist-details { display: flex; flex-direction: column; gap: 8px; }
 .checklist-details label { font-size: 0.78rem; font-weight: 600; color: #5a6572; display: flex; flex-direction: column; gap: 4px; }

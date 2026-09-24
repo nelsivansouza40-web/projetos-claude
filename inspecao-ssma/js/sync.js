@@ -96,6 +96,11 @@ const Sync = {
         if (veic.syncStatus === 'synced') continue;
         await this.syncVeiculo(veic.id, endpoint);
       }
+      const registrosPGR = await DB.getAllPGR();
+      for (const pgr of registrosPGR) {
+        if (pgr.syncStatus === 'synced') continue;
+        await this.syncPGR(pgr.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -853,8 +858,78 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncPGR(pgrId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let p = await DB.getPGR(pgrId);
+    if (!p) return;
+
+    p.syncStatus = 'sincronizando';
+    p.syncError = '';
+    await DB.putPGR(p);
+    this.notify();
+
+    try {
+      const payload = {
+        action: 'upsertPGR',
+        pgr: buildPGRMetaPayload(p)
+      };
+      const resp = await postJson(endpoint, payload);
+      if (!resp || resp.ok !== true) {
+        throw new Error((resp && resp.error) || 'Falha ao enviar dados do PGR.');
+      }
+      p.metaSynced = true;
+      p.remoteRef = resp.remoteRef || p.remoteRef || null;
+      p.syncStatus = 'synced';
+      p.syncError = '';
+      p.updatedAt = Date.now();
+      await DB.putPGR(p);
+    } catch (err) {
+      p = await DB.getPGR(pgrId);
+      p.syncStatus = 'erro';
+      p.syncError = err.message || String(err);
+      await DB.putPGR(p);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildPGRMetaPayload(p) {
+  return {
+    id: p.id,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+    empresa: p.data.empresa,
+    unidade: p.data.unidade,
+    responsavelPGR: p.data.responsavelPGR,
+    dataElaboracao: p.data.dataElaboracao,
+    perigos: p.data.perigos.map((item) => ({
+      id: item.id,
+      setor: item.setor,
+      funcao: item.funcao,
+      perigo: item.perigo,
+      fonte: item.fonte,
+      tipoRisco: item.tipoRisco,
+      severidade: item.severidade,
+      probabilidade: item.probabilidade,
+      nivelRisco: classificarRiscoPGR(item.severidade, item.probabilidade).nivel,
+      medidasExistentes: item.medidasExistentes,
+      medidasPropostas: item.medidasPropostas,
+      severidadeResidual: item.severidadeResidual,
+      probabilidadeResidual: item.probabilidadeResidual,
+      nivelRiscoResidual: classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual).nivel,
+      responsavel: item.responsavel,
+      prazo: item.prazo,
+      status: item.status
+    }))
+  };
+}
 
 function buildVeiculoMetaPayload(v) {
   return {

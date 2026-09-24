@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 10;
+const DB_VERSION = 11;
 let dbPromise = null;
 
 function openDB() {
@@ -48,6 +48,9 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('veiculos')) {
         db.createObjectStore('veiculos', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('pgr')) {
+        db.createObjectStore('pgr', { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => resolve(e.target.result);
@@ -283,6 +286,24 @@ const DB = {
   },
   async deleteVeiculo(id) {
     const store = await storeTx('veiculos', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putPGR(p) {
+    const store = await storeTx('pgr', 'readwrite');
+    await reqToPromise(store.put(p));
+    return p;
+  },
+  async getPGR(id) {
+    const store = await storeTx('pgr', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllPGR() {
+    const store = await storeTx('pgr', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deletePGR(id) {
+    const store = await storeTx('pgr', 'readwrite');
     return reqToPromise(store.delete(id));
   },
   async getSetting(key) {

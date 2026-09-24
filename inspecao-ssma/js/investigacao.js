@@ -118,10 +118,12 @@ async function renderInvestigacaoHome() {
       <h1>Investigação de Acidente</h1>
       <button id="btn-new-investigacao" class="btn-primary">+ Nova investigação</button>
     </div>
+    <div class="form-actions"><button id="btn-ver-tftg" class="btn-secondary">📊 Indicadores TF/TG (NBR 14280)</button></div>
     <ul class="insp-list">${itemsHtml}</ul>
   `;
 
   document.getElementById('btn-new-investigacao').addEventListener('click', startNewInvestigacao);
+  document.getElementById('btn-ver-tftg').addEventListener('click', renderIndicadoresTFTG);
   view.querySelectorAll('.insp-card').forEach((el) => {
     el.addEventListener('click', () => openInvestigacao(el.dataset.id));
   });
@@ -918,4 +920,109 @@ async function renderInvestigacaoReport(id) {
   document.getElementById('btn-back-investigacao-detail').addEventListener('click', () => renderInvestigacaoDetail(id));
   document.getElementById('btn-imprimir-investigacao').addEventListener('click', () => window.print());
   ligarAssinaturasInvestigacao(inv, id);
+}
+
+/* ---------------- INDICADORES TF/TG (NBR 14280) ---------------- */
+
+const DIAS_DEBITADOS_OBITO_NBR14280 = 6000;
+
+function calcularTFTG(investigacoes, horasHomem) {
+  let nAcidentesComAfastamento = 0;
+  let nObitos = 0;
+  let nSemAfastamento = 0;
+  let diasPerdidos = 0;
+
+  investigacoes.forEach((inv) => {
+    const g = inv.data.acidente.gravidade;
+    if (g === 'Com Afastamento') {
+      nAcidentesComAfastamento++;
+      diasPerdidos += Number(inv.data.acidente.diasAfastamento) || 0;
+    } else if (g === 'Fatal') {
+      nObitos++;
+      diasPerdidos += DIAS_DEBITADOS_OBITO_NBR14280;
+    } else if (g === 'Sem Afastamento') {
+      nSemAfastamento++;
+    }
+  });
+
+  const totalAcidentesComputados = nAcidentesComAfastamento + nObitos;
+  const horas = Number(horasHomem) || 0;
+  const tf = horas > 0 ? (totalAcidentesComputados * 1000000) / horas : null;
+  const tg = horas > 0 ? (diasPerdidos * 1000000) / horas : null;
+
+  return { nAcidentesComAfastamento, nObitos, nSemAfastamento, diasPerdidos, totalAcidentesComputados, tf, tg };
+}
+
+async function renderIndicadoresTFTG() {
+  state.screen = 'investigacao-tftg';
+  const horasSalvas = (await DB.getSetting('tftgHorasHomem')) || '';
+  const inicioSalvo = (await DB.getSetting('tftgPeriodoInicio')) || '';
+  const fimSalvo = (await DB.getSetting('tftgPeriodoFim')) || '';
+
+  view.innerHTML = `
+    <div class="screen-header">
+      <button id="btn-back-tftg" class="btn-link">← Voltar</button>
+      <h1>Indicadores TF/TG</h1>
+    </div>
+    <div class="form-section">
+      <label>Horas-Homem trabalhadas no período *
+        <input type="number" id="tftg-horas-homem" min="0" step="1" value="${escapeHtml(horasSalvas)}">
+      </label>
+      <label>Período — início
+        <input type="date" id="tftg-periodo-inicio" value="${escapeHtml(inicioSalvo)}">
+      </label>
+      <label>Período — fim
+        <input type="date" id="tftg-periodo-fim" value="${escapeHtml(fimSalvo)}">
+      </label>
+      <p class="hint">Deixe as datas em branco para considerar todas as investigações já registradas no aplicativo.</p>
+      <button id="btn-calcular-tftg" class="btn-primary">Calcular</button>
+    </div>
+    <div id="tftg-resultado"></div>
+    <p class="hint">Cálculo conforme a NBR 14280. Óbitos são debitados em 6.000 dias, conforme a norma. Incapacidades permanentes seguem uma tabela específica de dias debitados que não é aplicada automaticamente aqui — ajuste manualmente o resultado se houver esse caso.</p>
+  `;
+
+  document.getElementById('btn-back-tftg').addEventListener('click', renderInvestigacaoHome);
+
+  async function calcular() {
+    const horas = document.getElementById('tftg-horas-homem').value;
+    const inicio = document.getElementById('tftg-periodo-inicio').value;
+    const fim = document.getElementById('tftg-periodo-fim').value;
+    await DB.setSetting('tftgHorasHomem', horas);
+    await DB.setSetting('tftgPeriodoInicio', inicio);
+    await DB.setSetting('tftgPeriodoFim', fim);
+
+    const todas = await DB.getAllInvestigacoes();
+    const filtradas = todas.filter((inv) => {
+      const d = inv.data.acidente.data;
+      if (inicio && (!d || d < inicio)) return false;
+      if (fim && (!d || d > fim)) return false;
+      return true;
+    });
+
+    const resultadoEl = document.getElementById('tftg-resultado');
+    if (!Number(horas) || Number(horas) <= 0) {
+      resultadoEl.innerHTML = '<p class="hint">Informe as horas-homem trabalhadas no período para calcular os indicadores.</p>';
+      return;
+    }
+
+    const r = calcularTFTG(filtradas, horas);
+    resultadoEl.innerHTML = `
+      <div class="resumo">
+        <h2>Resultado do período</h2>
+        <ul class="resumo-stats">
+          <li>Acidentes com afastamento: ${r.nAcidentesComAfastamento}</li>
+          <li>Óbitos: ${r.nObitos}</li>
+          <li>Acidentes sem afastamento (não entram no cálculo): ${r.nSemAfastamento}</li>
+          <li>Dias perdidos/debitados considerados: ${r.diasPerdidos}</li>
+        </ul>
+        <div class="detail-block">
+          <p><strong>Taxa de Frequência (TF):</strong> ${r.tf !== null ? r.tf.toFixed(2) : '—'}</p>
+          <p><strong>Taxa de Gravidade (TG):</strong> ${r.tg !== null ? r.tg.toFixed(2) : '—'}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('btn-calcular-tftg').addEventListener('click', calcular);
+  if (horasSalvas) calcular();
 }

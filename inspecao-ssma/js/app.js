@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v26';
+const APP_VERSION = 'v27';
 
 const state = {
   screen: 'home',
@@ -95,6 +95,7 @@ async function updateSyncBar() {
   const registrosInvestigacao = await DB.getAllInvestigacoes();
   const registrosEPI = await DB.getAllFichasEPI();
   const registrosVeiculo = await DB.getAllVeiculos();
+  const registrosPGR = await DB.getAllPGR();
   const pendentesInsp = inspections.filter((i) => i.completo && i.syncStatus !== 'synced');
   const pendentesDDS = registrosDDS.filter((d) => d.completo && d.syncStatus !== 'synced');
   const pendentesDiag = registrosDiag.filter((d) => d.completo && d.syncStatus !== 'synced');
@@ -105,7 +106,8 @@ async function updateSyncBar() {
   const pendentesInvestigacao = registrosInvestigacao.filter((i) => i.completo && i.syncStatus !== 'synced');
   const pendentesEPI = registrosEPI.filter((f) => f.completo && f.syncStatus !== 'synced');
   const pendentesVeiculo = registrosVeiculo.filter((v) => v.completo && v.syncStatus !== 'synced');
-  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length + pendentesEPI.length + pendentesVeiculo.length;
+  const pendentesPGR = registrosPGR.filter((p) => p.completo && p.syncStatus !== 'synced');
+  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length + pendentesEPI.length + pendentesVeiculo.length + pendentesPGR.length;
   if (totalPendentes === 0) {
     syncBarEl.hidden = true;
     return;
@@ -123,6 +125,7 @@ async function updateSyncBar() {
   if (pendentesInvestigacao.length) partes.push(`${pendentesInvestigacao.length} investigação(ões)`);
   if (pendentesEPI.length) partes.push(`${pendentesEPI.length} ficha(s) de EPI`);
   if (pendentesVeiculo.length) partes.push(`${pendentesVeiculo.length} vistoria(s) de veículo`);
+  if (pendentesPGR.length) partes.push(`${pendentesPGR.length} PGR`);
   syncBarEl.innerHTML = `
     <span>${partes.join(' e ')} aguardando sincronização${online ? '' : ' (offline)'}</span>
     <button id="btn-sync-now" ${online ? '' : 'disabled'}>Sincronizar agora</button>
@@ -158,6 +161,8 @@ async function updateSyncBar() {
       if (state.screen === 'epi-detail') renderEPIDetail(state.epiId);
       if (state.screen === 'veiculo-home') renderVeiculoHome();
       if (state.screen === 'veiculo-detail') renderVeiculoDetail(state.veiculoId);
+      if (state.screen === 'pgr-home') renderPGRHome();
+      if (state.screen === 'pgr-detail') renderPGRDetail(state.pgrId);
     });
   }
 }
@@ -173,6 +178,7 @@ function setActiveTab(tab) {
   const tabInvestigacao = document.getElementById('tab-investigacao');
   const tabEPI = document.getElementById('tab-epi');
   const tabVeiculo = document.getElementById('tab-veiculo');
+  const tabPGR = document.getElementById('tab-pgr');
   if (tabInsp) tabInsp.classList.toggle('active', tab === 'inspecoes');
   if (tabPTAPR) tabPTAPR.classList.toggle('active', tab === 'ptapr');
   if (tabPET) tabPET.classList.toggle('active', tab === 'pet');
@@ -183,6 +189,7 @@ function setActiveTab(tab) {
   if (tabInvestigacao) tabInvestigacao.classList.toggle('active', tab === 'investigacao');
   if (tabEPI) tabEPI.classList.toggle('active', tab === 'epi');
   if (tabVeiculo) tabVeiculo.classList.toggle('active', tab === 'veiculo');
+  if (tabPGR) tabPGR.classList.toggle('active', tab === 'pgr');
 }
 
 async function refreshChrome() {
@@ -913,6 +920,9 @@ function abrirResultadoBusca(tipo, r) {
     case 'veiculo':
       if (r.completo) { renderVeiculoDetail(r.id); } else { state.veiculoId = r.id; state.step = 0; renderVeiculoForm(); }
       break;
+    case 'pgr':
+      renderPGRDetail(r.id);
+      break;
   }
 }
 
@@ -926,9 +936,9 @@ async function executarBuscaGlobal(termoBruto) {
   }
 
   const bate = (texto) => (texto || '').toLowerCase().includes(termo);
-  const [inspecoes, ptaprs, pets, ddsList, diagnosticos, cipaReunioes, certificados, investigacoes, fichasEpi, veiculos] = await Promise.all([
+  const [inspecoes, ptaprs, pets, ddsList, diagnosticos, cipaReunioes, certificados, investigacoes, fichasEpi, veiculos, pgrs] = await Promise.all([
     DB.getAllInspections(), DB.getAllPTAPR(), DB.getAllPET(), DB.getAllDDS(),
-    DB.getAllDiagnosticos(), DB.getAllCipaReunioes(), DB.getAllCertificados(), DB.getAllInvestigacoes(), DB.getAllFichasEPI(), DB.getAllVeiculos()
+    DB.getAllDiagnosticos(), DB.getAllCipaReunioes(), DB.getAllCertificados(), DB.getAllInvestigacoes(), DB.getAllFichasEPI(), DB.getAllVeiculos(), DB.getAllPGR()
   ]);
 
   const resultados = [];
@@ -992,6 +1002,12 @@ async function executarBuscaGlobal(termoBruto) {
     const id = r.data.identificacao;
     if (bate(id.placa) || bate(id.empresa) || bate(id.marca) || bate(id.modelo) || bate(id.condutor)) {
       resultados.push({ tipo: 'veiculo', registro: r, modulo: 'Veículo', titulo: id.placa || 'Vistoria de Veículo', sub: `${id.marca || ''} ${id.modelo || ''}` });
+    }
+  });
+  pgrs.forEach((r) => {
+    const d = r.data;
+    if (bate(d.empresa) || bate(d.unidade) || d.perigos.some((h) => bate(h.perigo) || bate(h.setor))) {
+      resultados.push({ tipo: 'pgr', registro: r, modulo: 'PGR', titulo: d.empresa || 'PGR', sub: d.unidade || '' });
     }
   });
 
@@ -1147,6 +1163,7 @@ document.getElementById('tab-pet').addEventListener('click', renderPETHome);
 document.getElementById('tab-investigacao').addEventListener('click', renderInvestigacaoHome);
 document.getElementById('tab-epi').addEventListener('click', renderEPIHome);
 document.getElementById('tab-veiculo').addEventListener('click', renderVeiculoHome);
+document.getElementById('tab-pgr').addEventListener('click', renderPGRHome);
 
 /* ---------------- INICIALIZAÇÃO ---------------- */
 

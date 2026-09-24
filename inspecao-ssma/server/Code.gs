@@ -26,6 +26,7 @@
  *  - { action: "upsertInvestigacao", investigacao } -> Investigação de Acidente de Trabalho (RIAT)
  *  - { action: "upsertFichaEPI", ficha }            -> Ficha de Controle de EPI (NR-6)
  *  - { action: "upsertVeiculo", veiculo }           -> Vistoria de Veículo (checklist + croqui de avarias)
+ *  - { action: "upsertPGR", pgr }                   -> Programa de Gerenciamento de Riscos (GRO/NR-01)
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
  *    de CIPA, PT/APR, certificados, PET, investigações de acidente e
@@ -68,6 +69,8 @@ const SHEET_EPI_ENTREGAS = 'Fichas_EPI_Entregas';
 const SHEET_VEICULO = 'Veiculos';
 const SHEET_VEICULO_ITENS = 'Veiculos_Itens';
 const SHEET_VEICULO_AVARIAS = 'Veiculos_Avarias';
+const SHEET_PGR = 'PGR';
+const SHEET_PGR_PERIGOS = 'PGR_Perigos';
 
 function doPost(e) {
   let body;
@@ -103,6 +106,8 @@ function doPost(e) {
         return jsonResponse(upsertFichaEPI(body.ficha));
       case 'upsertVeiculo':
         return jsonResponse(upsertVeiculo(body.veiculo));
+      case 'upsertPGR':
+        return jsonResponse(upsertPGR(body.pgr));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -848,6 +853,59 @@ function upsertVeiculo(v) {
   });
 
   return { ok: true, remoteRef: vFolder.getId() };
+}
+
+function upsertPGR(p) {
+  const sheetPGR = getOrCreateSheet(SHEET_PGR, [
+    'ID', 'Empresa', 'Unidade', 'Responsável Técnico', 'Data de Elaboração',
+    'Qtd. Perigos', 'Recebido em'
+  ]);
+
+  const id = p.id;
+  const linha = [
+    id,
+    p.empresa,
+    p.unidade,
+    p.responsavelPGR,
+    p.dataElaboracao,
+    (p.perigos || []).length,
+    new Date()
+  ];
+
+  const idCol = 1;
+  const data = sheetPGR.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetPGR.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetPGR.appendRow(linha);
+  }
+
+  const sheetPerigos = getOrCreateSheet(SHEET_PGR_PERIGOS, [
+    'PGR ID', 'Perigo ID', 'Setor', 'Função', 'Perigo', 'Fonte', 'Tipo de Risco',
+    'Severidade', 'Probabilidade', 'Nível de Risco', 'Medidas Existentes',
+    'Medidas Propostas', 'Severidade Residual', 'Probabilidade Residual',
+    'Nível de Risco Residual', 'Responsável', 'Prazo', 'Status', 'Recebido em'
+  ]);
+  // A lista de perigos pode ser editada livremente no app (removida,
+  // reavaliada), então mantemos a planilha em espelho a cada sincronização.
+  const dataPerigos = sheetPerigos.getDataRange().getValues();
+  for (let i = dataPerigos.length - 1; i >= 1; i--) {
+    if (dataPerigos[i][0] === id) sheetPerigos.deleteRow(i + 1);
+  }
+  (p.perigos || []).forEach((item) => {
+    sheetPerigos.appendRow([
+      id, item.id, item.setor, item.funcao, item.perigo, item.fonte, item.tipoRisco,
+      item.severidade, item.probabilidade, item.nivelRisco, item.medidasExistentes,
+      item.medidasPropostas, item.severidadeResidual, item.probabilidadeResidual,
+      item.nivelRiscoResidual, item.responsavel, item.prazo, item.status, new Date()
+    ]);
+  });
+
+  return { ok: true, remoteRef: id };
 }
 
 function uploadPhoto(inspectionId, photo) {
