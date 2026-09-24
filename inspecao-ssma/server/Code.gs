@@ -860,7 +860,7 @@ function upsertVeiculo(v) {
 function upsertPGR(p) {
   const sheetPGR = getOrCreateSheet(SHEET_PGR, [
     'ID', 'Empresa', 'Unidade', 'Responsável Técnico', 'Data de Elaboração',
-    'Qtd. Perigos', 'Recebido em'
+    'Caracterização do Processo e Ambiente de Trabalho', 'Qtd. Perigos', 'Recebido em'
   ]);
 
   const id = p.id;
@@ -870,6 +870,7 @@ function upsertPGR(p) {
     p.unidade,
     p.responsavelPGR,
     p.dataElaboracao,
+    p.caracterizacaoAmbiente,
     (p.perigos || []).length,
     new Date()
   ];
@@ -898,7 +899,7 @@ function upsertPGR(p) {
   });
 
   const sheetPerigos = getOrCreateSheet(SHEET_PGR_PERIGOS, [
-    'PGR ID', 'Perigo ID', 'GHE', 'Perigo', 'Fonte', 'Tipo de Risco',
+    'PGR ID', 'Perigo ID', 'GHE', 'Perigo', 'Lesão / Agravo à Saúde', 'Fonte', 'Tipo de Risco',
     'Severidade', 'Probabilidade', 'Nível de Risco', 'Medidas Existentes',
     'Medidas Propostas', 'Severidade Residual', 'Probabilidade Residual',
     'Nível de Risco Residual', 'Responsável', 'Prazo', 'Status', 'Recebido em'
@@ -911,7 +912,7 @@ function upsertPGR(p) {
   }
   (p.perigos || []).forEach((item) => {
     sheetPerigos.appendRow([
-      id, item.id, item.ghe, item.perigo, item.fonte, item.tipoRisco,
+      id, item.id, item.ghe, item.perigo, item.lesaoAgravo, item.fonte, item.tipoRisco,
       item.severidade, item.probabilidade, item.nivelRisco, item.medidasExistentes,
       item.medidasPropostas, item.severidadeResidual, item.probabilidadeResidual,
       item.nivelRiscoResidual, item.responsavel, item.prazo, item.status, new Date()

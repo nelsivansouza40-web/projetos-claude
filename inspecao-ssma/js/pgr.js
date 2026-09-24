@@ -11,6 +11,7 @@ function novoPerigoPGR() {
     gheId: '',
     perigo: '',
     fonte: '',
+    lesaoAgravo: '',
     tipoRisco: TIPOS_RISCO_PGR[0],
     severidade: '',
     probabilidade: '',
@@ -64,6 +65,7 @@ function novoPGRVazio() {
       unidade: '',
       responsavelPGR: '',
       dataElaboracao: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
+      caracterizacaoAmbiente: '',
       ghes: [],
       perigos: [],
       treinamentos: [],
@@ -193,6 +195,7 @@ async function renderPGRDetail(id) {
   if (!p) return renderPGRHome();
   p.data.ghes = p.data.ghes || [];
   p.data.treinamentos = p.data.treinamentos || [];
+  p.data.caracterizacaoAmbiente = p.data.caracterizacaoAmbiente || '';
   const s = statusLabel(p);
 
   view.innerHTML = `
@@ -215,6 +218,9 @@ async function renderPGRDetail(id) {
       </label>
       <label>Data de elaboração / última revisão
         <input type="date" id="pgr-data-elaboracao" value="${escapeHtml(p.data.dataElaboracao)}">
+      </label>
+      <label>Caracterização do processo e ambiente de trabalho
+        <textarea id="pgr-caracterizacao-ambiente" rows="3" placeholder="Ex.: Obra de construção civil, execução de estrutura em concreto armado, com atividades em altura e uso de ferramentas elétricas.">${escapeHtml(p.data.caracterizacaoAmbiente)}</textarea>
       </label>
     </div>
 
@@ -258,6 +264,8 @@ async function renderPGRDetail(id) {
   inputUnidade.addEventListener('blur', async () => { p.data.unidade = inputUnidade.value.trim(); await salvarPGR(p); });
   inputResponsavel.addEventListener('blur', async () => { p.data.responsavelPGR = inputResponsavel.value.trim(); await salvarPGR(p); });
   inputData.addEventListener('change', async () => { p.data.dataElaboracao = inputData.value; await salvarPGR(p); });
+  const inputCaracterizacao = document.getElementById('pgr-caracterizacao-ambiente');
+  inputCaracterizacao.addEventListener('blur', async () => { p.data.caracterizacaoAmbiente = inputCaracterizacao.value.trim(); await salvarPGR(p); });
 
   const ghesContainer = document.getElementById('pgr-ghes-container');
   const perigosContainer = document.getElementById('pgr-perigos-container');
@@ -336,6 +344,9 @@ function renderPerigoPGR(item, idx, ghes) {
       <label>Perigo / Risco identificado *
         <input type="text" class="in-perigo" placeholder="Ex.: Queda de altura ao subir em telhado sem proteção coletiva" value="${escapeHtml(item.perigo)}">
       </label>
+      <label>Possível lesão ou agravo à saúde *
+        <input type="text" class="in-lesao-agravo" placeholder="Ex.: Fratura, politraumatismo, óbito" value="${escapeHtml(item.lesaoAgravo)}">
+      </label>
       <div class="participante-linha">
         <label class="campo-leitura">Fonte / Causa
           <input type="text" class="in-fonte" value="${escapeHtml(item.fonte)}">
@@ -412,7 +423,7 @@ function renderPerigosPGR(container, p) {
     });
 
     const camposTexto = [
-      ['.in-perigo', 'perigo'], ['.in-fonte', 'fonte'],
+      ['.in-perigo', 'perigo'], ['.in-lesao-agravo', 'lesaoAgravo'], ['.in-fonte', 'fonte'],
       ['.in-medidas-existentes', 'medidasExistentes'], ['.in-medidas-propostas', 'medidasPropostas'],
       ['.in-responsavel-perigo', 'responsavel']
     ];
@@ -634,6 +645,7 @@ function validarPGRParaRelatorio(p) {
   p.data.perigos.forEach((item, idx) => {
     const num = idx + 1;
     if (!item.perigo) problemas.push(`Perigo ${num} está sem descrição.`);
+    if (!item.lesaoAgravo) problemas.push(`Perigo ${num} ("${item.perigo || 'sem descrição'}") está sem a possível lesão ou agravo à saúde (exigido pela NR-01).`);
     if (!item.severidade || !item.probabilidade) problemas.push(`Perigo ${num} ("${item.perigo || 'sem descrição'}") está sem avaliação de severidade/probabilidade.`);
   });
   return problemas;
@@ -671,6 +683,7 @@ function montarInventarioRiscosPGR(perigos, ghes) {
       <tr>
         <td>${idx + 1}</td>
         <td>${escapeHtml(item.perigo)}</td>
+        <td>${escapeHtml(item.lesaoAgravo || '—')}</td>
         <td>${escapeHtml(item.tipoRisco)}</td>
         <td>${escapeHtml(nomeGHEPGR(ghes, item.gheId) || '—')}</td>
         <td>${escapeHtml(item.medidasExistentes || '—')}</td>
@@ -681,7 +694,7 @@ function montarInventarioRiscosPGR(perigos, ghes) {
   }).join('');
   return `
     <table class="rep-table">
-      <thead><tr><th>Nº</th><th>Perigo / Risco</th><th>Tipo</th><th>GHE</th><th>Medidas de controle existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
+      <thead><tr><th>Nº</th><th>Perigo / Risco</th><th>Lesão / Agravo à Saúde</th><th>Tipo</th><th>GHE</th><th>Medidas de controle existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
       <tbody>${linhas}</tbody>
     </table>
   `;
@@ -816,6 +829,7 @@ async function renderPGRReport(id) {
           <tr><th>Empresa</th><td>${escapeHtml(p.data.empresa)}</td><th>Unidade</th><td>${escapeHtml(p.data.unidade || '—')}</td></tr>
           <tr><th>Responsável técnico</th><td>${escapeHtml(p.data.responsavelPGR || '—')}</td><th>Data de elaboração</th><td>${p.data.dataElaboracao ? formatarDataBR(p.data.dataElaboracao) : '—'}</td></tr>
         </table>
+        <p class="rep-hint"><strong>Caracterização do processo e ambiente de trabalho:</strong> ${escapeHtml(p.data.caracterizacaoAmbiente || '—')}</p>
       </section>
 
       <section class="rep-secao">

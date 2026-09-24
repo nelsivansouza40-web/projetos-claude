@@ -910,6 +910,7 @@ function buildPGRMetaPayload(p) {
     unidade: p.data.unidade,
     responsavelPGR: p.data.responsavelPGR,
     dataElaboracao: p.data.dataElaboracao,
+    caracterizacaoAmbiente: p.data.caracterizacaoAmbiente,
     ghes: ghes.map((g) => ({
       id: g.id,
       nome: g.nome,
@@ -921,6 +922,7 @@ function buildPGRMetaPayload(p) {
       id: item.id,
       ghe: nomeGHEPGR(ghes, item.gheId),
       perigo: item.perigo,
+      lesaoAgravo: item.lesaoAgravo,
       fonte: item.fonte,
       tipoRisco: item.tipoRisco,
       severidade: item.severidade,

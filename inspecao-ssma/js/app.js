@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v32';
+const APP_VERSION = 'v33';
 
 const state = {
   screen: 'home',
