@@ -111,6 +111,14 @@ function formatarDataBR(iso) {
   return `${m[3]}/${m[2]}/${m[1]}`;
 }
 
+function montarLocalizacaoRelatorio(localizacao) {
+  if (!localizacao || typeof localizacao.lat !== 'number') return '';
+  const lat = localizacao.lat.toFixed(6);
+  const lon = localizacao.lon.toFixed(6);
+  const link = `https://www.google.com/maps?q=${lat},${lon}`;
+  return `<p><strong>Localização registrada:</strong> <a href="${link}" target="_blank" rel="noopener">${lat}, ${lon}</a></p>`;
+}
+
 async function montarBlocoFoto(photoId) {
   const photo = await DB.getPhoto(photoId);
   if (!photo) return '';
@@ -345,6 +353,7 @@ async function renderReport(id) {
           <tr><th>Data</th><td>${formatarDataBR(id_.data)}</td><th>Hora</th><td>${escapeHtml(id_.hora)}</td></tr>
           <tr><th>Inspetor</th><td>${escapeHtml(id_.inspetor)}</td><th>Responsável acompanhando</th><td>${escapeHtml(id_.responsavelArea || '—')}</td></tr>
         </table>
+        ${montarLocalizacaoRelatorio(insp.data.localizacao)}
       </section>
 
       <section class="rep-secao">

@@ -70,7 +70,8 @@ function novaPETVazia() {
       assinaturas: {
         supervisorEntrada: '',
         vigia: ''
-      }
+      },
+      localizacao: null
     }
   };
 }
@@ -177,6 +178,7 @@ async function startNewPET() {
   state.petId = pet.id;
   state.step = 0;
   renderPETForm();
+  localizacoesPendentes[pet.id] = capturarLocalizacao();
 }
 
 /* ---------------- FORMULÁRIO (MULTI-ETAPAS) ---------------- */
@@ -654,6 +656,7 @@ function renderPETStepRevisao(content, pet) {
     if (semResposta > 0 && !confirm(`Existem ${semResposta} item(ns) sem resposta. Deseja concluir mesmo assim?`)) {
       return;
     }
+    await aplicarLocalizacaoPendente(pet);
     pet.completo = true;
     pet.syncStatus = 'pendente';
     await salvarRascunhoPET(pet);
@@ -677,6 +680,12 @@ function validarPETParaRelatorio(pet) {
   });
   if (!pet.data.leituras.length) {
     problemas.push('Nenhuma leitura de teste atmosférico foi registrada.');
+  } else {
+    const ultimaLeitura = pet.data.leituras[pet.data.leituras.length - 1];
+    const problemasUltimaLeitura = leituraForaDoLimite(ultimaLeitura);
+    if (problemasUltimaLeitura.length) {
+      problemas.push(`A entrada não pode ser liberada: a leitura mais recente (${ultimaLeitura.horario || 'sem horário'}) está fora da faixa segura — ${problemasUltimaLeitura.join('; ')}. Registre uma nova leitura dentro dos limites antes de gerar o relatório.`);
+    }
   }
   if (!pet.data.equipe.length) {
     problemas.push('Nenhum trabalhador autorizado foi registrado.');
@@ -969,6 +978,7 @@ async function renderPETReport(id) {
         </table>
         ${ident.descricaoEspaco ? `<p><strong>Descrição do espaço:</strong> ${escapeHtml(ident.descricaoEspaco)}</p>` : ''}
         <p><strong>Atividade:</strong> ${escapeHtml(ident.atividade)}</p>
+        ${montarLocalizacaoRelatorio(pet.data.localizacao)}
       </section>
 
       <section class="rep-secao rep-quebra">

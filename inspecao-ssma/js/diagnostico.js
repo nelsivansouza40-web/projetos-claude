@@ -49,7 +49,8 @@ function novoDiagnosticoVazio() {
       assinaturas: {
         responsavelDiagnostico: '',
         responsavelArea: ''
-      }
+      },
+      localizacao: null
     }
   };
 }
@@ -159,6 +160,7 @@ async function startNewDiagnostico() {
   state.diagId = diag.id;
   state.step = 0;
   renderDiagForm();
+  localizacoesPendentes[diag.id] = capturarLocalizacao();
 }
 
 /* ---------------- FORMULÁRIO (MULTI-ETAPAS) ---------------- */
@@ -451,6 +453,7 @@ function renderDiagStepRevisao(content, diag) {
     if (semResposta > 0 && !confirm(`Existem ${semResposta} item(ns) sem resposta. Deseja concluir mesmo assim?`)) {
       return;
     }
+    await aplicarLocalizacaoPendente(diag);
     diag.completo = true;
     diag.syncStatus = 'pendente';
     await salvarRascunhoDiagnostico(diag);
@@ -726,6 +729,7 @@ async function renderDiagReport(id) {
           <tr><th>Data</th><td>${formatarDataBR(ident.data)}</td><th>Hora</th><td>${escapeHtml(ident.hora)}</td></tr>
           <tr><th>Responsável pelo diagnóstico</th><td>${escapeHtml(ident.responsavelDiagnostico)}</td><th>Responsável da área</th><td>${escapeHtml(ident.responsavelArea || '—')}</td></tr>
         </table>
+        ${montarLocalizacaoRelatorio(diag.data.localizacao)}
       </section>
 
       <section class="rep-secao">

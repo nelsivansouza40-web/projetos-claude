@@ -29,7 +29,8 @@ function novaDDSVazia() {
       duracaoMinutos: '',
       observacoes: '',
       fotosIds: [],
-      participantes: []
+      participantes: [],
+      localizacao: null
     }
   };
 }
@@ -117,6 +118,7 @@ async function startNewDDS() {
   await DB.putDDS(dds);
   state.ddsId = dds.id;
   renderDDSForm();
+  localizacoesPendentes[dds.id] = capturarLocalizacao();
 }
 
 /* ---------------- FORMULÁRIO ---------------- */
@@ -251,6 +253,7 @@ async function renderDDSForm() {
         !confirm('Nenhum participante foi adicionado à lista de presença. Deseja concluir mesmo assim?')) {
       return;
     }
+    await aplicarLocalizacaoPendente(dds);
     dds.completo = true;
     dds.syncStatus = 'pendente';
     await salvarRascunhoDDS(dds);
@@ -519,6 +522,7 @@ async function renderDDSReport(id) {
           <tr><th>Data</th><td>${formatarDataBR(ident.data)}</td><th>Hora</th><td>${escapeHtml(ident.hora)}</td></tr>
           <tr><th>Duração</th><td colspan="3">${escapeHtml(dds.data.duracaoMinutos || '—')} minuto(s)</td></tr>
         </table>
+        ${montarLocalizacaoRelatorio(dds.data.localizacao)}
       </section>
 
       <section class="rep-secao">

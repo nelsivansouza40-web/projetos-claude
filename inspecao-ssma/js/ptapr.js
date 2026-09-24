@@ -57,7 +57,8 @@ function novaPTAPRVazia() {
         supervisorArea: '',
         responsavelAtividade: '',
         sesmt: ''
-      }
+      },
+      localizacao: null
     }
   };
 }
@@ -143,6 +144,7 @@ async function startNewPTAPR() {
   state.ptaprId = pt.id;
   state.step = 0;
   renderPTAPRForm();
+  localizacoesPendentes[pt.id] = capturarLocalizacao();
 }
 
 /* ---------------- FORMULÁRIO (MULTI-ETAPAS) ---------------- */
@@ -535,6 +537,7 @@ function renderPTAPRStepRevisao(content, pt) {
     if (semResposta > 0 && !confirm(`Existem ${semResposta} item(ns) sem resposta. Deseja concluir mesmo assim?`)) {
       return;
     }
+    await aplicarLocalizacaoPendente(pt);
     pt.completo = true;
     pt.syncStatus = 'pendente';
     await salvarRascunhoPTAPR(pt);
@@ -809,6 +812,7 @@ async function renderPTAPRReport(id) {
           <tr><th>Responsável pela atividade</th><td>${escapeHtml(ident.responsavelAtividade || '—')}</td><th>SESMT</th><td>${escapeHtml(ident.sesmt || '—')}</td></tr>
           <tr><th>Tipo(s) de trabalho</th><td colspan="3">${pt.data.tiposTrabalho.map((t) => escapeHtml(t)).join(', ') || '—'}</td></tr>
         </table>
+        ${montarLocalizacaoRelatorio(pt.data.localizacao)}
       </section>
 
       <section class="rep-secao rep-quebra">

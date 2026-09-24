@@ -45,6 +45,7 @@ const TIPOS_INSPECAO = [
   'Edificações',
   'Instalações Sanitárias',
   'Escola Técnica',
+  'Vistoria de Obra (NR-18)',
   'Outra inspeção específica'
 ];
 
@@ -738,6 +739,29 @@ const CHECKLISTS = {
     'A edificação possui Auto de Vistoria do Corpo de Bombeiros (AVCB) ou documento equivalente válido?',
     'Existe acessibilidade adequada para alunos e visitantes com deficiência ou mobilidade reduzida?',
     'As máquinas e ferramentas das oficinas possuem manual de operação e instrução de uso disponível?'
+  ],
+
+  'Vistoria de Obra (NR-18)': [
+    'O canteiro de obras está isolado e sinalizado adequadamente, impedindo acesso de pessoas não autorizadas?',
+    'As áreas de vivência (vestiário, refeitório, sanitários) atendem às exigências mínimas da NR-18?',
+    'As instalações elétricas provisórias estão protegidas e sinalizadas?',
+    'Os andaimes estão montados e liberados por profissional habilitado, com guarda-corpo e rodapé?',
+    'As escadas provisórias apresentam condições seguras de uso e fixação?',
+    'Existe proteção contra quedas em periferias, aberturas de piso e vãos?',
+    'Os elevadores de obra (cremalheira/guincho) possuem dispositivos de segurança funcionando?',
+    'As redes de proteção estão instaladas e em boas condições, quando aplicável?',
+    'Os equipamentos de içamento e movimentação de cargas estão em condições seguras?',
+    'Os trabalhadores utilizam os EPIs adequados à atividade (capacete, botina, cinto de segurança)?',
+    'As ferramentas manuais e elétricas apresentam condições seguras de uso?',
+    'Os materiais estão armazenados e empilhados de forma estável e segura?',
+    'As formas e escoramentos estão dimensionados e executados conforme projeto?',
+    'Existe sinalização de segurança visível nas áreas de risco do canteiro?',
+    'Os resíduos da obra estão segregados e com destinação adequada?',
+    'Os extintores de incêndio estão disponíveis, sinalizados e dentro da validade?',
+    'O PGR da obra está disponível e atualizado no canteiro?',
+    'A CIPA (ou o representante de segurança) está atuante na obra, quando exigido?',
+    'As frentes de trabalho em altura seguem os requisitos da NR-35, quando aplicável?',
+    'Existem condições ou comportamentos de risco que necessitem intervenção imediata?'
   ],
 
   'Outra inspeção específica': []

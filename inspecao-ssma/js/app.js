@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v21';
+const APP_VERSION = 'v23';
 
 const state = {
   screen: 'home',
@@ -27,6 +27,41 @@ function formatDateTime(ts) {
   if (!ts) return '';
   const d = new Date(ts);
   return d.toLocaleString('pt-BR');
+}
+
+// Guarda, por ID de registro, a Promise de localização iniciada na criação
+// do registro. Ela só é aplicada no momento de "Concluir e salvar" de cada
+// módulo (a última gravação do fluxo de criação) para não ser apagada pelas
+// gravações intermediárias de cada etapa do formulário, que sempre releem e
+// regravam o registro inteiro.
+const localizacoesPendentes = {};
+
+async function aplicarLocalizacaoPendente(registro) {
+  const promessa = localizacoesPendentes[registro.id];
+  if (!promessa) return;
+  delete localizacoesPendentes[registro.id];
+  const loc = await promessa;
+  if (loc) registro.data.localizacao = loc;
+}
+
+// Tenta capturar a localização do aparelho no momento em que o registro é
+// aberto no campo. Nunca bloqueia o fluxo: se o navegador não suportar, o
+// usuário negar a permissão ou o GPS demorar demais, o registro segue
+// normalmente sem localização.
+function capturarLocalizacao() {
+  return new Promise((resolve) => {
+    if (!('geolocation' in navigator)) { resolve(null); return; }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => resolve({
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+        precisao: Math.round(pos.coords.accuracy || 0),
+        capturadoEm: Date.now()
+      }),
+      () => resolve(null),
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+    );
+  });
 }
 
 function statusLabel(insp) {
@@ -252,7 +287,8 @@ function novaInspecaoVazia() {
       assinaturas: {
         inspetor: '',
         responsavelArea: ''
-      }
+      },
+      localizacao: null
     }
   };
 }
@@ -263,6 +299,7 @@ async function startNewInspection() {
   state.inspectionId = insp.id;
   state.step = 0;
   renderForm();
+  localizacoesPendentes[insp.id] = capturarLocalizacao();
 }
 
 async function salvarRascunho(insp) {
@@ -698,6 +735,7 @@ async function renderStepRevisao(content, insp) {
     if (naoRespondidos > 0 && !confirm(`Existem ${naoRespondidos} item(ns) sem resposta. Deseja concluir mesmo assim?`)) {
       return;
     }
+    await aplicarLocalizacaoPendente(insp);
     insp.completo = true;
     insp.syncStatus = 'pendente';
     await salvarRascunho(insp);
@@ -820,6 +858,139 @@ async function renderDetail(id) {
   });
 }
 
+/* ---------------- BUSCA GLOBAL ---------------- */
+
+function abrirResultadoBusca(tipo, r) {
+  switch (tipo) {
+    case 'inspecao':
+      if (r.completo) { renderDetail(r.id); } else { state.inspectionId = r.id; state.step = 0; renderForm(); }
+      break;
+    case 'ptapr':
+      if (r.completo) { renderPTAPRDetail(r.id); } else { state.ptaprId = r.id; state.step = 0; renderPTAPRForm(); }
+      break;
+    case 'pet':
+      if (r.completo) { renderPETDetail(r.id); } else { state.petId = r.id; state.step = 0; renderPETForm(); }
+      break;
+    case 'dds':
+      if (r.completo) { renderDDSDetail(r.id); } else { state.ddsId = r.id; renderDDSForm(); }
+      break;
+    case 'diagnostico':
+      if (r.completo) { renderDiagDetail(r.id); } else { state.diagId = r.id; state.step = 0; renderDiagForm(); }
+      break;
+    case 'cipa':
+      if (r.completo) { renderReuniaoCipaDetail(r.id); } else { state.cipaReuniaoId = r.id; renderReuniaoCipaForm(); }
+      break;
+    case 'certificado':
+      if (r.completo) { renderCertificadoDetail(r.id); } else { state.certId = r.id; renderCertificadoForm(); }
+      break;
+  }
+}
+
+async function executarBuscaGlobal(termoBruto) {
+  const resultadosEl = document.getElementById('resultados-busca-global');
+  if (!resultadosEl) return;
+  const termo = termoBruto.trim().toLowerCase();
+  if (termo.length < 2) {
+    resultadosEl.innerHTML = '<p class="hint">Digite ao menos 2 letras para buscar.</p>';
+    return;
+  }
+
+  const bate = (texto) => (texto || '').toLowerCase().includes(termo);
+  const [inspecoes, ptaprs, pets, ddsList, diagnosticos, cipaReunioes, certificados] = await Promise.all([
+    DB.getAllInspections(), DB.getAllPTAPR(), DB.getAllPET(), DB.getAllDDS(),
+    DB.getAllDiagnosticos(), DB.getAllCipaReunioes(), DB.getAllCertificados()
+  ]);
+
+  const resultados = [];
+
+  inspecoes.forEach((r) => {
+    const id = r.data.identificacao;
+    if (bate(id.empresa) || bate(id.unidade) || bate(id.area) || bate(id.inspetor) || bate(r.data.tipoInspecao)) {
+      resultados.push({ tipo: 'inspecao', registro: r, modulo: 'Inspeção', titulo: r.data.tipoInspecao || 'Inspeção', sub: `${id.empresa || ''} · ${id.area || ''}` });
+    }
+  });
+  ptaprs.forEach((r) => {
+    const id = r.data.identificacao;
+    if (bate(id.empresa) || bate(id.area) || bate(id.atividade) || bate(id.emitente) || bate(id.localEspecifico)) {
+      resultados.push({ tipo: 'ptapr', registro: r, modulo: 'PT/APR', titulo: id.atividade || 'PT/APR', sub: `${id.empresa || ''} · ${id.area || ''}` });
+    }
+  });
+  pets.forEach((r) => {
+    const id = r.data.identificacao;
+    if (bate(id.empresa) || bate(id.area) || bate(id.localEspaco) || bate(id.supervisorEntrada) || bate(id.vigia)) {
+      resultados.push({ tipo: 'pet', registro: r, modulo: 'PET', titulo: id.localEspaco || 'PET', sub: `${id.empresa || ''} · ${id.area || ''}` });
+    }
+  });
+  ddsList.forEach((r) => {
+    const id = r.data.identificacao;
+    if (bate(id.empresa) || bate(id.area) || bate(r.data.tema) || bate(id.ministrante)) {
+      resultados.push({ tipo: 'dds', registro: r, modulo: 'DDS', titulo: r.data.tema || 'DDS', sub: `${id.empresa || ''} · ${id.area || ''}` });
+    }
+  });
+  diagnosticos.forEach((r) => {
+    const id = r.data.identificacao;
+    if (bate(id.empresa) || bate(id.unidade) || bate(id.escopo) || bate(id.responsavelDiagnostico)) {
+      resultados.push({ tipo: 'diagnostico', registro: r, modulo: 'Diagnóstico', titulo: id.escopo || 'Diagnóstico', sub: `${id.empresa || ''} · ${id.unidade || ''}` });
+    }
+  });
+  cipaReunioes.forEach((r) => {
+    const id = r.data.identificacao;
+    if (bate(id.local) || bate(id.numeroAta)) {
+      resultados.push({ tipo: 'cipa', registro: r, modulo: 'CIPA', titulo: `Ata nº ${id.numeroAta || '—'}`, sub: id.local || '' });
+    }
+  });
+  certificados.forEach((r) => {
+    const d = r.data;
+    if (bate(d.colaborador) || bate(d.funcao) || bate(d.setor) || bate(descricaoTipoCertificado(r))) {
+      resultados.push({ tipo: 'certificado', registro: r, modulo: 'Certificado', titulo: d.colaborador || 'Certificado', sub: descricaoTipoCertificado(r) });
+    }
+  });
+
+  if (!resultados.length) {
+    resultadosEl.innerHTML = '<p class="empty-state">Nenhum resultado encontrado.</p>';
+    return;
+  }
+
+  resultadosEl.innerHTML = `<ul class="insp-list">${resultados.map((r, idx) => `
+    <li class="insp-card" data-idx="${idx}">
+      <div class="insp-card-main">
+        <div class="insp-card-title">${escapeHtml(r.titulo)}</div>
+        <div class="insp-card-sub">${escapeHtml(r.sub)}</div>
+      </div>
+      <div class="insp-card-side">
+        <span class="badge badge-rascunho">${escapeHtml(r.modulo)}</span>
+      </div>
+    </li>
+  `).join('')}</ul>`;
+
+  resultadosEl.querySelectorAll('.insp-card').forEach((el) => {
+    el.addEventListener('click', () => {
+      const item = resultados[Number(el.dataset.idx)];
+      abrirResultadoBusca(item.tipo, item.registro);
+    });
+  });
+}
+
+async function renderBuscaGlobal() {
+  state.screen = 'busca-global';
+  view.innerHTML = `
+    <div class="screen-header">
+      <button id="btn-back-busca" class="btn-link">← Voltar</button>
+      <h1>Busca global</h1>
+    </div>
+    <div class="form-section">
+      <label>Buscar por empresa, nome, atividade, área…
+        <input type="text" id="input-busca-global" placeholder="Digite para buscar em todos os módulos">
+      </label>
+    </div>
+    <div id="resultados-busca-global"><p class="hint">Digite ao menos 2 letras para buscar.</p></div>
+  `;
+  document.getElementById('btn-back-busca').addEventListener('click', renderHome);
+  const input = document.getElementById('input-busca-global');
+  input.addEventListener('input', () => executarBuscaGlobal(input.value));
+  input.focus();
+}
+
 /* ---------------- CONFIGURAÇÕES ---------------- */
 
 async function renderSettings() {
@@ -916,6 +1087,7 @@ async function renderSettings() {
 }
 
 document.getElementById('btn-settings').addEventListener('click', renderSettings);
+document.getElementById('btn-busca-global').addEventListener('click', renderBuscaGlobal);
 document.getElementById('tab-inspecoes').addEventListener('click', renderHome);
 document.getElementById('tab-dds').addEventListener('click', renderDDSHome);
 document.getElementById('tab-diagnostico').addEventListener('click', renderDiagHome);

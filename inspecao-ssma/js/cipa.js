@@ -290,6 +290,7 @@ async function startNewReuniaoCipa() {
   await DB.putCipaReuniao(reuniao);
   state.cipaReuniaoId = reuniao.id;
   renderReuniaoCipaForm();
+  localizacoesPendentes[reuniao.id] = capturarLocalizacao();
 }
 
 /* ---------------- REUNIÃO / ATA ---------------- */
@@ -322,7 +323,8 @@ function novaReuniaoCipaVazia() {
       },
       deliberacoes: '',
       fotosIds: [],
-      participantes: []
+      participantes: [],
+      localizacao: null
     }
   };
 }
@@ -466,6 +468,7 @@ async function renderReuniaoCipaForm() {
         !confirm('Nenhum participante foi adicionado à lista de presença. Deseja concluir mesmo assim?')) {
       return;
     }
+    await aplicarLocalizacaoPendente(reuniao);
     reuniao.completo = true;
     reuniao.syncStatus = 'pendente';
     await salvarRascunhoReuniaoCipa(reuniao);
@@ -709,6 +712,7 @@ async function renderReuniaoCipaReport(id) {
           <tr><th>Data</th><td>${formatarDataBR(ident.data)}</td><th>Hora</th><td>${escapeHtml(ident.hora)}</td></tr>
           <tr><th>Local</th><td>${escapeHtml(ident.local || '—')}</td><th>Tipo</th><td>${escapeHtml(ident.tipo)}</td></tr>
         </table>
+        ${montarLocalizacaoRelatorio(reuniao.data.localizacao)}
       </section>
 
       <section class="rep-secao">
