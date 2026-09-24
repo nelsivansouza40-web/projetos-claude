@@ -874,17 +874,51 @@ const Sync = {
     this.notify();
 
     try {
-      const payload = {
-        action: 'upsertPGR',
-        pgr: buildPGRMetaPayload(p)
-      };
-      const resp = await postJson(endpoint, payload);
-      if (!resp || resp.ok !== true) {
-        throw new Error((resp && resp.error) || 'Falha ao enviar dados do PGR.');
+      if (!p.metaSynced) {
+        const payload = {
+          action: 'upsertPGR',
+          pgr: buildPGRMetaPayload(p)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados do PGR.');
+        }
+        p.metaSynced = true;
+        p.remoteRef = resp.remoteRef || p.remoteRef || null;
+        await DB.putPGR(p);
       }
-      p.metaSynced = true;
-      p.remoteRef = resp.remoteRef || p.remoteRef || null;
-      p.syncStatus = 'synced';
+
+      // Envia as evidências fotográficas dos exercícios simulados de emergência.
+      const photos = await DB.getPhotosByInspection(pgrId);
+      const pendentes = photos.filter((foto) => !foto.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: p.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: p.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      const todasFotos = await DB.getPhotosByInspection(pgrId);
+      const tudoSincronizado = p.metaSynced && todasFotos.every((foto) => foto.synced);
+      p.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
       p.syncError = '';
       p.updatedAt = Date.now();
       await DB.putPGR(p);
@@ -910,6 +944,7 @@ function buildPGRMetaPayload(p) {
     unidade: p.data.unidade,
     responsavelPGR: p.data.responsavelPGR,
     dataElaboracao: p.data.dataElaboracao,
+    proximaRevisao: p.data.proximaRevisao,
     caracterizacaoAmbiente: p.data.caracterizacaoAmbiente,
     ghes: ghes.map((g) => ({
       id: g.id,
@@ -924,6 +959,8 @@ function buildPGRMetaPayload(p) {
       perigo: item.perigo,
       lesaoAgravo: item.lesaoAgravo,
       fonte: item.fonte,
+      tipoExposicao: item.tipoExposicao,
+      tempoExposicao: item.tempoExposicao,
       tipoRisco: item.tipoRisco,
       severidade: item.severidade,
       probabilidade: item.probabilidade,
@@ -946,6 +983,14 @@ function buildPGRMetaPayload(p) {
       responsavel: item.responsavel,
       dataPrevista: item.dataPrevista,
       status: item.status
+    })),
+    emergencia: p.data.emergencia || {},
+    exerciciosSimulados: (p.data.exerciciosSimulados || []).map((item) => ({
+      id: item.id,
+      data: item.data,
+      descricao: item.descricao,
+      participantes: item.participantes,
+      qtdFotos: (item.fotosIds || []).length
     }))
   };
 }

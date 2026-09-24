@@ -12,6 +12,8 @@ function novoPerigoPGR() {
     perigo: '',
     fonte: '',
     lesaoAgravo: '',
+    tipoExposicao: '',
+    tempoExposicao: '',
     tipoRisco: TIPOS_RISCO_PGR[0],
     severidade: '',
     probabilidade: '',
@@ -48,9 +50,21 @@ function novoTreinamentoPGR() {
   };
 }
 
+function novoExercicioSimuladoPGR() {
+  return {
+    id: uuid(),
+    data: '',
+    descricao: '',
+    participantes: '',
+    fotosIds: []
+  };
+}
+
 function novoPGRVazio() {
   const now = new Date();
   const pad = (n) => String(n).padStart(2, '0');
+  const hoje = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const daquiA2Anos = `${now.getFullYear() + 2}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
   return {
     id: uuid(),
     createdAt: Date.now(),
@@ -64,11 +78,19 @@ function novoPGRVazio() {
       empresa: '',
       unidade: '',
       responsavelPGR: '',
-      dataElaboracao: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
+      dataElaboracao: hoje,
+      proximaRevisao: daquiA2Anos,
       caracterizacaoAmbiente: '',
       ghes: [],
       perigos: [],
       treinamentos: [],
+      emergencia: {
+        meiosPrimeirosSocorros: '',
+        procedimentoAbandono: '',
+        medidasGrandeMagnitude: '',
+        periodicidadeExercicios: PERIODICIDADES_EXERCICIO_EMERGENCIA_PGR[0]
+      },
+      exerciciosSimulados: [],
       assinaturas: {
         responsavelPGR: ''
       }
@@ -133,6 +155,7 @@ async function renderPGRHome() {
         const s = statusLabel(p);
         const criticos = p.data.perigos.filter((h) => classificarRiscoPGR(h.severidade, h.probabilidade).nivel === 'Crítico').length;
         const altos = p.data.perigos.filter((h) => classificarRiscoPGR(h.severidade, h.probabilidade).nivel === 'Alto').length;
+        const revisaoVencida = p.data.proximaRevisao && p.data.proximaRevisao < new Date().toISOString().slice(0, 10);
         return `
           <li class="insp-card" data-id="${p.id}">
             <div class="insp-card-main">
@@ -141,6 +164,7 @@ async function renderPGRHome() {
               <div class="insp-card-sub">${p.data.perigos.length} perigo(s) mapeado(s)</div>
             </div>
             <div class="insp-card-side">
+              ${revisaoVencida ? `<span class="badge badge-erro">Revisão vencida</span>` : ''}
               ${criticos ? `<span class="badge badge-erro">${criticos} crítico(s)</span>` : ''}
               ${altos ? `<span class="badge badge-alto">${altos} alto(s)</span>` : ''}
               <span class="badge ${s.cls}">${s.text}</span>
@@ -174,7 +198,9 @@ async function renderPGRHome() {
 async function excluirPGR(id) {
   const p = await DB.getPGR(id);
   if (!p) return;
-  if (!confirm('Excluir este PGR do dispositivo? Esta ação não pode ser desfeita.')) return;
+  if (!confirm('Excluir este PGR do dispositivo e todas as suas fotos? Esta ação não pode ser desfeita.')) return;
+  const photos = await DB.getPhotosByInspection(id);
+  for (const photo of photos) await DB.deletePhoto(photo.id);
   await DB.deletePGR(id);
   renderPGRHome();
   updateSyncBar();
@@ -196,6 +222,14 @@ async function renderPGRDetail(id) {
   p.data.ghes = p.data.ghes || [];
   p.data.treinamentos = p.data.treinamentos || [];
   p.data.caracterizacaoAmbiente = p.data.caracterizacaoAmbiente || '';
+  p.data.exerciciosSimulados = p.data.exerciciosSimulados || [];
+  p.data.emergencia = p.data.emergencia || {
+    meiosPrimeirosSocorros: '',
+    procedimentoAbandono: '',
+    medidasGrandeMagnitude: '',
+    periodicidadeExercicios: PERIODICIDADES_EXERCICIO_EMERGENCIA_PGR[0]
+  };
+  const revisaoVencida = p.data.proximaRevisao && p.data.proximaRevisao < new Date().toISOString().slice(0, 10);
   const s = statusLabel(p);
 
   view.innerHTML = `
@@ -219,6 +253,10 @@ async function renderPGRDetail(id) {
       <label>Data de elaboração / última revisão
         <input type="date" id="pgr-data-elaboracao" value="${escapeHtml(p.data.dataElaboracao)}">
       </label>
+      <label>Data prevista da próxima revisão
+        <input type="date" id="pgr-proxima-revisao" value="${escapeHtml(p.data.proximaRevisao || '')}">
+      </label>
+      ${revisaoVencida ? '<p class="erro-msg">A revisão deste PGR está vencida (a NR-01 exige reavaliação a cada 2 anos, ou 3 anos com certificação em SST).</p>' : ''}
       <label>Caracterização do processo e ambiente de trabalho
         <textarea id="pgr-caracterizacao-ambiente" rows="3" placeholder="Ex.: Obra de construção civil, execução de estrutura em concreto armado, com atividades em altura e uso de ferramentas elétricas.">${escapeHtml(p.data.caracterizacaoAmbiente)}</textarea>
       </label>
@@ -245,6 +283,27 @@ async function renderPGRDetail(id) {
       <button type="button" id="btn-add-treinamento-pgr" class="btn-secondary">+ Adicionar treinamento</button>
     </div>
 
+    <div class="lista-participantes">
+      <h3>Preparação e Resposta a Emergências</h3>
+      <p class="hint">Procedimentos mínimos exigidos pela NR-01 (item 1.5.6) para situações de emergência.</p>
+      <label>Meios, responsáveis e recursos para primeiros socorros e encaminhamento de acidentados
+        <textarea id="pgr-emergencia-socorros" rows="2">${escapeHtml(p.data.emergencia.meiosPrimeirosSocorros)}</textarea>
+      </label>
+      <label>Procedimento de abandono de área / local afetado
+        <textarea id="pgr-emergencia-abandono" rows="2">${escapeHtml(p.data.emergencia.procedimentoAbandono)}</textarea>
+      </label>
+      <label>Medidas para emergências de grande magnitude (quando aplicável)
+        <textarea id="pgr-emergencia-magnitude" rows="2">${escapeHtml(p.data.emergencia.medidasGrandeMagnitude)}</textarea>
+      </label>
+      <label>Periodicidade dos exercícios simulados
+        <select id="pgr-emergencia-periodicidade">${PERIODICIDADES_EXERCICIO_EMERGENCIA_PGR.map((per) => `<option ${p.data.emergencia.periodicidadeExercicios === per ? 'selected' : ''}>${escapeHtml(per)}</option>`).join('')}</select>
+      </label>
+
+      <h4>Exercícios simulados realizados</h4>
+      <div id="pgr-exercicios-container"></div>
+      <button type="button" id="btn-add-exercicio-pgr" class="btn-secondary">+ Registrar exercício simulado</button>
+    </div>
+
     <div class="form-actions">
       <button id="btn-relatorio-pgr" class="btn-secondary">Gerar PGR (PDF)</button>
     </div>
@@ -264,12 +323,24 @@ async function renderPGRDetail(id) {
   inputUnidade.addEventListener('blur', async () => { p.data.unidade = inputUnidade.value.trim(); await salvarPGR(p); });
   inputResponsavel.addEventListener('blur', async () => { p.data.responsavelPGR = inputResponsavel.value.trim(); await salvarPGR(p); });
   inputData.addEventListener('change', async () => { p.data.dataElaboracao = inputData.value; await salvarPGR(p); });
+  const inputProximaRevisao = document.getElementById('pgr-proxima-revisao');
+  inputProximaRevisao.addEventListener('change', async () => { p.data.proximaRevisao = inputProximaRevisao.value; await salvarPGR(p); renderPGRDetail(id); });
   const inputCaracterizacao = document.getElementById('pgr-caracterizacao-ambiente');
   inputCaracterizacao.addEventListener('blur', async () => { p.data.caracterizacaoAmbiente = inputCaracterizacao.value.trim(); await salvarPGR(p); });
+
+  const inputSocorros = document.getElementById('pgr-emergencia-socorros');
+  const inputAbandono = document.getElementById('pgr-emergencia-abandono');
+  const inputMagnitude = document.getElementById('pgr-emergencia-magnitude');
+  const inputPeriodicidadeExercicio = document.getElementById('pgr-emergencia-periodicidade');
+  inputSocorros.addEventListener('blur', async () => { p.data.emergencia.meiosPrimeirosSocorros = inputSocorros.value.trim(); await salvarPGR(p); });
+  inputAbandono.addEventListener('blur', async () => { p.data.emergencia.procedimentoAbandono = inputAbandono.value.trim(); await salvarPGR(p); });
+  inputMagnitude.addEventListener('blur', async () => { p.data.emergencia.medidasGrandeMagnitude = inputMagnitude.value.trim(); await salvarPGR(p); });
+  inputPeriodicidadeExercicio.addEventListener('change', async () => { p.data.emergencia.periodicidadeExercicios = inputPeriodicidadeExercicio.value; await salvarPGR(p); });
 
   const ghesContainer = document.getElementById('pgr-ghes-container');
   const perigosContainer = document.getElementById('pgr-perigos-container');
   const treinamentosContainer = document.getElementById('pgr-treinamentos-container');
+  const exerciciosContainer = document.getElementById('pgr-exercicios-container');
 
   // Os selects de perigo e de treinamento mostram o nome dos GHEs cadastrados,
   // então precisam ser redesenhados sempre que a lista de GHEs mudar.
@@ -281,6 +352,7 @@ async function renderPGRDetail(id) {
   renderGHEsPGR(ghesContainer, p, refrescarDependentesDeGHE);
   renderPerigosPGR(perigosContainer, p);
   renderTreinamentosPGR(treinamentosContainer, p);
+  renderExerciciosSimuladosPGR(exerciciosContainer, p);
 
   document.getElementById('btn-add-ghe-pgr').addEventListener('click', async () => {
     p.data.ghes.push(novoGHEPGR());
@@ -298,6 +370,12 @@ async function renderPGRDetail(id) {
     p.data.treinamentos.push(novoTreinamentoPGR());
     await salvarPGR(p);
     renderTreinamentosPGR(treinamentosContainer, p);
+  });
+
+  document.getElementById('btn-add-exercicio-pgr').addEventListener('click', async () => {
+    p.data.exerciciosSimulados.push(novoExercicioSimuladoPGR());
+    await salvarPGR(p);
+    renderExerciciosSimuladosPGR(exerciciosContainer, p);
   });
 
   document.getElementById('btn-relatorio-pgr').addEventListener('click', () => {
@@ -323,7 +401,9 @@ async function renderPGRDetail(id) {
   });
 
   document.getElementById('btn-excluir-pgr-detail').addEventListener('click', async () => {
-    if (!confirm('Excluir este PGR do dispositivo? Esta ação não pode ser desfeita.')) return;
+    if (!confirm('Excluir este PGR do dispositivo e todas as suas fotos? Esta ação não pode ser desfeita.')) return;
+    const photos = await DB.getPhotosByInspection(id);
+    for (const photo of photos) await DB.deletePhoto(photo.id);
     await DB.deletePGR(id);
     renderPGRHome();
     updateSyncBar();
@@ -353,6 +433,17 @@ function renderPerigoPGR(item, idx, ghes) {
         </label>
         <label class="campo-leitura">Tipo de risco
           <select class="in-tipo-risco">${TIPOS_RISCO_PGR.map((t) => `<option ${item.tipoRisco === t ? 'selected' : ''}>${escapeHtml(t)}</option>`).join('')}</select>
+        </label>
+      </div>
+      <div class="participante-linha">
+        <label class="campo-leitura">Tipo de exposição
+          <select class="in-tipo-exposicao">
+            <option value="">Selecione…</option>
+            ${TIPOS_EXPOSICAO_PGR.map((t) => `<option ${item.tipoExposicao === t ? 'selected' : ''}>${escapeHtml(t)}</option>`).join('')}
+          </select>
+        </label>
+        <label class="campo-leitura">Tempo / frequência de exposição
+          <input type="text" class="in-tempo-exposicao" placeholder="Ex.: 8h/dia" value="${escapeHtml(item.tempoExposicao)}">
         </label>
       </div>
 
@@ -424,6 +515,7 @@ function renderPerigosPGR(container, p) {
 
     const camposTexto = [
       ['.in-perigo', 'perigo'], ['.in-lesao-agravo', 'lesaoAgravo'], ['.in-fonte', 'fonte'],
+      ['.in-tempo-exposicao', 'tempoExposicao'],
       ['.in-medidas-existentes', 'medidasExistentes'], ['.in-medidas-propostas', 'medidasPropostas'],
       ['.in-responsavel-perigo', 'responsavel']
     ];
@@ -434,6 +526,11 @@ function renderPerigosPGR(container, p) {
         item[campo] = el.value.trim ? el.value.trim() : el.value;
         await salvarPGR(p);
       });
+    });
+
+    card.querySelector('.in-tipo-exposicao').addEventListener('change', async (e) => {
+      item.tipoExposicao = e.target.value;
+      await salvarPGR(p);
     });
 
     card.querySelector('.in-tipo-risco').addEventListener('change', async (e) => {
@@ -632,6 +729,89 @@ function renderTreinamentosPGR(container, p) {
   });
 }
 
+/* ---------------- PREPARAÇÃO E RESPOSTA A EMERGÊNCIAS ---------------- */
+
+function renderExercicioSimuladoPGR(item, idx) {
+  return `
+    <div class="leitura-card" data-idx="${idx}">
+      <div class="participante-linha">
+        <label class="campo-leitura">Data do exercício
+          <input type="date" class="in-exercicio-data" value="${escapeHtml(item.data)}">
+        </label>
+        <button type="button" class="btn-remover-item btn-remover-exercicio" title="Remover exercício">✕</button>
+      </div>
+      <label>Descrição do exercício
+        <textarea class="in-exercicio-descricao" rows="2" placeholder="Ex.: Simulado de abandono de área em caso de incêndio no canteiro de obras.">${escapeHtml(item.descricao)}</textarea>
+      </label>
+      <label>Participantes
+        <input type="text" class="in-exercicio-participantes" value="${escapeHtml(item.participantes)}">
+      </label>
+      <label>Evidência (registro fotográfico)</label>
+      <div class="foto-botoes">
+        <label class="file-label">📷 Tirar foto
+          <input type="file" accept="image/*" capture="environment" class="input-foto-camera">
+        </label>
+        <label class="file-label">🖼️ Da galeria
+          <input type="file" accept="image/*" multiple class="input-foto-galeria">
+        </label>
+      </div>
+      <div class="thumbs"></div>
+    </div>
+  `;
+}
+
+function renderExerciciosSimuladosPGR(container, p) {
+  const exercicios = p.data.exerciciosSimulados;
+  container.innerHTML = exercicios.length
+    ? exercicios.map((item, idx) => renderExercicioSimuladoPGR(item, idx)).join('')
+    : '<p class="empty-state">Nenhum exercício simulado registrado ainda.</p>';
+
+  exercicios.forEach((item, idx) => {
+    const card = container.querySelector(`.leitura-card[data-idx="${idx}"]`);
+    if (!card) return;
+
+    card.querySelector('.in-exercicio-data').addEventListener('change', async (e) => {
+      item.data = e.target.value;
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-exercicio-descricao').addEventListener('blur', async (e) => {
+      item.descricao = e.target.value.trim();
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-exercicio-participantes').addEventListener('blur', async (e) => {
+      item.participantes = e.target.value.trim();
+      await salvarPGR(p);
+    });
+
+    card.querySelectorAll('.input-foto-camera, .input-foto-galeria').forEach((fileInput) => {
+      fileInput.addEventListener('change', async (e) => {
+        await adicionarFotos(p, item.fotosIds, e.target.files, `exercicio:${item.id}`);
+        await salvarPGR(p);
+        renderExerciciosSimuladosPGR(container, p);
+      });
+    });
+
+    renderThumbnails(card.querySelector('.thumbs'), item.fotosIds).then(() => {
+      card.querySelectorAll('.btn-remover-foto').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const photoId = btn.dataset.photoId;
+          await DB.deletePhoto(photoId);
+          item.fotosIds = item.fotosIds.filter((id) => id !== photoId);
+          await salvarPGR(p);
+          renderExerciciosSimuladosPGR(container, p);
+        });
+      });
+    });
+
+    card.querySelector('.btn-remover-exercicio').addEventListener('click', async () => {
+      if (!confirm('Remover o registro deste exercício simulado?')) return;
+      p.data.exerciciosSimulados.splice(idx, 1);
+      await salvarPGR(p);
+      renderExerciciosSimuladosPGR(container, p);
+    });
+  });
+}
+
 /* ---------------- VALIDAÇÃO PARA O RELATÓRIO ---------------- */
 
 function validarPGRParaRelatorio(p) {
@@ -679,6 +859,7 @@ function montarInventarioRiscosPGR(perigos, ghes) {
   const linhas = perigos.map((item, idx) => {
     const antes = classificarRiscoPGR(item.severidade, item.probabilidade);
     const depois = classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual);
+    const exposicao = [item.tipoExposicao, item.tempoExposicao].filter(Boolean).join(' — ');
     return `
       <tr>
         <td>${idx + 1}</td>
@@ -686,6 +867,7 @@ function montarInventarioRiscosPGR(perigos, ghes) {
         <td>${escapeHtml(item.lesaoAgravo || '—')}</td>
         <td>${escapeHtml(item.tipoRisco)}</td>
         <td>${escapeHtml(nomeGHEPGR(ghes, item.gheId) || '—')}</td>
+        <td>${escapeHtml(exposicao || '—')}</td>
         <td>${escapeHtml(item.medidasExistentes || '—')}</td>
         <td class="rep-td-status rep-status-${antes.cls === 'badge-ok' ? 'ok' : antes.cls === 'badge-pendente' ? 'na' : 'nc'}">${antes.nivel}${antes.valor ? ' (' + antes.valor + ')' : ''}</td>
         <td class="rep-td-status rep-status-${depois.cls === 'badge-ok' ? 'ok' : depois.cls === 'badge-pendente' ? 'na' : 'nc'}">${depois.nivel}${depois.valor ? ' (' + depois.valor + ')' : ''}</td>
@@ -694,7 +876,7 @@ function montarInventarioRiscosPGR(perigos, ghes) {
   }).join('');
   return `
     <table class="rep-table">
-      <thead><tr><th>Nº</th><th>Perigo / Risco</th><th>Lesão / Agravo à Saúde</th><th>Tipo</th><th>GHE</th><th>Medidas de controle existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
+      <thead><tr><th>Nº</th><th>Perigo / Risco</th><th>Lesão / Agravo à Saúde</th><th>Tipo</th><th>GHE</th><th>Exposição</th><th>Medidas de controle existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
       <tbody>${linhas}</tbody>
     </table>
   `;
@@ -745,6 +927,39 @@ function montarPlanoAcaoPGR(perigos) {
   `;
 }
 
+async function montarExerciciosSimuladosPGR(exercicios) {
+  if (!exercicios.length) return '<p class="rep-hint">Nenhum exercício simulado registrado.</p>';
+  const blocos = await Promise.all(exercicios.map(async (item, idx) => {
+    const fotosHtml = (await Promise.all((item.fotosIds || []).map(montarBlocoFoto))).join('');
+    return `
+      <div class="rep-foto-bloco">
+        <div class="rep-foto-header">
+          <strong>Exercício ${idx + 1}</strong> — ${item.data ? formatarDataBR(item.data) : 'data não informada'}
+        </div>
+        <p>${escapeHtml(item.descricao || '—')}</p>
+        ${item.participantes ? `<p><strong>Participantes:</strong> ${escapeHtml(item.participantes)}</p>` : ''}
+        ${fotosHtml ? `<div class="rep-fotos-grid">${fotosHtml}</div>` : '<p class="rep-hint">Sem evidência fotográfica anexada.</p>'}
+      </div>
+    `;
+  }));
+  return blocos.join('');
+}
+
+async function montarPreparacaoEmergenciaPGR(p) {
+  const emergencia = p.data.emergencia || {};
+  const exerciciosHtml = await montarExerciciosSimuladosPGR(p.data.exerciciosSimulados || []);
+  return `
+    <table class="rep-tabela-ident">
+      <tr><th>Primeiros socorros / encaminhamento de acidentados</th><td colspan="3">${escapeHtml(emergencia.meiosPrimeirosSocorros || '—')}</td></tr>
+      <tr><th>Procedimento de abandono de área</th><td colspan="3">${escapeHtml(emergencia.procedimentoAbandono || '—')}</td></tr>
+      <tr><th>Medidas para emergências de grande magnitude</th><td colspan="3">${escapeHtml(emergencia.medidasGrandeMagnitude || '—')}</td></tr>
+      <tr><th>Periodicidade dos exercícios simulados</th><td colspan="3">${escapeHtml(emergencia.periodicidadeExercicios || '—')}</td></tr>
+    </table>
+    <h4>Exercícios simulados realizados</h4>
+    ${exerciciosHtml}
+  `;
+}
+
 function ligarAssinaturasPGR(p, id) {
   view.querySelectorAll('.btn-assinar').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -792,12 +1007,15 @@ async function renderPGRReport(id) {
   p.data.assinaturas = p.data.assinaturas || {};
   p.data.ghes = p.data.ghes || [];
   p.data.treinamentos = p.data.treinamentos || [];
+  p.data.exerciciosSimulados = p.data.exerciciosSimulados || [];
+  p.data.emergencia = p.data.emergencia || {};
 
   const codigo = gerarCodigoPGR(p);
   const geradoEm = new Date().toLocaleString('pt-BR');
   const inventarioHtml = montarInventarioRiscosPGR(p.data.perigos, p.data.ghes);
   const planoAcaoHtml = montarPlanoAcaoPGR(p.data.perigos);
   const cronogramaHtml = montarCronogramaTreinamentoPGR(p.data.treinamentos, p.data.ghes);
+  const emergenciaHtml = await montarPreparacaoEmergenciaPGR(p);
 
   view.innerHTML = `
     <div class="screen-header no-print">
@@ -828,6 +1046,7 @@ async function renderPGRReport(id) {
         <table class="rep-tabela-ident">
           <tr><th>Empresa</th><td>${escapeHtml(p.data.empresa)}</td><th>Unidade</th><td>${escapeHtml(p.data.unidade || '—')}</td></tr>
           <tr><th>Responsável técnico</th><td>${escapeHtml(p.data.responsavelPGR || '—')}</td><th>Data de elaboração</th><td>${p.data.dataElaboracao ? formatarDataBR(p.data.dataElaboracao) : '—'}</td></tr>
+          <tr><th>Próxima revisão prevista</th><td colspan="3">${p.data.proximaRevisao ? formatarDataBR(p.data.proximaRevisao) : '—'}</td></tr>
         </table>
         <p class="rep-hint"><strong>Caracterização do processo e ambiente de trabalho:</strong> ${escapeHtml(p.data.caracterizacaoAmbiente || '—')}</p>
       </section>
@@ -852,8 +1071,13 @@ async function renderPGRReport(id) {
         ${cronogramaHtml}
       </section>
 
+      <section class="rep-secao rep-quebra">
+        <h3>6. Preparação e Resposta a Emergências</h3>
+        ${emergenciaHtml}
+      </section>
+
       <section class="rep-secao rep-assinaturas">
-        <h3>6. Responsável técnico</h3>
+        <h3>7. Responsável técnico</h3>
         <div class="rep-assinatura-grid">
           ${blocoAssinatura(p, 'responsavelPGR', 'Responsável técnico pelo PGR', p.data.responsavelPGR)}
         </div>

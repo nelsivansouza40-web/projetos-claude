@@ -73,6 +73,7 @@ const SHEET_PGR = 'PGR';
 const SHEET_PGR_GHES = 'PGR_GHEs';
 const SHEET_PGR_PERIGOS = 'PGR_Perigos';
 const SHEET_PGR_TREINAMENTOS = 'PGR_Treinamentos';
+const SHEET_PGR_EXERCICIOS = 'PGR_Exercicios_Simulados';
 
 function doPost(e) {
   let body;
@@ -860,17 +861,26 @@ function upsertVeiculo(v) {
 function upsertPGR(p) {
   const sheetPGR = getOrCreateSheet(SHEET_PGR, [
     'ID', 'Empresa', 'Unidade', 'Responsável Técnico', 'Data de Elaboração',
-    'Caracterização do Processo e Ambiente de Trabalho', 'Qtd. Perigos', 'Recebido em'
+    'Próxima Revisão', 'Caracterização do Processo e Ambiente de Trabalho',
+    'Primeiros Socorros / Encaminhamento', 'Procedimento de Abandono',
+    'Medidas para Emergências de Grande Magnitude', 'Periodicidade de Exercícios',
+    'Qtd. Perigos', 'Recebido em'
   ]);
 
   const id = p.id;
+  const emergencia = p.emergencia || {};
   const linha = [
     id,
     p.empresa,
     p.unidade,
     p.responsavelPGR,
     p.dataElaboracao,
+    p.proximaRevisao,
     p.caracterizacaoAmbiente,
+    emergencia.meiosPrimeirosSocorros,
+    emergencia.procedimentoAbandono,
+    emergencia.medidasGrandeMagnitude,
+    emergencia.periodicidadeExercicios,
     (p.perigos || []).length,
     new Date()
   ];
@@ -899,7 +909,8 @@ function upsertPGR(p) {
   });
 
   const sheetPerigos = getOrCreateSheet(SHEET_PGR_PERIGOS, [
-    'PGR ID', 'Perigo ID', 'GHE', 'Perigo', 'Lesão / Agravo à Saúde', 'Fonte', 'Tipo de Risco',
+    'PGR ID', 'Perigo ID', 'GHE', 'Perigo', 'Lesão / Agravo à Saúde', 'Fonte',
+    'Tipo de Exposição', 'Tempo / Frequência de Exposição', 'Tipo de Risco',
     'Severidade', 'Probabilidade', 'Nível de Risco', 'Medidas Existentes',
     'Medidas Propostas', 'Severidade Residual', 'Probabilidade Residual',
     'Nível de Risco Residual', 'Responsável', 'Prazo', 'Status', 'Recebido em'
@@ -912,7 +923,8 @@ function upsertPGR(p) {
   }
   (p.perigos || []).forEach((item) => {
     sheetPerigos.appendRow([
-      id, item.id, item.ghe, item.perigo, item.lesaoAgravo, item.fonte, item.tipoRisco,
+      id, item.id, item.ghe, item.perigo, item.lesaoAgravo, item.fonte,
+      item.tipoExposicao, item.tempoExposicao, item.tipoRisco,
       item.severidade, item.probabilidade, item.nivelRisco, item.medidasExistentes,
       item.medidasPropostas, item.severidadeResidual, item.probabilidadeResidual,
       item.nivelRiscoResidual, item.responsavel, item.prazo, item.status, new Date()
@@ -931,6 +943,19 @@ function upsertPGR(p) {
     sheetTreinamentos.appendRow([
       id, item.id, item.nome, item.ghe, item.cargaHoraria, item.periodicidade,
       item.responsavel, item.dataPrevista, item.status, new Date()
+    ]);
+  });
+
+  const sheetExercicios = getOrCreateSheet(SHEET_PGR_EXERCICIOS, [
+    'PGR ID', 'Exercício ID', 'Data', 'Descrição', 'Participantes', 'Qtd. Fotos', 'Recebido em'
+  ]);
+  const dataExercicios = sheetExercicios.getDataRange().getValues();
+  for (let i = dataExercicios.length - 1; i >= 1; i--) {
+    if (dataExercicios[i][0] === id) sheetExercicios.deleteRow(i + 1);
+  }
+  (p.exerciciosSimulados || []).forEach((item) => {
+    sheetExercicios.appendRow([
+      id, item.id, item.data, item.descricao, item.participantes, item.qtdFotos, new Date()
     ]);
   });
 
