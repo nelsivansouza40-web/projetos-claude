@@ -23,10 +23,11 @@
  *  - { action: "upsertPTAPR", ptapr }            -> dados da Permissão de Trabalho/APR
  *  - { action: "upsertCertificado", certificado } -> dados de certificado/treinamento
  *  - { action: "upsertPET", pet }                -> Permissão de Entrada e Trabalho em Espaço Confinado
+ *  - { action: "upsertInvestigacao", investigacao } -> Investigação de Acidente de Trabalho (RIAT)
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
- *    de CIPA, PT/APR, certificados e PET, com o próprio ID do registro
- *    correspondente)
+ *    de CIPA, PT/APR, certificados, PET e investigações de acidente, com o
+ *    próprio ID do registro correspondente)
  *
  * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
  * depois de sincronizar ao menos uma inspeção, rode a função
@@ -57,6 +58,9 @@ const SHEET_PET = 'PET';
 const SHEET_PET_ITENS = 'PET_Itens';
 const SHEET_PET_LEITURAS = 'PET_Leituras';
 const SHEET_PET_EQUIPE = 'PET_Equipe';
+const SHEET_INVESTIGACAO = 'Investigacoes_Acidente';
+const SHEET_INVESTIGACAO_PERGUNTAS = 'Investigacao_Perguntas';
+const SHEET_INVESTIGACAO_PLANO = 'Investigacao_Plano_Acao';
 
 function doPost(e) {
   let body;
@@ -86,6 +90,8 @@ function doPost(e) {
         return jsonResponse(upsertCertificado(body.certificado));
       case 'upsertPET':
         return jsonResponse(upsertPET(body.pet));
+      case 'upsertInvestigacao':
+        return jsonResponse(upsertInvestigacao(body.investigacao));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -624,6 +630,94 @@ function upsertPET(pet) {
   });
 
   return { ok: true, remoteRef: petFolder.getId() };
+}
+
+function upsertInvestigacao(inv) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folderName = inv.id + ' - Investigacao - ' + (inv.acidentado.nome || 'sem-nome');
+  const invFolder = getOrCreateDriveFolder(folderName, rootFolder);
+
+  const sheetInv = getOrCreateSheet(SHEET_INVESTIGACAO, [
+    'ID', 'Data', 'Hora', 'Empresa', 'Unidade', 'Local', 'Turno', 'Tipo de Acidente',
+    'Gravidade', 'Dias de Afastamento', 'CAT Emitida', 'Nº CAT', 'Parte do Corpo Atingida',
+    'Agente Causador', 'Natureza da Lesão', 'Nome do Acidentado', 'Função', 'Setor',
+    'Tempo de Empresa', 'Tempo na Função', 'Descrição do Acidente', 'Testemunhas',
+    'Causas Imediatas', 'Causas Básicas', 'Investigador', 'Recebido em', 'Pasta Drive'
+  ]);
+
+  const id = inv.id;
+  const ac = inv.acidente;
+  const acidentado = inv.acidentado;
+  const linha = [
+    id,
+    ac.data,
+    ac.hora,
+    ac.empresa,
+    ac.unidade,
+    ac.local,
+    ac.turno,
+    ac.tipo,
+    ac.gravidade,
+    ac.diasAfastamento,
+    ac.catEmitida,
+    ac.catNumero,
+    ac.parteCorpoAtingida,
+    ac.agenteCausador,
+    ac.naturezaLesao,
+    acidentado.nome,
+    acidentado.funcao,
+    acidentado.setor,
+    acidentado.tempoEmpresa,
+    acidentado.tempoFuncao,
+    inv.descricao,
+    inv.testemunhas,
+    inv.causasImediatas,
+    inv.causasBasicas,
+    inv.investigador,
+    new Date(),
+    invFolder.getUrl()
+  ];
+
+  const idCol = 1;
+  const data = sheetInv.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetInv.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetInv.appendRow(linha);
+  }
+
+  const sheetPerguntas = getOrCreateSheet(SHEET_INVESTIGACAO_PERGUNTAS, [
+    'Investigação ID', 'Pergunta ID', 'Pergunta', 'Resposta', 'Observação', 'Recebido em'
+  ]);
+  const perguntasExistentes = sheetPerguntas.getDataRange().getValues();
+  (inv.perguntas || []).forEach((item) => {
+    let jaExiste = false;
+    for (let i = 1; i < perguntasExistentes.length; i++) {
+      if (perguntasExistentes[i][0] === id && perguntasExistentes[i][1] === item.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetPerguntas.appendRow([id, item.id, item.texto, item.resposta, item.observacao, new Date()]);
+    }
+  });
+
+  const sheetPlano = getOrCreateSheet(SHEET_INVESTIGACAO_PLANO, [
+    'Investigação ID', 'Ação ID', 'Descrição', 'Responsável', 'Prazo', 'Status', 'Recebido em'
+  ]);
+  // A lista de ações pode ser editada livremente no app (removida, alterada
+  // de status), então mantemos a planilha em espelho a cada sincronização.
+  const dataPlano = sheetPlano.getDataRange().getValues();
+  for (let i = dataPlano.length - 1; i >= 1; i--) {
+    if (dataPlano[i][0] === id) sheetPlano.deleteRow(i + 1);
+  }
+  (inv.planoAcao || []).forEach((a) => {
+    sheetPlano.appendRow([id, a.id, a.descricao, a.responsavel, a.prazo, a.status, new Date()]);
+  });
+
+  return { ok: true, remoteRef: invFolder.getId() };
 }
 
 function uploadPhoto(inspectionId, photo) {

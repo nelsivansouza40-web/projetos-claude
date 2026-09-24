@@ -81,6 +81,11 @@ const Sync = {
         if (pet.syncStatus === 'synced') continue;
         await this.syncPET(pet.id, endpoint);
       }
+      const registrosInvestigacao = await DB.getAllInvestigacoes();
+      for (const inv of registrosInvestigacao) {
+        if (inv.syncStatus === 'synced') continue;
+        await this.syncInvestigacao(inv.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -649,8 +654,111 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncInvestigacao(invId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let inv = await DB.getInvestigacao(invId);
+    if (!inv) return;
+
+    inv.syncStatus = 'sincronizando';
+    inv.syncError = '';
+    await DB.putInvestigacao(inv);
+    this.notify();
+
+    try {
+      // 1) Envia os dados (texto) da investigação, sem fotos.
+      if (!inv.metaSynced) {
+        const payload = {
+          action: 'upsertInvestigacao',
+          investigacao: buildInvestigacaoMetaPayload(inv)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados da investigação.');
+        }
+        inv.metaSynced = true;
+        inv.remoteRef = resp.remoteRef || inv.remoteRef || null;
+        await DB.putInvestigacao(inv);
+      }
+
+      // 2) Envia cada foto pendente, individualmente.
+      const photos = await DB.getPhotosByInspection(invId);
+      const pendentes = photos.filter((p) => !p.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: inv.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: inv.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      // 3) Reavalia status final.
+      const todasFotos = await DB.getPhotosByInspection(invId);
+      const tudoSincronizado = inv.metaSynced && todasFotos.every((p) => p.synced);
+      inv.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
+      inv.syncError = '';
+      inv.updatedAt = Date.now();
+      await DB.putInvestigacao(inv);
+    } catch (err) {
+      inv = await DB.getInvestigacao(invId);
+      inv.syncStatus = 'erro';
+      inv.syncError = err.message || String(err);
+      await DB.putInvestigacao(inv);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildInvestigacaoMetaPayload(inv) {
+  return {
+    id: inv.id,
+    createdAt: inv.createdAt,
+    updatedAt: inv.updatedAt,
+    acidente: inv.data.acidente,
+    acidentado: inv.data.acidentado,
+    descricao: inv.data.descricao,
+    testemunhas: inv.data.testemunhas,
+    perguntas: inv.data.perguntas.map((item) => ({
+      id: item.id,
+      texto: item.texto,
+      resposta: item.resposta,
+      observacao: item.observacao
+    })),
+    causasImediatas: inv.data.causasImediatas,
+    causasBasicas: inv.data.causasBasicas,
+    investigador: inv.data.investigador,
+    planoAcao: inv.data.planoAcao.map((a) => ({
+      id: a.id,
+      descricao: a.descricao,
+      responsavel: a.responsavel,
+      prazo: a.prazo,
+      status: a.status
+    }))
+  };
+}
 
 function buildPETMetaPayload(pet) {
   return {

@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v23';
+const APP_VERSION = 'v24';
 
 const state = {
   screen: 'home',
@@ -92,6 +92,7 @@ async function updateSyncBar() {
   const registrosPTAPR = await DB.getAllPTAPR();
   const registrosCert = await DB.getAllCertificados();
   const registrosPET = await DB.getAllPET();
+  const registrosInvestigacao = await DB.getAllInvestigacoes();
   const pendentesInsp = inspections.filter((i) => i.completo && i.syncStatus !== 'synced');
   const pendentesDDS = registrosDDS.filter((d) => d.completo && d.syncStatus !== 'synced');
   const pendentesDiag = registrosDiag.filter((d) => d.completo && d.syncStatus !== 'synced');
@@ -99,7 +100,8 @@ async function updateSyncBar() {
   const pendentesPTAPR = registrosPTAPR.filter((p) => p.completo && p.syncStatus !== 'synced');
   const pendentesCert = registrosCert.filter((c) => c.completo && c.syncStatus !== 'synced');
   const pendentesPET = registrosPET.filter((p) => p.completo && p.syncStatus !== 'synced');
-  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length;
+  const pendentesInvestigacao = registrosInvestigacao.filter((i) => i.completo && i.syncStatus !== 'synced');
+  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length;
   if (totalPendentes === 0) {
     syncBarEl.hidden = true;
     return;
@@ -114,6 +116,7 @@ async function updateSyncBar() {
   if (pendentesDiag.length) partes.push(`${pendentesDiag.length} diagnóstico(s)`);
   if (pendentesCipa.length) partes.push(`${pendentesCipa.length} reunião(ões) de CIPA`);
   if (pendentesCert.length) partes.push(`${pendentesCert.length} certificado(s)`);
+  if (pendentesInvestigacao.length) partes.push(`${pendentesInvestigacao.length} investigação(ões)`);
   syncBarEl.innerHTML = `
     <span>${partes.join(' e ')} aguardando sincronização${online ? '' : ' (offline)'}</span>
     <button id="btn-sync-now" ${online ? '' : 'disabled'}>Sincronizar agora</button>
@@ -143,6 +146,8 @@ async function updateSyncBar() {
       if (state.screen === 'cert-detail') renderCertificadoDetail(state.certId);
       if (state.screen === 'pet-home') renderPETHome();
       if (state.screen === 'pet-detail') renderPETDetail(state.petId);
+      if (state.screen === 'investigacao-home') renderInvestigacaoHome();
+      if (state.screen === 'investigacao-detail') renderInvestigacaoDetail(state.investigacaoId);
     });
   }
 }
@@ -155,6 +160,7 @@ function setActiveTab(tab) {
   const tabDiag = document.getElementById('tab-diagnostico');
   const tabCipa = document.getElementById('tab-cipa');
   const tabCert = document.getElementById('tab-certificados');
+  const tabInvestigacao = document.getElementById('tab-investigacao');
   if (tabInsp) tabInsp.classList.toggle('active', tab === 'inspecoes');
   if (tabPTAPR) tabPTAPR.classList.toggle('active', tab === 'ptapr');
   if (tabPET) tabPET.classList.toggle('active', tab === 'pet');
@@ -162,6 +168,7 @@ function setActiveTab(tab) {
   if (tabDiag) tabDiag.classList.toggle('active', tab === 'diagnostico');
   if (tabCipa) tabCipa.classList.toggle('active', tab === 'cipa');
   if (tabCert) tabCert.classList.toggle('active', tab === 'certificados');
+  if (tabInvestigacao) tabInvestigacao.classList.toggle('active', tab === 'investigacao');
 }
 
 async function refreshChrome() {
@@ -883,6 +890,9 @@ function abrirResultadoBusca(tipo, r) {
     case 'certificado':
       if (r.completo) { renderCertificadoDetail(r.id); } else { state.certId = r.id; renderCertificadoForm(); }
       break;
+    case 'investigacao':
+      if (r.completo) { renderInvestigacaoDetail(r.id); } else { state.investigacaoId = r.id; state.step = 0; renderInvestigacaoForm(); }
+      break;
   }
 }
 
@@ -896,9 +906,9 @@ async function executarBuscaGlobal(termoBruto) {
   }
 
   const bate = (texto) => (texto || '').toLowerCase().includes(termo);
-  const [inspecoes, ptaprs, pets, ddsList, diagnosticos, cipaReunioes, certificados] = await Promise.all([
+  const [inspecoes, ptaprs, pets, ddsList, diagnosticos, cipaReunioes, certificados, investigacoes] = await Promise.all([
     DB.getAllInspections(), DB.getAllPTAPR(), DB.getAllPET(), DB.getAllDDS(),
-    DB.getAllDiagnosticos(), DB.getAllCipaReunioes(), DB.getAllCertificados()
+    DB.getAllDiagnosticos(), DB.getAllCipaReunioes(), DB.getAllCertificados(), DB.getAllInvestigacoes()
   ]);
 
   const resultados = [];
@@ -943,6 +953,13 @@ async function executarBuscaGlobal(termoBruto) {
     const d = r.data;
     if (bate(d.colaborador) || bate(d.funcao) || bate(d.setor) || bate(descricaoTipoCertificado(r))) {
       resultados.push({ tipo: 'certificado', registro: r, modulo: 'Certificado', titulo: d.colaborador || 'Certificado', sub: descricaoTipoCertificado(r) });
+    }
+  });
+  investigacoes.forEach((r) => {
+    const ac = r.data.acidente;
+    const acidentado = r.data.acidentado;
+    if (bate(acidentado.nome) || bate(ac.empresa) || bate(ac.local) || bate(ac.tipo)) {
+      resultados.push({ tipo: 'investigacao', registro: r, modulo: 'Investigação', titulo: acidentado.nome || 'Investigação de Acidente', sub: `${ac.empresa || ''} · ${ac.local || ''}` });
     }
   });
 
@@ -1095,6 +1112,7 @@ document.getElementById('tab-cipa').addEventListener('click', renderCipaHome);
 document.getElementById('tab-ptapr').addEventListener('click', renderPTAPRHome);
 document.getElementById('tab-certificados').addEventListener('click', renderCertificadosHome);
 document.getElementById('tab-pet').addEventListener('click', renderPETHome);
+document.getElementById('tab-investigacao').addEventListener('click', renderInvestigacaoHome);
 
 /* ---------------- INICIALIZAÇÃO ---------------- */
 
