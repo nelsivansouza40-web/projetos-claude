@@ -7,7 +7,7 @@
 const VEICULO_STEPS = ['Identificação', 'Checklist', 'Avarias e Fechamento', 'Revisão'];
 
 function novoItemVeiculo(texto) {
-  return { id: uuid(), texto, resposta: '', observacao: '' };
+  return { id: uuid(), texto, resposta: '', observacao: '', photoIds: [] };
 }
 
 function gerarChecklistVeiculo() {
@@ -273,6 +273,15 @@ function renderVeiculoItem(item, idx) {
       <div class="checklist-question">${String(idx + 1).padStart(2, '0')}. ${escapeHtml(item.texto)}</div>
       <div class="radio-group">${radiosHtml}</div>
       <div class="checklist-details">
+        <div class="foto-botoes">
+          <label class="file-label">📷 Tirar foto
+            <input type="file" accept="image/*" capture="environment" class="input-foto-camera">
+          </label>
+          <label class="file-label">🖼️ Da galeria
+            <input type="file" accept="image/*" multiple class="input-foto-galeria">
+          </label>
+        </div>
+        <div class="thumbs"></div>
         <label>Observação
           <textarea class="txt-observacao" rows="2">${escapeHtml(item.observacao)}</textarea>
         </label>
@@ -300,6 +309,26 @@ function renderVeiculoChecklistItems(container, v) {
     if (obs) obs.addEventListener('blur', async () => {
       item.observacao = obs.value;
       await salvarRascunhoVeiculo(v);
+    });
+
+    card.querySelectorAll('.input-foto-camera, .input-foto-galeria').forEach((fileInput) => {
+      fileInput.addEventListener('change', async (e) => {
+        await adicionarFotos(v, item.photoIds, e.target.files, `item:${item.id}`);
+        await salvarRascunhoVeiculo(v);
+        renderVeiculoChecklistItems(container, v);
+      });
+    });
+
+    renderThumbnails(card.querySelector('.thumbs'), item.photoIds).then(() => {
+      card.querySelectorAll('.btn-remover-foto').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const photoId = btn.dataset.photoId;
+          await DB.deletePhoto(photoId);
+          item.photoIds = item.photoIds.filter((id) => id !== photoId);
+          await salvarRascunhoVeiculo(v);
+          renderVeiculoChecklistItems(container, v);
+        });
+      });
     });
   });
 }
@@ -546,8 +575,8 @@ function validarVeiculoParaRelatorio(v) {
     const num = String(idx + 1).padStart(2, '0');
     if (!item.resposta) {
       problemas.push(`Item ${num} ("${item.texto}") está sem resposta.`);
-    } else if (item.resposta === 'Não Conforme' && !item.observacao) {
-      problemas.push(`Item ${num} ("${item.texto}") está Não Conforme, mas não tem observação.`);
+    } else if (item.resposta === 'Não Conforme' && !item.observacao && item.photoIds.length === 0) {
+      problemas.push(`Item ${num} ("${item.texto}") está Não Conforme, mas não tem observação nem foto.`);
     }
   });
   v.data.avarias.forEach((a, idx) => {
@@ -570,13 +599,19 @@ async function renderVeiculoDetail(id) {
   const ident = v.data.identificacao;
   const f = v.data.fechamento;
 
-  const checklistHtml = v.data.checklist.map((item, idx) => `
-    <div class="detail-item">
-      <div><strong>Item ${String(idx + 1).padStart(2, '0')}.</strong> ${escapeHtml(item.texto)}</div>
-      <div class="detail-resposta resposta-${item.resposta === 'Conforme' ? 'ok' : item.resposta === 'Não Conforme' ? 'nc' : 'na'}">${escapeHtml(item.resposta || 'Sem resposta')}</div>
-      ${item.observacao ? `<div class="detail-obs">Obs.: ${escapeHtml(item.observacao)}</div>` : ''}
-    </div>
-  `).join('');
+  const checklistHtml = v.data.checklist.map((item, idx) => {
+    const itemPhotos = photos.filter((p) => p.questionRef === `item:${item.id}`);
+    return `
+      <div class="detail-item">
+        <div><strong>Item ${String(idx + 1).padStart(2, '0')}.</strong> ${escapeHtml(item.texto)}</div>
+        <div class="detail-resposta resposta-${item.resposta === 'Conforme' ? 'ok' : item.resposta === 'Não Conforme' ? 'nc' : 'na'}">${escapeHtml(item.resposta || 'Sem resposta')}</div>
+        ${item.observacao ? `<div class="detail-obs">Obs.: ${escapeHtml(item.observacao)}</div>` : ''}
+        ${itemPhotos.length ? `<div class="thumbs">${itemPhotos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  const fotosGerais = photos.filter((p) => p.questionRef === 'veiculo');
 
   const avariasHtml = v.data.avarias.length
     ? `<ul class="lista-presenca">${v.data.avarias.map((a, idx) => `<li>Nº ${idx + 1} — ${escapeHtml(a.tipo)}: ${escapeHtml(a.descricao || 'sem descrição')}</li>`).join('')}</ul>`
@@ -598,7 +633,7 @@ async function renderVeiculoDetail(id) {
     <h3>Croqui do veículo</h3>
     <div class="croqui-container">${svgCroquiVeiculo(v.data.avarias)}</div>
     ${avariasHtml}
-    ${photos.length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${photos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
+    ${fotosGerais.length ? `<h3>Evidência fotográfica geral</h3><div class="thumbs">${fotosGerais.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     <h3>Fechamento</h3>
     <div class="detail-block">
       <p>Classificação geral: ${escapeHtml(f.classificacaoGeral || '—')} · Condições de uso: ${escapeHtml(f.condicoesUso || '—')}</p>
@@ -759,6 +794,7 @@ async function renderVeiculoReport(id) {
   const codigo = gerarCodigoVeiculo(v);
   const geradoEm = new Date().toLocaleString('pt-BR');
   const fotosHtml = await montarFotosVeiculo(v.data.fotosIds);
+  const registroFotograficoChecklist = await montarRegistroFotografico(v.data.checklist);
 
   view.innerHTML = `
     <div class="screen-header no-print">
@@ -802,18 +838,23 @@ async function renderVeiculoReport(id) {
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>3. Croqui do veículo e avarias</h3>
+        <h3>3. Registro fotográfico do checklist</h3>
+        ${registroFotograficoChecklist}
+      </section>
+
+      <section class="rep-secao rep-quebra">
+        <h3>4. Croqui do veículo e avarias</h3>
         <div class="croqui-container">${svgCroquiVeiculo(v.data.avarias)}</div>
         ${montarTabelaAvariasVeiculo(v.data.avarias)}
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>4. Evidência fotográfica</h3>
+        <h3>5. Evidência fotográfica geral</h3>
         ${fotosHtml}
       </section>
 
       <section class="rep-secao">
-        <h3>5. Fechamento</h3>
+        <h3>6. Fechamento</h3>
         <table class="rep-tabela-ident">
           <tr><th>Classificação geral</th><td>${escapeHtml(f.classificacaoGeral)}</td><th>Condições de uso</th><td>${escapeHtml(f.condicoesUso || '—')}</td></tr>
           <tr><th>Responsável pela vistoria</th><td colspan="3">${escapeHtml(f.responsavelVistoria)}</td></tr>
@@ -822,7 +863,7 @@ async function renderVeiculoReport(id) {
       </section>
 
       <section class="rep-secao rep-assinaturas">
-        <h3>6. Encerramento</h3>
+        <h3>7. Encerramento</h3>
         <div class="rep-assinatura-grid">
           ${blocoAssinatura(v, 'responsavelVistoria', 'Responsável pela vistoria', f.responsavelVistoria)}
           ${blocoAssinatura(v, 'condutor', 'Condutor', ident.condutor)}

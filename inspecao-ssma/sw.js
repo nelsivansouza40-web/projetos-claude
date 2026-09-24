@@ -3,7 +3,7 @@
  * internet, servindo os arquivos a partir do cache local do dispositivo.
  * Dados de inspeções e fotos ficam no IndexedDB (não neste cache).
  */
-const CACHE_VERSION = 'ssma-v28';
+const CACHE_VERSION = 'ssma-v29';
 const APP_SHELL = [
   './',
   './index.html',
