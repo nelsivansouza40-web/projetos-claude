@@ -251,6 +251,9 @@ main#view {
 }
 .leitura-aviso { color: var(--vermelho); font-size: 0.8rem; font-weight: 600; margin: 0; }
 
+.croqui-container { max-width: 280px; margin: 0 auto 12px; }
+.croqui-svg { width: 100%; height: auto; display: block; cursor: crosshair; border-radius: 10px; touch-action: manipulation; }
+
 .checklist-details { display: flex; flex-direction: column; gap: 8px; }
 .checklist-details label { font-size: 0.78rem; font-weight: 600; color: #5a6572; display: flex; flex-direction: column; gap: 4px; }
 .checklist-details textarea, .form-section textarea { resize: vertical; }

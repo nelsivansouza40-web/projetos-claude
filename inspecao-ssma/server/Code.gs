@@ -25,10 +25,11 @@
  *  - { action: "upsertPET", pet }                -> Permissão de Entrada e Trabalho em Espaço Confinado
  *  - { action: "upsertInvestigacao", investigacao } -> Investigação de Acidente de Trabalho (RIAT)
  *  - { action: "upsertFichaEPI", ficha }            -> Ficha de Controle de EPI (NR-6)
+ *  - { action: "upsertVeiculo", veiculo }           -> Vistoria de Veículo (checklist + croqui de avarias)
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
- *    de CIPA, PT/APR, certificados, PET e investigações de acidente, com o
- *    próprio ID do registro correspondente)
+ *    de CIPA, PT/APR, certificados, PET, investigações de acidente e
+ *    vistorias de veículo, com o próprio ID do registro correspondente)
  *
  * Painel de ações (Resolvidas / Pendentes / Dentro do Prazo / Em Atraso):
  * depois de sincronizar ao menos uma inspeção, rode a função
@@ -64,6 +65,9 @@ const SHEET_INVESTIGACAO_PERGUNTAS = 'Investigacao_Perguntas';
 const SHEET_INVESTIGACAO_PLANO = 'Investigacao_Plano_Acao';
 const SHEET_EPI = 'Fichas_EPI';
 const SHEET_EPI_ENTREGAS = 'Fichas_EPI_Entregas';
+const SHEET_VEICULO = 'Veiculos';
+const SHEET_VEICULO_ITENS = 'Veiculos_Itens';
+const SHEET_VEICULO_AVARIAS = 'Veiculos_Avarias';
 
 function doPost(e) {
   let body;
@@ -97,6 +101,8 @@ function doPost(e) {
         return jsonResponse(upsertInvestigacao(body.investigacao));
       case 'upsertFichaEPI':
         return jsonResponse(upsertFichaEPI(body.ficha));
+      case 'upsertVeiculo':
+        return jsonResponse(upsertVeiculo(body.veiculo));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -767,6 +773,81 @@ function upsertFichaEPI(ficha) {
   });
 
   return { ok: true, remoteRef: id };
+}
+
+function upsertVeiculo(v) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folderName = v.id + ' - Veiculo - ' + (v.identificacao.placa || 'sem-placa');
+  const vFolder = getOrCreateDriveFolder(folderName, rootFolder);
+
+  const sheetVeiculo = getOrCreateSheet(SHEET_VEICULO, [
+    'ID', 'Data', 'Hora', 'Empresa', 'Unidade', 'Placa', 'Marca', 'Modelo',
+    'Quilometragem', 'Condutor', 'Classificação Geral', 'Condições de Uso',
+    'Responsável pela Vistoria', 'Observações Finais', 'Recebido em', 'Pasta Drive'
+  ]);
+
+  const id = v.id;
+  const ident = v.identificacao;
+  const f = v.fechamento || {};
+  const linha = [
+    id,
+    ident.data,
+    ident.hora,
+    ident.empresa,
+    ident.unidade,
+    ident.placa,
+    ident.marca,
+    ident.modelo,
+    ident.km,
+    ident.condutor,
+    f.classificacaoGeral,
+    f.condicoesUso,
+    f.responsavelVistoria,
+    f.observacoesFinais,
+    new Date(),
+    vFolder.getUrl()
+  ];
+
+  const idCol = 1;
+  const data = sheetVeiculo.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetVeiculo.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetVeiculo.appendRow(linha);
+  }
+
+  const sheetItens = getOrCreateSheet(SHEET_VEICULO_ITENS, [
+    'Veículo ID', 'Item ID', 'Questão', 'Resposta', 'Observação', 'Recebido em'
+  ]);
+  const itensExistentes = sheetItens.getDataRange().getValues();
+  (v.checklist || []).forEach((item) => {
+    let jaExiste = false;
+    for (let i = 1; i < itensExistentes.length; i++) {
+      if (itensExistentes[i][0] === id && itensExistentes[i][1] === item.id) { jaExiste = true; break; }
+    }
+    if (!jaExiste) {
+      sheetItens.appendRow([id, item.id, item.texto, item.resposta, item.observacao, new Date()]);
+    }
+  });
+
+  const sheetAvarias = getOrCreateSheet(SHEET_VEICULO_AVARIAS, [
+    'Veículo ID', 'Avaria ID', 'Posição X (%)', 'Posição Y (%)', 'Tipo', 'Descrição', 'Recebido em'
+  ]);
+  // A lista de avarias pode ser editada livremente no app (removida,
+  // corrigida), então mantemos a planilha em espelho a cada sincronização.
+  const dataAvarias = sheetAvarias.getDataRange().getValues();
+  for (let i = dataAvarias.length - 1; i >= 1; i--) {
+    if (dataAvarias[i][0] === id) sheetAvarias.deleteRow(i + 1);
+  }
+  (v.avarias || []).forEach((a) => {
+    sheetAvarias.appendRow([id, a.id, a.x, a.y, a.tipo, a.descricao, new Date()]);
+  });
+
+  return { ok: true, remoteRef: vFolder.getId() };
 }
 
 function uploadPhoto(inspectionId, photo) {

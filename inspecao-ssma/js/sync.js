@@ -91,6 +91,11 @@ const Sync = {
         if (ficha.syncStatus === 'synced') continue;
         await this.syncFichaEPI(ficha.id, endpoint);
       }
+      const registrosVeiculo = await DB.getAllVeiculos();
+      for (const veic of registrosVeiculo) {
+        if (veic.syncStatus === 'synced') continue;
+        await this.syncVeiculo(veic.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -773,8 +778,106 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncVeiculo(veiculoId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let v = await DB.getVeiculo(veiculoId);
+    if (!v) return;
+
+    v.syncStatus = 'sincronizando';
+    v.syncError = '';
+    await DB.putVeiculo(v);
+    this.notify();
+
+    try {
+      // 1) Envia os dados (texto) da vistoria, sem fotos.
+      if (!v.metaSynced) {
+        const payload = {
+          action: 'upsertVeiculo',
+          veiculo: buildVeiculoMetaPayload(v)
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados da vistoria de veículo.');
+        }
+        v.metaSynced = true;
+        v.remoteRef = resp.remoteRef || v.remoteRef || null;
+        await DB.putVeiculo(v);
+      }
+
+      // 2) Envia cada foto pendente, individualmente.
+      const photos = await DB.getPhotosByInspection(veiculoId);
+      const pendentes = photos.filter((p) => !p.synced);
+
+      for (const foto of pendentes) {
+        const base64 = await blobToBase64(foto.blob);
+        const payload = {
+          action: 'uploadPhoto',
+          inspectionId: v.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: base64,
+            remoteRef: v.remoteRef || null
+          }
+        };
+        const resp = await postJson(endpoint, payload);
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      // 3) Reavalia status final.
+      const todasFotos = await DB.getPhotosByInspection(veiculoId);
+      const tudoSincronizado = v.metaSynced && todasFotos.every((p) => p.synced);
+      v.syncStatus = tudoSincronizado ? 'synced' : 'pendente';
+      v.syncError = '';
+      v.updatedAt = Date.now();
+      await DB.putVeiculo(v);
+    } catch (err) {
+      v = await DB.getVeiculo(veiculoId);
+      v.syncStatus = 'erro';
+      v.syncError = err.message || String(err);
+      await DB.putVeiculo(v);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildVeiculoMetaPayload(v) {
+  return {
+    id: v.id,
+    createdAt: v.createdAt,
+    updatedAt: v.updatedAt,
+    identificacao: v.data.identificacao,
+    checklist: v.data.checklist.map((item) => ({
+      id: item.id,
+      texto: item.texto,
+      resposta: item.resposta,
+      observacao: item.observacao
+    })),
+    avarias: v.data.avarias.map((a) => ({
+      id: a.id,
+      x: a.x,
+      y: a.y,
+      tipo: a.tipo,
+      descricao: a.descricao
+    })),
+    fechamento: v.data.fechamento
+  };
+}
 
 function buildFichaEPIMetaPayload(ficha) {
   return {

@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v25';
+const APP_VERSION = 'v26';
 
 const state = {
   screen: 'home',
@@ -94,6 +94,7 @@ async function updateSyncBar() {
   const registrosPET = await DB.getAllPET();
   const registrosInvestigacao = await DB.getAllInvestigacoes();
   const registrosEPI = await DB.getAllFichasEPI();
+  const registrosVeiculo = await DB.getAllVeiculos();
   const pendentesInsp = inspections.filter((i) => i.completo && i.syncStatus !== 'synced');
   const pendentesDDS = registrosDDS.filter((d) => d.completo && d.syncStatus !== 'synced');
   const pendentesDiag = registrosDiag.filter((d) => d.completo && d.syncStatus !== 'synced');
@@ -103,7 +104,8 @@ async function updateSyncBar() {
   const pendentesPET = registrosPET.filter((p) => p.completo && p.syncStatus !== 'synced');
   const pendentesInvestigacao = registrosInvestigacao.filter((i) => i.completo && i.syncStatus !== 'synced');
   const pendentesEPI = registrosEPI.filter((f) => f.completo && f.syncStatus !== 'synced');
-  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length + pendentesEPI.length;
+  const pendentesVeiculo = registrosVeiculo.filter((v) => v.completo && v.syncStatus !== 'synced');
+  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length + pendentesEPI.length + pendentesVeiculo.length;
   if (totalPendentes === 0) {
     syncBarEl.hidden = true;
     return;
@@ -120,6 +122,7 @@ async function updateSyncBar() {
   if (pendentesCert.length) partes.push(`${pendentesCert.length} certificado(s)`);
   if (pendentesInvestigacao.length) partes.push(`${pendentesInvestigacao.length} investigação(ões)`);
   if (pendentesEPI.length) partes.push(`${pendentesEPI.length} ficha(s) de EPI`);
+  if (pendentesVeiculo.length) partes.push(`${pendentesVeiculo.length} vistoria(s) de veículo`);
   syncBarEl.innerHTML = `
     <span>${partes.join(' e ')} aguardando sincronização${online ? '' : ' (offline)'}</span>
     <button id="btn-sync-now" ${online ? '' : 'disabled'}>Sincronizar agora</button>
@@ -153,6 +156,8 @@ async function updateSyncBar() {
       if (state.screen === 'investigacao-detail') renderInvestigacaoDetail(state.investigacaoId);
       if (state.screen === 'epi-home') renderEPIHome();
       if (state.screen === 'epi-detail') renderEPIDetail(state.epiId);
+      if (state.screen === 'veiculo-home') renderVeiculoHome();
+      if (state.screen === 'veiculo-detail') renderVeiculoDetail(state.veiculoId);
     });
   }
 }
@@ -167,6 +172,7 @@ function setActiveTab(tab) {
   const tabCert = document.getElementById('tab-certificados');
   const tabInvestigacao = document.getElementById('tab-investigacao');
   const tabEPI = document.getElementById('tab-epi');
+  const tabVeiculo = document.getElementById('tab-veiculo');
   if (tabInsp) tabInsp.classList.toggle('active', tab === 'inspecoes');
   if (tabPTAPR) tabPTAPR.classList.toggle('active', tab === 'ptapr');
   if (tabPET) tabPET.classList.toggle('active', tab === 'pet');
@@ -176,6 +182,7 @@ function setActiveTab(tab) {
   if (tabCert) tabCert.classList.toggle('active', tab === 'certificados');
   if (tabInvestigacao) tabInvestigacao.classList.toggle('active', tab === 'investigacao');
   if (tabEPI) tabEPI.classList.toggle('active', tab === 'epi');
+  if (tabVeiculo) tabVeiculo.classList.toggle('active', tab === 'veiculo');
 }
 
 async function refreshChrome() {
@@ -903,6 +910,9 @@ function abrirResultadoBusca(tipo, r) {
     case 'epi':
       renderEPIDetail(r.id);
       break;
+    case 'veiculo':
+      if (r.completo) { renderVeiculoDetail(r.id); } else { state.veiculoId = r.id; state.step = 0; renderVeiculoForm(); }
+      break;
   }
 }
 
@@ -916,9 +926,9 @@ async function executarBuscaGlobal(termoBruto) {
   }
 
   const bate = (texto) => (texto || '').toLowerCase().includes(termo);
-  const [inspecoes, ptaprs, pets, ddsList, diagnosticos, cipaReunioes, certificados, investigacoes, fichasEpi] = await Promise.all([
+  const [inspecoes, ptaprs, pets, ddsList, diagnosticos, cipaReunioes, certificados, investigacoes, fichasEpi, veiculos] = await Promise.all([
     DB.getAllInspections(), DB.getAllPTAPR(), DB.getAllPET(), DB.getAllDDS(),
-    DB.getAllDiagnosticos(), DB.getAllCipaReunioes(), DB.getAllCertificados(), DB.getAllInvestigacoes(), DB.getAllFichasEPI()
+    DB.getAllDiagnosticos(), DB.getAllCipaReunioes(), DB.getAllCertificados(), DB.getAllInvestigacoes(), DB.getAllFichasEPI(), DB.getAllVeiculos()
   ]);
 
   const resultados = [];
@@ -976,6 +986,12 @@ async function executarBuscaGlobal(termoBruto) {
     const d = r.data;
     if (bate(d.colaborador) || bate(d.funcao) || bate(d.setor) || d.entregas.some((e) => bate(e.epi))) {
       resultados.push({ tipo: 'epi', registro: r, modulo: 'Ficha de EPI', titulo: d.colaborador || 'Ficha de EPI', sub: `${d.funcao || ''} · ${d.setor || ''}` });
+    }
+  });
+  veiculos.forEach((r) => {
+    const id = r.data.identificacao;
+    if (bate(id.placa) || bate(id.empresa) || bate(id.marca) || bate(id.modelo) || bate(id.condutor)) {
+      resultados.push({ tipo: 'veiculo', registro: r, modulo: 'Veículo', titulo: id.placa || 'Vistoria de Veículo', sub: `${id.marca || ''} ${id.modelo || ''}` });
     }
   });
 
@@ -1130,6 +1146,7 @@ document.getElementById('tab-certificados').addEventListener('click', renderCert
 document.getElementById('tab-pet').addEventListener('click', renderPETHome);
 document.getElementById('tab-investigacao').addEventListener('click', renderInvestigacaoHome);
 document.getElementById('tab-epi').addEventListener('click', renderEPIHome);
+document.getElementById('tab-veiculo').addEventListener('click', renderVeiculoHome);
 
 /* ---------------- INICIALIZAÇÃO ---------------- */
 
