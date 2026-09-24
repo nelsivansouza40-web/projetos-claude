@@ -93,10 +93,13 @@ async function renderCertificadosHome() {
       <button id="btn-new-cert" class="btn-primary">+ Novo certificado</button>
     </div>
     ${resumoHtml}
+    ${registros.length ? '<div class="form-actions"><button id="btn-ver-matriz" class="btn-secondary">📊 Ver Matriz de Treinamento</button></div>' : ''}
     <ul class="insp-list">${itemsHtml}</ul>
   `;
 
   document.getElementById('btn-new-cert').addEventListener('click', startNewCertificado);
+  const btnMatriz = document.getElementById('btn-ver-matriz');
+  if (btnMatriz) btnMatriz.addEventListener('click', renderMatrizTreinamento);
   view.querySelectorAll('.insp-card').forEach((el) => {
     el.addEventListener('click', () => openCertificado(el.dataset.id));
   });
@@ -281,6 +284,78 @@ async function renderCertificadoForm() {
     await refreshChrome();
     renderCertificadosHome();
     Sync.syncAll().catch(() => {});
+  });
+}
+
+/* ---------------- MATRIZ DE TREINAMENTO ---------------- */
+
+function agruparCertificadosPorColaborador(registros) {
+  const mapa = new Map();
+  registros.forEach((c) => {
+    const nome = c.data.colaborador || 'Sem nome';
+    const tipo = descricaoTipoCertificado(c) || 'Não especificado';
+    if (!mapa.has(nome)) mapa.set(nome, { funcao: c.data.funcao, setor: c.data.setor, tipos: new Map() });
+    const entrada = mapa.get(nome);
+    const atual = entrada.tipos.get(tipo);
+    if (!atual || (c.data.dataEmissao || '') > (atual.data.dataEmissao || '')) {
+      entrada.tipos.set(tipo, c);
+    }
+  });
+  return mapa;
+}
+
+async function renderMatrizTreinamento() {
+  state.screen = 'cert-matriz';
+  setActiveTab('certificados');
+  const registros = await DB.getAllCertificados();
+  const colaboradores = agruparCertificadosPorColaborador(registros);
+  const tiposUnicos = [...new Set(registros.map((c) => descricaoTipoCertificado(c) || 'Não especificado'))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+  function montarTabela(filtro) {
+    const nomes = [...colaboradores.keys()]
+      .filter((nome) => !filtro || nome.toLowerCase().includes(filtro))
+      .sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+    if (!nomes.length) return '<p class="empty-state">Nenhum colaborador encontrado.</p>';
+
+    const linhas = nomes.map((nome) => {
+      const entrada = colaboradores.get(nome);
+      const celulas = tiposUnicos.map((tipo) => {
+        const cert = entrada.tipos.get(tipo);
+        if (!cert) return '<td><span class="badge badge-rascunho">—</span></td>';
+        const s = statusCertificado(cert);
+        return `<td><span class="badge ${s.cls}">${s.text}</span></td>`;
+      }).join('');
+      return `<tr><td>${escapeHtml(nome)}<br><span class="insp-card-sub">${escapeHtml(entrada.funcao || '')} · ${escapeHtml(entrada.setor || '')}</span></td>${celulas}</tr>`;
+    }).join('');
+
+    return `
+      <div style="overflow-x:auto;">
+        <table class="rep-table">
+          <thead><tr><th>Colaborador</th>${tiposUnicos.map((t) => `<th>${escapeHtml(t)}</th>`).join('')}</tr></thead>
+          <tbody>${linhas}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  view.innerHTML = `
+    <div class="screen-header">
+      <button id="btn-back-matriz" class="btn-link">← Voltar</button>
+      <h1>Matriz de Treinamento</h1>
+    </div>
+    <p class="hint">Mostra o treinamento mais recente de cada colaborador por tipo, com a mesma situação de validade usada nos certificados.</p>
+    <div class="form-section">
+      <label>Buscar colaborador
+        <input type="text" id="input-filtro-matriz" placeholder="Digite o nome do colaborador">
+      </label>
+    </div>
+    <div id="matriz-treinamento-container">${montarTabela('')}</div>
+  `;
+
+  document.getElementById('btn-back-matriz').addEventListener('click', renderCertificadosHome);
+  document.getElementById('input-filtro-matriz').addEventListener('input', (e) => {
+    document.getElementById('matriz-treinamento-container').innerHTML = montarTabela(e.target.value.trim().toLowerCase());
   });
 }
 

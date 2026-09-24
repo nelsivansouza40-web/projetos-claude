@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 8;
+const DB_VERSION = 9;
 let dbPromise = null;
 
 function openDB() {
@@ -42,6 +42,9 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('investigacoes')) {
         db.createObjectStore('investigacoes', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('fichasEpi')) {
+        db.createObjectStore('fichasEpi', { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => resolve(e.target.result);
@@ -241,6 +244,24 @@ const DB = {
   },
   async deleteInvestigacao(id) {
     const store = await storeTx('investigacoes', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putFichaEPI(ficha) {
+    const store = await storeTx('fichasEpi', 'readwrite');
+    await reqToPromise(store.put(ficha));
+    return ficha;
+  },
+  async getFichaEPI(id) {
+    const store = await storeTx('fichasEpi', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllFichasEPI() {
+    const store = await storeTx('fichasEpi', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deleteFichaEPI(id) {
+    const store = await storeTx('fichasEpi', 'readwrite');
     return reqToPromise(store.delete(id));
   },
   async getSetting(key) {

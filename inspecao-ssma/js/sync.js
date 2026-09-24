@@ -86,6 +86,11 @@ const Sync = {
         if (inv.syncStatus === 'synced') continue;
         await this.syncInvestigacao(inv.id, endpoint);
       }
+      const registrosEPI = await DB.getAllFichasEPI();
+      for (const ficha of registrosEPI) {
+        if (ficha.syncStatus === 'synced') continue;
+        await this.syncFichaEPI(ficha.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
@@ -729,8 +734,67 @@ const Sync = {
       throw err;
     }
     this.notify();
+  },
+
+  async syncFichaEPI(fichaId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let ficha = await DB.getFichaEPI(fichaId);
+    if (!ficha) return;
+
+    ficha.syncStatus = 'sincronizando';
+    ficha.syncError = '';
+    await DB.putFichaEPI(ficha);
+    this.notify();
+
+    try {
+      const payload = {
+        action: 'upsertFichaEPI',
+        ficha: buildFichaEPIMetaPayload(ficha)
+      };
+      const resp = await postJson(endpoint, payload);
+      if (!resp || resp.ok !== true) {
+        throw new Error((resp && resp.error) || 'Falha ao enviar dados da ficha de EPI.');
+      }
+      ficha.metaSynced = true;
+      ficha.remoteRef = resp.remoteRef || ficha.remoteRef || null;
+      ficha.syncStatus = 'synced';
+      ficha.syncError = '';
+      ficha.updatedAt = Date.now();
+      await DB.putFichaEPI(ficha);
+    } catch (err) {
+      ficha = await DB.getFichaEPI(fichaId);
+      ficha.syncStatus = 'erro';
+      ficha.syncError = err.message || String(err);
+      await DB.putFichaEPI(ficha);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   }
 };
+
+function buildFichaEPIMetaPayload(ficha) {
+  return {
+    id: ficha.id,
+    createdAt: ficha.createdAt,
+    updatedAt: ficha.updatedAt,
+    colaborador: ficha.data.colaborador,
+    funcao: ficha.data.funcao,
+    setor: ficha.data.setor,
+    entregas: ficha.data.entregas.map((e) => ({
+      id: e.id,
+      epi: e.epi,
+      ca: e.ca,
+      dataEntrega: e.dataEntrega,
+      quantidade: e.quantidade,
+      motivo: e.motivo,
+      assinado: !!e.assinatura
+    }))
+  };
+}
 
 function buildInvestigacaoMetaPayload(inv) {
   return {

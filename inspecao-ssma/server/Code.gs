@@ -24,6 +24,7 @@
  *  - { action: "upsertCertificado", certificado } -> dados de certificado/treinamento
  *  - { action: "upsertPET", pet }                -> Permissão de Entrada e Trabalho em Espaço Confinado
  *  - { action: "upsertInvestigacao", investigacao } -> Investigação de Acidente de Trabalho (RIAT)
+ *  - { action: "upsertFichaEPI", ficha }            -> Ficha de Controle de EPI (NR-6)
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
  *    de CIPA, PT/APR, certificados, PET e investigações de acidente, com o
@@ -61,6 +62,8 @@ const SHEET_PET_EQUIPE = 'PET_Equipe';
 const SHEET_INVESTIGACAO = 'Investigacoes_Acidente';
 const SHEET_INVESTIGACAO_PERGUNTAS = 'Investigacao_Perguntas';
 const SHEET_INVESTIGACAO_PLANO = 'Investigacao_Plano_Acao';
+const SHEET_EPI = 'Fichas_EPI';
+const SHEET_EPI_ENTREGAS = 'Fichas_EPI_Entregas';
 
 function doPost(e) {
   let body;
@@ -92,6 +95,8 @@ function doPost(e) {
         return jsonResponse(upsertPET(body.pet));
       case 'upsertInvestigacao':
         return jsonResponse(upsertInvestigacao(body.investigacao));
+      case 'upsertFichaEPI':
+        return jsonResponse(upsertFichaEPI(body.ficha));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -718,6 +723,50 @@ function upsertInvestigacao(inv) {
   });
 
   return { ok: true, remoteRef: invFolder.getId() };
+}
+
+function upsertFichaEPI(ficha) {
+  const sheetFicha = getOrCreateSheet(SHEET_EPI, [
+    'ID', 'Colaborador', 'Função', 'Setor', 'Qtd. Entregas', 'Recebido em'
+  ]);
+
+  const id = ficha.id;
+  const linha = [
+    id,
+    ficha.colaborador,
+    ficha.funcao,
+    ficha.setor,
+    (ficha.entregas || []).length,
+    new Date()
+  ];
+
+  const idCol = 1;
+  const data = sheetFicha.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > 0) {
+    sheetFicha.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
+  } else {
+    sheetFicha.appendRow(linha);
+  }
+
+  const sheetEntregas = getOrCreateSheet(SHEET_EPI_ENTREGAS, [
+    'Ficha ID', 'Entrega ID', 'EPI', 'CA', 'Data de Entrega', 'Quantidade',
+    'Motivo', 'Assinado', 'Recebido em'
+  ]);
+  // A lista de entregas pode ser editada livremente no app (removida,
+  // corrigida), então mantemos a planilha em espelho a cada sincronização.
+  const dataEntregas = sheetEntregas.getDataRange().getValues();
+  for (let i = dataEntregas.length - 1; i >= 1; i--) {
+    if (dataEntregas[i][0] === id) sheetEntregas.deleteRow(i + 1);
+  }
+  (ficha.entregas || []).forEach((e) => {
+    sheetEntregas.appendRow([id, e.id, e.epi, e.ca, e.dataEntrega, e.quantidade, e.motivo, e.assinado, new Date()]);
+  });
+
+  return { ok: true, remoteRef: id };
 }
 
 function uploadPhoto(inspectionId, photo) {

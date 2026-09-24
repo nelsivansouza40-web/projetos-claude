@@ -3,7 +3,7 @@
  * internet, servindo os arquivos a partir do cache local do dispositivo.
  * Dados de inspeções e fotos ficam no IndexedDB (não neste cache).
  */
-const CACHE_VERSION = 'ssma-v24';
+const CACHE_VERSION = 'ssma-v25';
 const APP_SHELL = [
   './',
   './index.html',
@@ -25,6 +25,7 @@ const APP_SHELL = [
   './js/certificados.js',
   './js/pet.js',
   './js/investigacao.js',
+  './js/epi.js',
   './js/app.js',
   './icons/icon-192.png',
   './icons/icon-512.png'
