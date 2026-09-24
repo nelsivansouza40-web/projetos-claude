@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v27';
+const APP_VERSION = 'v28';
 
 const state = {
   screen: 'home',
@@ -1056,16 +1056,60 @@ async function renderBuscaGlobal() {
   input.focus();
 }
 
+/* ---------------- APARÊNCIA DO CABEÇALHO ---------------- */
+
+function redimensionarImagemDataUrl(file, maxLargura = 960, qualidade = 0.75) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const escala = Math.min(1, maxLargura / img.width);
+        const w = Math.round(img.width * escala) || img.width;
+        const h = Math.round(img.height * escala) || img.height;
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', qualidade));
+      };
+      img.onerror = () => reject(new Error('Arquivo de imagem inválido.'));
+      img.src = reader.result;
+    };
+    reader.onerror = () => reject(new Error('Falha ao ler o arquivo.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function aplicarImagemFundoTopbar() {
+  const dataUrl = await DB.getSetting('topbarBgImage');
+  const topbar = document.getElementById('topbar');
+  topbar.style.backgroundImage = dataUrl
+    ? `linear-gradient(rgba(15,76,129,0.82), rgba(15,76,129,0.82)), url(${dataUrl})`
+    : 'none';
+}
+
 /* ---------------- CONFIGURAÇÕES ---------------- */
 
 async function renderSettings() {
   state.screen = 'settings';
   const endpoint = (await Sync.getEndpoint()) || '';
+  const topbarBgImage = await DB.getSetting('topbarBgImage');
 
   view.innerHTML = `
     <div class="screen-header">
       <button id="btn-back-home" class="btn-link">← Voltar</button>
       <h1>Configurações</h1>
+    </div>
+    <div class="form-section">
+      <h3>Aparência do cabeçalho</h3>
+      <p class="hint">Escolha uma imagem (por exemplo, o logotipo ou uma foto da empresa) para usar como fundo da barra azul no topo do aplicativo.</p>
+      ${topbarBgImage ? `<img src="${topbarBgImage}" alt="Fundo atual do cabeçalho" style="max-width:220px;border-radius:8px;display:block;margin-bottom:8px;">` : ''}
+      <label class="file-label">🖼️ ${topbarBgImage ? 'Trocar imagem' : 'Escolher imagem'}
+        <input type="file" accept="image/*" id="input-topbar-bg">
+      </label>
+      ${topbarBgImage ? '<button id="btn-remover-topbar-bg" class="btn-link">Remover imagem de fundo</button>' : ''}
+      <p id="topbar-bg-resultado" class="hint"></p>
     </div>
     <div class="form-section">
       <label>Endereço de sincronização (Google Apps Script Web App)
@@ -1100,6 +1144,28 @@ async function renderSettings() {
   `;
 
   document.getElementById('btn-back-home').addEventListener('click', renderHome);
+
+  document.getElementById('input-topbar-bg').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const resEl = document.getElementById('topbar-bg-resultado');
+    resEl.textContent = 'Processando imagem…';
+    try {
+      const dataUrl = await redimensionarImagemDataUrl(file);
+      await DB.setSetting('topbarBgImage', dataUrl);
+      await aplicarImagemFundoTopbar();
+      renderSettings();
+    } catch (err) {
+      resEl.textContent = 'Não foi possível usar essa imagem: ' + err.message;
+    }
+  });
+
+  const btnRemoverTopbarBg = document.getElementById('btn-remover-topbar-bg');
+  if (btnRemoverTopbarBg) btnRemoverTopbarBg.addEventListener('click', async () => {
+    await DB.setSetting('topbarBgImage', '');
+    await aplicarImagemFundoTopbar();
+    renderSettings();
+  });
 
   (async () => {
     const infoEl = document.getElementById('info-cache');
@@ -1179,6 +1245,7 @@ async function init() {
     }
   }
   updateConnBadge();
+  await aplicarImagemFundoTopbar();
   await updateSyncBar();
   await renderHome();
   Sync.syncAll().catch(() => {});
