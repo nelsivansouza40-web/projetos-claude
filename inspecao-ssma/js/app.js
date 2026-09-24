@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v29';
+const APP_VERSION = 'v30';
 
 const state = {
   screen: 'home',
@@ -1236,10 +1236,29 @@ document.getElementById('tab-pgr').addEventListener('click', renderPGRHome);
 async function init() {
   if ('serviceWorker' in navigator) {
     try {
-      const reg = await navigator.serviceWorker.register('sw.js');
-      // Força checar por uma versão mais nova a cada abertura do app, em vez de
-      // depender só da checagem automática do navegador (que pode demorar a acontecer).
+      // updateViaCache: 'none' impede o navegador de responder à checagem de
+      // atualização do sw.js com uma cópia guardada em cache HTTP — sem isso,
+      // um sw.js "velho" em cache podia fazer o app nunca perceber que existe
+      // uma versão nova publicada.
+      const reg = await navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' });
+
+      // Assim que uma versão nova terminar de instalar e assumir o controle,
+      // recarrega a página automaticamente — sem isso, a aba continuava
+      // rodando o JavaScript antigo até o usuário fechar e abrir de novo.
+      let recarregandoPorAtualizacao = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (recarregandoPorAtualizacao) return;
+        recarregandoPorAtualizacao = true;
+        location.reload();
+      });
+
+      // Força checar por uma versão mais nova a cada abertura do app e sempre
+      // que o app voltar a ficar visível, em vez de depender só da checagem
+      // automática do navegador (que pode demorar a acontecer).
       reg.update().catch(() => {});
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') reg.update().catch(() => {});
+      });
     } catch (e) {
       console.warn('Falha ao registrar service worker:', e);
     }
