@@ -160,7 +160,7 @@ const Retrato = (() => {
       c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
       c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
       st.foto = c; st.W = c.width; st.H = c.height;
-      st.L = { cx: c.width / 2, cy: c.height * 0.36, R: Math.min(c.width, c.height) * 0.22, g: 0, a: 0, r: 0 };
+      st.L = { cx: c.width / 2, cy: c.height * 0.38, R: Math.min(c.width, c.height) * 0.24, g: 0, a: 0, r: 0 };
     } finally { URL.revokeObjectURL(url); }
   }
 
