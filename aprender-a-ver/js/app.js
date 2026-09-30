@@ -35,7 +35,7 @@ const App = (() => {
 
     raiz.append(
       h('section', { class: 'capa-inicio' },
-        h('img', { class: 'logo-inicio', src: 'icons/icon-512.png', alt: 'Logomarca Aprender a Ver', width: 96, height: 96 }),
+        h('img', { class: 'capa-livro', src: 'icons/capa.jpg', alt: 'Capa do livro Aprender a Ver, de Nelsivan Souza', width: 760, height: 1098 }),
         h('p', { class: 'sobretitulo' }, 'Observação visual, forma, luz e sombra'),
         h('h1', {}, 'Aprender a Ver'),
         h('p', {}, 'Um caderno de estudo com as técnicas de Betty Edwards e Andrew Loomis, simuladores e uma prancheta para praticar.'),
