@@ -273,7 +273,7 @@ const Licoes = (() => {
         { t: 'A cruz', txt: 'A linha da sobrancelha dá a volta na bola como um equador; a linha central divide o rosto ao meio. O ponto onde as duas se cruzam, entre as sobrancelhas, define para onde a cabeça está virada. Loomis considera esta a chave de toda a construção.', g: [s(['central', 'sobrancelha'])] },
         { t: 'Três terços', txt: 'Na linha central, a distância da linha do cabelo até a sobrancelha é igual à da sobrancelha até a base do nariz, e igual à da base do nariz até o queixo. As duas primeiras marcas ficam na bola; o queixo fica abaixo dela.', g: [s(['tercos'])] },
         { t: 'Mandíbula e plano do rosto', txt: 'Ligue o queixo ao lado da cabeça: a mandíbula sobe até a base da orelha, na metade da volta da bola. Os lados do rosto descem da ponta da sobrancelha até o queixo e formam o plano da face.', g: [s(['mandibula'])] },
-        { t: 'Olhos, nariz, boca e orelha', txt: 'Os olhos ficam um pouco abaixo da linha da sobrancelha; o nariz ocupa o terço do meio; a boca fica no terço de baixo, mais perto do nariz. A orelha fica atrás da linha vertical do corte lateral, entre a linha da sobrancelha e a base do nariz.', g: [s(['tracos'])] },
+        { t: 'Olhos, nariz, boca e orelha', txt: 'Os olhos ficam um pouco abaixo da linha da sobrancelha; o nariz ocupa o terço do meio; a boca fica no terço de baixo, mais perto do nariz. A orelha fica atrás da linha vertical do corte lateral, entre a linha da sobrancelha e a base do nariz.', g: [s(['tracos', 'orelhas'])] },
         { t: 'Construção completa', final: true, txt: 'A mesma estrutura vale para qualquer pose. No simulador da cabeça você gira este modelo e vê como as linhas acompanham a forma.', g: [] }
       ]
     };

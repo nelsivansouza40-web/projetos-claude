@@ -55,6 +55,7 @@ const App = (() => {
     }
     raiz.append(h('h2', { class: 'secao' }, 'Trilhas'), grade);
     raiz.append(h('h2', { class: 'secao' }, 'Ferramentas'), h('div', { class: 'grade-ferramentas' },
+      h('a', { class: 'cartao ferramenta', href: '#/retrato' }, h('span', { html: U.icone('rosto') }), h('strong', {}, 'Retrato guiado'), h('span', {}, 'Da bola de Loomis ao retrato pronto em 12 etapas, a partir de uma foto sua.')),
       h('a', { class: 'cartao ferramenta', href: '#/foto' }, h('span', { html: U.icone('foto') }), h('strong', {}, 'Foto em etapas'), h('span', {}, 'Contornos, valores, grades de proporção e aferição a partir de uma foto sua.')),
       h('a', { class: 'cartao ferramenta', href: '#/prancheta' }, h('span', { html: U.icone('lapis') }), h('strong', {}, 'Prancheta livre'), h('span', {}, 'Lápis de 2H a 6B, carvão, pincel, esfuminho, papel higiênico e borrachas, com tempo e autoavaliação.')),
       h('a', { class: 'cartao ferramenta', href: '#/progresso' }, h('span', { html: U.icone('grafico') }), h('strong', {}, 'Meu progresso'), h('span', {}, 'Desenhos salvos, antes e depois, sequência de dias.'))));
@@ -233,6 +234,9 @@ const App = (() => {
       else if (p0 === 'foto') {
         definirTitulo('Foto em etapas', 'Processada no próprio aparelho');
         Foto.montar(raiz, { aba: params.aba, exercicio: params.exercicio, etapa: params.etapa != null ? +params.etapa : null });
+      } else if (p0 === 'retrato') {
+        definirTitulo('Retrato guiado', 'Método de Loomis em 12 etapas');
+        Retrato.montar(raiz);
       } else if (p0 === 'prancheta') {
         definirTitulo('Prancheta', pendente ? pendente.titulo : 'Desenho livre');
         Prancheta.montar(raiz, pendente || { titulo: 'Desenho livre', origem: 'livre' });

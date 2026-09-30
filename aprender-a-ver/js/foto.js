@@ -211,7 +211,7 @@ const Foto = (() => {
       const L = st.loomis;
       const partes = Cabeca.projetar(L.g, L.a, L.r);
       s += `<g class="ant">${Cabeca.svg(partes, ['esfera', 'lateral', 'central', 'sobrancelha', 'tercos', 'mandibula'], L.cx, L.cy, L.R)}</g>`;
-      s += `<g class="novo">${Cabeca.svg(partes, ['tracos'], L.cx, L.cy, L.R, { ocultas: false })}</g>`;
+      s += `<g class="novo">${Cabeca.svg(partes, ['tracos', 'orelhas'], L.cx, L.cy, L.R, { ocultas: false })}</g>`;
     }
     return s;
   }

@@ -281,3 +281,16 @@ svg.sobreposicao .tx-sobre { fill: #fff; stroke: rgba(20, 18, 16, .75); stroke-w
 .figura-realista { position: relative; }
 .img-realista { display: block; width: 100%; height: auto; aspect-ratio: 1; transition: opacity .2s; background: var(--papel); }
 .troca-acabamento { display: flex; justify-content: center; padding: 8px; background: var(--papel); }
+
+/* Retrato guiado: barra de etapas da prancheta */
+.barra-etapas { padding: 12px 14px; }
+.barra-etapas p { margin: 6px 0; }
+.etapa-cabeca { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.etapa-num { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--acento-escuro); }
+.etapa-nav { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.etapa-pontos { display: flex; flex: 1; gap: 4px; justify-content: center; flex-wrap: wrap; }
+.etapa-pontos .ponto { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--borda); background: var(--cartao); padding: 0; cursor: pointer; }
+.etapa-pontos .ponto.feito { background: var(--acento-suave); border-color: var(--acento); }
+.etapa-pontos .ponto.ativo { background: var(--acento); border-color: var(--acento); }
+.lista-etapas { columns: 2; column-gap: 24px; font-size: .92rem; }
+@media (max-width: 520px) { .lista-etapas { columns: 1; } }

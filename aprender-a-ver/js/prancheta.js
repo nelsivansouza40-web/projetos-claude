@@ -48,8 +48,11 @@ const Prancheta = (() => {
       visao: { girar: false, espelhar: false },
       coberto: cfg.modo === 'cego' || cfg.modo === 'espiar',
       olhadas: 0, desvirado: false, simetria: false,
-      segundos: 0, rodando: false, avisouTempo: false, salvo: false
+      segundos: 0, rodando: false, avisouTempo: false, salvo: false,
+      etapa: 0, guiaVisivel: true
     };
+    const etapas = cfg.etapas && cfg.etapas.length ? cfg.etapas : null;
+    if (etapas) st.grau = etapas[0].grau || st.grau;
     raiz.innerHTML = '';
     raiz.classList.add('pagina-prancheta');
 
@@ -61,14 +64,30 @@ const Prancheta = (() => {
       h('div', {}, h('strong', {}, cfg.titulo), cfg.tempoMin ? h('span', { class: 'nota' }, ` · sugestão: ${cfg.tempoMin} min`) : null),
       h('div', { class: 'relogio-caixa', html: U.icone('relogio') }, relogio, btnRelogio)));
 
+    // Etapas guiadas (retrato em etapas)
+    if (etapas) {
+      const num = h('span', { class: 'etapa-num' });
+      const tit = h('strong', {});
+      const txt = h('p', {});
+      const lap = h('span', { class: 'nota' });
+      const ant = h('button', { class: 'btn pequeno', onclick: () => irEtapa(st.etapa - 1) }, 'Anterior');
+      const prox = h('button', { class: 'btn pequeno primario', onclick: () => irEtapa(st.etapa + 1) }, 'Próxima');
+      const pontos = h('div', { class: 'etapa-pontos' }, etapas.map((e, i) => h('button', { class: 'ponto', 'aria-label': `Etapa ${i + 1}: ${e.titulo}`, onclick: () => irEtapa(i) })));
+      raiz.append(h('div', { class: 'cartao barra-etapas' },
+        h('div', { class: 'etapa-cabeca' }, num, tit), txt, lap,
+        h('div', { class: 'etapa-nav' }, ant, pontos, prox)));
+      st.ui.etapa = { num, tit, txt, lap, ant, prox, pontos };
+    }
+
     // Ferramentas
     const grupoGrau = h('div', { class: 'segmentado', 'aria-label': 'Graduação do lápis' });
     for (const g of Object.keys(LAPIS)) grupoGrau.append(h('button', { class: 'seg' + (g === st.grau ? ' ativo' : ''), onclick: (e) => { st.grau = g; U.$$('.seg', grupoGrau).forEach((b) => b.classList.remove('ativo')); e.currentTarget.classList.add('ativo'); } }, g));
     grupoGrau.hidden = st.ferramenta !== 'lapis';
+    st.ui.grupoGrau = grupoGrau;
     const grupoFerr = h('div', { class: 'segmentado', 'aria-label': 'Ferramenta' });
     for (const [id, f] of Object.entries(FERRAMENTAS)) {
       if (f.tipo === 'apagar' && cfg.semBorracha) continue;
-      grupoFerr.append(h('button', { class: 'seg' + (st.ferramenta === id ? ' ativo' : ''), onclick: (e) => {
+      grupoFerr.append(h('button', { class: 'seg' + (st.ferramenta === id ? ' ativo' : ''), 'data-id': id, onclick: (e) => {
         st.ferramenta = id;
         U.$$('.seg', grupoFerr).forEach((b) => b.classList.remove('ativo'));
         e.currentTarget.classList.add('ativo');
@@ -89,7 +108,7 @@ const Prancheta = (() => {
     const area = h('div', { class: 'area-desenho' });
     area.style.aspectRatio = `${W} / ${H}`;
     area.style.width = `min(100%, calc(76vh * ${(W / H).toFixed(4)}))`;
-    const fundoImg = cfg.fundo ? h('img', { class: 'camada fundo', alt: '', src: U.svgParaUrl(cfg.fundo) }) : null;
+    const fundoImg = cfg.fundo || etapas ? h('img', { class: 'camada fundo', alt: '', src: cfg.fundo ? U.svgParaUrl(cfg.fundo) : '' }) : null;
     if (fundoImg) fundoImg.style.opacity = cfg.fundoOpacidade != null ? cfg.fundoOpacidade : 0.35;
     const refSobre = cfg.referencia ? h('img', { class: 'camada ref-sobre', alt: '', src: cfg.referencia }) : null;
     const cv = h('canvas', { class: 'camada tela', width: W, height: H, 'aria-label': 'Área de desenho' });
@@ -104,7 +123,7 @@ const Prancheta = (() => {
     }
     palco.append(refPainel, area);
     raiz.append(palco);
-    Object.assign(st.ui, { palco, area, cv, ctx: cv.getContext('2d', { willReadFrequently: true }), refSobre, gradeSvg, simetria, capa });
+    Object.assign(st.ui, { palco, area, cv, ctx: cv.getContext('2d', { willReadFrequently: true }), refSobre, gradeSvg, simetria, capa, fundoImg, grupoFerr });
 
     // Opções de visualização
     const vis = h('div', { class: 'barra-ferramentas' });
@@ -116,6 +135,7 @@ const Prancheta = (() => {
       const op = h('input', { type: 'range', min: 5, max: 90, value: Math.round(st.opacidade * 100), oninput: (e) => { st.opacidade = e.target.value / 100; aplicarVisual(); } });
       vis.append(h('span', { class: 'rotulo' }, 'Referência:'), seg, h('label', { class: 'slider curto', title: 'Transparência da referência sobreposta' }, op));
     }
+    if (etapas) vis.append(h('button', { class: 'btn pequeno ativo', title: 'Linhas de construção da etapa, bem fracas, no papel', onclick: (e) => { st.guiaVisivel = !st.guiaVisivel; e.currentTarget.classList.toggle('ativo', st.guiaVisivel); aplicarEtapa(); } }, 'Guia no papel'));
     vis.append(
       h('button', { class: 'btn pequeno', onclick: (e) => { st.grade = st.grade ? 0 : (cfg.grade || 4); e.currentTarget.classList.toggle('ativo', !!st.grade); aplicarVisual(); } }, 'Grade'),
       h('button', { class: 'btn pequeno', title: 'Ver o desenho espelhado ajuda a enxergar erros', onclick: (e) => { st.visao.espelhar = !st.visao.espelhar; e.currentTarget.classList.toggle('ativo', st.visao.espelhar); aplicarVisual(); } }, 'Espelhar desenho'),
@@ -144,9 +164,50 @@ const Prancheta = (() => {
     raiz.append(acoes);
 
     ligarPonteiro(cv);
+    if (etapas) aplicarEtapa();
     aplicarVisual();
     redesenhar();
     if (cfg.modo !== 'livre' || cfg.tempoMin) U.aviso(cfg.modo === 'invertido' ? 'A referência está de cabeça para baixo. Não vire até terminar.' : 'O tempo começa a contar no primeiro traço.');
+  }
+
+  function irEtapa(i) {
+    const n = st.cfg.etapas.length;
+    if (i < 0 || i >= n) return;
+    st.etapa = i;
+    aplicarEtapa();
+    // a graduação sugerida vira a atual, com o lápis selecionado
+    const e = st.cfg.etapas[i];
+    if (e.grau && LAPIS[e.grau]) {
+      st.grau = e.grau;
+      if (st.ferramenta !== 'lapis') {
+        st.ferramenta = 'lapis';
+        U.$$('.seg', st.ui.grupoFerr).forEach((b) => b.classList.toggle('ativo', b.dataset.id === 'lapis'));
+        st.ui.grupoGrau.hidden = false;
+      }
+      U.$$('.seg', st.ui.grupoGrau).forEach((b) => b.classList.toggle('ativo', b.textContent === e.grau));
+    }
+    st.ui.etapa.num.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function aplicarEtapa() {
+    const { ui, cfg } = st, n = cfg.etapas.length, e = cfg.etapas[st.etapa], q = ui.etapa;
+    q.num.textContent = `Etapa ${st.etapa + 1} de ${n}`;
+    q.tit.textContent = e.titulo;
+    q.txt.textContent = e.texto;
+    q.lap.textContent = e.grau ? `Lápis sugerido: ${e.grau}` : '';
+    q.ant.disabled = st.etapa === 0;
+    q.prox.disabled = st.etapa === n - 1;
+    U.$$('.ponto', q.pontos).forEach((b, k) => { b.classList.toggle('ativo', k === st.etapa); b.classList.toggle('feito', k < st.etapa); });
+    if (ui.refImg) ui.refImg.src = e.referencia;
+    if (ui.refSobre) ui.refSobre.src = e.referencia;
+    if (ui.fundoImg) {
+      // mantém a última guia de construção nas etapas de valor
+      let guia = null;
+      for (let k = st.etapa; k >= 0 && !guia; k--) guia = cfg.etapas[k].guia;
+      ui.fundoImg.hidden = !guia || !st.guiaVisivel;
+      if (guia) ui.fundoImg.src = U.svgParaUrl(guia);
+      ui.fundoImg.style.opacity = e.guia ? (cfg.fundoOpacidade != null ? cfg.fundoOpacidade : 0.35) : 0.12;
+    }
   }
 
   function aplicarVisual() {
@@ -157,7 +218,7 @@ const Prancheta = (() => {
     if (ui.refImg) {
       let t = '';
       const inv = cfg.modo === 'invertido' && !st.desvirado;
-      if (cfg.girarRef !== inv) t += 'rotate(180deg) ';
+      if (!!cfg.girarRef !== inv) t += 'rotate(180deg) ';
       if (cfg.espelharRef) t += 'scaleX(-1)';
       ui.refImg.style.transform = t.trim() || 'none';
     }

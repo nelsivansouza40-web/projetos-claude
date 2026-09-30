@@ -319,7 +319,7 @@ const Sims = (() => {
     function svgAtual() {
       const partes = Cabeca.projetar(st.g, st.a, st.r);
       const constr = Cabeca.svg(partes, ['esfera', 'lateral', 'central', 'sobrancelha', 'tercos', 'mandibula'], cx, cy, R, { ocultas: st.ocultas });
-      const tr = st.tracos ? Cabeca.svg(partes, ['tracos'], cx, cy, R, { ocultas: false }) : '';
+      const tr = st.tracos ? Cabeca.svg(partes, ['tracos', 'orelhas'], cx, cy, R, { ocultas: false }) : '';
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W * 2}" height="${H * 2}" class="sim-svg" role="img" aria-label="Cabeça de Loomis"><style>${Licoes.CSS}</style><rect width="${W}" height="${H}" fill="#fbf8f2"/><g class="ant">${constr}</g><g class="novo">${tr}</g></svg>`;
     }
     const desenhar = () => { box.innerHTML = svgAtual(); };

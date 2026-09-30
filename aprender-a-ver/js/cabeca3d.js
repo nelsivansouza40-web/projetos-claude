@@ -45,6 +45,8 @@ const Cabeca = (() => {
       add('lateral', [[s * LADO, -u, 0], [s * LADO, u, 0]], { n: [s, 0, 0], lim: 0 });
       add('lateral', [[s * LADO, 0, -u], [s * LADO, 0, u]], { n: [s, 0, 0], lim: 0 });
     }
+    // Linha dos olhos: um pouco abaixo da sobrancelha, na metade da altura da cabeça
+    add('linhaOlhos', amostrar(0, Math.PI, 48, (a) => { const r = Math.sqrt(1 - (0.25 * u) ** 2); return [r * Math.cos(a), 0.25 * u, r * Math.sin(a)]; }), 'esfera');
     // Linha do cabelo e linha da base do nariz (arcos da frente, entre os cortes)
     const rLat = Math.sqrt(1 - u * u);
     add('tercos', amostrar(0, Math.PI, 48, (a) => [rLat * Math.cos(a), -u, rLat * Math.sin(a)]), 'esfera');
@@ -68,7 +70,7 @@ const Cabeca = (() => {
       // sobrancelha
       add('tracos', amostrar(0, 1, 10, (t) => naEsfera(s * (0.1 + 0.36 * t), -0.04 - 0.05 * Math.sin(Math.PI * t))), { n: norm([s * 0.3, 0, 0.95]), lim: 0.0 });
       // orelha (no plano lateral, atrás da linha vertical, entre sobrancelha e nariz)
-      add('tracos', amostrar(0, 2 * Math.PI, 28, (a) => [s * (LADO + 0.03), 0.5 * u + 0.5 * u * Math.sin(a), -0.2 + 0.13 * Math.cos(a) - 0.03 * Math.sin(a)]), { n: [s, 0, 0], lim: -0.12 });
+      add('orelhas', amostrar(0, 2 * Math.PI, 28, (a) => [s * (LADO + 0.03), 0.5 * u + 0.5 * u * Math.sin(a), -0.2 + 0.13 * Math.cos(a) - 0.03 * Math.sin(a)]), { n: [s, 0, 0], lim: -0.12 });
     }
     // nariz: dorso, ponta, asas e base
     add('tracos', [[0, 0.05, 0.99], [0, 0.45, 1.0], [0, 0.6, 1.04], [0, 0.66, 0.92]], { n: [0, 0, 1], lim: -0.35 });
