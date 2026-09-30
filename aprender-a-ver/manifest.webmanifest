@@ -1,0 +1,27 @@
+{
+  "id": "/aprender-a-ver/",
+  "name": "Aprender a Ver",
+  "short_name": "Aprender a Ver",
+  "description": "Estudo de desenho realista com as técnicas de Betty Edwards e Andrew Loomis.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4efe5",
+  "theme_color": "#2b2622",
+  "orientation": "any",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
