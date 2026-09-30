@@ -294,3 +294,38 @@ svg.sobreposicao .tx-sobre { fill: #fff; stroke: rgba(20, 18, 16, .75); stroke-w
 .etapa-pontos .ponto.ativo { background: var(--acento); border-color: var(--acento); }
 .lista-etapas { columns: 2; column-gap: 24px; font-size: .92rem; }
 @media (max-width: 520px) { .lista-etapas { columns: 1; } }
+
+/* Ateliê digital */
+.pagina-atelie { padding-bottom: 8px; }
+.atelie-ferramentas { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 6px; scrollbar-width: thin; }
+.atelie-ferramentas .ferr { flex: none; border: 1px solid var(--borda); background: var(--cartao); color: var(--tinta); border-radius: 10px; padding: 8px 11px; font-weight: 600; font-size: .84rem; cursor: pointer; min-height: 38px; }
+.atelie-ferramentas .ferr.ativo { background: var(--acento); border-color: var(--acento); color: #fff; }
+.atelie-acoes { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.atelie-palco { position: relative; height: min(68vh, 900px); min-height: 300px; border-radius: var(--raio); overflow: hidden; border: 1px solid var(--borda); background: var(--fundo); }
+.atelie-tela { display: block; touch-action: none; cursor: crosshair; }
+.atelie-ref { position: absolute; top: 8px; right: 8px; width: min(34%, 260px); border-radius: 8px; box-shadow: var(--sombra); border: 2px solid var(--cartao); pointer-events: none; }
+.atelie-zoom { position: absolute; left: 8px; bottom: 8px; font-size: .75rem; background: rgba(0,0,0,.55); color: #fff; padding: 2px 7px; border-radius: 6px; pointer-events: none; }
+.atelie-abas { margin: 10px 0 0; display: flex; }
+.atelie-abas .seg { flex: 1; }
+.atelie-painel { margin-top: 8px; }
+.atelie-cor-atual { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--borda); display: inline-block; }
+.atelie-escala { display: grid; grid-template-columns: repeat(11, 1fr); gap: 3px; margin: 4px 0 10px; }
+.atelie-escala.recentes { grid-template-columns: repeat(10, 1fr); }
+.atelie-escala .tom { aspect-ratio: 1; border: 1px solid var(--borda); border-radius: 6px; cursor: pointer; font-size: .7rem; font-weight: 700; color: transparent; min-height: 28px; }
+.atelie-escala .tom:nth-child(-n+6) { color: rgba(255,255,255,.8); }
+.atelie-escala .tom:nth-child(n+7) { color: rgba(0,0,0,.6); }
+.atelie-escala.recentes .tom { color: transparent; }
+.atelie-escala .tom.ativo { outline: 3px solid var(--acento); outline-offset: 1px; }
+.atelie-camadas { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.atelie-camada { display: grid; grid-template-columns: 1fr auto 90px auto; gap: 8px; align-items: center; padding: 6px 8px; border: 1px solid var(--borda); border-radius: 10px; }
+.atelie-camada.ativa { border-color: var(--acento); background: var(--acento-suave); }
+.atelie-camada .nome { background: none; border: 0; text-align: left; font-weight: 700; color: var(--tinta); cursor: pointer; padding: 6px 0; }
+.atelie-camada input[type=range] { width: 100%; accent-color: var(--acento); }
+.atelie-camada .mini { display: flex; gap: 4px; }
+@media (max-width: 560px) {
+  .atelie-camada { grid-template-columns: 1fr auto; }
+  .atelie-camada input[type=range] { grid-column: 1 / -1; }
+  .atelie-camada .mini { grid-column: 1 / -1; }
+  .atelie-abas .seg { padding: 8px 6px; font-size: .78rem; }
+}
+#abas a span { white-space: nowrap; }

@@ -178,6 +178,7 @@ const U = (() => {
     foto: '<rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6l2-3h4l2 3"/>',
     grafico: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
     casa: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+    pincel: '<path d="M18.5 3.5l2 2L11 15l-2.5-.5L8 12l10.5-8.5z"/><path d="M8 15c-2 0-3.5 1.5-3.5 3.5 0 1-.5 2-1.5 2.5 3 .5 6.5-.5 7-3.5l-2-2.5z"/>',
     relogio: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'
   };
   const icone = (nome, cls = 'ico') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[nome] || ''}</svg>`;
