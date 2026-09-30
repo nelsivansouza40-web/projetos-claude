@@ -54,7 +54,7 @@ const Retrato = (() => {
   // ---------------- linhas de Loomis ----------------
   const f1 = (n) => n.toFixed(1);
   function linhas(grupos, novos, W, H, estiloExtra = '') {
-    const L = st.L, partes = Cabeca.projetar(L.g, L.a, L.r);
+    const L = st.L, partes = Cabeca.projetar(L.g, L.a, L.r, L.P);
     const ant = grupos.filter((g) => !novos.includes(g));
     const lw = Math.max(1.5, W / 260);
     const css = `.l{fill:none;stroke-linecap:round;stroke-linejoin:round}.ant .l{stroke:#2f5d9a;stroke-width:${f1(lw)}}.novo .l{stroke:#d0402a;stroke-width:${f1(lw * 1.3)}}.l.g{stroke-dasharray:${f1(W / 90)} ${f1(W / 90)};stroke-width:${f1(lw * 0.7)}}${estiloExtra}`;
@@ -100,7 +100,7 @@ const Retrato = (() => {
     { t: 'O círculo base', txt: 'Desenhe um círculo leve. Imagine uma esfera sólida: é a base do crânio. Compare o tamanho com a referência: a bola vai do topo da cabeça até perto da base do nariz.', grupos: ['esfera'], novos: ['esfera'], grau: '2H' },
     { t: 'A cruz guia', txt: 'Trace a linha central e a linha da sobrancelha seguindo a curva da esfera. Elas mostram para onde a pessoa está olhando.', grupos: ['esfera', 'central', 'sobrancelha'], novos: ['central', 'sobrancelha'], grau: '2H' },
     { t: 'Corte as laterais', txt: 'Corte uma fatia de cada lado da bola. Isso achata a cabeça e dá a forma de um crânio de verdade. O corte mais visível fica do lado para onde o rosto está virado.', grupos: ['esfera', 'central', 'sobrancelha', 'lateral'], novos: ['lateral'], grau: '2H' },
-    { t: 'Divida em três partes', txt: 'Marque três distâncias iguais na linha central: do começo do cabelo às sobrancelhas, das sobrancelhas à base do nariz e da base do nariz ao queixo. Se a boca estiver aberta, a última parte fica um pouco maior.', grupos: ['esfera', 'central', 'sobrancelha', 'lateral', 'tercos'], novos: ['tercos'], grau: '2H' },
+    { t: 'Divida em três partes', txt: 'Marque três distâncias iguais na linha central: do começo do cabelo às sobrancelhas, das sobrancelhas à base do nariz e da base do nariz ao queixo. Se a boca estiver aberta, a última parte fica um pouco maior. Em crianças o nariz e o queixo ocupam bem menos espaço e os olhos ficam na metade da cabeça; em idosos o nariz e as orelhas crescem.', grupos: ['esfera', 'central', 'sobrancelha', 'lateral', 'tercos'], novos: ['tercos'], grau: '2H' },
     { t: 'Mandíbula e orelhas', txt: 'Ligue o oval ao queixo para formar a mandíbula. A orelha fica entre a linha das sobrancelhas e a do nariz. Trace os lados do rosto e o pescoço.', grupos: ['esfera', 'central', 'sobrancelha', 'lateral', 'tercos', 'mandibula', 'orelhas'], novos: ['mandibula', 'orelhas'], grau: '2H' },
     { t: 'Simplifique o cabelo', txt: 'Olhe a referência e desenhe o cabelo em blocos grandes e simples, com linhas retas. Não faça fio por fio.', grupos: ['esfera', 'central', 'sobrancelha', 'lateral', 'tercos', 'mandibula', 'orelhas'], novos: [], cabelo: 'contorno', grau: 'HB' },
     { t: 'Linha dos olhos', txt: 'Trace a linha onde os dois olhos vão ficar, um pouco abaixo da linha das sobrancelhas. Confira na foto se a cabeça está inclinada: a linha inclina junto.', grupos: ['esfera', 'central', 'sobrancelha', 'lateral', 'tercos', 'mandibula', 'orelhas', 'linhaOlhos'], novos: ['linhaOlhos'], grau: 'HB' },
@@ -160,7 +160,7 @@ const Retrato = (() => {
       c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
       c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
       st.foto = c; st.W = c.width; st.H = c.height;
-      st.L = { cx: c.width / 2, cy: c.height * 0.38, R: Math.min(c.width, c.height) * 0.24, g: 0, a: 0, r: 0 };
+      st.L = { cx: c.width / 2, cy: c.height * 0.38, R: Math.min(c.width, c.height) * 0.24, g: 0, a: 0, r: 0, tipo: 'adulto', P: { ...Cabeca.PADRAO } };
     } finally { URL.revokeObjectURL(url); }
   }
 
@@ -208,26 +208,55 @@ const Retrato = (() => {
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('class', 'sobreposicao'); svg.setAttribute('preserveAspectRatio', 'none');
     palco.append(img, svg);
     const desenhar = () => {
-      const partes = Cabeca.projetar(L.g, L.a, L.r), r = Math.max(8, W / 55);
+      const partes = Cabeca.projetar(L.g, L.a, L.r, L.P), r = Math.max(8, W / 55);
       svg.innerHTML = `<g class="ant">${Cabeca.svg(partes, ['esfera', 'lateral', 'central', 'sobrancelha', 'tercos', 'mandibula'], L.cx, L.cy, L.R)}</g><g class="novo">${Cabeca.svg(partes, ['tracos', 'orelhas'], L.cx, L.cy, L.R, { ocultas: false })}</g>` +
-        `<circle class="alca" cx="${f1(L.cx)}" cy="${f1(L.cy)}" r="${r}"/><circle class="alca azul" cx="${f1(L.cx + L.R)}" cy="${f1(L.cy)}" r="${r}"/>`;
+        `<circle class="alca" cx="${f1(L.cx)}" cy="${f1(L.cy)}" r="${r}"/><circle class="alca azul" cx="${f1(L.cx + L.R * L.P.largura)}" cy="${f1(L.cy)}" r="${r}"/>`;
     };
     let arrasto = null;
     const ponto = (e) => { const r = svg.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; };
     svg.addEventListener('pointerdown', (e) => {
       const [x, y] = ponto(e);
-      const perto = Math.hypot(x - (L.cx + L.R), y - L.cy) < 34 * W / svg.getBoundingClientRect().width;
+      const perto = Math.hypot(x - (L.cx + L.R * L.P.largura), y - L.cy) < 34 * W / svg.getBoundingClientRect().width;
       arrasto = { id: perto ? 'raio' : 'mover', x0: x, y0: y, L0: { ...L } };
       svg.setPointerCapture(e.pointerId); e.preventDefault();
     });
     svg.addEventListener('pointermove', (e) => {
       if (!arrasto) return;
       const [x, y] = ponto(e);
-      if (arrasto.id === 'mover') { L.cx = arrasto.L0.cx + x - arrasto.x0; L.cy = arrasto.L0.cy + y - arrasto.y0; } else L.R = Math.max(20, Math.hypot(x - L.cx, y - L.cy));
+      if (arrasto.id === 'mover') { L.cx = arrasto.L0.cx + x - arrasto.x0; L.cy = arrasto.L0.cy + y - arrasto.y0; } else L.R = Math.max(20, Math.hypot(x - L.cx, y - L.cy) / L.P.largura);
       desenhar();
     });
     svg.addEventListener('pointerup', () => { arrasto = null; });
     const sl = (k, rot, min, max) => { const o = h('output', {}, L[k] + '°'); return h('label', { class: 'slider' }, h('span', {}, rot), h('input', { type: 'range', min, max, value: L[k], oninput: (e) => { L[k] = +e.target.value; o.textContent = L[k] + '°'; desenhar(); } }), o); };
+    // Tipo de rosto: modelos prontos e ajuste livre de cada medida
+    const MEDIDAS = [
+      ['largura', 'Largura da cabeça'], ['altura', 'Altura da cabeça'],
+      ['testa', 'Testa (linha do cabelo)'], ['nariz', 'Terço do meio (nariz)'], ['queixo', 'Terço de baixo (queixo)'],
+      ['mandibula', 'Largura da mandíbula'], ['olhos', 'Tamanho dos olhos'], ['orelhas', 'Tamanho das orelhas']
+    ];
+    const segTipo = h('div', { class: 'segmentado', 'aria-label': 'Tipo de rosto' });
+    const medidas = h('div', { class: 'controles coluna' });
+    const entradas = {};
+    const marcarTipo = () => U.$$('.seg', segTipo).forEach((b) => b.classList.toggle('ativo', b.dataset.id === L.tipo));
+    const sincronizar = () => { for (const [k] of MEDIDAS) { entradas[k].inp.value = Math.round(L.P[k] * 100); entradas[k].out.textContent = Math.round(L.P[k] * 100) + '%'; } };
+    const aplicarTipo = (id) => { L.tipo = id; if (id !== 'personalizado') L.P = { ...Cabeca.PADRAO, ...Cabeca.TIPOS[id].p }; marcarTipo(); sincronizar(); desenhar(); };
+    for (const [id, t] of [...Object.entries(Cabeca.TIPOS), ['personalizado', { rotulo: 'Personalizado' }]]) {
+      segTipo.append(h('button', { class: 'seg', 'data-id': id, onclick: () => { aplicarTipo(id); medidas.hidden = id !== 'personalizado'; if (id === 'personalizado') U.aviso('Ajuste cada medida até as linhas baterem com o rosto da foto.'); } }, t.rotulo));
+    }
+    for (const [k, rot] of MEDIDAS) {
+      const out = h('output', {});
+      const inp = h('input', { type: 'range', min: k === 'nariz' || k === 'queixo' ? 60 : 70, max: 140, value: 100, oninput: (e) => {
+        L.P[k] = e.target.value / 100; out.textContent = e.target.value + '%';
+        if (L.tipo !== 'personalizado') { L.tipo = 'personalizado'; marcarTipo(); }
+        desenhar();
+      } });
+      entradas[k] = { inp, out };
+      medidas.append(h('label', { class: 'slider' }, h('span', {}, rot), inp, out));
+    }
+    medidas.append(h('div', { class: 'linha-botoes' }, h('button', { class: 'btn pequeno', onclick: () => aplicarTipo('adulto') }, 'Voltar ao adulto padrão')));
+    medidas.hidden = L.tipo !== 'personalizado';
+    marcarTipo(); sincronizar();
+
     const btnComecar = h('button', { class: 'btn primario', onclick: async () => {
       btnComecar.disabled = true; btnComecar.textContent = 'Preparando as 12 etapas...';
       try {
@@ -244,6 +273,10 @@ const Retrato = (() => {
         h('p', { class: 'dica' }, 'Arraste a bola até o crânio e use a alça azul para o tamanho. A cruz fica entre as sobrancelhas; a linha de baixo da bola passa na base do nariz; o queixo fica no fim da linha central. Use os controles para virar e inclinar até as linhas acompanharem o rosto.')),
       h('div', { class: 'cartao papel palco-moldura' }, palco),
       h('div', { class: 'controles coluna' }, sl('g', 'Virar', -90, 90), sl('a', 'Cima ou baixo', -40, 40), sl('r', 'Inclinar', -40, 40)),
+      h('div', { class: 'cartao' },
+        h('h3', {}, 'Tipo de rosto'),
+        h('p', { class: 'nota' }, 'Escolha o tipo mais parecido com a pessoa da foto. Em "Personalizado", ou ao mexer em qualquer medida, você ajusta largura, altura e cada terço separadamente.'),
+        segTipo, medidas),
       h('div', { class: 'linha-botoes' }, h('button', { class: 'btn', onclick: () => entrada.click() }, 'Trocar foto'), btnComecar));
     desenhar();
   }

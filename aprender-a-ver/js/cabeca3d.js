@@ -23,6 +23,8 @@ const Cabeca = (() => {
     let x1 = x * g.cy + z * g.sy, z1 = -x * g.sy + z * g.cy;
     // arfagem (olhar para cima/baixo) em torno de x
     let y1 = y * g.cp - z1 * g.sp, z2 = y * g.sp + z1 * g.cp;
+    // largura e altura livres (modo personalizado), antes da inclinação
+    if (g.lx) { x1 *= g.lx; y1 *= g.ly; }
     // inclinação lateral em torno do eixo de visão
     const x2 = x1 * g.cr - y1 * g.sr, y2 = x1 * g.sr + y1 * g.cr;
     return [x2, y2, z2];
@@ -52,12 +54,16 @@ const Cabeca = (() => {
   // 'aro' (borda do corte lateral), ou um vetor normal fixo com limite.
   function curvas() {
     const C = [];
-    const add = (grupo, pts, vis, extra = {}) => C.push(typeof vis === 'object' ? { grupo, pts, ...vis } : { grupo, pts, vis, ...extra });
+    // def: como a curva se ajusta às proporções de cada tipo de rosto
+    let def = null;
+    const add = (grupo, pts, vis, extra = {}) => C.push(typeof vis === 'object' ? { grupo, pts, def, ...vis } : { grupo, pts, vis, def, ...extra });
 
     // Linha central: grande círculo vertical + descida pelo rosto até o queixo
     add('central', amostrar(-Math.PI, Math.PI, 120, (a) => [0, Math.sin(a), Math.cos(a)]), 'esfera');
+    def = { tipo: 'rosto' };
     // descida da linha central pelo plano do rosto até o queixo
     add('central', suave([[0, u, LADO + 0.25], [0, 0.95, 0.96], [0, 1.2, 0.93], [0, 1.4, 0.88], [0, QUEIXO, 0.84]], 6), { n: [0, 0.1, 1], lim: -0.55 });
+    def = null;
     // Linha da sobrancelha (equador)
     add('sobrancelha', amostrar(0, 2 * Math.PI, 120, (a) => [Math.cos(a), 0, Math.sin(a)]), 'esfera');
     // Cortes laterais (círculos) e a cruz de cada lado
@@ -67,15 +73,16 @@ const Cabeca = (() => {
       add('lateral', [[s * LADO, 0, -u], [s * LADO, 0, u]], { n: [s, 0, 0], lim: 0 });
     }
     // Linha do cabelo e linha da base do nariz: arcos da frente, de um corte ao outro
-    add('tercos', amostrar(0, Math.PI, 60, (a) => [LADO * Math.cos(a), -u, LADO * Math.sin(a)]), 'esfera');
-    add('tercos', amostrar(0, Math.PI, 60, (a) => [LADO * Math.cos(a), u, LADO * Math.sin(a)]), 'esfera');
+    add('tercos', arcoFrente(-u), 'esfera', { def: { tipo: 'arco', ref: 'cabelo' } });
+    add('tercos', arcoFrente(u), 'esfera', { def: { tipo: 'arco', ref: 'nariz' } });
     // Linha do queixo: um traço curto e reto
+    def = { tipo: 'rosto', mand: true };
     add('tercos', suave([[-0.17, QUEIXO - 0.01, 0.78], [0, QUEIXO, 0.84], [0.17, QUEIXO - 0.01, 0.78]], 6), { n: [0, 0.4, 1], lim: -0.35 });
     // Linha dos olhos: logo abaixo da sobrancelha, atravessando o rosto
-    const yO = 0.3, rO = Math.sqrt(1 - yO * yO), aO = Math.acos(LADO / rO);
-    add('linhaOlhos', amostrar(aO, Math.PI - aO, 40, (a) => [rO * Math.cos(a), yO, rO * Math.sin(a)]), 'esfera');
+    add('linhaOlhos', arcoFrente(0.3), 'esfera', { def: { tipo: 'arco', ref: 'olhos' } });
 
     for (const s of [1, -1]) {
+      def = { tipo: 'rosto', mand: true };
       // Mandíbula: do corte lateral, sob a orelha, até o canto do queixo
       add('mandibula', suave([[s * LADO, 0.5, -0.36], [s * 0.64, 0.95, -0.28], [s * 0.6, 1.12, -0.05], [s * 0.45, 1.33, 0.42], [s * 0.17, QUEIXO - 0.01, 0.78]]), { n: [s * 0.9, 0.35, 0.25], lim: -0.35 });
       // Lado do rosto: da ponta da sobrancelha, pela maçã do rosto, até o queixo
@@ -85,15 +92,18 @@ const Cabeca = (() => {
 
       // Orelha: um "C" no plano lateral, atrás da cruz, entre sobrancelha e nariz
       const xo = s * (LADO + 0.04);
+      def = { tipo: 'orelha', c: [xo, 0.375, -0.23] };
       add('orelhas', suave([[xo, 0.04, -0.1], [xo, -0.02, -0.24], [xo + s * 0.02, 0.1, -0.36], [xo + s * 0.03, 0.34, -0.38], [xo + s * 0.02, 0.56, -0.3], [xo, u - 0.02, -0.2], [xo, u + 0.02, -0.12], [xo, u - 0.06, -0.08]]), { n: [s, 0, -0.25], lim: -0.15 });
       add('orelhas', suave([[xo, 0.16, -0.14], [xo + s * 0.01, 0.12, -0.25], [xo + s * 0.01, 0.34, -0.29], [xo, 0.5, -0.2]], 6), { n: [s, 0, -0.25], lim: -0.1 });
 
       // Olho: amêndoa (pálpebra de cima e de baixo) e íris
       const n0 = norm([s * 0.35, 0.25, 0.9]);
+      def = { tipo: 'olho', c: [s * 0.32, 0.245, 0.9] };
       const ci = s * 0.17, ce = s * 0.49, ye = 0.26;
       add('tracos', suave([[ci, ye, 0], [s * 0.25, ye - 0.07, 0], [s * 0.37, ye - 0.075, 0], [ce, ye - 0.015, 0]].map(([x, y]) => frente(x, y)), 6), { n: n0, lim: 0.02 });
       add('tracos', suave([[ci, ye, 0], [s * 0.27, ye + 0.04, 0], [s * 0.39, ye + 0.035, 0], [ce, ye - 0.015, 0]].map(([x, y]) => frente(x, y)), 6), { n: n0, lim: 0.02 });
       add('tracos', amostrar(0, 2 * Math.PI, 18, (a) => frente(s * 0.32 + 0.048 * Math.cos(a), ye - 0.015 + 0.048 * Math.sin(a), 0.975)), { n: n0, lim: 0.08 });
+      def = { tipo: 'rosto' };
       // Sobrancelha: começa sobre o canto interno do olho e afina para fora
       add('tracos', suave([[s * 0.15, 0.07, 0], [s * 0.27, 0.02, 0], [s * 0.4, 0.015, 0], [s * 0.5, 0.06, 0]].map(([x, y]) => frente(x, y, 0.985)), 6), { n: norm([s * 0.35, 0, 0.94]), lim: 0 });
       // Asa do nariz: círculo menor de cada lado da bola do nariz
@@ -115,23 +125,75 @@ const Cabeca = (() => {
     add('tracos', suave(B([[-0.17, 1.06], [-0.09, 1.12], [0, 1.135], [0.09, 1.12], [0.17, 1.06]]), 5), nB);
     return C;
   }
-  const CURVAS = curvas();
+  // Arco da frente da bola numa altura y, limitado pelos cortes laterais
+  function arcoFrente(y) {
+    const r = Math.sqrt(Math.max(0.0001, 1 - y * y)), a0 = r > LADO ? Math.acos(LADO / r) : 0;
+    return amostrar(a0, Math.PI - a0, 48, (a) => [r * Math.cos(a), y, r * Math.sin(a)]);
+  }
+  const BASE = curvas();
+
+  // Proporções por tipo de rosto (1 = adulto de referência).
+  // testa: altura da linha do cabelo; nariz: terço do meio; queixo: terço de baixo;
+  // mandibula: largura da parte de baixo; olhos e orelhas: tamanho; largura e altura: forma geral.
+  const PADRAO = { testa: 1, nariz: 1, queixo: 1, mandibula: 1, olhos: 1, orelhas: 1, largura: 1, altura: 1 };
+  const TIPOS = {
+    adulto: { rotulo: 'Adulto', p: {} },
+    jovem: { rotulo: 'Jovem', p: { testa: 1.05, nariz: 0.94, queixo: 0.92, mandibula: 0.94, olhos: 1.08, orelhas: 0.95, largura: 0.97 } },
+    idoso: { rotulo: 'Idoso', p: { testa: 1.12, nariz: 1.08, queixo: 1.04, mandibula: 1.04, olhos: 0.92, orelhas: 1.22, largura: 1.02 } },
+    crianca: { rotulo: 'Criança', p: { testa: 1.25, nariz: 0.74, queixo: 0.7, mandibula: 0.84, olhos: 1.2, orelhas: 0.9, largura: 1.04, altura: 0.96 } }
+  };
+  const completar = (P) => Object.assign({}, PADRAO, P || {});
+
+  // Aplica as proporções ao modelo base (resultado guardado por combinação)
+  const cache = new Map();
+  function modelo(P) {
+    P = completar(P);
+    const chave = ['testa', 'nariz', 'queixo', 'mandibula', 'olhos', 'orelhas'].map((k) => P[k].toFixed(3)).join('|');
+    if (cache.has(chave)) return cache.get(chave);
+    const yN = u * Math.max(0.6, P.nariz), yQ = yN + u * P.queixo, yE = 0.3;
+    // desloca as alturas do rosto: sobrancelha e olhos fixos, base do nariz e queixo nas novas posições
+    const fy = (y) => (y <= yE ? y : y <= u ? yE + (y - yE) * (yN - yE) / (u - yE) : y <= QUEIXO ? yN + (y - u) * (yQ - yN) / u : yQ + (y - QUEIXO));
+    const fx = (x, y, mand) => (mand ? x * (1 + (P.mandibula - 1) * Math.min(1, Math.max(0, (y - 0.3) / 0.9))) : x);
+    const alturas = { cabelo: -Math.min(0.97, u * P.testa), nariz: yN, olhos: fy(0.3) };
+    const C = BASE.map((c) => {
+      const d = c.def;
+      if (!d) return c;
+      let pts;
+      if (d.tipo === 'arco') pts = arcoFrente(alturas[d.ref]);
+      else if (d.tipo === 'olho' || d.tipo === 'orelha') {
+        const k = d.tipo === 'olho' ? P.olhos : P.orelhas, [cx, cy, cz] = d.c;
+        pts = c.pts.map(([x, y, z]) => {
+          const x1 = d.tipo === 'olho' ? cx + (x - cx) * k : x, y1 = cy + (y - cy) * k, z1 = d.tipo === 'orelha' ? cz + (z - cz) * k : z;
+          return [x1, fy(y1), z1];
+        });
+      } else pts = c.pts.map(([x, y, z]) => [fx(x, y, d.mand), fy(y), z]);
+      return { ...c, pts };
+    });
+    if (cache.size > 40) cache.clear();
+    cache.set(chave, C);
+    return C;
+  }
 
   // Projeta a cabeça numa pose. Retorna polilinhas com visibilidade por ponto.
-  function projetar(guinada = 0, arfagem = 0, rolagem = 0) {
+  // P (opcional): proporções do tipo de rosto, ver TIPOS.
+  function projetar(guinada = 0, arfagem = 0, rolagem = 0, P) {
+    P = completar(P);
     const g = {
       cy: Math.cos(guinada * RAD), sy: Math.sin(guinada * RAD),
       cp: Math.cos(arfagem * RAD), sp: Math.sin(arfagem * RAD),
       cr: Math.cos(rolagem * RAD), sr: Math.sin(rolagem * RAD)
     };
-    return CURVAS.map((c) => {
+    const lx = P.largura, ly = P.altura, esticado = lx !== 1 || ly !== 1;
+    // a visibilidade usa a rotação pura; o esticamento só muda o desenho
+    const gv = g, gd = esticado ? { ...g, lx, ly } : g;
+    const partes = modelo(P).map((c) => {
       let visNormal = null;
-      if (c.n) visNormal = girar(c.n, g)[2] > c.lim;
-      if (c.vis === 'perfil') visNormal = Math.abs(girar([1, 0, 0], g)[2]) > (c.lim || 0.3) && girar([0, 0, 1], g)[2] > -0.2;
+      if (c.n) visNormal = girar(c.n, gv)[2] > c.lim;
+      if (c.vis === 'perfil') visNormal = Math.abs(girar([1, 0, 0], gv)[2]) > (c.lim || 0.3) && girar([0, 0, 1], gv)[2] > -0.2;
       let planoVisivel = false;
-      if (c.vis === 'aro') planoVisivel = girar([c.lado, 0, 0], g)[2] > 0;
+      if (c.vis === 'aro') planoVisivel = girar([c.lado, 0, 0], gv)[2] > 0;
       const pts = c.pts.map((p) => {
-        const r = girar(p, g);
+        const r = girar(p, gd);
         let vis;
         if (c.vis === 'esfera') vis = r[2] > -0.01;
         else if (c.vis === 'aro') vis = planoVisivel || r[2] > 0;
@@ -140,6 +202,9 @@ const Cabeca = (() => {
       });
       return { grupo: c.grupo, pts };
     });
+    // contorno da bola: círculo, ou elipse quando a forma foi esticada
+    partes.contorno = { lx, ly, rol: rolagem };
+    return partes;
   }
 
   // Converte em SVG. grupos: lista dos grupos a desenhar.
@@ -147,7 +212,11 @@ const Cabeca = (() => {
     const ocultas = op.ocultas !== false;
     const f = (n) => n.toFixed(1);
     let out = '';
-    if (grupos.includes('esfera')) out += `<circle class="l" cx="${f(cx)}" cy="${f(cy)}" r="${f(R)}"/>`;
+    const k = partes.contorno || { lx: 1, ly: 1, rol: 0 };
+    if (grupos.includes('esfera')) {
+      out += k.lx === 1 && k.ly === 1 ? `<circle class="l" cx="${f(cx)}" cy="${f(cy)}" r="${f(R)}"/>`
+        : `<ellipse class="l" cx="${f(cx)}" cy="${f(cy)}" rx="${f(R * k.lx)}" ry="${f(R * k.ly)}" transform="rotate(${f(k.rol)} ${f(cx)} ${f(cy)})"/>`;
+    }
     for (const p of partes) {
       if (!grupos.includes(p.grupo)) continue;
       // separa trechos visíveis e ocultos
@@ -179,5 +248,5 @@ const Cabeca = (() => {
     deCima: [-25, -28, 0]
   };
 
-  return { projetar, svg, POSES, u };
+  return { projetar, svg, POSES, TIPOS, PADRAO, u };
 })();

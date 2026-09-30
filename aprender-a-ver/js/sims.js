@@ -313,11 +313,11 @@ const Sims = (() => {
   // CABEÇA DE LOOMIS
   // ------------------------------------------------------------
   function cabeca(raiz) {
-    const st = { g: -35, a: 6, r: 0, ocultas: true, tracos: true };
+    const st = { g: -35, a: 6, r: 0, ocultas: true, tracos: true, tipo: 'adulto' };
     const box = h('div', { class: 'cartao papel' });
     const W = 400, H = 400, cx = 200, cy = 165, R = 112;
     function svgAtual() {
-      const partes = Cabeca.projetar(st.g, st.a, st.r);
+      const partes = Cabeca.projetar(st.g, st.a, st.r, Cabeca.TIPOS[st.tipo].p);
       const constr = Cabeca.svg(partes, ['esfera', 'lateral', 'central', 'sobrancelha', 'tercos', 'mandibula'], cx, cy, R, { ocultas: st.ocultas });
       const tr = st.tracos ? Cabeca.svg(partes, ['tracos', 'orelhas'], cx, cy, R, { ocultas: false }) : '';
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W * 2}" height="${H * 2}" class="sim-svg" role="img" aria-label="Cabeça de Loomis"><style>${Licoes.CSS}</style><rect width="${W}" height="${H}" fill="#fbf8f2"/><g class="ant">${constr}</g><g class="novo">${tr}</g></svg>`;
@@ -338,6 +338,11 @@ const Sims = (() => {
     } }, rotulo);
     raiz.append(
       box,
+      (() => {
+        const seg = h('div', { class: 'segmentado', 'aria-label': 'Tipo de rosto' });
+        for (const [id, t] of Object.entries(Cabeca.TIPOS)) seg.append(h('button', { class: 'seg' + (id === st.tipo ? ' ativo' : ''), onclick: (e) => { st.tipo = id; U.$$('.seg', seg).forEach((b) => b.classList.remove('ativo')); e.currentTarget.classList.add('ativo'); desenhar(); } }, t.rotulo));
+        return h('div', { class: 'linha-botoes' }, h('span', { class: 'rotulo' }, 'Tipo de rosto'), seg);
+      })(),
       h('div', { class: 'linha-botoes' }, pose('frente', 'Frente'), pose('tresQuartos', 'Três quartos'), pose('perfil', 'Perfil'), pose('deBaixo', 'De baixo'), pose('deCima', 'De cima')),
       h('div', { class: 'controles coluna' },
         slider('g', 'Virar para os lados', -90, 90),
@@ -352,7 +357,8 @@ const Sims = (() => {
         h('ul', {},
           h('li', {}, 'Veja como a linha da sobrancelha e a linha central formam uma cruz que "anda" sobre a bola quando a cabeça gira.'),
           h('li', {}, 'Na vista de baixo, as linhas horizontais se curvam para cima; na de cima, para baixo. É o mesmo efeito das linhas guia na folha de olhos, narizes, bocas e orelhas em quatro ângulos.'),
-          h('li', {}, 'Quando a cabeça inclina, tudo inclina junto: a linha dos olhos continua em ângulo reto com a linha central.')
+          h('li', {}, 'Quando a cabeça inclina, tudo inclina junto: a linha dos olhos continua em ângulo reto com a linha central.'),
+          h('li', {}, 'Compare os tipos de rosto: na criança o crânio domina e os olhos ficam na metade da cabeça; no idoso o nariz e as orelhas crescem e a linha do cabelo sobe.')
         )
       )
     );
