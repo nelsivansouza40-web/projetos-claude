@@ -251,9 +251,13 @@ const App = (() => {
     let anterior = location.hash;
     window.addEventListener('hashchange', () => {
       if (ignorarProxima) { ignorarProxima = false; anterior = location.hash; return; }
-      if (anterior.startsWith('#/prancheta') && Prancheta.temAlteracoes() && !confirm('O desenho não foi salvo. Sair mesmo assim?')) {
+      if (anterior.startsWith('#/prancheta') && Prancheta.temAlteracoes()) {
+        const destino = location.hash;
         ignorarProxima = true;
         location.hash = anterior;
+        U.confirmar('O desenho não foi salvo. Sair mesmo assim?', 'Sair sem salvar').then((ok) => {
+          if (ok) { Prancheta.descartar(); location.hash = destino; }
+        });
         return;
       }
       anterior = location.hash;

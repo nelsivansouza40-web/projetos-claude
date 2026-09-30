@@ -58,7 +58,7 @@ const Prancheta = (() => {
     raiz.append(h('div', { class: 'barra-ferramentas' }, grupoFerr, grupoTam,
       h('button', { class: 'btn pequeno', onclick: desfazer }, 'Desfazer'),
       h('button', { class: 'btn pequeno', onclick: refazer }, 'Refazer'),
-      h('button', { class: 'btn pequeno', onclick: () => { if (st.tracos.length && confirm('Apagar todo o desenho?')) { st.tracos = []; st.refeitos = []; redesenhar(); } } }, 'Limpar')));
+      h('button', { class: 'btn pequeno', onclick: async () => { if (st.tracos.length && await U.confirmar('Apagar todo o desenho?', 'Apagar')) { st.tracos = []; st.refeitos = []; redesenhar(); } } }, 'Limpar')));
 
     // Palco
     const palco = h('div', { class: 'prancheta-palco layout-' + st.layout });
@@ -338,7 +338,8 @@ const Prancheta = (() => {
     }
   }
 
-  const temAlteracoes = () => !!(st && st.tracos.length && !st.salvo && document.body.contains(st.ui.cv));
+  const temAlteracoes = () => !!(st && st.tracos.length && !st.salvo && !st.descartado && document.body.contains(st.ui.cv));
+  const descartar = () => { if (st) st.descartado = true; };
   const MOLDES = { vaso: MOLDE_VASO };
-  return { montar, temAlteracoes, MOLDES };
+  return { montar, temAlteracoes, descartar, MOLDES };
 })();

@@ -154,6 +154,19 @@ const U = (() => {
     return { fechar, corpo };
   }
 
+  // Confirmação dentro da página (o navegador pode bloquear confirm()).
+  function confirmar(msg, rotuloSim = 'Confirmar') {
+    return new Promise((res) => {
+      let resposta = false;
+      const m = modal('Confirmar', h('p', {}, msg), [
+        { rotulo: 'Cancelar' },
+        { rotulo: rotuloSim, classe: 'primario', acao: () => { resposta = true; } }
+      ]);
+      const obs = new MutationObserver(() => { if (!document.body.contains(m.corpo)) { obs.disconnect(); res(resposta); } });
+      obs.observe(document.body, { childList: true });
+    });
+  }
+
   // Ícones de linha simples (SVG inline)
   const ICONES = {
     olho: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
@@ -169,5 +182,5 @@ const U = (() => {
   };
   const icone = (nome, cls = 'ico') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[nome] || ''}</svg>`;
 
-  return { $, $$, h, esc, store, desenhos, hoje, chaveDia, dataCurta, duracao, registrarPratica, sequenciaDias, carregarImagem, svgParaUrl, canvasParaBlob, baixar, aviso, modal, icone };
+  return { $, $$, h, esc, store, desenhos, hoje, chaveDia, dataCurta, duracao, registrarPratica, sequenciaDias, carregarImagem, svgParaUrl, canvasParaBlob, baixar, aviso, modal, confirmar, icone };
 })();

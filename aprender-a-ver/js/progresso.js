@@ -87,7 +87,7 @@ const Progresso = (() => {
       d.gostei ? h('p', {}, h('b', {}, 'Gostei: '), d.gostei) : null,
       d.melhorar ? h('p', {}, h('b', {}, 'Melhorar: '), d.melhorar) : null);
     U.modal(d.titulo, info, [
-      { rotulo: 'Apagar', classe: 'perigo', acao: () => { if (!confirm('Apagar este desenho?')) return false; U.desenhos.apagar(d.id).then(() => { raiz.innerHTML = ''; montar(raiz); }); } },
+      { rotulo: 'Apagar', classe: 'perigo', acao: () => { U.confirmar('Apagar este desenho? Não dá para desfazer.', 'Apagar').then((ok) => { if (ok) U.desenhos.apagar(d.id).then(() => { raiz.innerHTML = ''; montar(raiz); }); }); } },
       { rotulo: 'Baixar', acao: () => { U.baixar(d.png, `${d.titulo.replace(/[^\w\- ]+/g, '')}.png`); return false; } },
       { rotulo: 'Fechar', classe: 'primario' }
     ]);
