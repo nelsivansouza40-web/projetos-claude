@@ -133,7 +133,7 @@ const Foto = (() => {
     const { W, H } = st;
     const hh = H * 0.36;
     st.prop = { cx: W / 2, cy: H * 0.5, hh, half: hh * 0.68, ang: 0, olho: -hh * 0.35 };
-    st.loomis = { cx: W / 2, cy: H * 0.42, R: Math.min(W, H) * 0.24, g: 0, a: 0, r: 0 };
+    st.loomis = { cx: W / 2, cy: H * 0.4, R: Math.min(W, H) * 0.24, g: 0, a: 0, r: 0, P: { ...Cabeca.PADRAO } };
     const vw = Math.min(W * 0.8, H * 0.8 * st.razao);
     st.visor = { x: (W - vw) / 2, y: (H - vw / st.razao) / 2, w: vw };
     st.afer = { pts: [], unidade: null };
@@ -209,7 +209,7 @@ const Foto = (() => {
       }
     } else {
       const L = st.loomis;
-      const partes = Cabeca.projetar(L.g, L.a, L.r);
+      const partes = Cabeca.projetar(L.g, L.a, L.r, L.P);
       s += `<g class="ant">${Cabeca.svg(partes, ['esfera', 'lateral', 'central', 'sobrancelha', 'tercos', 'mandibula'], L.cx, L.cy, L.R)}</g>`;
       s += `<g class="novo">${Cabeca.svg(partes, ['tracos', 'orelhas'], L.cx, L.cy, L.R, { ocultas: false })}</g>`;
     }
@@ -364,7 +364,7 @@ const Foto = (() => {
         s = svgProporcoes();
         if (st.modoProp === 'loomis') {
           const L = st.loomis, r = Math.max(8, st.W / 55);
-          s += `<circle class="alca" cx="${f1(L.cx)}" cy="${f1(L.cy)}" r="${r}"/><circle class="alca azul" cx="${f1(L.cx + L.R)}" cy="${f1(L.cy)}" r="${r}"/>`;
+          s += Cabeca.svgMoldura(L, r);
         } else {
           for (const a of alcasProp()) s += `<circle class="alca${a.id === 'girar' ? ' azul' : ''}" cx="${f1(a.pos[0])}" cy="${f1(a.pos[1])}" r="${Math.max(8, st.W / 55)}"/>`;
         }
@@ -393,8 +393,8 @@ const Foto = (() => {
       if (aba === 'proporcoes') {
         if (st.modoProp === 'loomis') {
           const L = st.loomis;
-          const a = perto([{ id: 'raio', pos: [L.cx + L.R, L.cy] }, { id: 'mover', pos: [L.cx, L.cy] }]);
-          arrasto = a ? { id: a.id, x0: x, y0: y, L0: { ...L } } : { id: 'mover', x0: x, y0: y, L0: { ...L } };
+          const a = perto(Cabeca.moldura(L).alcas);
+          arrasto = { id: a ? a.id : 'mover', x0: x, y0: y, L0: { ...L, P: { ...L.P } } };
         } else {
           const a = perto(alcasProp());
           arrasto = a ? { id: a.id, x0: x, y0: y, p0: { ...st.prop } } : null;
@@ -416,7 +416,7 @@ const Foto = (() => {
       const dx = x - arrasto.x0, dy = y - arrasto.y0;
       if (aba === 'proporcoes' && st.modoProp === 'loomis') {
         const L = st.loomis, L0 = arrasto.L0;
-        if (arrasto.id === 'mover') { L.cx = L0.cx + dx; L.cy = L0.cy + dy; } else L.R = Math.max(20, Math.hypot(x - L.cx, y - L.cy));
+        if (arrasto.id === 'mover') { L.cx = L0.cx + dx; L.cy = L0.cy + dy; } else Cabeca.arrastarAlca(L, L0, arrasto.id, x, y);
       } else if (aba === 'proporcoes') {
         const p = st.prop, p0 = arrasto.p0;
         const [lx, ly] = paraLocal(p0, x, y);
@@ -456,8 +456,13 @@ const Foto = (() => {
         const L = st.loomis;
         const sl = (k, rot, min, max) => { const o = h('output', {}, L[k] + '°'); return h('label', { class: 'slider' }, h('span', {}, rot), h('input', { type: 'range', min, max, value: L[k], oninput: (e) => { L[k] = +e.target.value; o.textContent = L[k] + '°'; desenharSvg(); } }), o); };
         painel.append(
-          h('p', { class: 'dica' }, 'Loomis sugere desenhar as linhas de construção sobre fotos de outras pessoas para entender a estrutura. Arraste para posicionar a bola sobre o crânio, use a alça azul para o tamanho e os controles para acertar a pose. A cruz deve cair entre as sobrancelhas.'),
-          h('div', { class: 'controles coluna' }, sl('g', 'Virar', -90, 90), sl('a', 'Cima ou baixo', -40, 40), sl('r', 'Inclinar', -40, 40)));
+          h('p', { class: 'dica' }, 'Loomis sugere desenhar as linhas de construção sobre fotos de outras pessoas para entender a estrutura. Arraste para posicionar a bola sobre o crânio. Os quadrados vermelhos dos cantos mudam o tamanho sem deformar; os azuis, no meio de cada lado, esticam só aquele lado. Use os controles para acertar a pose. A cruz deve cair entre as sobrancelhas.'),
+          h('div', { class: 'controles coluna' }, sl('g', 'Virar', -90, 90), sl('a', 'Cima ou baixo', -40, 40), sl('r', 'Inclinar', -40, 40)),
+          (() => {
+            const seg = h('div', { class: 'segmentado', 'aria-label': 'Tipo de rosto' });
+            for (const [id, t] of Object.entries(Cabeca.TIPOS)) seg.append(h('button', { class: 'seg', onclick: (e) => { L.P = { ...Cabeca.PADRAO, ...t.p }; U.$$('.seg', seg).forEach((b) => b.classList.remove('ativo')); e.currentTarget.classList.add('ativo'); desenharSvg(); } }, t.rotulo));
+            return h('div', { class: 'linha-botoes' }, h('span', { class: 'rotulo' }, 'Tipo de rosto'), seg);
+          })());
       }
       painel.append(h('div', { class: 'linha-botoes' }, h('button', { class: 'btn primario', onclick: praticarProporcoes }, 'Desenhar com esta grade')));
     } else if (aba === 'visor') {

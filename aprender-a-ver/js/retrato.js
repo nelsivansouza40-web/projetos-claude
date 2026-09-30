@@ -209,21 +209,23 @@ const Retrato = (() => {
     palco.append(img, svg);
     const desenhar = () => {
       const partes = Cabeca.projetar(L.g, L.a, L.r, L.P), r = Math.max(8, W / 55);
-      svg.innerHTML = `<g class="ant">${Cabeca.svg(partes, ['esfera', 'lateral', 'central', 'sobrancelha', 'tercos', 'mandibula'], L.cx, L.cy, L.R)}</g><g class="novo">${Cabeca.svg(partes, ['tracos', 'orelhas'], L.cx, L.cy, L.R, { ocultas: false })}</g>` +
-        `<circle class="alca" cx="${f1(L.cx)}" cy="${f1(L.cy)}" r="${r}"/><circle class="alca azul" cx="${f1(L.cx + L.R * L.P.largura)}" cy="${f1(L.cy)}" r="${r}"/>`;
+      svg.innerHTML = `<g class="ant">${Cabeca.svg(partes, ['esfera', 'lateral', 'central', 'sobrancelha', 'tercos', 'mandibula'], L.cx, L.cy, L.R)}</g><g class="novo">${Cabeca.svg(partes, ['tracos', 'orelhas'], L.cx, L.cy, L.R, { ocultas: false })}</g>` + Cabeca.svgMoldura(L, r);
     };
     let arrasto = null;
     const ponto = (e) => { const r = svg.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; };
     svg.addEventListener('pointerdown', (e) => {
       const [x, y] = ponto(e);
-      const perto = Math.hypot(x - (L.cx + L.R * L.P.largura), y - L.cy) < 34 * W / svg.getBoundingClientRect().width;
-      arrasto = { id: perto ? 'raio' : 'mover', x0: x, y0: y, L0: { ...L } };
+      const raio = 30 * W / svg.getBoundingClientRect().width;
+      let alvo = null, d = raio;
+      for (const a of Cabeca.moldura(L).alcas) { const dd = Math.hypot(a.pos[0] - x, a.pos[1] - y); if (dd < d) { d = dd; alvo = a.id; } }
+      arrasto = { id: alvo || 'mover', x0: x, y0: y, L0: { ...L, P: { ...L.P } } };
       svg.setPointerCapture(e.pointerId); e.preventDefault();
     });
     svg.addEventListener('pointermove', (e) => {
       if (!arrasto) return;
       const [x, y] = ponto(e);
-      if (arrasto.id === 'mover') { L.cx = arrasto.L0.cx + x - arrasto.x0; L.cy = arrasto.L0.cy + y - arrasto.y0; } else L.R = Math.max(20, Math.hypot(x - L.cx, y - L.cy) / L.P.largura);
+      if (arrasto.id === 'mover') { L.cx = arrasto.L0.cx + x - arrasto.x0; L.cy = arrasto.L0.cy + y - arrasto.y0; }
+      else if (Cabeca.arrastarAlca(L, arrasto.L0, arrasto.id, x, y)) { if (L.tipo !== 'personalizado') { L.tipo = 'personalizado'; marcarTipo(); medidas.hidden = false; } sincronizar(); }
       desenhar();
     });
     svg.addEventListener('pointerup', () => { arrasto = null; });
@@ -245,7 +247,7 @@ const Retrato = (() => {
     }
     for (const [k, rot] of MEDIDAS) {
       const out = h('output', {});
-      const inp = h('input', { type: 'range', min: k === 'nariz' || k === 'queixo' ? 60 : 70, max: 140, value: 100, oninput: (e) => {
+      const inp = h('input', { type: 'range', min: k === 'largura' || k === 'altura' ? 50 : k === 'nariz' || k === 'queixo' ? 60 : 70, max: k === 'largura' || k === 'altura' ? 180 : 140, value: 100, oninput: (e) => {
         L.P[k] = e.target.value / 100; out.textContent = e.target.value + '%';
         if (L.tipo !== 'personalizado') { L.tipo = 'personalizado'; marcarTipo(); }
         desenhar();
@@ -270,7 +272,7 @@ const Retrato = (() => {
     raiz.append(
       h('div', { class: 'cartao' },
         h('h2', {}, 'Encaixe a cabeça'),
-        h('p', { class: 'dica' }, 'Arraste a bola até o crânio e use a alça azul para o tamanho. A cruz fica entre as sobrancelhas; a linha de baixo da bola passa na base do nariz; o queixo fica no fim da linha central. Use os controles para virar e inclinar até as linhas acompanharem o rosto.')),
+        h('p', { class: 'dica' }, 'Arraste a bola até o crânio. Os quadrados vermelhos dos cantos mudam o tamanho sem deformar; os azuis, no meio de cada lado, esticam só aquele lado (topo da cabeça, queixo, esquerda e direita). A cruz fica entre as sobrancelhas; a linha de baixo da bola passa na base do nariz; o queixo fica no fim da linha central. Use os controles para virar e inclinar até as linhas acompanharem o rosto.')),
       h('div', { class: 'cartao papel palco-moldura' }, palco),
       h('div', { class: 'controles coluna' }, sl('g', 'Virar', -90, 90), sl('a', 'Cima ou baixo', -40, 40), sl('r', 'Inclinar', -40, 40)),
       h('div', { class: 'cartao' },

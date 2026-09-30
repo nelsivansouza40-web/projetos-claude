@@ -239,6 +239,65 @@ const Cabeca = (() => {
     return out;
   }
 
+  // Moldura de ajuste sobre uma foto: do topo da bola ao queixo, com oito alças.
+  // L = { cx, cy, R, r (inclinação em graus), P (proporções) }.
+  // Cantos mudam o tamanho sem deformar; bordas esticam só aquele lado.
+  const ALCAS = [['topoEsq', -1, -1], ['topo', 0, -1], ['topoDir', 1, -1], ['dir', 1, 0], ['baseDir', 1, 1], ['base', 0, 1], ['baseEsq', -1, 1], ['esq', -1, 0]];
+  function caixa(L) {
+    const P = completar(L.P), yQ = u * Math.max(0.6, P.nariz) + u * P.queixo;
+    return { X0: -L.R * P.largura, X1: L.R * P.largura, Y0: -L.R * P.altura, Y1: L.R * P.altura * yQ, yQ };
+  }
+  function moldura(L) {
+    const { X0, X1, Y0, Y1 } = caixa(L), a = (L.r || 0) * RAD, c = Math.cos(a), s = Math.sin(a);
+    const tela = (x, y) => [L.cx + x * c - y * s, L.cy + x * s + y * c];
+    const px = (k) => (k < 0 ? X0 : k > 0 ? X1 : (X0 + X1) / 2), py = (k) => (k < 0 ? Y0 : k > 0 ? Y1 : (Y0 + Y1) / 2);
+    return {
+      alcas: ALCAS.map(([id, kx, ky]) => ({ id, pos: tela(px(kx), py(ky)), canto: kx !== 0 && ky !== 0 })),
+      contorno: [tela(X0, Y0), tela(X1, Y0), tela(X1, Y1), tela(X0, Y1)]
+    };
+  }
+  // Arrasta a alça id até (x, y). L0 é o estado no início do arrasto.
+  // Retorna true quando a forma foi deformada (largura ou altura mudaram).
+  function arrastarAlca(L, L0, id, x, y) {
+    const alca = ALCAS.find((a) => a[0] === id);
+    if (!alca) return false;
+    const [, kx, ky] = alca, b = caixa(L0), a = (L0.r || 0) * RAD, c = Math.cos(a), s = Math.sin(a);
+    const dx = x - L0.cx, dy = y - L0.cy, lx = dx * c + dy * s, ly = -dx * s + dy * c;
+    let { X0, X1, Y0, Y1 } = b;
+    const min = 30;
+    if (kx && ky) {
+      // canto: o canto oposto fica parado e a forma cresce por igual
+      const fx = kx < 0 ? X1 : X0, fy = ky < 0 ? Y1 : Y0, w0 = X1 - X0, h0 = Y1 - Y0;
+      const k = Math.max(min / Math.min(w0, h0), (Math.abs(lx - fx) / w0 + Math.abs(ly - fy) / h0) / 2);
+      if (kx < 0) X0 = fx - w0 * k; else X1 = fx + w0 * k;
+      if (ky < 0) Y0 = fy - h0 * k; else Y1 = fy + h0 * k;
+      L.R = L0.R * k;
+    } else {
+      if (kx < 0) X0 = Math.min(lx, X1 - min);
+      if (kx > 0) X1 = Math.max(lx, X0 + min);
+      if (ky < 0) Y0 = Math.min(ly, Y1 - min);
+      if (ky > 0) Y1 = Math.max(ly, Y0 + min);
+      L.R = L0.R;
+      const P0 = completar(L0.P), lim = (v) => Math.min(1.8, Math.max(0.5, v));
+      L.P = { ...P0, largura: lim((X1 - X0) / (2 * L.R)), altura: lim((Y1 - Y0) / (L.R * (1 + b.yQ))) };
+      // mantém a borda oposta no lugar mesmo quando o limite segura a medida
+      const nw = 2 * L.R * L.P.largura, nh = L.R * L.P.altura * (1 + b.yQ);
+      if (kx < 0) X0 = X1 - nw; else if (kx > 0) X1 = X0 + nw;
+      if (ky < 0) Y0 = Y1 - nh; else if (ky > 0) Y1 = Y0 + nh;
+    }
+    const P = completar(L.P);
+    const cxl = (X0 + X1) / 2, cyl = Y0 + L.R * P.altura;
+    L.cx = L0.cx + cxl * c - cyl * s; L.cy = L0.cy + cxl * s + cyl * c;
+    return !(kx && ky);
+  }
+  // Desenho da moldura e das alças (classes da sobreposição de fotos)
+  function svgMoldura(L, r) {
+    const m = moldura(L), f = (n) => n.toFixed(1);
+    return `<path class="l g moldura" d="M${m.contorno.map((p) => p.map(f).join(',')).join('L')}Z"/>` +
+      m.alcas.map((a) => `<rect class="alca${a.canto ? '' : ' azul'}" x="${f(a.pos[0] - r * 0.8)}" y="${f(a.pos[1] - r * 0.8)}" width="${f(r * 1.6)}" height="${f(r * 1.6)}" rx="${f(r * 0.3)}"/>`).join('') +
+      `<circle class="alca" cx="${f(L.cx)}" cy="${f(L.cy)}" r="${f(r)}"/>`;
+  }
+
   // Poses de referência (graus): guinada, arfagem, rolagem
   const POSES = {
     frente: [0, 0, 0],
@@ -248,5 +307,5 @@ const Cabeca = (() => {
     deCima: [-25, -28, 0]
   };
 
-  return { projetar, svg, POSES, TIPOS, PADRAO, u };
+  return { projetar, svg, POSES, TIPOS, PADRAO, u, moldura, arrastarAlca, svgMoldura };
 })();
