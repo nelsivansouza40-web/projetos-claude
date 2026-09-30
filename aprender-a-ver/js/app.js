@@ -55,6 +55,7 @@ const App = (() => {
     }
     raiz.append(h('h2', { class: 'secao' }, 'Trilhas'), grade);
     raiz.append(h('h2', { class: 'secao' }, 'Ferramentas'), h('div', { class: 'grade-ferramentas' },
+      h('a', { class: 'cartao ferramenta', href: '#/grade' }, h('span', { html: U.icone('grade') }), h('strong', {}, 'Método da grade'), h('span', {}, 'Grade quadrada, retangular ou em centímetros, diagonais, etiquetas, efeitos, corte, impressão e comparação com o seu desenho.')),
       h('a', { class: 'cartao ferramenta', href: '#/atelie' }, h('span', { html: U.icone('pincel') }), h('strong', {}, 'Ateliê digital'), h('span', {}, 'Coloque uma foto e desenhe sobre ela em camadas, com lápis de 4H a 8B, esfuminho, borrachas e zoom.')),
       h('a', { class: 'cartao ferramenta', href: '#/retrato' }, h('span', { html: U.icone('rosto') }), h('strong', {}, 'Retrato guiado'), h('span', {}, 'Da bola de Loomis ao retrato pronto em 12 etapas, a partir de uma foto sua.')),
       h('a', { class: 'cartao ferramenta', href: '#/foto' }, h('span', { html: U.icone('foto') }), h('strong', {}, 'Foto em etapas'), h('span', {}, 'Contornos, valores, grades de proporção e aferição a partir de uma foto sua.')),
@@ -227,6 +228,7 @@ const App = (() => {
     $('#btn-voltar').hidden = !p0;
     U.$$('#abas a').forEach((a) => a.classList.toggle('ativa', a.dataset.rota === (p0 || 'inicio')));
     if (p0 !== 'atelie' && typeof Atelie !== 'undefined') Atelie.sair();
+    if (p0 !== 'grade' && typeof Grade !== 'undefined') Grade.sair();
     try {
       if (!p0) telaInicio(raiz);
       else if (p0 === 'trilha') telaTrilha(raiz, p1);
@@ -236,6 +238,9 @@ const App = (() => {
       else if (p0 === 'foto') {
         definirTitulo('Foto em etapas', 'Processada no próprio aparelho');
         Foto.montar(raiz, { aba: params.aba, exercicio: params.exercicio, etapa: params.etapa != null ? +params.etapa : null });
+      } else if (p0 === 'grade') {
+        definirTitulo('Método da grade', 'Copie célula por célula');
+        Grade.montar(raiz);
       } else if (p0 === 'atelie') {
         definirTitulo('Ateliê digital', 'Desenhe sobre a foto, em camadas');
         Atelie.montar(raiz);

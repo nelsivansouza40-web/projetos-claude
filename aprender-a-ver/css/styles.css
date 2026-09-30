@@ -329,3 +329,34 @@ svg.sobreposicao .tx-sobre { fill: #fff; stroke: rgba(20, 18, 16, .75); stroke-w
   .atelie-abas .seg { padding: 8px 6px; font-size: .78rem; }
 }
 #abas a span { white-space: nowrap; }
+
+/* Método da grade */
+.grade-palco { position: relative; height: min(66vh, 900px); min-height: 300px; border-radius: var(--raio); overflow: hidden; background: #2a2622; }
+.grade-palco.cheia { position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 60; border-radius: 0; }
+.grade-tela { display: block; touch-action: none; }
+.grade-info { position: absolute; left: 8px; bottom: 8px; font-size: .75rem; background: rgba(0,0,0,.6); color: #fff; padding: 2px 8px; border-radius: 6px; pointer-events: none; }
+.grade-sair { position: absolute; top: 10px; right: 10px; }
+.grade-cadeado { position: absolute; top: 10px; left: 10px; }
+.grade-navcel { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); display: flex; gap: 6px; align-items: center; background: rgba(255,255,255,.92); color: #222; padding: 6px 8px; border-radius: 12px; }
+.grade-navcel[hidden] { display: none; }
+.grade-cor { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--borda); cursor: pointer; }
+.grade-cor.ativo { outline: 3px solid var(--acento); outline-offset: 2px; }
+.grade-campos { display: grid; gap: 8px; margin-bottom: 8px; }
+.grade-campo { display: grid; grid-template-columns: 1fr 90px auto; gap: 8px; align-items: center; font-size: .9rem; }
+.grade-campo input { padding: 6px 8px; border: 1px solid var(--borda); border-radius: 8px; background: var(--cartao); color: var(--tinta); font-size: 1rem; }
+.grade-partes { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; }
+.grade-partes figure { margin: 0; text-align: center; font-size: .75rem; }
+.grade-partes img { width: 100%; border: 1px solid var(--borda); }
+.grade-salvas { display: flex; flex-direction: column; gap: 10px; }
+.grade-salva { display: grid; grid-template-columns: 90px 1fr; gap: 10px; align-items: center; }
+.grade-salva img { width: 90px; border-radius: 6px; border: 1px solid var(--borda); }
+.grade-salva .nota { display: block; }
+body.sem-rolagem { overflow: hidden; }
+.area-impressao { display: none; }
+@media print {
+  body.imprimindo > *:not(.area-impressao) { display: none !important; }
+  body.imprimindo .area-impressao { display: block; }
+  .pagina-impressao { page-break-after: always; break-after: page; }
+  .pagina-impressao img { display: block; max-width: none; }
+  @page { margin: 1cm; }
+}
