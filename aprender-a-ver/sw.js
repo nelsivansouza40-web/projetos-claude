@@ -2,7 +2,7 @@
  * Service Worker: guarda os arquivos do aplicativo no aparelho para que ele
  * abra e funcione sem internet. Desenhos e fotos ficam no IndexedDB.
  */
-const CACHE_VERSION = 'aprender-a-ver-v10';
+const CACHE_VERSION = 'aprender-a-ver-v11';
 const APP_SHELL = [
   './',
   './index.html',
