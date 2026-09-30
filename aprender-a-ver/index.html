@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2b2622">
+  <meta name="description" content="Estudo de desenho realista com as técnicas de Betty Edwards e Andrew Loomis: lições passo a passo, simuladores, foto em etapas e prancheta.">
+  <title>Aprender a Ver</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header id="topo">
+    <button id="btn-voltar" class="icone-btn" aria-label="Voltar" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="marca">
+      <strong id="titulo-pagina">Aprender a Ver</strong>
+      <span id="subtitulo-pagina">Estudo de desenho realista</span>
+    </div>
+  </header>
+
+  <main id="vista"></main>
+
+  <nav id="abas" aria-label="Navegação principal">
+    <a href="#/" data-rota="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Início</span></a>
+    <a href="#/foto" data-rota="foto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6l2-3h4l2 3"/></svg><span>Foto</span></a>
+    <a href="#/prancheta" data-rota="prancheta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/><path d="M14 6l3 3"/></svg><span>Prancheta</span></a>
+    <a href="#/progresso" data-rota="progresso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Progresso</span></a>
+  </nav>
+
+  <script src="js/util.js"></script>
+  <script src="js/cabeca3d.js"></script>
+  <script src="js/licoes.js"></script>
+  <script src="js/visual.js"></script>
+  <script src="js/sims.js"></script>
+  <script src="js/foto.js"></script>
+  <script src="js/prancheta.js"></script>
+  <script src="js/progresso.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
