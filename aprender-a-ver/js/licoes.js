@@ -64,7 +64,7 @@ const Licoes = (() => {
       corpo = `<g class="ant">${ant}</g><g class="novo">${juntar(p.fundo)}${juntar(p.g)}</g>`;
     }
     const tam = op.tamanho || 800;
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${vb[0]} ${vb[1]}" width="${tam}" height="${Math.round(tam * vb[1] / vb[0])}"><style>${CSS}</style><rect width="${vb[0]}" height="${vb[1]}" fill="#fbf8f2"/>${licao.defs ? `<defs>${licao.defs}</defs>` : ''}${corpo}</svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${vb[0]} ${vb[1]}" width="${tam}" height="${Math.round(tam * vb[1] / vb[0])}"><style>${CSS}</style><rect width="${vb[0]}" height="${vb[1]}" fill="#fbf8f2"/>${licao.defs ? `<defs>${licao.defs}</defs>` : ''}${licao.escala ? `<g transform="${licao.escala}">${corpo}</g>` : corpo}</svg>`;
   }
 
   // ---------------------------------------------------------------

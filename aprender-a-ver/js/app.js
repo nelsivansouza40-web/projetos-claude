@@ -93,16 +93,17 @@ const App = (() => {
     definirTitulo(l.titulo, l.fonte);
     raiz.append(h('p', { class: 'resumo' }, l.resumo));
     const vb = l.vb || [400, 400];
-    const etapas = l.passos.map((p, k) => ({ titulo: p.t, texto: p.txt, figura: () => Licoes.svgEtapa(l, k) }));
+    const etapas = l.passos.map((p, k) => ({ titulo: p.t, texto: p.txt, figura: () => (p.realista ? Realista.figura(l, k) : Licoes.svgEtapa(l, k)) }));
+    const refEtapa = async (k) => (l.passos[k].realista ? Realista.referencia(l, k) : U.svgParaUrl(Licoes.svgEtapa(l, k)));
     Visual.passos(raiz, etapas, {
-      aoPraticar: (k) => abrirPrancheta({
+      aoPraticar: async (k) => abrirPrancheta({
         titulo: `${l.titulo}: ${l.passos[k].t}`, origem: 'licao:' + id,
-        referencia: U.svgParaUrl(Licoes.svgEtapa(l, k)), layout: 'lado', aspecto: vb[0] / vb[1], tempoMin: 10
+        referencia: await refEtapa(k), layout: 'lado', aspecto: vb[0] / vb[1], tempoMin: 10
       }),
       aoConcluir: () => {
         Progresso.concluir('licao:' + id);
         const { trilha, prox } = proximoNaTrilha('licao', id);
-        const acoes = [{ rotulo: 'Praticar o desenho final', acao: () => abrirPrancheta({ titulo: l.titulo, origem: 'licao:' + id, referencia: U.svgParaUrl(Licoes.svgEtapa(l, l.passos.length - 1)), layout: 'lado', aspecto: vb[0] / vb[1], tempoMin: 15 }) }];
+        const acoes = [{ rotulo: 'Praticar o desenho final', acao: () => { refEtapa(l.passos.length - 1).then((ref) => abrirPrancheta({ titulo: l.titulo, origem: 'licao:' + id, referencia: ref, layout: 'lado', aspecto: vb[0] / vb[1], tempoMin: 15 })); } }];
         if (prox) acoes.push({ rotulo: 'Próximo item', classe: 'primario', acao: () => { location.hash = hrefItem(prox[0], prox[1]); } });
         else if (trilha) acoes.push({ rotulo: 'Voltar à trilha', classe: 'primario', acao: () => { location.hash = '#/trilha/' + trilha.id; } });
         U.modal('Lição concluída', h('p', {}, 'Ler as etapas é metade do trabalho. A outra metade é desenhar: pratique a figura final na prancheta, olhando a referência ao lado.'), acoes);
