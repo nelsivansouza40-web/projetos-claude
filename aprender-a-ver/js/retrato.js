@@ -97,7 +97,7 @@ const Retrato = (() => {
 
   // ---------------- as 12 etapas ----------------
   const ETAPAS = [
-    { t: 'O círculo base', txt: 'Desenhe um círculo leve. Imagine uma esfera sólida: é a base do crânio. Compare o tamanho com a referência: a bola vai do topo da cabeça até perto da base do nariz.', grupos: ['esfera'], novos: ['esfera'], grau: '2H' },
+    { t: 'O círculo base', txt: 'Desenhe um círculo leve. Imagine uma esfera sólida: é a base do crânio. Compare o tamanho com a referência: na medida de Loomis a bola tem a largura da cabeça com as orelhas e vai do topo da cabeça até a altura da boca; o queixo fica abaixo dela.', grupos: ['esfera'], novos: ['esfera'], grau: '2H' },
     { t: 'A cruz guia', txt: 'Trace a linha central e a linha da sobrancelha seguindo a curva da esfera. Elas mostram para onde a pessoa está olhando.', grupos: ['esfera', 'central', 'sobrancelha'], novos: ['central', 'sobrancelha'], grau: '2H' },
     { t: 'Corte as laterais', txt: 'Corte uma fatia de cada lado da bola. Isso achata a cabeça e dá a forma de um crânio de verdade. O corte mais visível fica do lado para onde o rosto está virado.', grupos: ['esfera', 'central', 'sobrancelha', 'lateral'], novos: ['lateral'], grau: '2H' },
     { t: 'Divida em três partes', txt: 'Marque três distâncias iguais na linha central: do começo do cabelo às sobrancelhas, das sobrancelhas à base do nariz e da base do nariz ao queixo. Se a boca estiver aberta, a última parte fica um pouco maior. Em crianças o nariz e o queixo ocupam bem menos espaço e os olhos ficam na metade da cabeça; em idosos o nariz e as orelhas crescem.', grupos: ['esfera', 'central', 'sobrancelha', 'lateral', 'tercos'], novos: ['tercos'], grau: '2H' },
@@ -234,7 +234,8 @@ const Retrato = (() => {
     const MEDIDAS = [
       ['largura', 'Largura da cabeça'], ['altura', 'Altura da cabeça'],
       ['testa', 'Testa (linha do cabelo)'], ['nariz', 'Terço do meio (nariz)'], ['queixo', 'Terço de baixo (queixo)'],
-      ['mandibula', 'Largura da mandíbula'], ['olhos', 'Tamanho dos olhos'], ['orelhas', 'Tamanho das orelhas']
+      ['mandibula', 'Largura da mandíbula'], ['olhos', 'Tamanho dos olhos'], ['sobrancelhas', 'Altura das sobrancelhas'],
+      ['boca', 'Tamanho da boca'], ['orelhas', 'Tamanho das orelhas']
     ];
     const segTipo = h('div', { class: 'segmentado', 'aria-label': 'Tipo de rosto' });
     const medidas = h('div', { class: 'controles coluna' });
@@ -247,7 +248,7 @@ const Retrato = (() => {
     }
     for (const [k, rot] of MEDIDAS) {
       const out = h('output', {});
-      const inp = h('input', { type: 'range', min: k === 'largura' || k === 'altura' ? 50 : k === 'nariz' || k === 'queixo' ? 60 : 70, max: k === 'largura' || k === 'altura' ? 180 : 140, value: 100, oninput: (e) => {
+      const inp = h('input', { type: 'range', min: k === 'largura' || k === 'altura' || k === 'sobrancelhas' ? 50 : k === 'nariz' || k === 'queixo' ? 60 : 70, max: k === 'largura' || k === 'altura' || k === 'sobrancelhas' ? 180 : 140, value: 100, oninput: (e) => {
         L.P[k] = e.target.value / 100; out.textContent = e.target.value + '%';
         if (L.tipo !== 'personalizado') { L.tipo = 'personalizado'; marcarTipo(); }
         desenhar();
@@ -255,7 +256,7 @@ const Retrato = (() => {
       entradas[k] = { inp, out };
       medidas.append(h('label', { class: 'slider' }, h('span', {}, rot), inp, out));
     }
-    medidas.append(h('div', { class: 'linha-botoes' }, h('button', { class: 'btn pequeno', onclick: () => aplicarTipo('adulto') }, 'Voltar ao adulto padrão')));
+    medidas.append(h('div', { class: 'linha-botoes' }, h('button', { class: 'btn pequeno', onclick: () => aplicarTipo('adulto') }, 'Voltar à medida de Loomis')));
     medidas.hidden = L.tipo !== 'personalizado';
     marcarTipo(); sincronizar();
 
@@ -272,12 +273,12 @@ const Retrato = (() => {
     raiz.append(
       h('div', { class: 'cartao' },
         h('h2', {}, 'Encaixe a cabeça'),
-        h('p', { class: 'dica' }, 'Arraste a bola até o crânio. Os quadrados vermelhos dos cantos mudam o tamanho sem deformar; os azuis, no meio de cada lado, esticam só aquele lado (topo da cabeça, queixo, esquerda e direita). A cruz fica entre as sobrancelhas; a linha de baixo da bola passa na base do nariz; o queixo fica no fim da linha central. Use os controles para virar e inclinar até as linhas acompanharem o rosto.')),
+        h('p', { class: 'dica' }, 'Arraste a bola até o crânio. Os quadrados vermelhos dos cantos mudam o tamanho sem deformar; os azuis, no meio de cada lado, esticam só aquele lado (topo da cabeça, queixo, esquerda e direita). A cruz fica entre as sobrancelhas; a base do nariz fica na linha de baixo do corte lateral; o queixo fica no fim da linha central. Na medida de Loomis a bola ocupa a largura da cabeça com as orelhas. Use os controles para virar e inclinar até as linhas acompanharem o rosto.')),
       h('div', { class: 'cartao papel palco-moldura' }, palco),
       h('div', { class: 'controles coluna' }, sl('g', 'Virar', -90, 90), sl('a', 'Cima ou baixo', -40, 40), sl('r', 'Inclinar', -40, 40)),
       h('div', { class: 'cartao' },
         h('h3', {}, 'Tipo de rosto'),
-        h('p', { class: 'nota' }, 'Escolha o tipo mais parecido com a pessoa da foto. Em "Personalizado", ou ao mexer em qualquer medida, você ajusta largura, altura e cada terço separadamente.'),
+        h('p', { class: 'nota' }, 'Adulto segue a medida do livro de Loomis (3 por 3,5 unidades). Os outros tipos partem dela; "Referência chriiswo" usa o rosto mais longo do vídeo. Em "Personalizado", ou ao puxar as alças, você ajusta cada medida separadamente.'),
         segTipo, medidas),
       h('div', { class: 'linha-botoes' }, h('button', { class: 'btn', onclick: () => entrada.click() }, 'Trocar foto'), btnComecar));
     desenhar();

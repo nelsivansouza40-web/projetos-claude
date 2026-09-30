@@ -4,16 +4,22 @@
  * sobrancelha e pela linha central, e o rosto dividido em três partes
  * iguais (cabelo-sobrancelha, sobrancelha-base do nariz, base do nariz-queixo).
  *
- * Proporções conferidas com o método de Loomis e com as folhas de
- * construção usadas como referência: raio da bola = 1; cada terço do
- * rosto vale u = 0,75 (a fatia lateral vai da linha do cabelo à base do
- * nariz); o queixo fica 2u abaixo da linha da sobrancelha.
+ * Medidas do livro (prancha 19): de frente a cabeça cabe num retângulo de
+ * 3 unidades de largura (a bola, com as orelhas) por 3,5 de altura. Com o
+ * raio da bola = 1, uma unidade vale 2/3: é o tamanho de cada terço do
+ * rosto e o raio do corte lateral. Do topo à linha do cabelo vai meia
+ * unidade, o queixo fica 2 unidades abaixo da sobrancelha e os olhos
+ * caem na metade da altura total.
+ *
+ * As curvas são desenhadas numa geometria de trabalho (terço = 0,75) e
+ * depois levadas às proporções de cada tipo de rosto pela função modelo().
  *
  * Eixos: x para a direita, y para baixo, z na direção de quem olha.
  */
 const Cabeca = (() => {
-  const u = 0.75;
-  const LADO = Math.sqrt(1 - u * u); // distância do corte lateral ao centro (0,661)
+  const LIVRO = 2 / 3; // unidade de Loomis em raios da bola
+  const u = 0.75; // terço da geometria de trabalho
+  const LADO = Math.sqrt(1 - u * u);
   const QUEIXO = 2 * u;
   const RAD = Math.PI / 180;
 
@@ -68,9 +74,9 @@ const Cabeca = (() => {
     add('sobrancelha', amostrar(0, 2 * Math.PI, 120, (a) => [Math.cos(a), 0, Math.sin(a)]), 'esfera');
     // Cortes laterais (círculos) e a cruz de cada lado
     for (const s of [1, -1]) {
-      add('lateral', amostrar(0, 2 * Math.PI, 72, (a) => [s * LADO, u * Math.sin(a), u * Math.cos(a)]), 'aro', { lado: s });
-      add('lateral', [[s * LADO, -u, 0], [s * LADO, u, 0]], { n: [s, 0, 0], lim: 0 });
-      add('lateral', [[s * LADO, 0, -u], [s * LADO, 0, u]], { n: [s, 0, 0], lim: 0 });
+      add('lateral', lateral(s, 'aro', u), 'aro', { lado: s, def: { tipo: 'lateral', s, parte: 'aro' } });
+      add('lateral', lateral(s, 'v', u), { n: [s, 0, 0], lim: 0, def: { tipo: 'lateral', s, parte: 'v' } });
+      add('lateral', lateral(s, 'h', u), { n: [s, 0, 0], lim: 0, def: { tipo: 'lateral', s, parte: 'h' } });
     }
     // Linha do cabelo e linha da base do nariz: arcos da frente, de um corte ao outro
     add('tercos', arcoFrente(-u), 'esfera', { def: { tipo: 'arco', ref: 'cabelo' } });
@@ -93,8 +99,8 @@ const Cabeca = (() => {
       // Orelha: um "C" no plano lateral, atrás da cruz, entre sobrancelha e nariz
       const xo = s * (LADO + 0.04);
       def = { tipo: 'orelha', c: [xo, 0.375, -0.23] };
-      add('orelhas', suave([[xo, 0.04, -0.1], [xo, -0.02, -0.24], [xo + s * 0.02, 0.1, -0.36], [xo + s * 0.03, 0.34, -0.38], [xo + s * 0.02, 0.56, -0.3], [xo, u - 0.02, -0.2], [xo, u + 0.02, -0.12], [xo, u - 0.06, -0.08]]), { n: [s, 0, -0.25], lim: -0.15 });
-      add('orelhas', suave([[xo, 0.16, -0.14], [xo + s * 0.01, 0.12, -0.25], [xo + s * 0.01, 0.34, -0.29], [xo, 0.5, -0.2]], 6), { n: [s, 0, -0.25], lim: -0.1 });
+      add('orelhas', suave([[xo, 0.04, -0.1], [xo, -0.02, -0.24], [xo + s * 0.02, 0.1, -0.36], [xo + s * 0.03, 0.34, -0.38], [xo + s * 0.02, 0.56, -0.3], [xo, u - 0.02, -0.2], [xo, u + 0.02, -0.12], [xo, u - 0.06, -0.08]]), { n: [s, 0, 0.15], lim: -0.35 });
+      add('orelhas', suave([[xo, 0.16, -0.14], [xo + s * 0.01, 0.12, -0.25], [xo + s * 0.01, 0.34, -0.29], [xo, 0.5, -0.2]], 6), { n: [s, 0, 0.15], lim: -0.3 });
 
       // Olho: amêndoa (pálpebra de cima e de baixo) e íris
       const n0 = norm([s * 0.35, 0.25, 0.9]);
@@ -103,9 +109,10 @@ const Cabeca = (() => {
       add('tracos', suave([[ci, ye, 0], [s * 0.25, ye - 0.07, 0], [s * 0.37, ye - 0.075, 0], [ce, ye - 0.015, 0]].map(([x, y]) => frente(x, y)), 6), { n: n0, lim: 0.02 });
       add('tracos', suave([[ci, ye, 0], [s * 0.27, ye + 0.04, 0], [s * 0.39, ye + 0.035, 0], [ce, ye - 0.015, 0]].map(([x, y]) => frente(x, y)), 6), { n: n0, lim: 0.02 });
       add('tracos', amostrar(0, 2 * Math.PI, 18, (a) => frente(s * 0.32 + 0.048 * Math.cos(a), ye - 0.015 + 0.048 * Math.sin(a), 0.975)), { n: n0, lim: 0.08 });
-      def = { tipo: 'rosto' };
+      def = { tipo: 'rosto', sobr: true };
       // Sobrancelha: começa sobre o canto interno do olho e afina para fora
       add('tracos', suave([[s * 0.15, 0.07, 0], [s * 0.27, 0.02, 0], [s * 0.4, 0.015, 0], [s * 0.5, 0.06, 0]].map(([x, y]) => frente(x, y, 0.985)), 6), { n: norm([s * 0.35, 0, 0.94]), lim: 0 });
+      def = { tipo: 'rosto' };
       // Asa do nariz: círculo menor de cada lado da bola do nariz
       add('tracos', amostrar(0, 2 * Math.PI, 18, (a) => [s * 0.115 + 0.055 * Math.cos(a), 0.67 + 0.05 * Math.sin(a), 0.98 + s * 0.02 * Math.cos(a)]), { n: norm([s * 0.45, 0.2, 1]), lim: -0.1 });
       // Lateral do nariz: desce do canto do olho até a asa
@@ -119,6 +126,7 @@ const Cabeca = (() => {
     add('tracos', suave([[-0.1, 0.73, 0.98], [0, 0.76, 1.02], [0.1, 0.73, 0.98]], 5), { n: [0, 0.4, 1], lim: -0.4 });
     // Boca: lábio de cima com o arco do cupido, linha da boca e lábio de baixo
     const B = (pts) => pts.map(([x, y]) => [x, y, focinho(x, y)]);
+    def = { tipo: 'boca' };
     const nB = { n: [0, 0.1, 1], lim: -0.28 };
     add('tracos', suave(B([[-0.21, 1.03], [-0.1, 0.98], [-0.03, 0.965], [0, 0.98], [0.03, 0.965], [0.1, 0.98], [0.21, 1.03]]), 5), nB);
     add('tracos', suave(B([[-0.21, 1.03], [-0.08, 1.035], [0, 1.045], [0.08, 1.035], [0.21, 1.03]]), 5), nB);
@@ -126,47 +134,82 @@ const Cabeca = (() => {
     return C;
   }
   // Arco da frente da bola numa altura y, limitado pelos cortes laterais
-  function arcoFrente(y) {
-    const r = Math.sqrt(Math.max(0.0001, 1 - y * y)), a0 = r > LADO ? Math.acos(LADO / r) : 0;
+  function arcoFrente(y, lado = LADO) {
+    const r = Math.sqrt(Math.max(0.0001, 1 - y * y)), a0 = r > lado ? Math.acos(lado / r) : 0;
     return amostrar(a0, Math.PI - a0, 48, (a) => [r * Math.cos(a), y, r * Math.sin(a)]);
+  }
+  // Corte lateral de raio t: o círculo e a cruz dentro dele
+  function lateral(s, parte, t) {
+    const l = Math.sqrt(1 - t * t);
+    if (parte === 'aro') return amostrar(0, 2 * Math.PI, 72, (a) => [s * l, t * Math.sin(a), t * Math.cos(a)]);
+    if (parte === 'v') return [[s * l, -t, 0], [s * l, t, 0]];
+    return [[s * l, 0, -t], [s * l, 0, t]];
   }
   const BASE = curvas();
 
-  // Proporções por tipo de rosto (1 = adulto de referência).
+  // Proporções por tipo de rosto (1 = adulto de Loomis).
+  // terco: tamanho de cada terço em raios da bola (2/3 no livro);
   // testa: altura da linha do cabelo; nariz: terço do meio; queixo: terço de baixo;
-  // mandibula: largura da parte de baixo; olhos e orelhas: tamanho; largura e altura: forma geral.
-  const PADRAO = { testa: 1, nariz: 1, queixo: 1, mandibula: 1, olhos: 1, orelhas: 1, largura: 1, altura: 1 };
+  // mandibula: largura da parte de baixo; olhos, orelhas e boca: tamanho;
+  // sobrancelhas: altura acima dos olhos; largura e altura: forma geral.
+  const PADRAO = { terco: LIVRO, testa: 1, nariz: 1, queixo: 1, mandibula: 1, olhos: 1, orelhas: 1, boca: 1, sobrancelhas: 1, largura: 1, altura: 1 };
   const TIPOS = {
-    adulto: { rotulo: 'Adulto', p: {} },
+    adulto: { rotulo: 'Adulto (Loomis)', p: {} },
+    feminino: { rotulo: 'Feminino', p: { mandibula: 0.9, olhos: 1.1, boca: 0.9, sobrancelhas: 1.35, queixo: 0.96, largura: 0.97 } },
+    masculino: { rotulo: 'Masculino', p: { mandibula: 1.08, olhos: 0.95, boca: 1.04, sobrancelhas: 0.8, queixo: 1.03, largura: 1.02 } },
     jovem: { rotulo: 'Jovem', p: { testa: 1.05, nariz: 0.94, queixo: 0.92, mandibula: 0.94, olhos: 1.08, orelhas: 0.95, largura: 0.97 } },
     idoso: { rotulo: 'Idoso', p: { testa: 1.12, nariz: 1.08, queixo: 1.04, mandibula: 1.04, olhos: 0.92, orelhas: 1.22, largura: 1.02 } },
-    crianca: { rotulo: 'Criança', p: { testa: 1.25, nariz: 0.74, queixo: 0.7, mandibula: 0.84, olhos: 1.2, orelhas: 0.9, largura: 1.04, altura: 0.96 } }
+    crianca: { rotulo: 'Criança', p: { testa: 1.25, nariz: 0.74, queixo: 0.7, mandibula: 0.84, olhos: 1.2, orelhas: 0.9, boca: 0.9, largura: 1.04, altura: 0.96 } },
+    chriiswo: { rotulo: 'Referência chriiswo', p: { terco: 0.75 } }
   };
   const completar = (P) => Object.assign({}, PADRAO, P || {});
 
   // Aplica as proporções ao modelo base (resultado guardado por combinação)
   const cache = new Map();
+  // Altura do queixo (abaixo da sobrancelha) para as proporções P
+  const alturaQueixo = (P) => P.terco * (Math.max(0.6, P.nariz) + P.queixo);
   function modelo(P) {
     P = completar(P);
-    const chave = ['testa', 'nariz', 'queixo', 'mandibula', 'olhos', 'orelhas'].map((k) => P[k].toFixed(3)).join('|');
+    const chave = Object.keys(PADRAO).filter((k) => k !== 'largura' && k !== 'altura').map((k) => P[k].toFixed(3)).join('|');
     if (cache.has(chave)) return cache.get(chave);
-    const yN = u * Math.max(0.6, P.nariz), yQ = yN + u * P.queixo, yE = 0.3;
-    // desloca as alturas do rosto: sobrancelha e olhos fixos, base do nariz e queixo nas novas posições
-    const fy = (y) => (y <= yE ? y : y <= u ? yE + (y - yE) * (yN - yE) / (u - yE) : y <= QUEIXO ? yN + (y - u) * (yQ - yN) / u : yQ + (y - QUEIXO));
-    const fx = (x, y, mand) => (mand ? x * (1 + (P.mandibula - 1) * Math.min(1, Math.max(0, (y - 0.3) / 0.9))) : x);
-    const alturas = { cabelo: -Math.min(0.97, u * P.testa), nariz: yN, olhos: fy(0.3) };
+    const t = P.terco, lado = Math.sqrt(1 - t * t), kL = lado / LADO;
+    const yN = t * Math.max(0.6, P.nariz), yQ = alturaQueixo(P);
+    // olhos na metade da altura total (do topo da bola ao queixo), nunca colados na sobrancelha
+    const yO = Math.max(0.14, (yQ - 1) / 2);
+    // alturas da geometria de trabalho levadas às novas: sobrancelha fixa, olhos, base do nariz e queixo
+    const ancoras = [[0, 0], [0.245, yO], [u, yN], [2 * u, yQ]];
+    const fy = (y) => {
+      if (y <= 0) return y;
+      for (let i = 1; i < ancoras.length; i++) {
+        const [a0, b0] = ancoras[i - 1], [a1, b1] = ancoras[i];
+        if (y <= a1) return b0 + (y - a0) * (b1 - b0) / (a1 - a0);
+      }
+      return yQ + (y - 2 * u);
+    };
+    // a parte de cima da mandíbula acompanha o corte lateral; a de baixo, a largura da mandíbula
+    const fx = (x, y) => x * (1 + (kL - 1) * Math.min(1, Math.max(0, (1.3 - y) / 0.8))) * (1 + (P.mandibula - 1) * Math.min(1, Math.max(0, (y - 0.3) / 0.9)));
+    const alturas = { cabelo: -Math.min(0.97, t * P.testa), nariz: yN, olhos: fy(0.3) };
+    const dSobr = (P.sobrancelhas - 1) * 0.1;
     const C = BASE.map((c) => {
       const d = c.def;
       if (!d) return c;
       let pts;
-      if (d.tipo === 'arco') pts = arcoFrente(alturas[d.ref]);
-      else if (d.tipo === 'olho' || d.tipo === 'orelha') {
-        const k = d.tipo === 'olho' ? P.olhos : P.orelhas, [cx, cy, cz] = d.c;
+      if (d.tipo === 'arco') pts = arcoFrente(alturas[d.ref], lado);
+      else if (d.tipo === 'lateral') pts = lateral(d.s, d.parte, t);
+      else if (d.tipo === 'olho') {
+        const [cx, cy] = d.c, k = P.olhos, y0 = fy(cy);
+        pts = c.pts.map(([x, y, z]) => [cx + (x - cx) * k, y0 + (y - cy) * k, z]);
+      } else if (d.tipo === 'orelha') {
+        const [cx, cy, cz] = d.c, k = P.orelhas, sx = Math.sign(cx);
         pts = c.pts.map(([x, y, z]) => {
-          const x1 = d.tipo === 'olho' ? cx + (x - cx) * k : x, y1 = cy + (y - cy) * k, z1 = d.tipo === 'orelha' ? cz + (z - cz) * k : z;
-          return [x1, fy(y1), z1];
+          const z1 = cz + (z - cz) * k;
+          // a orelha abre um pouco para fora, por isso aparece de frente
+          return [x * kL + sx * 0.3 * Math.max(0, -z1 - 0.06), fy(cy + (y - cy) * k), z1];
         });
-      } else pts = c.pts.map(([x, y, z]) => [fx(x, y, d.mand), fy(y), z]);
+      } else if (d.tipo === 'boca') {
+        const k = P.boca;
+        pts = c.pts.map(([x, y, z]) => [x * k, fy(1.04 + (y - 1.04) * (0.6 + 0.4 * k)), z]);
+      } else pts = c.pts.map(([x, y, z]) => [d.mand ? fx(x, y) : x, fy(y) - (d.sobr ? dSobr : 0), z]);
       return { ...c, pts };
     });
     if (cache.size > 40) cache.clear();
@@ -244,7 +287,7 @@ const Cabeca = (() => {
   // Cantos mudam o tamanho sem deformar; bordas esticam só aquele lado.
   const ALCAS = [['topoEsq', -1, -1], ['topo', 0, -1], ['topoDir', 1, -1], ['dir', 1, 0], ['baseDir', 1, 1], ['base', 0, 1], ['baseEsq', -1, 1], ['esq', -1, 0]];
   function caixa(L) {
-    const P = completar(L.P), yQ = u * Math.max(0.6, P.nariz) + u * P.queixo;
+    const P = completar(L.P), yQ = alturaQueixo(P);
     return { X0: -L.R * P.largura, X1: L.R * P.largura, Y0: -L.R * P.altura, Y1: L.R * P.altura * yQ, yQ };
   }
   function moldura(L) {
@@ -307,5 +350,5 @@ const Cabeca = (() => {
     deCima: [-25, -28, 0]
   };
 
-  return { projetar, svg, POSES, TIPOS, PADRAO, u, moldura, arrastarAlca, svgMoldura };
+  return { projetar, svg, POSES, TIPOS, PADRAO, u: LIVRO, moldura, arrastarAlca, svgMoldura };
 })();
