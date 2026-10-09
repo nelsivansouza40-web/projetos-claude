@@ -38,35 +38,20 @@ const Atelie = (() => {
     return '#' + c + c + c;
   });
 
-  // ---------------- textura (grão do papel) ----------------
-  function ruido(tam, semente) {
-    const c = document.createElement('canvas'); c.width = c.height = tam;
-    const x = c.getContext('2d'), img = x.createImageData(tam, tam), d = img.data;
-    let s = semente;
-    const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
-    // ruído com fibras levemente alongadas
-    const base = new Float32Array(tam * tam);
-    for (let i = 0; i < base.length; i++) base[i] = rnd();
-    for (let y = 0; y < tam; y++) for (let xx = 0; xx < tam; xx++) {
-      const i = y * tam + xx;
-      const v = (base[i] * 2 + base[y * tam + ((xx + 1) % tam)] + base[((y + 1) % tam) * tam + xx]) / 4;
-      d[i * 4 + 3] = Math.round(v * 255);
-    }
-    x.putImageData(img, 0, 0);
-    return c;
-  }
-  let grao = null;
+  // ---------------- textura (grão do papel, ver papel.js) ----------------
   const mascaras = new Map();
   // Máscara de textura: alfa entre (1 - forca) e 1
-  function mascaraGrao(forca) {
-    const k = Math.round(forca * 10);
-    if (mascaras.has(k)) return mascaras.get(k);
-    if (!grao) grao = ruido(256, 7919);
-    const c = document.createElement('canvas'); c.width = c.height = 256;
+  // O grão vem do papel escolhido: papel áspero marca mais o traço, papel liso quase nada
+  function mascaraGrao(forca, pp) {
+    const ef = Math.min(1, forca * (0.35 + 1.15 * pp.dente));
+    const k = Math.round(ef * 10), chave = k + '|' + pp.escala;
+    if (mascaras.has(chave)) return mascaras.get(chave);
+    const t = Papel.ladrilho(pp.escala);
+    const c = document.createElement('canvas'); c.width = t.width; c.height = t.height;
     const x = c.getContext('2d');
-    x.fillStyle = `rgba(0,0,0,${1 - k / 10})`; x.fillRect(0, 0, 256, 256);
-    x.globalAlpha = k / 10; x.drawImage(grao, 0, 0);
-    mascaras.set(k, c);
+    x.fillStyle = `rgba(0,0,0,${1 - k / 10})`; x.fillRect(0, 0, c.width, c.height);
+    x.globalAlpha = k / 10; x.drawImage(t, 0, 0);
+    mascaras.set(chave, c);
     return c;
   }
 
@@ -100,7 +85,7 @@ const Atelie = (() => {
       W, H, foto, camada,
       camadas: [camada('Desenho')], ativa: 0,
       fotoVis: !!foto, fotoOpac: 0.45, fotoCinza: false, fotoSobre: false, fotoLado: false,
-      papel: '#fbf8f2', graoPapel: true, grade: 0,
+      papel: '#fbf8f2', graoPapel: true, grade: 0, pp: Papel.atual(),
       ferramenta: 'lapis', grau: '2B', cor: '#262626', recentes: [],
       ajustes: Object.fromEntries(Object.entries(FERR).map(([k, f]) => [k, { tam: f.tam, fluxo: f.fluxo, dureza: f.dureza, textura: f.textura }])),
       estab: 3, pressao: true, reta: false,
@@ -108,7 +93,9 @@ const Atelie = (() => {
       desfazer: [], refazer: [], alterado: false, segundos: 0
     };
     aplicarGrau('2B');
+    usarPapel(st.pp);
   }
+  function usarPapel(pp) { st.pp = pp; st.papel = pp.cor; st.papelTipo = pp.tipo; st.papelG = pp.gramatura; }
   function aplicarGrau(g) {
     st.grau = g;
     Object.assign(st.ajustes.lapis, GRAUS[g]);
@@ -142,7 +129,7 @@ const Atelie = (() => {
       for (const c of st.camadas) camadas.push({ nome: c.nome, visivel: c.visivel, opac: c.opac, multiplicar: c.multiplicar, png: await U.canvasParaBlob(c.cv) });
       const foto = st.foto ? await U.canvasParaBlob(st.foto, 'image/jpeg', 0.92) : null;
       const { W, H, fotoVis, fotoOpac, fotoCinza, fotoSobre, papel, graoPapel, grade, ferramenta, grau, cor, recentes, ajustes, estab, pressao, segundos } = st;
-      await bancoOp('readwrite', (s) => s.put({ W, H, foto, camadas, ativa: st.ativa, fotoVis, fotoOpac, fotoCinza, fotoSobre, papel, graoPapel, grade, ferramenta, grau, cor, recentes, ajustes, estab, pressao, segundos, salvoEm: new Date().toISOString() }, 'atual'));
+      await bancoOp('readwrite', (s) => s.put({ W, H, foto, camadas, ativa: st.ativa, papelTipo: st.papelTipo, papelG: st.papelG, fotoVis, fotoOpac, fotoCinza, fotoSobre, papel, graoPapel, grade, ferramenta, grau, cor, recentes, ajustes, estab, pressao, segundos, salvoEm: new Date().toISOString() }, 'atual'));
     } catch (e) { /* segue sem salvar: navegador sem espaço ou modo privado */ }
   }
   async function abrirProjeto(p) {
@@ -159,6 +146,7 @@ const Atelie = (() => {
     if (!st.camadas.length) st.camadas.push(st.camada('Desenho'));
     for (const k of ['ativa', 'fotoVis', 'fotoOpac', 'fotoCinza', 'fotoSobre', 'papel', 'graoPapel', 'grade', 'ferramenta', 'grau', 'cor', 'recentes', 'estab', 'pressao', 'segundos']) if (p[k] != null) st[k] = p[k];
     if (p.ajustes) for (const k of Object.keys(st.ajustes)) Object.assign(st.ajustes[k], p.ajustes[k] || {});
+    if (p.papelTipo) usarPapel(Papel.propriedades(p.papelTipo, p.papelG));
     st.ativa = Math.min(st.ativa, st.camadas.length - 1);
   }
 
@@ -338,11 +326,9 @@ const Atelie = (() => {
     } else if (ui.aba === 'vista') {
       const grade = h('div', { class: 'segmentado' });
       for (const [n, rot] of [[0, 'Sem grade'], [3, '3 x 3'], [4, '4 x 4'], [6, '6 x 6'], [8, '8 x 8']]) grade.append(h('button', { class: 'seg' + (st.grade === n ? ' ativo' : ''), onclick: () => { st.grade = n; atualizarPaineis(); desenhar(); } }, rot));
-      const papel = h('div', { class: 'segmentado' });
-      for (const [cor, rot] of [['#ffffff', 'Branco'], ['#fbf8f2', 'Marfim'], ['#efe6d2', 'Creme'], ['#d9d6cf', 'Cinza claro']]) papel.append(h('button', { class: 'seg' + (st.papel === cor ? ' ativo' : ''), onclick: () => { st.papel = cor; atualizarPaineis(); desenhar(); agendarSalvar(); } }, rot));
       c.append(
         h('div', { class: 'barra-ferramentas' }, h('span', { class: 'rotulo' }, 'Grade'), grade),
-        h('div', { class: 'barra-ferramentas' }, h('span', { class: 'rotulo' }, 'Papel'), papel),
+        Papel.controles((pp) => { usarPapel(pp); desenhar(); agendarSalvar(); }),
         h('div', { class: 'linha-botoes' },
           h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: st.graoPapel, onchange: (e) => { st.graoPapel = e.target.checked; desenhar(); } }), ' Grão do papel'),
           h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: st.vista.espelho, onchange: (e) => { st.vista.espelho = e.target.checked; desenhar(); } }), ' Espelhar a vista'),
@@ -427,7 +413,6 @@ const Atelie = (() => {
   }
   let pedido = 0;
   function desenhar() { if (!pedido) pedido = requestAnimationFrame(() => { pedido = 0; compor(); }); }
-  let padraoPapel = null;
   function compor() {
     if (!st || !st.ui) return;
     const { ctx, cv, dpr } = st.ui, v = st.vista;
@@ -453,10 +438,7 @@ const Atelie = (() => {
       ctx.drawImage(c.cv, 0, 0);
     }
     ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
-    if (st.graoPapel) {
-      if (!padraoPapel) { const g = ruido(256, 104729), x = g.getContext('2d'); x.globalCompositeOperation = 'source-in'; x.fillStyle = '#6b6252'; x.fillRect(0, 0, 256, 256); padraoPapel = ctx.createPattern(g, 'repeat'); }
-      ctx.save(); ctx.globalAlpha = 0.07; ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = padraoPapel; ctx.fillRect(0, 0, st.W, st.H); ctx.restore();
-    }
+    if (st.graoPapel) Papel.desenharGrao(ctx, st.W, st.H, st.pp);
     if (fotoVisivel && (st.fotoSobre || st.comparando)) desenharFoto();
     if (st.grade) {
       ctx.save(); ctx.strokeStyle = 'rgba(200,83,31,.55)'; ctx.lineWidth = 1 / v.esc;
@@ -560,7 +542,9 @@ const Atelie = (() => {
     const t = st.traco, f = FERR[st.ferramenta], aj = ajuste(), ctx = t.cam.ctx;
     const p = st.pressao ? pressao : 1;
     const raio = Math.max(0.5, aj.tam / 2 * (f.pTam && st.pressao ? 0.3 + 0.7 * p : 1));
-    const alfa = Math.min(1, aj.fluxo * (f.pOp && st.pressao ? 0.25 + 0.75 * p : 1));
+    // o papel muda o resultado: quanto grafite segura, como espalha e como limpa
+    const pp = st.pp, fatorPapel = f.tipo === 'pintar' ? pp.absorcao : f.tipo === 'apagar' ? pp.apaga : pp.esfuma;
+    const alfa = Math.min(1, aj.fluxo * fatorPapel * (f.pOp && st.pressao ? 0.25 + 0.75 * p : 1));
     const c = t.caixa; c[0] = Math.min(c[0], x - raio); c[1] = Math.min(c[1], y - raio); c[2] = Math.max(c[2], x + raio); c[3] = Math.max(c[3], y + raio);
     const lado = Math.ceil(raio * 2) + 2, ox = x - lado / 2, oy = y - lado / 2;
     if (f.tipo === 'pintar' || f.tipo === 'apagar') {
@@ -570,7 +554,7 @@ const Atelie = (() => {
         prepararTmp(lado);
         tctx.drawImage(pt, 0, 0);
         tctx.globalCompositeOperation = 'destination-in';
-        const pad = tctx.createPattern(mascaraGrao(aj.textura), 'repeat');
+        const pad = tctx.createPattern(mascaraGrao(aj.textura, pp), 'repeat');
         pad.setTransform(new DOMMatrix().translate(-ox, -oy));
         tctx.fillStyle = pad; tctx.fillRect(0, 0, lado, lado);
         fonte = tmp;
@@ -701,7 +685,7 @@ const Atelie = (() => {
     x.fillStyle = st.papel; x.fillRect(0, 0, st.W, st.H);
     if (comFoto && st.foto) { x.globalAlpha = st.fotoOpac; if (st.fotoCinza) x.filter = 'grayscale(1)'; x.drawImage(st.foto, 0, 0); x.filter = 'none'; x.globalAlpha = 1; }
     for (const cm of st.camadas) if (cm.visivel) { x.globalAlpha = cm.opac; x.globalCompositeOperation = cm.multiplicar ? 'multiply' : 'source-over'; x.drawImage(cm.cv, 0, 0); }
-    if (st.graoPapel) { x.globalAlpha = 0.07; x.globalCompositeOperation = 'multiply'; const g = ruido(256, 104729), gx = g.getContext('2d'); gx.globalCompositeOperation = 'source-in'; gx.fillStyle = '#6b6252'; gx.fillRect(0, 0, 256, 256); x.fillStyle = x.createPattern(g, 'repeat'); x.fillRect(0, 0, st.W, st.H); }
+    if (st.graoPapel) { x.globalAlpha = 1; x.globalCompositeOperation = 'source-over'; Papel.desenharGrao(x, st.W, st.H, st.pp); }
     return c;
   }
   async function exportar(comFoto) {

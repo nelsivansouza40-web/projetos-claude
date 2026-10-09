@@ -369,3 +369,8 @@ body.sem-rolagem { overflow: hidden; }
 /* Folhas de estudo */
 .folha-moldura { padding: 6px; cursor: zoom-in; }
 .folha-estudo { display: block; width: 100%; height: auto; border-radius: 6px; }
+
+/* Papel */
+.papel-amostra { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: start; }
+.papel-amostra .amostra { width: 64px; height: 64px; border-radius: 8px; border: 1px solid var(--borda); box-shadow: var(--sombra); }
+.papel-amostra .nota { margin: 0; }

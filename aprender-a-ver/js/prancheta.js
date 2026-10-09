@@ -16,8 +16,8 @@ const Prancheta = (() => {
     '6B': { cor: 'rgba(22,20,18,0.98)', largura: 5.8 }
   };
   const FERRAMENTAS = {
-    lapis: { rotulo: 'Lápis', tipo: 'traco' },
-    carvao: { rotulo: 'Carvão', tipo: 'traco', cor: 'rgba(30,27,24,0.22)', largura: 16 },
+    lapis: { rotulo: 'Lápis', tipo: 'traco', grao: 0.7 },
+    carvao: { rotulo: 'Carvão', tipo: 'traco', cor: 'rgba(30,27,24,0.22)', largura: 16, grao: 0.9 },
     nanquim: { rotulo: 'Pincel preto', tipo: 'traco', cor: '#141210', largura: 12 },
     esfuminho: { rotulo: 'Esfuminho', tipo: 'borrar', largura: 18, forca: 0.55, coleta: 0.25, clareia: 1,
       dica: 'Esfuminho: espalha o grafite em áreas pequenas e nas passagens de tom. Use depois das camadas de lápis.' },
@@ -41,6 +41,7 @@ const Prancheta = (() => {
     const W = cfg.aspecto >= 1 ? LADO_MAIOR : Math.round(LADO_MAIOR * cfg.aspecto);
     const H = cfg.aspecto >= 1 ? Math.round(LADO_MAIOR / cfg.aspecto) : LADO_MAIOR;
     st = {
+      pp: Papel.atual(),
       cfg, W, H, tracos: [], refeitos: [], atual: null,
       ferramenta: cfg.ferramenta, tamanho: 1, grau: '2B',
       layout: cfg.layout, opacidade: cfg.opacidade,
@@ -106,6 +107,8 @@ const Prancheta = (() => {
     const palco = h('div', { class: 'prancheta-palco layout-' + st.layout });
     const refPainel = h('div', { class: 'ref-painel' });
     const area = h('div', { class: 'area-desenho' });
+    const aplicarPapel = () => { area.style.backgroundColor = st.pp.cor; area.style.backgroundImage = Papel.fundoCss(st.pp); };
+    aplicarPapel();
     area.style.aspectRatio = `${W} / ${H}`;
     area.style.width = `min(100%, calc(76vh * ${(W / H).toFixed(4)}))`;
     const fundoImg = cfg.fundo || etapas ? h('img', { class: 'camada fundo', alt: '', src: cfg.fundo ? U.svgParaUrl(cfg.fundo) : '' }) : null;
@@ -139,7 +142,10 @@ const Prancheta = (() => {
     vis.append(
       h('button', { class: 'btn pequeno', onclick: (e) => { st.grade = st.grade ? 0 : (cfg.grade || 4); e.currentTarget.classList.toggle('ativo', !!st.grade); aplicarVisual(); } }, 'Grade'),
       h('button', { class: 'btn pequeno', title: 'Ver o desenho espelhado ajuda a enxergar erros', onclick: (e) => { st.visao.espelhar = !st.visao.espelhar; e.currentTarget.classList.toggle('ativo', st.visao.espelhar); aplicarVisual(); } }, 'Espelhar desenho'),
-      h('button', { class: 'btn pequeno', onclick: (e) => { st.visao.girar = !st.visao.girar; e.currentTarget.classList.toggle('ativo', st.visao.girar); aplicarVisual(); } }, 'Virar 180°'));
+      h('button', { class: 'btn pequeno', onclick: (e) => { st.visao.girar = !st.visao.girar; e.currentTarget.classList.toggle('ativo', st.visao.girar); aplicarVisual(); } }, 'Virar 180°'),
+      h('button', { class: 'btn pequeno', title: 'Tipo de papel e gramatura', onclick: () => {
+        U.modal('Papel', Papel.controles((pp) => { st.pp = pp; aplicarPapel(); redesenhar(); }), [{ rotulo: 'Pronto', classe: 'primario' }]);
+      } }, 'Papel'));
     raiz.append(vis);
     if (cfg.referencia && st.layout === 'sobreposto') raiz.append(h('p', { class: 'nota' }, 'Com a referência sobreposta você está decalcando. Use só para conferir; o treino do olhar acontece lado a lado.'));
 
@@ -278,9 +284,13 @@ const Prancheta = (() => {
     cv.addEventListener('pointercancel', fim);
   }
   function estilo(ctx, t) {
-    const f = FERRAMENTAS[t.f];
+    const f = FERRAMENTAS[t.f], pp = st.pp;
     ctx.globalCompositeOperation = f.tipo === 'apagar' ? 'destination-out' : 'source-over';
-    const cor = f.tipo === 'apagar' ? `rgba(0,0,0,${f.alfa})` : (t.cor || f.cor);
+    // o papel muda o traço: quanto grafite segura e quanto a borracha limpa
+    ctx.globalAlpha = f.tipo === 'apagar' ? pp.apaga : pp.absorcao;
+    let cor = f.tipo === 'apagar' ? `rgba(0,0,0,${f.alfa})` : (t.cor || f.cor);
+    // lápis e carvão pegam o grão do papel
+    if (f.grao) { const pad = ctx.createPattern(Papel.tintaGranulada(cor, f.grao, pp), 'repeat'); if (pad) cor = pad; }
     ctx.strokeStyle = cor; ctx.fillStyle = cor;
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   }
@@ -302,7 +312,7 @@ const Prancheta = (() => {
       for (let xx = 0; xx < d; xx++) {
         const dist = Math.hypot(xx - r + 0.5, yy - r + 0.5) / r;
         if (dist > 1) continue;
-        const w = f.forca * Math.pow(1 - dist, 0.8);
+        const w = Math.min(0.95, f.forca * st.pp.esfuma) * Math.pow(1 - dist, 0.8);
         const j = (yy * d + xx) * 4;
         const a = px[j + 3] / 255;
         const c0 = px[j] * a, c1 = px[j + 1] * a, c2 = px[j + 2] * a, c3 = px[j + 3];
@@ -416,7 +426,8 @@ const Prancheta = (() => {
     const { W, H, cfg } = st;
     const c = document.createElement('canvas'); c.width = W; c.height = H;
     const ctx = c.getContext('2d');
-    ctx.fillStyle = '#fbf8f2'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = st.pp.cor; ctx.fillRect(0, 0, W, H);
+    Papel.desenharGrao(ctx, W, H, st.pp);
     if (cfg.modo === 'invertido' && st.desvirado) { ctx.translate(W, H); ctx.rotate(Math.PI); }
     if (cfg.modo === 'vaso' && cfg.fundo) {
       try { ctx.drawImage(await U.carregarImagem(U.svgParaUrl(cfg.fundo)), 0, 0, W, H); } catch (e) { /* ignora */ }
