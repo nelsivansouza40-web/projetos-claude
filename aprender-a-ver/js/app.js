@@ -56,6 +56,7 @@ const App = (() => {
     }
     raiz.append(h('h2', { class: 'secao' }, 'Trilhas'), grade);
     raiz.append(h('h2', { class: 'secao' }, 'Ferramentas'), h('div', { class: 'grade-ferramentas' },
+      h('a', { class: 'cartao ferramenta', href: '#/estudo' }, h('span', { html: U.icone('rosto') }), h('strong', {}, 'Folhas de estudo'), h('span', {}, 'Da sua foto, três pranchas: construção passo a passo, proporções com medidas e os planos da cabeça com luz e sombra.')),
       h('a', { class: 'cartao ferramenta', href: '#/grade' }, h('span', { html: U.icone('grade') }), h('strong', {}, 'Método da grade'), h('span', {}, 'Grade quadrada, retangular ou em centímetros, diagonais, etiquetas, efeitos, corte, impressão e comparação com o seu desenho.')),
       h('a', { class: 'cartao ferramenta', href: '#/atelie' }, h('span', { html: U.icone('pincel') }), h('strong', {}, 'Ateliê digital'), h('span', {}, 'Coloque uma foto e desenhe sobre ela em camadas, com lápis de 4H a 8B, esfuminho, borrachas e zoom.')),
       h('a', { class: 'cartao ferramenta', href: '#/retrato' }, h('span', { html: U.icone('rosto') }), h('strong', {}, 'Retrato guiado'), h('span', {}, 'Da bola de Loomis ao retrato pronto em 12 etapas, a partir de uma foto sua.')),
@@ -245,9 +246,12 @@ const App = (() => {
       } else if (p0 === 'atelie') {
         definirTitulo('Ateliê digital', 'Desenhe sobre a foto, em camadas');
         Atelie.montar(raiz);
+      } else if (p0 === 'estudo') {
+        definirTitulo('Folhas de estudo', 'Construção, proporções, planos e luz');
+        Retrato.montar(raiz, { modo: 'estudo' });
       } else if (p0 === 'retrato') {
         definirTitulo('Retrato guiado', 'Método de Loomis em 12 etapas');
-        Retrato.montar(raiz);
+        Retrato.montar(raiz, { modo: 'retrato' });
       } else if (p0 === 'prancheta') {
         definirTitulo('Prancheta', pendente ? pendente.titulo : 'Desenho livre');
         Prancheta.montar(raiz, pendente || { titulo: 'Desenho livre', origem: 'livre' });

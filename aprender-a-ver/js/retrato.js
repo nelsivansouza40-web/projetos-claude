@@ -164,7 +164,9 @@ const Retrato = (() => {
     } finally { URL.revokeObjectURL(url); }
   }
 
-  function montar(raiz) {
+  let modo = 'retrato';
+  function montar(raiz, op) {
+    if (op) modo = op.modo || 'retrato';
     raiz.innerHTML = '';
     const entrada = h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: async (e) => {
       const arq = e.target.files && e.target.files[0];
@@ -186,9 +188,11 @@ const Retrato = (() => {
     if (!st.foto) {
       raiz.append(h('div', { class: 'cartao vazio' },
         h('div', { class: 'ico-grande', html: U.icone('rosto', 'ico') }),
-        h('h2', {}, 'Retrato guiado em 12 etapas'),
-        h('p', {}, 'Escolha a foto de um rosto. O aplicativo encaixa a construção de Loomis sobre ela e conduz o retrato do círculo base até o acabamento, mostrando a referência de cada etapa ao lado da prancheta.'),
-        h('ol', { class: 'passos lista-etapas' }, ETAPAS.map((e) => h('li', {}, e.t))),
+        h('h2', {}, modo === 'estudo' ? 'Folhas de estudo do rosto' : 'Retrato guiado em 12 etapas'),
+        modo === 'estudo'
+          ? h('p', {}, 'Escolha a foto de um rosto e encaixe a cabeça de Loomis sobre ela. O aplicativo monta três pranchas de estudo: a construção passo a passo até o retrato a lápis, as proporções com as medidas, e os planos da cabeça com luz e sombra.')
+          : h('p', {}, 'Escolha a foto de um rosto. O aplicativo encaixa a construção de Loomis sobre ela e conduz o retrato do círculo base até o acabamento, mostrando a referência de cada etapa ao lado da prancheta.'),
+        modo === 'estudo' ? null : h('ol', { class: 'passos lista-etapas' }, ETAPAS.map((e) => h('li', {}, e.t))),
         h('p', { class: 'nota' }, 'Funciona melhor com o rosto de frente ou levemente virado, bem iluminado e com fundo claro. A foto fica só neste aparelho.'),
         h('div', { class: 'linha-botoes' },
           h('button', { class: 'btn primario', onclick: () => entrada.click() }, 'Escolher foto'),
@@ -260,6 +264,7 @@ const Retrato = (() => {
     medidas.hidden = L.tipo !== 'personalizado';
     marcarTipo(); sincronizar();
 
+    const btnEstudo = h('button', { class: 'btn', onclick: () => Estudo.mostrar(raiz, { foto: st.foto, L: { ...L, P: { ...L.P } }, voltar: () => montar(raiz) }) }, 'Gerar folhas de estudo');
     const btnComecar = h('button', { class: 'btn primario', onclick: async () => {
       btnComecar.disabled = true; btnComecar.textContent = 'Preparando as 12 etapas...';
       try {
@@ -280,7 +285,8 @@ const Retrato = (() => {
         h('h3', {}, 'Tipo de rosto'),
         h('p', { class: 'nota' }, 'Adulto segue a medida do livro de Loomis (3 por 3,5 unidades). Os outros tipos partem dela; "Referência chriiswo" usa o rosto mais longo do vídeo. Em "Personalizado", ou ao puxar as alças, você ajusta cada medida separadamente.'),
         segTipo, medidas),
-      h('div', { class: 'linha-botoes' }, h('button', { class: 'btn', onclick: () => entrada.click() }, 'Trocar foto'), btnComecar));
+      h('div', { class: 'linha-botoes' }, h('button', { class: 'btn', onclick: () => entrada.click() }, 'Trocar foto'), ...(modo === 'estudo' ? [btnEstudo, btnComecar] : [btnComecar, btnEstudo])));
+    if (modo === 'estudo') { btnComecar.classList.remove('primario'); btnEstudo.classList.add('primario'); }
     desenhar();
   }
 

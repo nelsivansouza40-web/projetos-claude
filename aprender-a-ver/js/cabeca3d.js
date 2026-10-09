@@ -131,6 +131,56 @@ const Cabeca = (() => {
     add('tracos', suave(B([[-0.21, 1.03], [-0.1, 0.98], [-0.03, 0.965], [0, 0.98], [0.03, 0.965], [0.1, 0.98], [0.21, 1.03]]), 5), nB);
     add('tracos', suave(B([[-0.21, 1.03], [-0.08, 1.035], [0, 1.045], [0.08, 1.035], [0.21, 1.03]]), 5), nB);
     add('tracos', suave(B([[-0.17, 1.06], [-0.09, 1.12], [0, 1.135], [0.09, 1.12], [0.17, 1.06]]), 5), nB);
+
+    // ---------- planos do rosto (para os estudos de planos e de luz) ----------
+    const F = (x, y, k = 0.99) => frente(x, y, k);
+    const plano = (id, nome, cor, pts, mand) => {
+      // normal pelo método de Newell, virada para fora da cabeça
+      let n = [0, 0, 0];
+      for (let i = 0; i < pts.length; i++) {
+        const a = pts[i], b = pts[(i + 1) % pts.length];
+        n[0] += (a[1] - b[1]) * (a[2] + b[2]); n[1] += (a[2] - b[2]) * (a[0] + b[0]); n[2] += (a[0] - b[0]) * (a[1] + b[1]);
+      }
+      const m = pts.reduce((acc, p) => acc.map((v, i) => v + p[i] / pts.length), [0, 0, 0]);
+      n = norm(n);
+      if (n[0] * m[0] + n[1] * (m[1] - 0.4) + n[2] * (m[2] + 0.2) < 0) n = n.map((v) => -v);
+      C.push({ grupo: 'plano', pts: [...pts, pts[0]], vis: 'plano', nPlano: n, id, nome, cor, def: { tipo: 'rosto', mand: !!mand } });
+    };
+    plano('testa', 'Testa', 'a', [F(-0.42, -0.62), F(0.42, -0.62), F(0.5, -0.06), F(-0.5, -0.06)]);
+    plano('arcada', 'Arcada da sobrancelha', 'b', [F(-0.5, -0.06, 1), F(0.5, -0.06, 1), F(0.48, 0.07, 1), F(-0.48, 0.07, 1)]);
+    plano('narizDorso', 'Dorso do nariz', 'a', [[-0.06, 0.08, 0.99], [0.06, 0.08, 0.99], [0.08, 0.6, 1.17], [-0.08, 0.6, 1.17]]);
+    plano('narizBase', 'Base do nariz', 'b', [[-0.08, 0.6, 1.17], [0.08, 0.6, 1.17], [0.17, 0.7, 0.98], [0, 0.77, 1.0], [-0.17, 0.7, 0.98]]);
+    plano('boca', 'Plano da boca', 'a', [[-0.3, 0.74, 0.93], [0.3, 0.74, 0.93], [0.26, 1.12, 0.86], [-0.26, 1.12, 0.86]], true);
+    plano('queixo', 'Queixo', 'b', [[-0.26, 1.12, 0.86], [0.26, 1.12, 0.86], [0.17, 1.49, 0.8], [-0.17, 1.49, 0.8]], true);
+    for (const s of [1, -1]) {
+      plano('tempora', 'Têmpora', 'b', [F(s * 0.42, -0.62), F(s * 0.62, -0.5), F(s * LADO, 0), F(s * 0.5, -0.06)]);
+      plano('orbita', 'Órbita do olho', 'a', [F(s * 0.1, 0.07, 0.95), F(s * 0.48, 0.07, 0.95), F(s * 0.5, 0.34, 0.95), F(s * 0.12, 0.34, 0.95)]);
+      plano('narizLado', 'Lateral do nariz', 'a', [[s * 0.06, 0.08, 0.99], [s * 0.08, 0.6, 1.17], [s * 0.17, 0.7, 0.98], [s * 0.12, 0.34, 0.97]]);
+      plano('zigoma', 'Maçã do rosto', 'b', [F(s * 0.5, 0.34), F(s * 0.68, 0.2), F(s * 0.68, 0.52), F(s * 0.42, 0.58)]);
+      plano('bochecha', 'Bochecha', 'a', [F(s * 0.42, 0.58), F(s * 0.68, 0.52), [s * 0.6, 0.95, 0.66], [s * 0.3, 0.74, 0.9]], true);
+      plano('mandibula', 'Mandíbula', 'b', [[s * 0.3, 0.74, 0.9], [s * 0.6, 0.95, 0.66], [s * 0.45, 1.33, 0.5], [s * 0.17, 1.49, 0.8], [s * 0.26, 1.12, 0.86]], true);
+      plano('masseter', 'Lateral da mandíbula', 'a', [[s * 0.68, 0.5, 0.42], [s * 0.64, 1.0, -0.2], [s * 0.45, 1.33, 0.5], [s * 0.6, 0.95, 0.66]], true);
+    }
+
+    // ---------- pontos de referência para medir ----------
+    const marco = (nome, p, d) => C.push({ grupo: 'marco', pts: [p], vis: 'marco', nome, def: d || { tipo: 'rosto' } });
+    marco('topo', [0, -1, 0], null);
+    marco('cabelo', [0, -u, LADO], { tipo: 'ponto', ref: 'cabelo' });
+    marco('sobrancelha', [0, 0, 1], null);
+    marco('narizBase', [0, 0.76, 1.02]);
+    marco('queixo', [0, QUEIXO, 0.84]);
+    marco('boca', [0, 1.045, 0.93], { tipo: 'boca' });
+    for (const [s, l] of [[1, 'D'], [-1, 'E']]) {
+      const dOlho = { tipo: 'olho', c: [s * 0.32, 0.245, 0.9] };
+      marco('olhoInt' + l, frente(s * 0.17, 0.26), dOlho);
+      marco('olhoExt' + l, frente(s * 0.49, 0.245), dOlho);
+      marco('pupila' + l, frente(s * 0.32, 0.245), dOlho);
+      marco('nariz' + l, [s * 0.17, 0.7, 0.98]);
+      marco('boca' + l, [s * 0.21, 1.03, 0.9], { tipo: 'boca' });
+      marco('rosto' + l, [s * 0.68, 0.3, 0.5], { tipo: 'rosto', mand: true });
+      marco('cranio' + l, [s, 0, 0], null);
+      marco('pescoco' + l, [s * 0.5, 1.75, -0.38], { tipo: 'rosto', mand: true });
+    }
     return C;
   }
   // Arco da frente da bola numa altura y, limitado pelos cortes laterais
@@ -195,6 +245,7 @@ const Cabeca = (() => {
       if (!d) return c;
       let pts;
       if (d.tipo === 'arco') pts = arcoFrente(alturas[d.ref], lado);
+      else if (d.tipo === 'ponto') { const y = alturas[d.ref]; pts = [[0, y, Math.sqrt(Math.max(0, 1 - y * y))]]; }
       else if (d.tipo === 'lateral') pts = lateral(d.s, d.parte, t);
       else if (d.tipo === 'olho') {
         const [cx, cy] = d.c, k = P.olhos, y0 = fy(cy);
@@ -233,6 +284,9 @@ const Cabeca = (() => {
       let visNormal = null;
       if (c.n) visNormal = girar(c.n, gv)[2] > c.lim;
       if (c.vis === 'perfil') visNormal = Math.abs(girar([1, 0, 0], gv)[2]) > (c.lim || 0.3) && girar([0, 0, 1], gv)[2] > -0.2;
+      let nRot = null;
+      if (c.vis === 'plano') { nRot = girar(c.nPlano, gv); visNormal = nRot[2] > 0.03; }
+      if (c.vis === 'marco') visNormal = true;
       let planoVisivel = false;
       if (c.vis === 'aro') planoVisivel = girar([c.lado, 0, 0], gv)[2] > 0;
       const pts = c.pts.map((p) => {
@@ -241,8 +295,10 @@ const Cabeca = (() => {
         if (c.vis === 'esfera') vis = r[2] > -0.01;
         else if (c.vis === 'aro') vis = planoVisivel || r[2] > 0;
         else vis = visNormal;
-        return [r[0], r[1], vis];
+        return [r[0], r[1], vis, r[2]];
       });
+      if (c.vis === 'plano') return { grupo: c.grupo, pts, plano: { id: c.id, nome: c.nome, cor: c.cor, n: nRot } };
+      if (c.vis === 'marco') return { grupo: c.grupo, pts, nome: c.nome };
       return { grupo: c.grupo, pts };
     });
     // contorno da bola: círculo, ou elipse quando a forma foi esticada
@@ -341,6 +397,35 @@ const Cabeca = (() => {
       `<circle class="alca" cx="${f(L.cx)}" cy="${f(L.cy)}" r="${f(r)}"/>`;
   }
 
+  // Planos do rosto preenchidos, do mais distante ao mais próximo.
+  // modo: 'luz' (tons pela direção da luz), 'cores' (vermelho e azul alternados) ou 'linhas'.
+  const LUZ = norm([-0.55, -0.65, 0.55]);
+  function planosSvg(partes, cx, cy, R, op = {}) {
+    const modo = op.modo || 'luz', f = (n) => n.toFixed(1);
+    const lista = partes.filter((p) => p.grupo === 'plano' && p.pts[0][2]);
+    lista.sort((a, b) => a.pts.reduce((s, p) => s + p[3], 0) / a.pts.length - b.pts.reduce((s, p) => s + p[3], 0) / b.pts.length);
+    let out = '';
+    for (const p of lista) {
+      const d = p.pts.map((pt, i) => (i ? 'L' : 'M') + f(cx + pt[0] * R) + ',' + f(cy + pt[1] * R)).join('') + 'Z';
+      if (modo === 'linhas') { out += `<path class="l plano" d="${d}"/>`; continue; }
+      if (modo === 'cores') {
+        const cor = p.plano.cor === 'a' ? '#e0705c' : '#6f98d6';
+        out += `<path d="${d}" fill="${cor}" fill-opacity="${op.opac != null ? op.opac : 0.45}" stroke="${cor}" stroke-width="${op.traco || 1}" stroke-linejoin="round"/>`;
+        continue;
+      }
+      const n = p.plano.n, v = Math.max(0, n[0] * LUZ[0] + n[1] * LUZ[1] + n[2] * LUZ[2]);
+      const tom = Math.round(70 + 170 * Math.pow(v, 0.8));
+      out += `<path d="${d}" fill="rgb(${tom},${tom - 3},${tom - 8})" stroke="#4a443d" stroke-opacity=".55" stroke-width="${op.traco || 0.8}" stroke-linejoin="round"/>`;
+    }
+    return out;
+  }
+  // Pontos de referência projetados: { nome: [x, y] } em coordenadas da tela
+  function marcos(partes, cx, cy, R) {
+    const m = {};
+    for (const p of partes) if (p.grupo === 'marco') m[p.nome] = [cx + p.pts[0][0] * R, cy + p.pts[0][1] * R];
+    return m;
+  }
+
   // Poses de referência (graus): guinada, arfagem, rolagem
   const POSES = {
     frente: [0, 0, 0],
@@ -350,5 +435,5 @@ const Cabeca = (() => {
     deCima: [-25, -28, 0]
   };
 
-  return { projetar, svg, POSES, TIPOS, PADRAO, u: LIVRO, moldura, arrastarAlca, svgMoldura };
+  return { projetar, svg, planosSvg, marcos, POSES, TIPOS, PADRAO, u: LIVRO, moldura, arrastarAlca, svgMoldura };
 })();
