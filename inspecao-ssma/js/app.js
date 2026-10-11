@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v40';
+const APP_VERSION = 'v41';
 
 const state = {
   screen: 'home',
@@ -98,6 +98,7 @@ async function updateSyncBar() {
   const registrosPGR = await DB.getAllPGR();
   const registrosRelatos = await DB.getAllRelatos();
   const acoesAvulsas = await DB.getAllAcoes();
+  const registrosObs = await DB.getAllItems('observacoes');
   const pendentesInsp = inspections.filter((i) => i.completo && i.syncStatus !== 'synced');
   const pendentesDDS = registrosDDS.filter((d) => d.completo && d.syncStatus !== 'synced');
   const pendentesDiag = registrosDiag.filter((d) => d.completo && d.syncStatus !== 'synced');
@@ -111,7 +112,8 @@ async function updateSyncBar() {
   const pendentesPGR = registrosPGR.filter((p) => p.completo && p.syncStatus !== 'synced');
   const pendentesRelatos = registrosRelatos.filter((r) => r.completo && r.syncStatus !== 'synced');
   const pendentesAcoes = acoesAvulsas.filter((a) => a.syncStatus !== 'synced');
-  const totalPendentes = pendentesRelatos.length + pendentesAcoes.length + pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length + pendentesEPI.length + pendentesVeiculo.length + pendentesPGR.length;
+  const pendentesObs = registrosObs.filter((o) => o.completo && o.syncStatus !== 'synced');
+  const totalPendentes = pendentesObs.length + pendentesRelatos.length + pendentesAcoes.length + pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length + pendentesEPI.length + pendentesVeiculo.length + pendentesPGR.length;
   if (totalPendentes === 0) {
     syncBarEl.hidden = true;
     return;
@@ -131,6 +133,7 @@ async function updateSyncBar() {
   if (pendentesVeiculo.length) partes.push(`${pendentesVeiculo.length} vistoria(s) de veículo`);
   if (pendentesPGR.length) partes.push(`${pendentesPGR.length} PGR`);
   if (pendentesRelatos.length) partes.push(`${pendentesRelatos.length} relato(s)`);
+  if (pendentesObs.length) partes.push(`${pendentesObs.length} observação(ões)`);
   if (pendentesAcoes.length) partes.push(`${pendentesAcoes.length} ação(ões) avulsa(s)`);
   const comErro = [
     ...inspections.map((r) => ['Inspeção', r.data.tipoInspecao, r]),
@@ -145,6 +148,7 @@ async function updateSyncBar() {
     ...registrosVeiculo.map((r) => ['Veículo', r.data.identificacao && r.data.identificacao.placa, r]),
     ...registrosPGR.map((r) => ['PGR', r.data.empresa, r]),
     ...registrosRelatos.map((r) => ['Relato', r.data.tipo, r]),
+    ...registrosObs.map((r) => ['Observação', r.data.atividade, r]),
     ...acoesAvulsas.map((r) => ['Ação avulsa', r.descricao, r])
   ].filter(([, , r]) => r.syncStatus === 'erro');
   state.errosSincronizacao = comErro.map(([modulo, titulo, r]) => ({ modulo, titulo: titulo || 'Sem título', erro: r.syncError || 'Erro sem mensagem' }));
@@ -192,6 +196,7 @@ async function updateSyncBar() {
       if (state.screen === 'relatos-detail') renderRelatoDetail(state.relatoId);
       if (state.screen === 'acoes-home') renderAcoesHome();
       if (state.screen === 'painel') renderPainel();
+      if (state.screen === 'observacoes-home') renderObservacoesHome();
     });
   }
 }
@@ -242,7 +247,7 @@ function setActiveTab(tab) {
   if (tabEPI) tabEPI.classList.toggle('active', tab === 'epi');
   if (tabVeiculo) tabVeiculo.classList.toggle('active', tab === 'veiculo');
   if (tabPGR) tabPGR.classList.toggle('active', tab === 'pgr');
-  ['painel', 'acoes', 'relatos'].forEach((t) => {
+  ['painel', 'acoes', 'relatos', 'observacoes'].forEach((t) => {
     const el = document.getElementById(`tab-${t}`);
     if (el) el.classList.toggle('active', tab === t);
   });
@@ -265,6 +270,8 @@ async function renderHome() {
   state.screen = 'home';
   setActiveTab('inspecoes');
   const todas = await DB.getAllInspections();
+  const progAlerta = await contarProgramacoesAtrasadas();
+  if (state.screen !== 'home') return;
   const filtro = state.filtroDisciplina || 'Todas';
   const inspections = filtro === 'Todas' ? todas : todas.filter((i) => disciplinaDaInspecao(i) === filtro);
   const chips = ['Todas', ...DISCIPLINAS_INSPECAO.map((d) => d.id)].map((d) => `
@@ -299,9 +306,19 @@ async function renderHome() {
       <h1>Inspeções</h1>
       <button id="btn-new-insp" class="btn-primary">+ Nova inspeção</button>
     </div>
+    <div class="atalhos-inspecao">
+      <button type="button" id="btn-programacao" class="btn-secondary">Programação${progAlerta.atrasadas ? ` <span class="badge badge-erro">${progAlerta.atrasadas} atrasada(s)</span>` : progAlerta.embreve ? ` <span class="badge badge-pendente">${progAlerta.embreve} vencendo</span>` : ''}</button>
+      <button type="button" id="btn-equipamentos" class="btn-secondary">Equipamentos e QR</button>
+      <button type="button" id="btn-ler-qr-home" class="btn-secondary">Ler QR code</button>
+      <button type="button" id="btn-modelos" class="btn-secondary">Checklists da empresa</button>
+    </div>
     <div class="chips-filtro">${chips}</div>
     <ul class="insp-list">${itemsHtml}</ul>
   `;
+  document.getElementById('btn-programacao').addEventListener('click', renderProgramacaoHome);
+  document.getElementById('btn-equipamentos').addEventListener('click', renderEquipamentosHome);
+  document.getElementById('btn-ler-qr-home').addEventListener('click', abrirLeitorQR);
+  document.getElementById('btn-modelos').addEventListener('click', renderModelosHome);
   view.querySelectorAll('.chip-filtro').forEach((btn) => {
     btn.addEventListener('click', () => { state.filtroDisciplina = btn.dataset.filtro; renderHome(); });
   });
@@ -415,6 +432,33 @@ function startNewInspection() {
   });
 }
 
+/** Inicia uma inspeção já preenchida (a partir de uma programação ou de um equipamento). */
+async function iniciarInspecaoPreenchida(opts) {
+  const insp = novaInspecaoVazia();
+  insp.data.disciplina = opts.disciplina || 'Segurança';
+  if (opts.area) insp.data.identificacao.area = opts.area;
+  if (opts.programacaoId) insp.data.programacaoId = opts.programacaoId;
+  if (opts.equipamentoId) {
+    const eq = await DB.getItem('equipamentos', opts.equipamentoId);
+    if (eq) {
+      insp.data.equipamentoId = eq.id;
+      insp.data.equipamento = { codigo: eq.codigo, nome: eq.nome };
+      if (!insp.data.identificacao.area) insp.data.identificacao.area = eq.local || '';
+    }
+  }
+  // Reaproveita empresa, unidade e inspetor da última inspeção.
+  const anterior = (await DB.getAllInspections())[0];
+  if (anterior) {
+    ['empresa', 'unidade', 'inspetor'].forEach((k) => { insp.data.identificacao[k] = anterior.data.identificacao[k] || ''; });
+  }
+  if (opts.tipoInspecao) await aplicarTipoNaInspecao(insp, opts.tipoInspecao);
+  await DB.putInspection(insp);
+  state.inspectionId = insp.id;
+  state.step = 0;
+  renderForm();
+  localizacoesPendentes[insp.id] = capturarLocalizacao();
+}
+
 async function criarInspecao(disciplina) {
   const insp = novaInspecaoVazia();
   insp.data.disciplina = disciplina;
@@ -453,20 +497,18 @@ async function renderForm() {
   });
 
   const content = document.getElementById('step-content');
-  if (state.step === 0) renderStepIdentificacao(content, insp);
+  if (state.step === 0) renderStepIdentificacao(content, insp, await DB.getAllItems('modelosChecklist'));
   else if (state.step === 1) renderStepChecklist(content, insp);
   else if (state.step === 2) renderStepFechamento(content, insp);
   else renderStepRevisao(content, insp);
 }
 
 /* ---- Passo 1: Identificação ---- */
-function renderStepIdentificacao(content, insp) {
+function renderStepIdentificacao(content, insp, modelos) {
   const id = insp.data.identificacao;
   const disciplinaAtual = disciplinaDaInspecao(insp);
-  const opcoesTipos = (disc, selecionado) => dadosDisciplina(disc).tipos.map((t) =>
-    `<option value="${escapeHtml(t)}" ${selecionado === t ? 'selected' : ''}>${escapeHtml(t)}</option>`
-  ).join('');
-  const tiposOptions = opcoesTipos(disciplinaAtual, insp.data.tipoInspecao);
+  const opcoesTipos = (disc, selecionado) => opcoesTiposComModelos(disc, selecionado, modelos);
+  const tiposOptions = opcoesTipos(disciplinaAtual, valorTipoDaInspecao(insp));
   const disciplinasOptions = DISCIPLINAS_INSPECAO.map((d) =>
     `<option value="${escapeHtml(d.id)}" ${disciplinaAtual === d.id ? 'selected' : ''}>${escapeHtml(d.rotulo)}</option>`
   ).join('');
@@ -494,6 +536,7 @@ function renderStepIdentificacao(content, insp) {
       <label>Responsável da área acompanhando
         <input type="text" name="responsavelArea" value="${escapeHtml(id.responsavelArea)}">
       </label>
+      ${insp.data.equipamento ? `<p class="detail-block">Equipamento: <strong>${escapeHtml(insp.data.equipamento.codigo)} — ${escapeHtml(insp.data.equipamento.nome)}</strong></p>` : ''}
       <label>Disciplina *
         <select name="disciplina" required>${disciplinasOptions}</select>
       </label>
@@ -512,7 +555,7 @@ function renderStepIdentificacao(content, insp) {
   const form = document.getElementById('form-ident');
   form.querySelector('select[name="disciplina"]').addEventListener('change', (e) => {
     form.querySelector('select[name="tipoInspecao"]').innerHTML =
-      '<option value="" disabled selected>Selecione…</option>' + opcoesTipos(e.target.value, '');
+      opcoesTipos(e.target.value, '');
   });
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -528,9 +571,8 @@ function renderStepIdentificacao(content, insp) {
       responsavelArea: (fd.get('responsavelArea') || '').trim()
     };
     const novoTipo = fd.get('tipoInspecao');
-    if (novoTipo !== insp.data.tipoInspecao || insp.data.checklist.length === 0) {
-      insp.data.tipoInspecao = novoTipo;
-      insp.data.checklist = gerarChecklistParaTipo(novoTipo);
+    if (novoTipo !== valorTipoDaInspecao(insp) || insp.data.checklist.length === 0) {
+      await aplicarTipoNaInspecao(insp, novoTipo);
     }
     await salvarRascunho(insp);
     state.step = 1;
@@ -543,6 +585,7 @@ function renderStepChecklist(content, insp) {
   content.innerHTML = `
     <div class="checklist" id="checklist-container"></div>
     <button id="btn-add-item" class="btn-secondary">+ Adicionar item personalizado</button>
+    <button id="btn-salvar-modelo" class="btn-link">Salvar estes itens como checklist da empresa</button>
     <div class="form-actions">
       <button id="btn-checklist-back" class="btn-link">← Voltar</button>
       <button id="btn-checklist-next" class="btn-primary">Avançar →</button>
@@ -552,6 +595,7 @@ function renderStepChecklist(content, insp) {
   const container = document.getElementById('checklist-container');
   renderChecklistItems(container, insp);
 
+  document.getElementById('btn-salvar-modelo').addEventListener('click', () => salvarChecklistComoModelo(insp));
   document.getElementById('btn-add-item').addEventListener('click', async () => {
     const texto = prompt('Descreva o item de inspeção adicional:');
     if (!texto || !texto.trim()) return;
@@ -710,7 +754,14 @@ async function renderThumbnails(el, photoIds) {
       <img src="${url}" alt="Evidência">
       <span class="thumb-sync ${photo.synced ? 'ok' : ''}">${photo.synced ? '✓' : '⏳'}</span>
       <button type="button" class="btn-remover-foto" data-photo-id="${id}">✕</button>
+      ${photo.synced ? '' : `<button type="button" class="btn-marcar-foto" data-photo-id="${id}" title="Marcar na foto">Marcar</button>`}
     `;
+    const btnMarcar = thumbEl.querySelector('.btn-marcar-foto');
+    if (btnMarcar) btnMarcar.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const novo = await abrirMarcacaoFoto(id);
+      if (novo) thumbEl.querySelector('img').src = URL.createObjectURL(novo);
+    });
   }
 }
 
@@ -925,6 +976,7 @@ async function renderDetail(id) {
     </div>
     ${seloDisciplina(insp)}
     <span class="badge ${s.cls}">${s.text}</span>
+    ${insp.data.equipamento ? `<p>Equipamento: <strong>${escapeHtml(insp.data.equipamento.codigo)} — ${escapeHtml(insp.data.equipamento.nome)}</strong></p>` : ''}
     ${insp.syncError ? `<p class="erro-msg">${escapeHtml(insp.syncError)}</p>` : ''}
     <div class="detail-block">
       <p>${escapeHtml(insp.data.identificacao.empresa)} · ${escapeHtml(insp.data.identificacao.unidade)} · ${escapeHtml(insp.data.identificacao.area)}</p>
@@ -1352,6 +1404,8 @@ document.getElementById('tab-pgr').addEventListener('click', renderPGRHome);
 document.getElementById('tab-painel').addEventListener('click', renderPainel);
 document.getElementById('tab-acoes').addEventListener('click', renderAcoesHome);
 document.getElementById('tab-relatos').addEventListener('click', renderRelatosHome);
+document.getElementById('tab-observacoes').addEventListener('click', renderObservacoesHome);
+window.addEventListener('hashchange', () => { tratarLinkEquipamento(); });
 
 /* ---------------- INICIALIZAÇÃO ---------------- */
 
@@ -1391,6 +1445,8 @@ async function init() {
   // Só renderiza a tela inicial se o usuário ainda não tiver navegado para
   // outro lugar enquanto essas leituras assíncronas rodavam — sem essa
   // checagem, essa chamada atrasada substituía a tela atual sem aviso.
+  // Etiqueta QR lida pela câmera do celular: abre direto a ficha do equipamento.
+  if (state.screen === 'home' && await tratarLinkEquipamento()) { Sync.syncAll().catch(() => {}); return; }
   if (state.screen === 'home') await renderHome();
   Sync.syncAll().catch(() => {});
 }

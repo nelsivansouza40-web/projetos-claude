@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 12;
+const DB_VERSION = 13;
 let dbPromise = null;
 
 function openDB() {
@@ -58,6 +58,9 @@ function openDB() {
       if (!db.objectStoreNames.contains('acoes')) {
         db.createObjectStore('acoes', { keyPath: 'id' });
       }
+      ['programacoes', 'equipamentos', 'modelosChecklist', 'observacoes'].forEach((nome) => {
+        if (!db.objectStoreNames.contains(nome)) db.createObjectStore(nome, { keyPath: 'id' });
+      });
     };
     req.onsuccess = (e) => resolve(e.target.result);
     req.onerror = (e) => reject(e.target.error);
@@ -78,6 +81,26 @@ function reqToPromise(req) {
 }
 
 const DB = {
+  /* Acesso genérico para os cadastros mais simples (programações,
+   * equipamentos, modelos de checklist e observações comportamentais). */
+  async putItem(store, obj) {
+    const st = await storeTx(store, 'readwrite');
+    await reqToPromise(st.put(obj));
+    return obj;
+  },
+  async getItem(store, id) {
+    const st = await storeTx(store, 'readonly');
+    return reqToPromise(st.get(id));
+  },
+  async getAllItems(store) {
+    const st = await storeTx(store, 'readonly');
+    const all = await reqToPromise(st.getAll());
+    return all.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  },
+  async deleteItem(store, id) {
+    const st = await storeTx(store, 'readwrite');
+    return reqToPromise(st.delete(id));
+  },
   async putInspection(insp) {
     const store = await storeTx('inspections', 'readwrite');
     await reqToPromise(store.put(insp));
