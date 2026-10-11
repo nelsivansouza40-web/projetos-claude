@@ -79,6 +79,15 @@ const SHEET_PGR_EXERCICIOS = 'PGR_Exercicios_Simulados';
 const SHEET_RELATOS = 'Relatos';
 const SHEET_ACOES = 'Acoes_Avulsas';
 
+const VERSAO_SERVIDOR = '2026-10-11';
+
+/** Abrir o endereço do app da Web no navegador mostra se o servidor está no ar. */
+function doGet() {
+  return ContentService.createTextOutput(
+    'Servidor do Inspeções SSMA funcionando. Versão ' + VERSAO_SERVIDOR + '.'
+  ).setMimeType(ContentService.MimeType.TEXT);
+}
+
 function doPost(e) {
   let body;
   try {
@@ -90,7 +99,7 @@ function doPost(e) {
   try {
     switch (body.action) {
       case 'ping':
-        return jsonResponse({ ok: true });
+        return jsonResponse({ ok: true, versao: VERSAO_SERVIDOR });
       case 'upsertInspection':
         return jsonResponse(upsertInspection(body.inspection));
       case 'upsertDDS':
