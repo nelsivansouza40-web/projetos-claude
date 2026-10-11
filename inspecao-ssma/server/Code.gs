@@ -79,7 +79,7 @@ const SHEET_PGR_EXERCICIOS = 'PGR_Exercicios_Simulados';
 const SHEET_RELATOS = 'Relatos';
 const SHEET_ACOES = 'Acoes_Avulsas';
 
-const VERSAO_SERVIDOR = '2026-10-11';
+const VERSAO_SERVIDOR = '2026-10-11b';
 
 /** Abrir o endereço do app da Web no navegador mostra se o servidor está no ar. */
 function doGet() {
@@ -1145,20 +1145,24 @@ function criarOuAtualizarDashboard() {
 
   const linhaKpi = 4;
   const REF_INSP = 'Inspecoes!';
+  // As fórmulas só contam linhas com ID preenchido e ignoram células que
+  // pareçam vazias mas tenham espaços ou restos de formatação.
+  const faixa = (col) => REF_INSP + col + '2:' + col + LINHA_FINAL;
+  const temId = '(LEN(TRIM(' + faixa('A') + '))>0)';
   const kpis = [
-    ['Total de Ações', '=COUNTIF(' + REF_INSP + COL_PRAZO + '2:' + COL_PRAZO + LINHA_FINAL + ';"<>")'],
-    ['Resolvidas', '=COUNTIF(' + REF_INSP + colStatusLetra + '2:' + colStatusLetra + LINHA_FINAL + ';"Resolvida")'],
-    ['Dentro do Prazo', '=COUNTIF(' + REF_INSP + colSituacaoLetra + '2:' + colSituacaoLetra + LINHA_FINAL + ';"Dentro do Prazo")'],
-    ['Em Atraso', '=COUNTIF(' + REF_INSP + colSituacaoLetra + '2:' + colSituacaoLetra + LINHA_FINAL + ';"Em Atraso")']
+    ['Total de Ações', '=SUMPRODUCT(' + temId + '*(LEN(TRIM(' + faixa(COL_PRAZO) + '))>0))'],
+    ['Resolvidas', '=SUMPRODUCT(' + temId + '*(' + faixa(colStatusLetra) + '="Resolvida"))'],
+    ['Dentro do Prazo', '=SUMPRODUCT(' + temId + '*(' + faixa(colSituacaoLetra) + '="Dentro do Prazo"))'],
+    ['Em Atraso', '=SUMPRODUCT(' + temId + '*(' + faixa(colSituacaoLetra) + '="Em Atraso"))']
   ];
   kpis.forEach((kpi, i) => {
     const col = 1 + i * 2; // A, C, E, G
     dash.getRange(linhaKpi, col).setValue(kpi[0]).setFontWeight('bold');
     dash.getRange(linhaKpi + 1, col).setFormula(kpi[1]).setFontSize(28).setFontWeight('bold');
   });
-  // Pendentes = Dentro do Prazo + Em Atraso (colunas E e G da linha de valores).
+  // Pendentes = Total - Resolvidas (inclui as ações sem prazo vencido e as atrasadas).
   dash.getRange(linhaKpi, 9).setValue('Pendentes').setFontWeight('bold');
-  dash.getRange(linhaKpi + 1, 9).setFormula('=E' + (linhaKpi + 1) + '+G' + (linhaKpi + 1)).setFontSize(28).setFontWeight('bold');
+  dash.getRange(linhaKpi + 1, 9).setFormula('=A' + (linhaKpi + 1) + '-C' + (linhaKpi + 1)).setFontSize(28).setFontWeight('bold');
   dash.setColumnWidths(1, 9, 130);
 
   // Fonte de dados do gráfico (situações mutuamente exclusivas, somam o total).
