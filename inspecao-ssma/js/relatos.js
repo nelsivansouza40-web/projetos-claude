@@ -93,6 +93,7 @@ async function renderRelatosHome() {
             <div class="insp-card-side">
               <span class="badge ${classePotencialRelato(d.potencial)}">Potencial ${escapeHtml(d.potencial)}</span>
               <span class="badge ${s.cls}">${s.text}</span>
+              ${r.completo && r.syncStatus !== 'synced' ? `<span class="badge ${statusLabel(r).cls}">${statusLabel(r).text}</span>` : ''}
               <button type="button" class="btn-excluir-card" data-id="${r.id}" title="Excluir">🗑</button>
             </div>
           </li>
