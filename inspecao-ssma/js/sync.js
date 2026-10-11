@@ -953,6 +953,7 @@ function buildPGRMetaPayload(p) {
     endereco: p.data.endereco || '',
     regimeTrabalho: p.data.regimeTrabalho || '',
     consultaTrabalhadores: p.data.consultaTrabalhadores || '',
+    requisitosEspecificos: p.data.requisitosEspecificos || '',
     revisoes: (p.data.revisoes || []).map((r) => `Rev. ${r.revisao} (${r.data || 's/ data'}): ${r.motivo || ''}`).join(' | '),
     ghes: ghes.map((g) => ({
       id: g.id,

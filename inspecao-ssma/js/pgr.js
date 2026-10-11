@@ -95,6 +95,7 @@ function novoPGRVazio() {
       revisoes: [{ id: uuid(), revisao: '00', motivo: 'Emissão original', data: hoje }],
       caracterizacaoAmbiente: '',
       consultaTrabalhadores: '',
+      requisitosEspecificos: '',
       ghes: [],
       perigos: [],
       treinamentos: [],
@@ -271,6 +272,7 @@ async function renderPGRDetail(id) {
   p.data.caracterizacaoAmbiente = p.data.caracterizacaoAmbiente || '';
   p.data.revisoes = p.data.revisoes || [];
   p.data.consultaTrabalhadores = p.data.consultaTrabalhadores || '';
+  p.data.requisitosEspecificos = p.data.requisitosEspecificos || '';
   ['cnpj', 'cnae', 'atividadePrincipal', 'grauRisco', 'endereco', 'regimeTrabalho'].forEach((k) => { p.data[k] = p.data[k] || ''; });
   p.data.exerciciosSimulados = p.data.exerciciosSimulados || [];
   p.data.emergencia = p.data.emergencia || {
@@ -332,6 +334,9 @@ async function renderPGRDetail(id) {
       </label>
       <label>Consulta aos trabalhadores e à CIPA (percepção dos riscos)
         <textarea class="in-ident" data-campo="consultaTrabalhadores" rows="2" placeholder="Datas, participantes e principais contribuições da consulta.">${escapeHtml(p.data.consultaTrabalhadores)}</textarea>
+      </label>
+      <label>Requisitos específicos da NR setorial (NR-18, NR-22, NR-32 etc.)
+        <textarea class="in-ident" data-campo="requisitosEspecificos" rows="4" placeholder="Itens que a norma do setor exige no PGR além da NR-01 e a situação de cada um.">${escapeHtml(p.data.requisitosEspecificos)}</textarea>
       </label>
     </div>
 
@@ -1307,6 +1312,7 @@ async function renderPGRReport(id) {
         <p>${escapeHtml(p.data.caracterizacaoAmbiente || '—')}</p>
         ${montarGHEsRelatorioPGR(p.data.ghes)}
         <p><strong>Consulta aos trabalhadores e à CIPA:</strong> ${escapeHtml(p.data.consultaTrabalhadores || '—')}</p>
+        ${p.data.requisitosEspecificos ? `<h4>Requisitos específicos da NR setorial</h4><p style="white-space:pre-line">${escapeHtml(p.data.requisitosEspecificos)}</p>` : ''}
       </section>
 
       <section class="rep-secao">

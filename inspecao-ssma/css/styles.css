@@ -458,6 +458,11 @@ main#view {
   @page { size: A4; margin: 14mm; }
 }
 .detail-thumbs { margin-top: 8px; }
-.rep-inventario-pgr { font-size: 0.72rem; }
+.rep-inventario-pgr { font-size: 0.68rem; table-layout: fixed; width: 100%; }
+.rep-inventario-pgr td, .rep-inventario-pgr th { overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; padding: 3px 4px; }
+.rep-inventario-pgr th:nth-child(2) { width: 8%; }
+.rep-inventario-pgr th:nth-child(7) { width: 16%; }
+.rep-inventario-pgr th:nth-child(9), .rep-inventario-pgr th:nth-child(10) { width: 9%; }
+.rep-inventario-pgr th:first-child, .rep-inventario-pgr td:first-child { width: 2.2em; }
 .rep-inventario-pgr td, .rep-inventario-pgr th { vertical-align: top; }
 .rep-matriz-pgr td, .rep-matriz-pgr th { font-size: 0.75rem; }

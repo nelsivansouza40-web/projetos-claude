@@ -869,7 +869,7 @@ function upsertPGR(p) {
     'Medidas para Emergências de Grande Magnitude', 'Periodicidade de Exercícios',
     'Qtd. Perigos', 'Recebido em',
     'CNPJ', 'CNAE', 'Atividade Principal', 'Grau de Risco', 'Endereço', 'Regime de Trabalho',
-    'Consulta aos Trabalhadores', 'Controle de Revisões'
+    'Consulta aos Trabalhadores', 'Controle de Revisões', 'Requisitos da NR Setorial'
   ]);
 
   const id = p.id;
@@ -889,7 +889,7 @@ function upsertPGR(p) {
     (p.perigos || []).length,
     new Date(),
     p.cnpj, p.cnae, p.atividadePrincipal, p.grauRisco, p.endereco, p.regimeTrabalho,
-    p.consultaTrabalhadores, p.revisoes
+    p.consultaTrabalhadores, p.revisoes, p.requisitosEspecificos
   ];
 
   const idCol = 1;
