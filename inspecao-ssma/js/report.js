@@ -351,6 +351,7 @@ async function renderReport(id) {
           <tr><th>Empresa / Contratada</th><td>${escapeHtml(id_.empresa)}</td><th>Unidade / Projeto</th><td>${escapeHtml(id_.unidade)}</td></tr>
           <tr><th>Área / Setor</th><td>${escapeHtml(id_.area)}</td><th>Disciplina</th><td>${escapeHtml(dadosDisciplina(disciplinaDaInspecao(insp)).rotulo)}</td></tr>
           <tr><th>Tipo de inspeção</th><td colspan="3">${escapeHtml(insp.data.tipoInspecao)}</td></tr>
+          ${insp.data.equipamento ? `<tr><th>Equipamento</th><td colspan="3">${escapeHtml(insp.data.equipamento.codigo)} — ${escapeHtml(insp.data.equipamento.nome)}</td></tr>` : ''}
           <tr><th>Data</th><td>${formatarDataBR(id_.data)}</td><th>Hora</th><td>${escapeHtml(id_.hora)}</td></tr>
           <tr><th>Inspetor</th><td>${escapeHtml(id_.inspetor)}</td><th>Responsável acompanhando</th><td>${escapeHtml(id_.responsavelArea || '—')}</td></tr>
         </table>

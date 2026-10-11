@@ -29,6 +29,7 @@
  *  - { action: "upsertPGR", pgr }                   -> Programa de Gerenciamento de Riscos (GRO/NR-01)
  *  - { action: "upsertRelato", relato }             -> Relato de quase acidente / condição insegura
  *  - { action: "upsertAcao", acao }                 -> Ação avulsa da Central de ações
+ *  - { action: "upsertObservacao", observacao }     -> Observação comportamental
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
  *    de CIPA, PT/APR, certificados, PET, investigações de acidente e
@@ -78,8 +79,9 @@ const SHEET_PGR_TREINAMENTOS = 'PGR_Treinamentos';
 const SHEET_PGR_EXERCICIOS = 'PGR_Exercicios_Simulados';
 const SHEET_RELATOS = 'Relatos';
 const SHEET_ACOES = 'Acoes_Avulsas';
+const SHEET_OBSERVACOES = 'Observacoes_Comportamentais';
 
-const VERSAO_SERVIDOR = '2026-10-11b';
+const VERSAO_SERVIDOR = '2026-10-11c';
 
 /** Abrir o endereço do app da Web no navegador mostra se o servidor está no ar. */
 function doGet() {
@@ -128,6 +130,8 @@ function doPost(e) {
         return jsonResponse(upsertRelato(body.relato));
       case 'upsertAcao':
         return jsonResponse(upsertAcao(body.acao));
+      case 'upsertObservacao':
+        return jsonResponse(upsertObservacao(body.observacao));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -212,6 +216,17 @@ function upsertInspection(insp) {
   } else {
     sheetInsp.appendRow(linha);
     rowIndex = sheetInsp.getLastRow();
+  }
+
+  // Equipamento inspecionado (quando a inspeção veio de uma etiqueta QR).
+  if (insp.equipamento) {
+    const cabE = sheetInsp.getRange(1, 1, 1, sheetInsp.getLastColumn()).getValues()[0];
+    let colEq = cabE.indexOf('Equipamento') + 1;
+    if (!colEq) {
+      colEq = sheetInsp.getLastColumn() + 1;
+      sheetInsp.getRange(1, colEq).setValue('Equipamento');
+    }
+    sheetInsp.getRange(rowIndex, colEq).setValue(insp.equipamento);
   }
 
   // Disciplina (Segurança, Meio Ambiente ou Qualidade): coluna localizada pelo
@@ -1042,6 +1057,25 @@ function upsertRelato(r) {
     r.potencial, r.acaoImediata, r.anonimo ? 'Sim' : 'Não', r.relator, r.funcaoRelator,
     t.analise || '', t.acaoCorretiva || '', t.responsavel || '', t.prazo || '', t.status || '',
     loc.lat || '', loc.lon || '', r.qtdFotos || 0, new Date(), folder.getUrl()
+  ]);
+  return { ok: true, remoteRef: folder.getId() };
+}
+
+function upsertObservacao(o) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folder = getOrCreateDriveFolder(o.id + ' - Observacao - ' + (o.area || 'area'), rootFolder);
+  const sheet = getOrCreateSheet(SHEET_OBSERVACOES, [
+    'ID', 'Data', 'Hora', 'Empresa', 'Área', 'Atividade', 'Observador', 'Nº Observados',
+    'Seguros', 'De Risco', '% Seguro', 'Itens de Risco', 'Comportamentos de Risco',
+    'Reconhecimento', 'Feedback Realizado', 'Compromisso', 'Ação Corretiva', 'Responsável',
+    'Prazo', 'Status da Ação', 'Qtd. Fotos', 'Recebido em', 'Pasta Drive'
+  ]);
+  const t = o.tratamento || {};
+  gravarLinhaPorId(sheet, [
+    o.id, o.data, o.hora, o.empresa, o.area, o.atividade, o.observador, o.numObservados,
+    o.seguros, o.deRisco, o.percentualSeguro === null ? '' : o.percentualSeguro, o.itensDeRisco, o.comportamentosRisco,
+    o.reconhecimento, o.feedbackRealizado, o.compromisso, t.acaoCorretiva || '', t.responsavel || '',
+    t.prazo || '', t.status || '', o.qtdFotos || 0, new Date(), folder.getUrl()
   ]);
   return { ok: true, remoteRef: folder.getId() };
 }

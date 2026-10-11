@@ -109,6 +109,11 @@ const Sync = {
         if (!relato.completo || relato.syncStatus === 'synced') continue;
         try { await this.syncRelato(relato.id, endpoint); } catch (e) { falhas++; }
       }
+      const observacoes = await DB.getAllItems('observacoes');
+      for (const obs of observacoes) {
+        if (!obs.completo || obs.syncStatus === 'synced') continue;
+        try { await this.syncObservacao(obs.id, endpoint); } catch (e) { falhas++; }
+      }
       const acoesAvulsas = await DB.getAllAcoes();
       for (const acao of acoesAvulsas) {
         if (acao.syncStatus === 'synced') continue;
@@ -177,6 +182,51 @@ const Sync = {
       relato.syncStatus = 'erro';
       relato.syncError = err.message || String(err);
       await DB.putRelato(relato);
+      this.notify();
+      throw err;
+    }
+    this.notify();
+  },
+
+  async syncObservacao(obsId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+    let obs = await DB.getItem('observacoes', obsId);
+    if (!obs) return;
+    obs.syncStatus = 'sincronizando';
+    obs.syncError = '';
+    await DB.putItem('observacoes', obs);
+    this.notify();
+    try {
+      if (!obs.metaSynced) {
+        const resp = await postJson(endpoint, { action: 'upsertObservacao', observacao: buildObservacaoMetaPayload(obs) });
+        if (!resp || resp.ok !== true) throw new Error((resp && resp.error) || 'Falha ao enviar a observação.');
+        obs.metaSynced = true;
+        obs.remoteRef = resp.remoteRef || obs.remoteRef || null;
+        await DB.putItem('observacoes', obs);
+      }
+      const photos = await DB.getPhotosByInspection(obsId);
+      for (const foto of photos.filter((p) => !p.synced)) {
+        const resp = await postJson(endpoint, {
+          action: 'uploadPhoto',
+          inspectionId: obs.id,
+          photo: { id: foto.id, questionRef: foto.questionRef, mimeType: foto.mimeType, fileName: foto.fileName, base64: await blobToBase64(foto.blob), remoteRef: obs.remoteRef || null }
+        });
+        if (!resp || resp.ok !== true) throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+      }
+      const todas = await DB.getPhotosByInspection(obsId);
+      obs.syncStatus = obs.metaSynced && todas.every((p) => p.synced) ? 'synced' : 'pendente';
+      obs.syncError = '';
+      await DB.putItem('observacoes', obs);
+    } catch (err) {
+      obs = await DB.getItem('observacoes', obsId);
+      obs.syncStatus = 'erro';
+      obs.syncError = err.message || String(err);
+      await DB.putItem('observacoes', obs);
       this.notify();
       throw err;
     }
@@ -1060,6 +1110,33 @@ function buildRelatoMetaPayload(r) {
   };
 }
 
+function buildObservacaoMetaPayload(o) {
+  const d = o.data;
+  const k = indiceSeguro(o);
+  return {
+    id: o.id,
+    createdAt: o.createdAt,
+    updatedAt: o.updatedAt,
+    data: d.data,
+    hora: d.hora,
+    empresa: d.empresa,
+    area: d.area,
+    atividade: d.atividade,
+    observador: d.observador,
+    numObservados: d.numObservados,
+    seguros: k.seguro,
+    deRisco: k.risco,
+    percentualSeguro: k.pct,
+    itensDeRisco: d.itens.filter((i) => i.resultado === 'De risco').map((i) => `${i.categoria}: ${i.texto}`).join(' | '),
+    comportamentosRisco: d.comportamentosRisco,
+    reconhecimento: d.reconhecimento,
+    feedbackRealizado: d.feedbackRealizado,
+    compromisso: d.compromisso,
+    tratamento: d.tratamento,
+    qtdFotos: d.fotosIds.length
+  };
+}
+
 function buildAcaoMetaPayload(a) {
   return {
     id: a.id,
@@ -1382,6 +1459,7 @@ function buildInspectionMetaPayload(insp) {
     updatedAt: insp.updatedAt,
     identificacao: insp.data.identificacao,
     disciplina: disciplinaDaInspecao(insp),
+    equipamento: insp.data.equipamento ? `${insp.data.equipamento.codigo} — ${insp.data.equipamento.nome}` : '',
     tipoInspecao: insp.data.tipoInspecao,
     checklist: insp.data.checklist.map((item) => ({
       id: item.id,

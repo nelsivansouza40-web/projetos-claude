@@ -151,6 +151,11 @@ async function renderPainel() {
     });
   }
 
+  const progAlerta = await contarProgramacoesAtrasadas();
+  const observacoes = (await DB.getAllItems('observacoes')).filter((o) => o.completo && daEmpresa(o.data.empresa) && noPeriodo(o.data.data));
+  let obsSeg = 0; let obsRisco = 0;
+  observacoes.forEach((o) => { const k = indiceSeguro(o); obsSeg += k.seguro; obsRisco += k.risco; });
+  const pctObs = obsSeg + obsRisco ? Math.round((obsSeg / (obsSeg + obsRisco)) * 100) : null;
   const participantesDDS = dds.reduce((s, r) => s + r.data.participantes.length, 0);
   const coresRelato = { 'Quase acidente': 'var(--amarelo)', 'Condição insegura': 'var(--vermelho)', 'Comportamento de risco': '#8a3ffc', 'Sugestão de melhoria': 'var(--verde)' };
   const relatosTipo = TIPOS_RELATO.map((t) => ({ rotulo: t, valor: rels.filter((r) => r.data.tipo === t).length, cor: coresRelato[t] })).filter((x) => x.valor);
@@ -195,6 +200,8 @@ async function renderPainel() {
       ${kpi(acid.length, 'Acidentes', acid.length ? 'kpi-alerta' : 'kpi-ok', 'investigacao')}
       ${kpi(pts.length + petsF.length, 'PT/APR e PET')}
       ${kpi(`${dds.length}<small> / ${participantesDDS} part.</small>`, 'DDS realizados')}
+      ${kpi(progAlerta.atrasadas, 'Inspeções programadas atrasadas', progAlerta.atrasadas ? 'kpi-alerta' : 'kpi-ok', 'programacao')}
+      ${kpi(pctObs === null ? '—' : pctObs + '%', `Comportamento seguro (${observacoes.length} obs.)`, pctObs === null ? '' : pctObs >= 90 ? 'kpi-ok' : pctObs >= 75 ? 'kpi-atencao' : 'kpi-alerta', 'observacoes')}
     </div>
 
     <div class="painel-grid">
@@ -245,6 +252,8 @@ async function renderPainel() {
       if (alvo === 'inspecoes') return renderHome();
       if (alvo === 'relatos') return renderRelatosHome();
       if (alvo === 'investigacao') return renderInvestigacaoHome();
+      if (alvo === 'programacao') return renderProgramacaoHome();
+      if (alvo === 'observacoes') return renderObservacoesHome();
       state.filtroAcoes = { situacao: alvo === 'acoes-atrasadas' ? 'atrasadas' : 'abertas', origem: 'Todas', busca: '' };
       return renderAcoesHome();
     };

@@ -50,8 +50,8 @@ function situacaoAcao(a) {
 
 /** Lê todos os módulos e devolve a lista unificada de ações. */
 async function coletarAcoes() {
-  const [inspecoes, investigacoes, pgrs, relatos, avulsas] = await Promise.all([
-    DB.getAllInspections(), DB.getAllInvestigacoes(), DB.getAllPGR(), DB.getAllRelatos(), DB.getAllAcoes()
+  const [inspecoes, investigacoes, pgrs, relatos, avulsas, observacoes] = await Promise.all([
+    DB.getAllInspections(), DB.getAllInvestigacoes(), DB.getAllPGR(), DB.getAllRelatos(), DB.getAllAcoes(), DB.getAllItems('observacoes')
   ]);
   const acoes = [];
 
@@ -109,6 +109,16 @@ async function coletarAcoes() {
       chave: `rel:${r.id}`, origem: 'Relato', registroId: r.id, ref: 'tratamento',
       descricao: t.acaoCorretiva, contexto: `${r.data.tipo} · ${formatarDataBR(r.data.data)} · ${r.data.local || r.data.area}`,
       empresa: r.data.empresa, area: r.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente'
+    });
+  });
+
+  observacoes.filter((o) => o.completo).forEach((o) => {
+    const t = o.data.tratamento;
+    if (!t || !t.acaoCorretiva) return;
+    acoes.push({
+      chave: `obs:${o.id}`, origem: 'Observação', registroId: o.id, ref: 'tratamento',
+      descricao: t.acaoCorretiva, contexto: `Observação comportamental · ${formatarDataBR(o.data.data)} · ${o.data.atividade}`,
+      empresa: o.data.empresa, area: o.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente'
     });
   });
 
@@ -170,6 +180,13 @@ async function atualizarAcaoNaOrigem(acao, campos) {
     Object.assign(r.data.tratamento, campos);
     marcarPendente(r);
     await DB.putRelato(r);
+  } else if (acao.origem === 'Observação') {
+    const o = await DB.getItem('observacoes', acao.registroId);
+    if (!o) return;
+    Object.assign(o.data.tratamento, campos);
+    marcarPendente(o);
+    o.updatedAt = Date.now();
+    await DB.putItem('observacoes', o);
   } else if (acao.origem === 'Avulsa') {
     const a = await DB.getAcao(acao.registroId);
     if (!a) return;
@@ -187,6 +204,7 @@ function abrirOrigemAcao(acao) {
     case 'Investigação': return renderInvestigacaoDetail(acao.registroId);
     case 'PGR': return renderPGRDetail(acao.registroId);
     case 'Relato': return renderRelatoDetail(acao.registroId);
+    case 'Observação': return renderObservacaoDetail(acao.registroId);
     case 'Avulsa': return renderAcaoAvulsaForm(acao.registroId);
   }
 }
@@ -228,7 +246,7 @@ async function renderAcoesHome() {
 
   const conta = (chave) => todas.filter((a) => situacaoAcao(a).chave === chave).length;
   const abertas = todas.filter((a) => a.status !== 'Concluída').length;
-  const origens = ['Todas', 'Inspeção', 'Investigação', 'PGR', 'Relato', 'Avulsa'];
+  const origens = ['Todas', 'Inspeção', 'Investigação', 'PGR', 'Relato', 'Observação', 'Avulsa'];
 
   view.innerHTML = `
     <div class="screen-header">
