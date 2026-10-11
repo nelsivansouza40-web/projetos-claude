@@ -27,6 +27,8 @@
  *  - { action: "upsertFichaEPI", ficha }            -> Ficha de Controle de EPI (NR-6)
  *  - { action: "upsertVeiculo", veiculo }           -> Vistoria de Veículo (checklist + croqui de avarias)
  *  - { action: "upsertPGR", pgr }                   -> Programa de Gerenciamento de Riscos (GRO/NR-01)
+ *  - { action: "upsertRelato", relato }             -> Relato de quase acidente / condição insegura
+ *  - { action: "upsertAcao", acao }                 -> Ação avulsa da Central de ações
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
  *    de CIPA, PT/APR, certificados, PET, investigações de acidente e
@@ -74,6 +76,8 @@ const SHEET_PGR_GHES = 'PGR_GHEs';
 const SHEET_PGR_PERIGOS = 'PGR_Perigos';
 const SHEET_PGR_TREINAMENTOS = 'PGR_Treinamentos';
 const SHEET_PGR_EXERCICIOS = 'PGR_Exercicios_Simulados';
+const SHEET_RELATOS = 'Relatos';
+const SHEET_ACOES = 'Acoes_Avulsas';
 
 function doPost(e) {
   let body;
@@ -111,6 +115,10 @@ function doPost(e) {
         return jsonResponse(upsertVeiculo(body.veiculo));
       case 'upsertPGR':
         return jsonResponse(upsertPGR(body.pgr));
+      case 'upsertRelato':
+        return jsonResponse(upsertRelato(body.relato));
+      case 'upsertAcao':
+        return jsonResponse(upsertAcao(body.acao));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
       default:
@@ -194,6 +202,17 @@ function upsertInspection(insp) {
     sheetInsp.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
     sheetInsp.appendRow(linha);
+    rowIndex = sheetInsp.getLastRow();
+  }
+
+  // Se o painel de ações já foi criado, o status marcado na Central de ações
+  // do app atualiza a coluna "Status da Ação" desta inspeção.
+  if (insp.fechamento.statusAcao) {
+    const cab = sheetInsp.getRange(1, 1, 1, sheetInsp.getLastColumn()).getValues()[0];
+    const colStatus = cab.indexOf('Status da Ação') + 1;
+    if (colStatus) {
+      sheetInsp.getRange(rowIndex, colStatus).setValue(insp.fechamento.statusAcao === 'Concluída' ? 'Resolvida' : 'Pendente');
+    }
   }
 
   const sheetItens = getOrCreateSheet(SHEET_ITENS, [
@@ -972,6 +991,50 @@ function upsertPGR(p) {
   });
 
   return { ok: true, remoteRef: id };
+}
+
+/** Grava (ou atualiza, pelo ID na coluna A) uma linha na aba informada. */
+function gravarLinhaPorId(sheet, linha) {
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][0] === linha[0]) {
+      sheet.getRange(i + 1, 1, 1, linha.length).setValues([linha]);
+      return;
+    }
+  }
+  sheet.appendRow(linha);
+}
+
+function upsertRelato(r) {
+  const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+  const folder = getOrCreateDriveFolder(r.id + ' - Relato - ' + (r.tipo || 'relato'), rootFolder);
+  const sheet = getOrCreateSheet(SHEET_RELATOS, [
+    'ID', 'Tipo', 'Data', 'Hora', 'Empresa', 'Área', 'Local', 'Descrição',
+    'Potencial', 'Ação Imediata', 'Anônimo', 'Relator', 'Função do Relator',
+    'Análise', 'Ação Corretiva', 'Responsável', 'Prazo', 'Status da Ação',
+    'Latitude', 'Longitude', 'Qtd. Fotos', 'Recebido em', 'Pasta Drive'
+  ]);
+  const t = r.tratamento || {};
+  const loc = r.localizacao || {};
+  gravarLinhaPorId(sheet, [
+    r.id, r.tipo, r.data, r.hora, r.empresa, r.area, r.local, r.descricao,
+    r.potencial, r.acaoImediata, r.anonimo ? 'Sim' : 'Não', r.relator, r.funcaoRelator,
+    t.analise || '', t.acaoCorretiva || '', t.responsavel || '', t.prazo || '', t.status || '',
+    loc.lat || '', loc.lon || '', r.qtdFotos || 0, new Date(), folder.getUrl()
+  ]);
+  return { ok: true, remoteRef: folder.getId() };
+}
+
+function upsertAcao(a) {
+  const sheet = getOrCreateSheet(SHEET_ACOES, [
+    'ID', 'Descrição', 'Origem', 'Empresa', 'Área', 'Responsável', 'Prazo',
+    'Status', 'Observação', 'Recebido em'
+  ]);
+  gravarLinhaPorId(sheet, [
+    a.id, a.descricao, a.origem, a.empresa, a.area, a.responsavel, a.prazo,
+    a.status, a.observacao, new Date()
+  ]);
+  return { ok: true, remoteRef: a.id };
 }
 
 function uploadPhoto(inspectionId, photo) {

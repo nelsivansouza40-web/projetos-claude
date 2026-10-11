@@ -524,6 +524,7 @@ function renderPlanoAcaoInvestigacao(container, inv) {
             <label class="campo-leitura">Status
               <select class="in-status">
                 <option ${a.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                <option ${a.status === 'Em andamento' ? 'selected' : ''}>Em andamento</option>
                 <option ${a.status === 'Concluída' ? 'selected' : ''}>Concluída</option>
               </select>
             </label>

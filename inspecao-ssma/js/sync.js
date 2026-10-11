@@ -101,10 +101,108 @@ const Sync = {
         if (pgr.syncStatus === 'synced') continue;
         await this.syncPGR(pgr.id, endpoint);
       }
+      const registrosRelatos = await DB.getAllRelatos();
+      for (const relato of registrosRelatos) {
+        if (!relato.completo || relato.syncStatus === 'synced') continue;
+        await this.syncRelato(relato.id, endpoint);
+      }
+      const acoesAvulsas = await DB.getAllAcoes();
+      for (const acao of acoesAvulsas) {
+        if (acao.syncStatus === 'synced') continue;
+        await this.syncAcao(acao.id, endpoint);
+      }
     } finally {
       this.running = false;
       this.notify();
     }
+  },
+
+  async syncRelato(relatoId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let relato = await DB.getRelato(relatoId);
+    if (!relato) return;
+
+    relato.syncStatus = 'sincronizando';
+    relato.syncError = '';
+    await DB.putRelato(relato);
+    this.notify();
+
+    try {
+      if (!relato.metaSynced) {
+        const resp = await postJson(endpoint, { action: 'upsertRelato', relato: buildRelatoMetaPayload(relato) });
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar dados do relato.');
+        }
+        relato.metaSynced = true;
+        relato.remoteRef = resp.remoteRef || relato.remoteRef || null;
+        await DB.putRelato(relato);
+      }
+
+      const photos = await DB.getPhotosByInspection(relatoId);
+      for (const foto of photos.filter((p) => !p.synced)) {
+        const resp = await postJson(endpoint, {
+          action: 'uploadPhoto',
+          inspectionId: relato.id,
+          photo: {
+            id: foto.id,
+            questionRef: foto.questionRef,
+            mimeType: foto.mimeType,
+            fileName: foto.fileName,
+            base64: await blobToBase64(foto.blob),
+            remoteRef: relato.remoteRef || null
+          }
+        });
+        if (!resp || resp.ok !== true) {
+          throw new Error((resp && resp.error) || 'Falha ao enviar uma foto.');
+        }
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+        this.notify();
+      }
+
+      const todasFotos = await DB.getPhotosByInspection(relatoId);
+      relato.syncStatus = relato.metaSynced && todasFotos.every((p) => p.synced) ? 'synced' : 'pendente';
+      relato.syncError = '';
+      await DB.putRelato(relato);
+    } catch (err) {
+      relato = await DB.getRelato(relatoId);
+      relato.syncStatus = 'erro';
+      relato.syncError = err.message || String(err);
+      await DB.putRelato(relato);
+      this.notify();
+      throw err;
+    }
+    this.notify();
+  },
+
+  async syncAcao(acaoId, endpointOverride) {
+    const endpoint = endpointOverride || (await this.getEndpoint());
+    if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
+    if (!this.isOnline()) throw new Error('Sem conexão com a internet.');
+
+    let acao = await DB.getAcao(acaoId);
+    if (!acao) return;
+    try {
+      const resp = await postJson(endpoint, { action: 'upsertAcao', acao: buildAcaoMetaPayload(acao) });
+      if (!resp || resp.ok !== true) {
+        throw new Error((resp && resp.error) || 'Falha ao enviar a ação.');
+      }
+      acao.syncStatus = 'synced';
+      acao.syncError = '';
+      await DB.putAcao(acao);
+    } catch (err) {
+      acao = await DB.getAcao(acaoId);
+      acao.syncStatus = 'erro';
+      acao.syncError = err.message || String(err);
+      await DB.putAcao(acao);
+      this.notify();
+      throw err;
+    }
+    this.notify();
   },
 
   async syncInspection(inspectionId, endpointOverride) {
@@ -934,6 +1032,46 @@ const Sync = {
   }
 };
 
+function buildRelatoMetaPayload(r) {
+  const d = r.data;
+  return {
+    id: r.id,
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt,
+    tipo: d.tipo,
+    data: d.data,
+    hora: d.hora,
+    empresa: d.empresa,
+    area: d.area,
+    local: d.local,
+    descricao: d.descricao,
+    potencial: d.potencial,
+    acaoImediata: d.acaoImediata,
+    anonimo: !!d.anonimo,
+    relator: d.anonimo ? 'Anônimo' : d.relator,
+    funcaoRelator: d.anonimo ? '' : d.funcaoRelator,
+    tratamento: d.tratamento,
+    localizacao: d.localizacao,
+    qtdFotos: d.fotosIds.length
+  };
+}
+
+function buildAcaoMetaPayload(a) {
+  return {
+    id: a.id,
+    createdAt: a.createdAt,
+    updatedAt: a.updatedAt,
+    descricao: a.descricao,
+    origem: a.origemTexto || 'Avulsa',
+    empresa: a.empresa,
+    area: a.area,
+    responsavel: a.responsavel,
+    prazo: a.prazo,
+    status: a.status,
+    observacao: a.observacao
+  };
+}
+
 function buildPGRMetaPayload(p) {
   const ghes = p.data.ghes || [];
   return {
@@ -1246,6 +1384,9 @@ function buildInspectionMetaPayload(insp) {
       resposta: item.resposta,
       observacao: item.observacao,
       medida: item.medida,
+      responsavelAcao: item.responsavelAcao || '',
+      prazoAcao: item.prazoAcao || '',
+      statusAcao: item.statusAcao || '',
       personalizado: !!item.personalizado
     })),
     fechamento: insp.data.fechamento
