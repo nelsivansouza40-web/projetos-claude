@@ -58,7 +58,7 @@ async function coletarAcoes() {
   inspecoes.filter((i) => i.completo).forEach((insp) => {
     const id = insp.data.identificacao;
     const f = insp.data.fechamento;
-    const contexto = `${insp.data.tipoInspecao || 'Inspeção'} · ${formatarDataBR(id.data)}`;
+    const contexto = `${disciplinaDaInspecao(insp)} · ${insp.data.tipoInspecao || 'Inspeção'} · ${formatarDataBR(id.data)}`;
     const descricaoFechamento = f.medidaDefinitiva || f.medidaImediata;
     if (descricaoFechamento) {
       acoes.push({

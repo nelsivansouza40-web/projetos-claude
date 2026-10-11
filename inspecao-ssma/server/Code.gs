@@ -205,6 +205,18 @@ function upsertInspection(insp) {
     rowIndex = sheetInsp.getLastRow();
   }
 
+  // Disciplina (Segurança, Meio Ambiente ou Qualidade): coluna localizada pelo
+  // cabeçalho e criada no fim da aba, para não deslocar as colunas existentes.
+  if (insp.disciplina) {
+    const cabD = sheetInsp.getRange(1, 1, 1, sheetInsp.getLastColumn()).getValues()[0];
+    let colDisciplina = cabD.indexOf('Disciplina') + 1;
+    if (!colDisciplina) {
+      colDisciplina = sheetInsp.getLastColumn() + 1;
+      sheetInsp.getRange(1, colDisciplina).setValue('Disciplina');
+    }
+    sheetInsp.getRange(rowIndex, colDisciplina).setValue(insp.disciplina);
+  }
+
   // Se o painel de ações já foi criado, o status marcado na Central de ações
   // do app atualiza a coluna "Status da Ação" desta inspeção.
   if (insp.fechamento.statusAcao) {

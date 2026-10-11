@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v37';
+const APP_VERSION = 'v38';
 
 const state = {
   screen: 'home',
@@ -222,7 +222,13 @@ Sync.onChange(refreshChrome);
 async function renderHome() {
   state.screen = 'home';
   setActiveTab('inspecoes');
-  const inspections = await DB.getAllInspections();
+  const todas = await DB.getAllInspections();
+  const filtro = state.filtroDisciplina || 'Todas';
+  const inspections = filtro === 'Todas' ? todas : todas.filter((i) => disciplinaDaInspecao(i) === filtro);
+  const chips = ['Todas', ...DISCIPLINAS_INSPECAO.map((d) => d.id)].map((d) => `
+    <button type="button" class="chip-filtro ${d === filtro ? 'ativo' : ''}" data-filtro="${escapeHtml(d)}">
+      ${escapeHtml(d)} <span>${d === 'Todas' ? todas.length : todas.filter((i) => disciplinaDaInspecao(i) === d).length}</span>
+    </button>`).join('');
 
   const itemsHtml = inspections.length
     ? inspections.map((insp) => {
@@ -237,21 +243,26 @@ async function renderHome() {
               <div class="insp-card-sub">${escapeHtml(ident.data || '')} ${escapeHtml(ident.hora || '')}</div>
             </div>
             <div class="insp-card-side">
+              ${seloDisciplina(insp)}
               <span class="badge ${s.cls}">${s.text}</span>
               <button type="button" class="btn-excluir-card" data-id="${insp.id}" title="Excluir">🗑</button>
             </div>
           </li>
         `;
       }).join('')
-    : '<li class="empty-state">Nenhuma inspeção registrada ainda. Toque em "Nova inspeção" para começar.</li>';
+    : `<li class="empty-state">${todas.length ? 'Nenhuma inspeção desta disciplina.' : 'Nenhuma inspeção registrada ainda. Toque em "Nova inspeção" para começar.'}</li>`;
 
   view.innerHTML = `
     <div class="screen-header">
       <h1>Inspeções</h1>
       <button id="btn-new-insp" class="btn-primary">+ Nova inspeção</button>
     </div>
+    <div class="chips-filtro">${chips}</div>
     <ul class="insp-list">${itemsHtml}</ul>
   `;
+  view.querySelectorAll('.chip-filtro').forEach((btn) => {
+    btn.addEventListener('click', () => { state.filtroDisciplina = btn.dataset.filtro; renderHome(); });
+  });
 
   document.getElementById('btn-new-insp').addEventListener('click', startNewInspection);
   view.querySelectorAll('.insp-card').forEach((el) => {
@@ -314,6 +325,7 @@ function novaInspecaoVazia() {
         inspetor: '',
         responsavelArea: ''
       },
+      disciplina: '',
       tipoInspecao: '',
       checklist: [],
       fechamento: {
@@ -337,8 +349,33 @@ function novaInspecaoVazia() {
   };
 }
 
-async function startNewInspection() {
+/** Primeira tela da nova inspeção: escolha da disciplina. */
+function startNewInspection() {
+  state.screen = 'escolha-disciplina';
+  view.innerHTML = `
+    <div class="screen-header">
+      <button id="btn-back-home" class="btn-link">← Voltar</button>
+      <h1>Nova inspeção</h1>
+    </div>
+    <p class="hint">Qual inspeção será realizada? A escolha define os checklists disponíveis.</p>
+    <div class="disciplinas-grid">
+      ${DISCIPLINAS_INSPECAO.map((d) => `
+        <button type="button" class="disciplina-card" data-disciplina="${escapeHtml(d.id)}" style="--cor-disciplina:${d.cor}">
+          <span class="disciplina-titulo">${escapeHtml(d.rotulo)}</span>
+          <span class="disciplina-desc">${escapeHtml(d.descricao)}</span>
+          <span class="disciplina-qtd">${d.tipos.length - 1} checklists</span>
+        </button>`).join('')}
+    </div>
+  `;
+  document.getElementById('btn-back-home').addEventListener('click', renderHome);
+  view.querySelectorAll('.disciplina-card').forEach((btn) => {
+    btn.addEventListener('click', () => criarInspecao(btn.dataset.disciplina));
+  });
+}
+
+async function criarInspecao(disciplina) {
   const insp = novaInspecaoVazia();
+  insp.data.disciplina = disciplina;
   await DB.putInspection(insp);
   state.inspectionId = insp.id;
   state.step = 0;
@@ -383,8 +420,13 @@ async function renderForm() {
 /* ---- Passo 1: Identificação ---- */
 function renderStepIdentificacao(content, insp) {
   const id = insp.data.identificacao;
-  const tiposOptions = TIPOS_INSPECAO.map((t) =>
-    `<option value="${escapeHtml(t)}" ${insp.data.tipoInspecao === t ? 'selected' : ''}>${escapeHtml(t)}</option>`
+  const disciplinaAtual = disciplinaDaInspecao(insp);
+  const opcoesTipos = (disc, selecionado) => dadosDisciplina(disc).tipos.map((t) =>
+    `<option value="${escapeHtml(t)}" ${selecionado === t ? 'selected' : ''}>${escapeHtml(t)}</option>`
+  ).join('');
+  const tiposOptions = opcoesTipos(disciplinaAtual, insp.data.tipoInspecao);
+  const disciplinasOptions = DISCIPLINAS_INSPECAO.map((d) =>
+    `<option value="${escapeHtml(d.id)}" ${disciplinaAtual === d.id ? 'selected' : ''}>${escapeHtml(d.rotulo)}</option>`
   ).join('');
 
   content.innerHTML = `
@@ -410,6 +452,9 @@ function renderStepIdentificacao(content, insp) {
       <label>Responsável da área acompanhando
         <input type="text" name="responsavelArea" value="${escapeHtml(id.responsavelArea)}">
       </label>
+      <label>Disciplina *
+        <select name="disciplina" required>${disciplinasOptions}</select>
+      </label>
       <label>Tipo de inspeção *
         <select name="tipoInspecao" required>
           <option value="" disabled ${!insp.data.tipoInspecao ? 'selected' : ''}>Selecione…</option>
@@ -423,9 +468,14 @@ function renderStepIdentificacao(content, insp) {
   `;
 
   const form = document.getElementById('form-ident');
+  form.querySelector('select[name="disciplina"]').addEventListener('change', (e) => {
+    form.querySelector('select[name="tipoInspecao"]').innerHTML =
+      '<option value="" disabled selected>Selecione…</option>' + opcoesTipos(e.target.value, '');
+  });
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const fd = new FormData(form);
+    insp.data.disciplina = fd.get('disciplina') || disciplinaAtual;
     insp.data.identificacao = {
       data: fd.get('data'),
       hora: fd.get('hora'),
@@ -751,7 +801,7 @@ async function renderStepRevisao(content, insp) {
   content.innerHTML = `
     <div class="resumo">
       <h2>Resumo da inspeção</h2>
-      <p><strong>${escapeHtml(insp.data.tipoInspecao)}</strong></p>
+      <p>${seloDisciplina(insp)} <strong>${escapeHtml(insp.data.tipoInspecao)}</strong></p>
       <p>${escapeHtml(insp.data.identificacao.empresa)} · ${escapeHtml(insp.data.identificacao.area)}</p>
       <p>${escapeHtml(insp.data.identificacao.data)} ${escapeHtml(insp.data.identificacao.hora)}</p>
       <ul class="resumo-stats">
@@ -831,6 +881,7 @@ async function renderDetail(id) {
       <button id="btn-back-home" class="btn-link">← Voltar</button>
       <h1>${escapeHtml(insp.data.tipoInspecao)}</h1>
     </div>
+    ${seloDisciplina(insp)}
     <span class="badge ${s.cls}">${s.text}</span>
     ${insp.syncError ? `<p class="erro-msg">${escapeHtml(insp.syncError)}</p>` : ''}
     <div class="detail-block">
@@ -964,8 +1015,8 @@ async function executarBuscaGlobal(termoBruto) {
 
   inspecoes.forEach((r) => {
     const id = r.data.identificacao;
-    if (bate(id.empresa) || bate(id.unidade) || bate(id.area) || bate(id.inspetor) || bate(r.data.tipoInspecao)) {
-      resultados.push({ tipo: 'inspecao', registro: r, modulo: 'Inspeção', titulo: r.data.tipoInspecao || 'Inspeção', sub: `${id.empresa || ''} · ${id.area || ''}` });
+    if (bate(id.empresa) || bate(id.unidade) || bate(id.area) || bate(id.inspetor) || bate(r.data.tipoInspecao) || bate(disciplinaDaInspecao(r))) {
+      resultados.push({ tipo: 'inspecao', registro: r, modulo: `Inspeção · ${disciplinaDaInspecao(r)}`, titulo: r.data.tipoInspecao || 'Inspeção', sub: `${id.empresa || ''} · ${id.area || ''}` });
     }
   });
   ptaprs.forEach((r) => {
