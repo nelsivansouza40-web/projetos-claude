@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v41';
+const APP_VERSION = 'v42';
 
 const state = {
   screen: 'home',
@@ -251,8 +251,7 @@ function setActiveTab(tab) {
     const el = document.getElementById(`tab-${t}`);
     if (el) el.classList.toggle('active', tab === t);
   });
-  const ativa = document.querySelector('.tab-btn.active');
-  if (ativa && ativa.scrollIntoView) ativa.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  if (typeof atualizarMenuGrupos === 'function') atualizarMenuGrupos(tab);
 }
 
 async function refreshChrome() {
@@ -271,6 +270,11 @@ async function renderHome() {
   setActiveTab('inspecoes');
   const todas = await DB.getAllInspections();
   const progAlerta = await contarProgramacoesAtrasadas();
+  const ultimoBackup = await DB.getSetting('ultimoBackup');
+  const diasSemBackup = ultimoBackup ? Math.floor((Date.now() - ultimoBackup) / 86400000) : null;
+  const lembreteBackup = todas.length && (diasSemBackup === null || diasSemBackup >= 7)
+    ? `<p class="aviso-backup">${diasSemBackup === null ? 'Nenhuma cópia de segurança feita neste aparelho.' : `Última cópia de segurança há ${diasSemBackup} dias.`} <button type="button" id="btn-ir-backup" class="btn-link">Fazer agora</button></p>`
+    : '';
   if (state.screen !== 'home') return;
   const filtro = state.filtroDisciplina || 'Todas';
   const inspections = filtro === 'Todas' ? todas : todas.filter((i) => disciplinaDaInspecao(i) === filtro);
@@ -306,6 +310,7 @@ async function renderHome() {
       <h1>Inspeções</h1>
       <button id="btn-new-insp" class="btn-primary">+ Nova inspeção</button>
     </div>
+    ${lembreteBackup}
     <div class="atalhos-inspecao">
       <button type="button" id="btn-programacao" class="btn-secondary">Programação${progAlerta.atrasadas ? ` <span class="badge badge-erro">${progAlerta.atrasadas} atrasada(s)</span>` : progAlerta.embreve ? ` <span class="badge badge-pendente">${progAlerta.embreve} vencendo</span>` : ''}</button>
       <button type="button" id="btn-equipamentos" class="btn-secondary">Equipamentos e QR</button>
@@ -315,6 +320,8 @@ async function renderHome() {
     <div class="chips-filtro">${chips}</div>
     <ul class="insp-list">${itemsHtml}</ul>
   `;
+  const btnIrBackup = document.getElementById('btn-ir-backup');
+  if (btnIrBackup) btnIrBackup.addEventListener('click', renderSettings);
   document.getElementById('btn-programacao').addEventListener('click', renderProgramacaoHome);
   document.getElementById('btn-equipamentos').addEventListener('click', renderEquipamentosHome);
   document.getElementById('btn-ler-qr-home').addEventListener('click', abrirLeitorQR);
@@ -925,6 +932,8 @@ async function renderStepRevisao(content, insp) {
     await aplicarLocalizacaoPendente(insp);
     insp.completo = true;
     insp.syncStatus = 'pendente';
+    // Tempo da abertura até a conclusão (indicador do piloto).
+    if (!insp.data.concluidoEm) insp.data.concluidoEm = Date.now();
     await salvarRascunho(insp);
     await refreshChrome();
     renderHome();
@@ -1265,7 +1274,9 @@ async function aplicarImagemFundoTopbar() {
 async function renderSettings() {
   state.screen = 'settings';
   const endpoint = (await Sync.getEndpoint()) || '';
+  const chaveAcesso = (await DB.getSetting('chaveAcesso')) || '';
   const topbarBgImage = await DB.getSetting('topbarBgImage');
+  const secaoBackup = await htmlSecaoBackup();
 
   view.innerHTML = `
     <div class="screen-header">
@@ -1292,10 +1303,18 @@ async function renderSettings() {
         fotos das inspeções quando o aparelho está online, gravando tudo em
         uma planilha do Google Sheets e em uma pasta do Google Drive.
       </p>
+      <label>Seu nome (identifica seus registros na planilha da equipe)
+        <input type="text" id="input-usuario" value="${escapeHtml((await DB.getSetting('nomeUsuario')) || '')}">
+      </label>
+      <label>Chave de acesso (opcional)
+        <input type="text" id="input-chave" autocomplete="off" placeholder="Igual à CHAVE_ACESSO definida no Apps Script" value="${escapeHtml(chaveAcesso)}">
+      </label>
+      <p class="hint">Quando a planilha exige chave, só aparelhos com a mesma chave conseguem gravar dados nela.</p>
       <button id="btn-salvar-endpoint" class="btn-primary">Salvar</button>
       <button id="btn-testar-endpoint" class="btn-secondary">Testar conexão</button>
       <p id="teste-resultado"></p>
     </div>
+    ${secaoBackup}
     <div class="form-section">
       <h3>Sobre o funcionamento offline</h3>
       <p class="hint">
@@ -1315,6 +1334,7 @@ async function renderSettings() {
   `;
 
   document.getElementById('btn-back-home').addEventListener('click', renderHome);
+  ligarSecaoBackup();
 
   document.getElementById('input-topbar-bg').addEventListener('change', async (e) => {
     const file = e.target.files[0];
@@ -1370,7 +1390,9 @@ async function renderSettings() {
   document.getElementById('btn-salvar-endpoint').addEventListener('click', async () => {
     const url = document.getElementById('input-endpoint').value.trim();
     await Sync.setEndpoint(url);
-    document.getElementById('teste-resultado').textContent = 'Endereço salvo.';
+    await DB.setSetting('chaveAcesso', document.getElementById('input-chave').value.trim());
+    await DB.setSetting('nomeUsuario', document.getElementById('input-usuario').value.trim());
+    document.getElementById('teste-resultado').textContent = 'Configurações salvas.';
   });
 
   document.getElementById('btn-testar-endpoint').addEventListener('click', async () => {
@@ -1380,8 +1402,11 @@ async function renderSettings() {
     if (!navigator.onLine) { resEl.textContent = 'Sem conexão com a internet no momento.'; return; }
     resEl.textContent = 'Testando…';
     try {
+      await DB.setSetting('chaveAcesso', document.getElementById('input-chave').value.trim());
       const resp = await postJson(url, { action: 'ping' });
-      resEl.textContent = resp && resp.ok ? 'Conexão bem-sucedida.' : 'O servidor respondeu, mas com erro: ' + (resp && resp.error);
+      resEl.textContent = resp && resp.ok
+        ? `Conexão bem-sucedida${resp.versao ? ' (servidor versão ' + resp.versao + ')' : ' — atenção: o servidor está com uma versão antiga do Code.gs'}.`
+        : 'O servidor respondeu, mas com erro: ' + (resp && resp.error);
     } catch (e) {
       resEl.textContent = 'Falha ao conectar: ' + e.message;
     }
@@ -1440,6 +1465,7 @@ async function init() {
     }
   }
   updateConnBadge();
+  pedirArmazenamentoPermanente();
   await aplicarImagemFundoTopbar();
   await updateSyncBar();
   // Só renderiza a tela inicial se o usuário ainda não tiver navegado para

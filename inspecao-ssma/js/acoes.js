@@ -64,7 +64,7 @@ async function coletarAcoes() {
       acoes.push({
         chave: `insp:${insp.id}:fechamento`, origem: 'Inspeção', registroId: insp.id, ref: 'fechamento',
         descricao: descricaoFechamento, contexto, empresa: id.empresa, area: id.area,
-        responsavel: f.responsavelAcao, prazo: f.prazo, status: f.statusAcao || 'Pendente'
+        responsavel: f.responsavelAcao, prazo: f.prazo, status: f.statusAcao || 'Pendente', concluidaEm: f.concluidaEmAcao || ''
       });
     }
     insp.data.checklist.forEach((item) => {
@@ -73,7 +73,7 @@ async function coletarAcoes() {
         chave: `insp:${insp.id}:${item.id}`, origem: 'Inspeção', registroId: insp.id, ref: item.id,
         descricao: item.medida, contexto: `${contexto} · NC: ${item.texto}`, empresa: id.empresa, area: id.area,
         responsavel: item.responsavelAcao || f.responsavelAcao, prazo: item.prazoAcao || f.prazo,
-        status: item.statusAcao || 'Pendente'
+        status: item.statusAcao || 'Pendente', concluidaEm: item.concluidaEmAcao || ''
       });
     });
   });
@@ -85,7 +85,7 @@ async function coletarAcoes() {
       acoes.push({
         chave: `inv:${inv.id}:${a.id}`, origem: 'Investigação', registroId: inv.id, ref: a.id,
         descricao: a.descricao, contexto: `Acidente ${formatarDataBR(ac.data)} · ${ac.local || ''}`,
-        empresa: ac.empresa, area: ac.local, responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente'
+        empresa: ac.empresa, area: ac.local, responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente', concluidaEm: a.concluidaEm || ''
       });
     });
   });
@@ -97,7 +97,7 @@ async function coletarAcoes() {
       acoes.push({
         chave: `pgr:${pgr.id}:${p.id}`, origem: 'PGR', registroId: pgr.id, ref: p.id,
         descricao: p.medidasPropostas, contexto: `PGR ${d.empresa || ''} · ${nomeGHEPGR(d.ghes, p.gheId) || 'sem GHE'} · ${p.perigo}`,
-        empresa: d.empresa, area: d.unidade, responsavel: p.responsavel, prazo: p.prazo, status: p.status || 'Pendente'
+        empresa: d.empresa, area: d.unidade, responsavel: p.responsavel, prazo: p.prazo, status: p.status || 'Pendente', concluidaEm: p.concluidaEm || ''
       });
     });
   });
@@ -108,7 +108,7 @@ async function coletarAcoes() {
     acoes.push({
       chave: `rel:${r.id}`, origem: 'Relato', registroId: r.id, ref: 'tratamento',
       descricao: t.acaoCorretiva, contexto: `${r.data.tipo} · ${formatarDataBR(r.data.data)} · ${r.data.local || r.data.area}`,
-      empresa: r.data.empresa, area: r.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente'
+      empresa: r.data.empresa, area: r.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente', concluidaEm: t.concluidaEm || ''
     });
   });
 
@@ -118,7 +118,7 @@ async function coletarAcoes() {
     acoes.push({
       chave: `obs:${o.id}`, origem: 'Observação', registroId: o.id, ref: 'tratamento',
       descricao: t.acaoCorretiva, contexto: `Observação comportamental · ${formatarDataBR(o.data.data)} · ${o.data.atividade}`,
-      empresa: o.data.empresa, area: o.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente'
+      empresa: o.data.empresa, area: o.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente', concluidaEm: t.concluidaEm || ''
     });
   });
 
@@ -126,7 +126,7 @@ async function coletarAcoes() {
     acoes.push({
       chave: `av:${a.id}`, origem: 'Avulsa', registroId: a.id, ref: '',
       descricao: a.descricao, contexto: a.origemTexto && a.origemTexto !== 'Avulsa' ? a.origemTexto : (a.observacao || 'Ação avulsa'), empresa: a.empresa, area: a.area,
-      responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente'
+      responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente', concluidaEm: a.concluidaEm || ''
     });
   });
 
@@ -135,6 +135,8 @@ async function coletarAcoes() {
 
 /** Grava a alteração de responsável, prazo ou status no registro de origem. */
 async function atualizarAcaoNaOrigem(acao, campos) {
+  // Data de conclusão: base do indicador "ações concluídas no prazo".
+  if ('status' in campos) campos = { ...campos, concluidaEm: campos.status === 'Concluída' ? hojeISO() : '' };
   const marcarPendente = (r) => {
     r.updatedAt = Date.now();
     if (r.completo) {
@@ -150,13 +152,13 @@ async function atualizarAcaoNaOrigem(acao, campos) {
     if (acao.ref === 'fechamento') {
       if ('responsavel' in campos) f.responsavelAcao = campos.responsavel;
       if ('prazo' in campos) f.prazo = campos.prazo;
-      if ('status' in campos) f.statusAcao = campos.status;
+      if ('status' in campos) { f.statusAcao = campos.status; f.concluidaEmAcao = campos.concluidaEm; }
     } else {
       const item = insp.data.checklist.find((i) => i.id === acao.ref);
       if (!item) return;
       if ('responsavel' in campos) item.responsavelAcao = campos.responsavel;
       if ('prazo' in campos) item.prazoAcao = campos.prazo;
-      if ('status' in campos) item.statusAcao = campos.status;
+      if ('status' in campos) { item.statusAcao = campos.status; item.concluidaEmAcao = campos.concluidaEm; }
     }
     marcarPendente(insp);
     await DB.putInspection(insp);

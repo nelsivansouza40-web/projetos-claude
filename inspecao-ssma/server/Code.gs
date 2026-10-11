@@ -30,6 +30,7 @@
  *  - { action: "upsertRelato", relato }             -> Relato de quase acidente / condição insegura
  *  - { action: "upsertAcao", acao }                 -> Ação avulsa da Central de ações
  *  - { action: "upsertObservacao", observacao }     -> Observação comportamental
+ *  - { action: "upsertAcoesConsolidadas", acoes }   -> lista de ações do aparelho (painel do gestor)
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
  *    de CIPA, PT/APR, certificados, PET, investigações de acidente e
@@ -81,7 +82,7 @@ const SHEET_RELATOS = 'Relatos';
 const SHEET_ACOES = 'Acoes_Avulsas';
 const SHEET_OBSERVACOES = 'Observacoes_Comportamentais';
 
-const VERSAO_SERVIDOR = '2026-10-11c';
+const VERSAO_SERVIDOR = '2026-10-12';
 
 /** Abrir o endereço do app da Web no navegador mostra se o servidor está no ar. */
 function doGet() {
@@ -96,6 +97,14 @@ function doPost(e) {
     body = JSON.parse(e.postData.contents);
   } catch (err) {
     return jsonResponse({ ok: false, error: 'JSON inválido: ' + err.message });
+  }
+
+  // Chave de acesso: se a propriedade CHAVE_ACESSO estiver definida em
+  // Configurações do projeto > Propriedades do script, só aceita requisições
+  // que tragam a mesma chave (definida também nas Configurações do app).
+  const chaveEsperada = PropertiesService.getScriptProperties().getProperty('CHAVE_ACESSO');
+  if (chaveEsperada && body.chave !== chaveEsperada) {
+    return jsonResponse({ ok: false, error: 'Chave de acesso inválida. Confira a chave nas Configurações do app.' });
   }
 
   try {
@@ -130,6 +139,8 @@ function doPost(e) {
         return jsonResponse(upsertRelato(body.relato));
       case 'upsertAcao':
         return jsonResponse(upsertAcao(body.acao));
+      case 'upsertAcoesConsolidadas':
+        return jsonResponse(upsertAcoesConsolidadas(body.acoes, body.usuario));
       case 'upsertObservacao':
         return jsonResponse(upsertObservacao(body.observacao));
       case 'uploadPhoto':
@@ -218,28 +229,14 @@ function upsertInspection(insp) {
     rowIndex = sheetInsp.getLastRow();
   }
 
-  // Equipamento inspecionado (quando a inspeção veio de uma etiqueta QR).
-  if (insp.equipamento) {
-    const cabE = sheetInsp.getRange(1, 1, 1, sheetInsp.getLastColumn()).getValues()[0];
-    let colEq = cabE.indexOf('Equipamento') + 1;
-    if (!colEq) {
-      colEq = sheetInsp.getLastColumn() + 1;
-      sheetInsp.getRange(1, colEq).setValue('Equipamento');
-    }
-    sheetInsp.getRange(rowIndex, colEq).setValue(insp.equipamento);
-  }
-
-  // Disciplina (Segurança, Meio Ambiente ou Qualidade): coluna localizada pelo
-  // cabeçalho e criada no fim da aba, para não deslocar as colunas existentes.
-  if (insp.disciplina) {
-    const cabD = sheetInsp.getRange(1, 1, 1, sheetInsp.getLastColumn()).getValues()[0];
-    let colDisciplina = cabD.indexOf('Disciplina') + 1;
-    if (!colDisciplina) {
-      colDisciplina = sheetInsp.getLastColumn() + 1;
-      sheetInsp.getRange(1, colDisciplina).setValue('Disciplina');
-    }
-    sheetInsp.getRange(rowIndex, colDisciplina).setValue(insp.disciplina);
-  }
+  // Colunas acrescentadas depois da versão original: localizadas pelo
+  // cabeçalho e criadas no fim da aba, para não deslocar as existentes.
+  gravarColunaExtra(sheetInsp, rowIndex, 'Disciplina', insp.disciplina);
+  gravarColunaExtra(sheetInsp, rowIndex, 'Equipamento', insp.equipamento);
+  gravarColunaExtra(sheetInsp, rowIndex, 'Conformidade (%)', insp.conformidade);
+  gravarColunaExtra(sheetInsp, rowIndex, 'Qtd. NC', insp.qtdNC);
+  gravarColunaExtra(sheetInsp, rowIndex, 'Duração (min)', insp.duracaoMin);
+  gravarColunaExtra(sheetInsp, rowIndex, 'Registrado por', body_usuario_(insp));
 
   // Se o painel de ações já foi criado, o status marcado na Central de ações
   // do app atualiza a coluna "Status da Ação" desta inspeção.
@@ -1027,6 +1024,46 @@ function upsertPGR(p) {
   });
 
   return { ok: true, remoteRef: id };
+}
+
+/** Grava um valor numa coluna identificada pelo título; cria a coluna no fim se ela não existir. */
+function gravarColunaExtra(sheet, rowIndex, titulo, valor) {
+  if (valor === undefined || valor === null) return;
+  const cab = sheet.getRange(1, 1, 1, Math.max(1, sheet.getLastColumn())).getValues()[0];
+  let col = cab.indexOf(titulo) + 1;
+  if (!col) {
+    col = sheet.getLastColumn() + 1;
+    sheet.getRange(1, col).setValue(titulo);
+  }
+  sheet.getRange(rowIndex, col).setValue(valor);
+}
+
+function body_usuario_(registro) {
+  return registro && registro.usuario ? registro.usuario : '';
+}
+
+/**
+ * Lista consolidada de ações de todos os aparelhos (uma linha por ação,
+ * identificada pela chave). É a base do painel do gestor no Looker Studio.
+ */
+function upsertAcoesConsolidadas(acoes, usuario) {
+  const sheet = getOrCreateSheet('Acoes_Consolidadas', [
+    'Chave', 'Origem', 'Ação', 'Contexto', 'Empresa', 'Área', 'Responsável', 'Prazo',
+    'Status', 'Situação', 'Concluída em', 'Concluída no prazo', 'Registrado por', 'Atualizado em'
+  ]);
+  const dados = sheet.getDataRange().getValues();
+  const linhaPorChave = {};
+  for (let i = 1; i < dados.length; i++) linhaPorChave[dados[i][0]] = i + 1;
+  const novas = [];
+  (acoes || []).forEach((a) => {
+    const noPrazo = a.status === 'Concluída' && a.concluidaEm && a.prazo ? (a.concluidaEm <= a.prazo ? 'Sim' : 'Não') : '';
+    const linha = [a.chave, a.origem, a.descricao, a.contexto, a.empresa, a.area, a.responsavel, a.prazo,
+      a.status, a.situacao, a.concluidaEm, noPrazo, usuario || '', new Date()];
+    if (linhaPorChave[a.chave]) sheet.getRange(linhaPorChave[a.chave], 1, 1, linha.length).setValues([linha]);
+    else novas.push(linha);
+  });
+  if (novas.length) sheet.getRange(sheet.getLastRow() + 1, 1, novas.length, novas[0].length).setValues(novas);
+  return { ok: true, total: (acoes || []).length };
 }
 
 /** Grava (ou atualiza, pelo ID na coluna A) uma linha na aba informada. */
