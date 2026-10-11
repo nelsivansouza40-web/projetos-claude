@@ -40,81 +40,85 @@ const Sync = {
 
     this.running = true;
     this.notify();
+    // Um registro com erro não pode travar a fila: cada um é tentado
+    // separadamente, e o erro fica gravado no próprio registro.
+    let falhas = 0;
     try {
       const inspections = await DB.getAllInspections();
       for (const insp of inspections) {
-        if (insp.syncStatus === 'synced') continue;
-        await this.syncInspection(insp.id, endpoint);
+        if (!insp.completo || insp.syncStatus === 'synced') continue;
+        try { await this.syncInspection(insp.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosDDS = await DB.getAllDDS();
       for (const dds of registrosDDS) {
-        if (dds.syncStatus === 'synced') continue;
-        await this.syncDDS(dds.id, endpoint);
+        if (!dds.completo || dds.syncStatus === 'synced') continue;
+        try { await this.syncDDS(dds.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosDiag = await DB.getAllDiagnosticos();
       for (const diag of registrosDiag) {
-        if (diag.syncStatus === 'synced') continue;
-        await this.syncDiagnostico(diag.id, endpoint);
+        if (!diag.completo || diag.syncStatus === 'synced') continue;
+        try { await this.syncDiagnostico(diag.id, endpoint); } catch (e) { falhas++; }
       }
       const gestoesCipa = await DB.getAllCipaGestoes();
       for (const gestao of gestoesCipa) {
-        if (gestao.syncStatus === 'synced') continue;
-        await this.syncCipaGestao(gestao.id, endpoint);
+        if (!gestao.completo || gestao.syncStatus === 'synced') continue;
+        try { await this.syncCipaGestao(gestao.id, endpoint); } catch (e) { falhas++; }
       }
       const reunioesCipa = await DB.getAllCipaReunioes();
       for (const reuniao of reunioesCipa) {
-        if (reuniao.syncStatus === 'synced') continue;
-        await this.syncCipaReuniao(reuniao.id, endpoint);
+        if (!reuniao.completo || reuniao.syncStatus === 'synced') continue;
+        try { await this.syncCipaReuniao(reuniao.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosPTAPR = await DB.getAllPTAPR();
       for (const pt of registrosPTAPR) {
-        if (pt.syncStatus === 'synced') continue;
-        await this.syncPTAPR(pt.id, endpoint);
+        if (!pt.completo || pt.syncStatus === 'synced') continue;
+        try { await this.syncPTAPR(pt.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosCert = await DB.getAllCertificados();
       for (const cert of registrosCert) {
-        if (cert.syncStatus === 'synced') continue;
-        await this.syncCertificado(cert.id, endpoint);
+        if (!cert.completo || cert.syncStatus === 'synced') continue;
+        try { await this.syncCertificado(cert.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosPET = await DB.getAllPET();
       for (const pet of registrosPET) {
-        if (pet.syncStatus === 'synced') continue;
-        await this.syncPET(pet.id, endpoint);
+        if (!pet.completo || pet.syncStatus === 'synced') continue;
+        try { await this.syncPET(pet.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosInvestigacao = await DB.getAllInvestigacoes();
       for (const inv of registrosInvestigacao) {
-        if (inv.syncStatus === 'synced') continue;
-        await this.syncInvestigacao(inv.id, endpoint);
+        if (!inv.completo || inv.syncStatus === 'synced') continue;
+        try { await this.syncInvestigacao(inv.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosEPI = await DB.getAllFichasEPI();
       for (const ficha of registrosEPI) {
-        if (ficha.syncStatus === 'synced') continue;
-        await this.syncFichaEPI(ficha.id, endpoint);
+        if (!ficha.completo || ficha.syncStatus === 'synced') continue;
+        try { await this.syncFichaEPI(ficha.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosVeiculo = await DB.getAllVeiculos();
       for (const veic of registrosVeiculo) {
-        if (veic.syncStatus === 'synced') continue;
-        await this.syncVeiculo(veic.id, endpoint);
+        if (!veic.completo || veic.syncStatus === 'synced') continue;
+        try { await this.syncVeiculo(veic.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosPGR = await DB.getAllPGR();
       for (const pgr of registrosPGR) {
-        if (pgr.syncStatus === 'synced') continue;
-        await this.syncPGR(pgr.id, endpoint);
+        if (!pgr.completo || pgr.syncStatus === 'synced') continue;
+        try { await this.syncPGR(pgr.id, endpoint); } catch (e) { falhas++; }
       }
       const registrosRelatos = await DB.getAllRelatos();
       for (const relato of registrosRelatos) {
         if (!relato.completo || relato.syncStatus === 'synced') continue;
-        await this.syncRelato(relato.id, endpoint);
+        try { await this.syncRelato(relato.id, endpoint); } catch (e) { falhas++; }
       }
       const acoesAvulsas = await DB.getAllAcoes();
       for (const acao of acoesAvulsas) {
         if (acao.syncStatus === 'synced') continue;
-        await this.syncAcao(acao.id, endpoint);
+        try { await this.syncAcao(acao.id, endpoint); } catch (e) { falhas++; }
       }
     } finally {
       this.running = false;
       this.notify();
     }
+    if (falhas) throw new Error(`${falhas} registro(s) não sincronizaram. Abra cada um para ver o motivo.`);
   },
 
   async syncRelato(relatoId, endpointOverride) {
@@ -1394,7 +1398,33 @@ function buildInspectionMetaPayload(insp) {
   };
 }
 
-function blobToBase64(blob) {
+/**
+ * Fotos de celular costumam ter 3 a 6 MB, o que torna o envio lento e sujeito
+ * a queda em rede móvel. Antes de enviar, fotos JPEG grandes são reduzidas
+ * para no máximo 1600 px no lado maior (qualidade suficiente para relatório).
+ */
+async function reduzirFotoParaEnvio(blob) {
+  try {
+    if (!blob || !/jpe?g/i.test(blob.type || '') || blob.size < 700 * 1024 || !window.createImageBitmap) return blob;
+    const img = await createImageBitmap(blob);
+    const escala = Math.min(1, 1600 / Math.max(img.width, img.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(img.width * escala);
+    canvas.height = Math.round(img.height * escala);
+    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+    const menor = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', 0.82));
+    return menor && menor.size < blob.size ? menor : blob;
+  } catch (e) {
+    return blob;
+  }
+}
+
+async function blobToBase64(blobOriginal) {
+  const blob = await reduzirFotoParaEnvio(blobOriginal);
+  return blobParaBase64(blob);
+}
+
+function blobParaBase64(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = () => {
