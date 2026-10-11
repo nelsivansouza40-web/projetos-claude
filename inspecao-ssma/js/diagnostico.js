@@ -9,7 +9,7 @@ const DIAG_STEPS = ['Identificação', 'Diagnóstico', 'Fechamento', 'Revisão']
 const PESO_RESPOSTA_DIAG = { 'Atende': 1, 'Atende Parcialmente': 0.5, 'Não Atende': 0 };
 
 function novoItemDiagnostico(texto) {
-  return { id: uuid(), texto, resposta: '', observacao: '', personalizado: false };
+  return { id: uuid(), texto, resposta: '', observacao: '', personalizado: false, photoIds: [] };
 }
 
 function gerarCategoriasDiagnostico() {
@@ -288,6 +288,7 @@ function renderDiagItem(item, catIdx, itemIdx) {
       <div class="checklist-question">${escapeHtml(item.texto)}</div>
       <div class="radio-group">${radiosHtml}</div>
       <div class="checklist-details">
+        ${htmlFotosItem()}
         <label>Observação
           <textarea class="txt-observacao" rows="2">${escapeHtml(item.observacao)}</textarea>
         </label>
@@ -330,6 +331,8 @@ function renderDiagCategorias(container, diag) {
         item.observacao = obs.value;
         await salvarRascunhoDiagnostico(diag);
       });
+
+      ligarFotosItem(card, diag, item, salvarRascunhoDiagnostico);
     });
   });
 }
@@ -489,7 +492,12 @@ async function renderDiagDetail(id) {
   const ident = diag.data.identificacao;
   const classificacao = classificarScore(calcularScoreGeral(diag.data.categorias));
 
-  const categoriasHtml = diag.data.categorias.map((cat) => {
+  const fotosCat = await Promise.all(diag.data.categorias.map(async (cat) => (await Promise.all(cat.itens.map(async (i) => {
+    const fotos = await htmlFotosItemDetalhe(i);
+    return fotos ? `<div class="detail-obs">${escapeHtml(i.texto)}</div>${fotos}` : '';
+  }))).join('')));
+
+  const categoriasHtml = diag.data.categorias.map((cat, catIdx) => {
     const score = calcularScoreCategoria(cat.itens);
     const critScore = classificarScore(score);
     const naoAtende = cat.itens.filter((i) => i.resposta === 'Não Atende');
@@ -500,6 +508,7 @@ async function renderDiagDetail(id) {
           <span class="badge ${critScore.cls}">${score !== null ? score + '%' : 'Sem dados'}</span>
         </div>
         ${naoAtende.length ? `<p class="detail-obs">Pontos críticos: ${naoAtende.map((i) => escapeHtml(i.texto)).join('; ')}</p>` : ''}
+        ${fotosCat[catIdx]}
       </div>
     `;
   }).join('');
@@ -520,7 +529,7 @@ async function renderDiagDetail(id) {
     ${categoriasHtml}
     ${diag.data.planoAcao ? `<h3>Plano de ação</h3><div class="detail-block"><p>${escapeHtml(diag.data.planoAcao)}</p></div>` : ''}
     ${diag.data.observacoesFinais ? `<h3>Observações</h3><div class="detail-block"><p>${escapeHtml(diag.data.observacoesFinais)}</p></div>` : ''}
-    ${photos.length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${photos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
+    ${fotosGerais(photos).length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${fotosGerais(photos).map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     <div class="form-actions">
       <button id="btn-editar-diag" class="btn-secondary">✏️ Editar diagnóstico</button>
       <button id="btn-relatorio-diag" class="btn-secondary">Gerar relatório (PDF)</button>
@@ -690,6 +699,7 @@ async function renderDiagReport(id) {
   const scoreGeral = calcularScoreGeral(diag.data.categorias);
   const classificacao = classificarScore(scoreGeral);
   const fotosHtml = await montarFotosDiag(diag.data.fotosComplementaresIds);
+  const fotosItensHtml = await montarFotosItensRelatorio(diag.data.categorias.flatMap((cat) => cat.itens.map((item, idx) => ({ item, rotulo: cat.nome + ', item ' + (idx + 1) }))));
 
   let numSecao = 4;
   const numPlano = diag.data.planoAcao ? numSecao++ : null;
@@ -751,7 +761,7 @@ async function renderDiagReport(id) {
 
       <section class="rep-secao rep-quebra">
         <h3>${numFotos}. Evidência fotográfica</h3>
-        ${fotosHtml}
+        ${secaoFotosRelatorio(fotosItensHtml, diag.data.fotosComplementaresIds, fotosHtml)}
       </section>
 
       ${numObs ? `

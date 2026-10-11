@@ -457,3 +457,4 @@ main#view {
   .rep-foto-bloco { break-inside: avoid; }
   @page { size: A4; margin: 14mm; }
 }
+.detail-thumbs { margin-top: 8px; }
