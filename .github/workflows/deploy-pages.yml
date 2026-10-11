@@ -1,9 +1,9 @@
-name: Publicar Inspeções SSMA no GitHub Pages
+name: Publicar Inspeções SSMA e Gestão SST no GitHub Pages
 
 on:
   push:
     branches: [ claude/google-forms-ssma-inspection-0pjlyi ]
-    paths: [ 'inspecao-ssma/**', '.github/workflows/deploy-pages.yml' ]
+    paths: [ 'inspecao-ssma/**', 'gestao-sst/**', '.github/workflows/deploy-pages.yml' ]
   workflow_dispatch:
 
 permissions:
@@ -28,10 +28,19 @@ jobs:
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Empacotar conteúdo do app
+      # Inspeções SSMA continua na raiz do site (mesmo endereço de sempre);
+      # Gestão SST fica na subpasta /gestao-sst/.
+      - name: Montar o site
+        run: |
+          mkdir -p _site
+          cp -r inspecao-ssma/. _site/
+          cp -r gestao-sst _site/gestao-sst
+          rm -f _site/gestao-sst/gerar-arquivo-unico.py _site/gestao-sst/.gitignore
+
+      - name: Empacotar conteúdo do site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: inspecao-ssma
+          path: _site
 
       - name: Publicar no GitHub Pages
         id: deployment
