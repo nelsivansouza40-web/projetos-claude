@@ -1377,6 +1377,7 @@ function buildInspectionMetaPayload(insp) {
     createdAt: insp.createdAt,
     updatedAt: insp.updatedAt,
     identificacao: insp.data.identificacao,
+    disciplina: disciplinaDaInspecao(insp),
     tipoInspecao: insp.data.tipoInspecao,
     checklist: insp.data.checklist.map((item) => ({
       id: item.id,

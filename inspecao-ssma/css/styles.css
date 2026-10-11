@@ -458,6 +458,17 @@ main#view {
 .chip-filtro.ativo { background: var(--azul); border-color: var(--azul); color: #fff; }
 .chip-filtro.ativo span { color: #fff; }
 .checkbox-anonimo { align-self: flex-start; margin-top: 6px; }
+.badge-disciplina { color: #fff; }
+.disciplinas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+.disciplina-card {
+  background: #fff; border: 1px solid var(--cinza-borda); border-left: 8px solid var(--cor-disciplina);
+  border-radius: 12px; padding: 18px 16px; text-align: left; cursor: pointer; font: inherit; color: var(--texto);
+  display: flex; flex-direction: column; gap: 6px; min-height: 130px;
+}
+.disciplina-card:hover, .disciplina-card:focus-visible { box-shadow: 0 3px 10px rgba(0,0,0,0.12); outline: none; }
+.disciplina-titulo { font-size: 1.15rem; font-weight: 700; color: var(--cor-disciplina); }
+.disciplina-desc { font-size: 0.85rem; color: #5a6572; }
+.disciplina-qtd { margin-top: auto; font-size: 0.78rem; font-weight: 700; color: var(--cor-disciplina); }
 .form-section label.radio-pill, .form-section label.checkbox-pill { flex-direction: row; align-items: center; font-weight: 500; }
 #sync-bar[hidden] { display: none; }
 

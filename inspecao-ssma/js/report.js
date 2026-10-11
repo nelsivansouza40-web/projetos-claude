@@ -66,7 +66,7 @@ function montarParecerTecnico(insp, stats) {
   const partes = [];
 
   partes.push(
-    `Com base na inspeção do tipo "${insp.data.tipoInspecao}" realizada em ${id.data ? formatarDataBR(id.data) : 'data não informada'}` +
+    `Com base na inspeção de ${dadosDisciplina(disciplinaDaInspecao(insp)).rotulo.toLowerCase()} do tipo "${insp.data.tipoInspecao}" realizada em ${id.data ? formatarDataBR(id.data) : 'data não informada'}` +
     `${id.hora ? ' às ' + id.hora : ''}, na área "${id.area || 'não informada'}" da unidade "${id.unidade || 'não informada'}", ` +
     `foram verificados ${stats.total} item(ns) do checklist aplicável.`
   );
@@ -334,8 +334,8 @@ async function renderReport(id) {
         <div class="rep-titulo">
           <img src="icons/icon-192.png" alt="" class="rep-logo">
           <div>
-            <h2>RELATÓRIO DE INSPEÇÃO SSMA</h2>
-            <p>Segurança, Saúde do Trabalho e Meio Ambiente — ${escapeHtml(insp.data.tipoInspecao)}</p>
+            <h2>RELATÓRIO DE INSPEÇÃO — ${escapeHtml(disciplinaDaInspecao(insp).toUpperCase())}</h2>
+            <p>${escapeHtml(dadosDisciplina(disciplinaDaInspecao(insp)).subtitulo)} — ${escapeHtml(insp.data.tipoInspecao)}</p>
           </div>
         </div>
         <table class="rep-controle">
@@ -349,7 +349,8 @@ async function renderReport(id) {
         <h3>1. Identificação da inspeção</h3>
         <table class="rep-tabela-ident">
           <tr><th>Empresa / Contratada</th><td>${escapeHtml(id_.empresa)}</td><th>Unidade / Projeto</th><td>${escapeHtml(id_.unidade)}</td></tr>
-          <tr><th>Área / Setor</th><td>${escapeHtml(id_.area)}</td><th>Tipo de inspeção</th><td>${escapeHtml(insp.data.tipoInspecao)}</td></tr>
+          <tr><th>Área / Setor</th><td>${escapeHtml(id_.area)}</td><th>Disciplina</th><td>${escapeHtml(dadosDisciplina(disciplinaDaInspecao(insp)).rotulo)}</td></tr>
+          <tr><th>Tipo de inspeção</th><td colspan="3">${escapeHtml(insp.data.tipoInspecao)}</td></tr>
           <tr><th>Data</th><td>${formatarDataBR(id_.data)}</td><th>Hora</th><td>${escapeHtml(id_.hora)}</td></tr>
           <tr><th>Inspetor</th><td>${escapeHtml(id_.inspetor)}</td><th>Responsável acompanhando</th><td>${escapeHtml(id_.responsavelArea || '—')}</td></tr>
         </table>

@@ -71,7 +71,8 @@ async function renderPainel() {
   const daEmpresa = (emp) => !filtro.empresa || (emp || '').trim() === filtro.empresa;
   const noPeriodo = (data) => !inicio || (data || '') >= inicio;
 
-  const insp = inspecoes.filter((r) => r.completo && daEmpresa(r.data.identificacao.empresa) && noPeriodo(r.data.identificacao.data));
+  const daDisciplina = (r) => !filtro.disciplina || disciplinaDaInspecao(r) === filtro.disciplina;
+  const insp = inspecoes.filter((r) => r.completo && daDisciplina(r) && daEmpresa(r.data.identificacao.empresa) && noPeriodo(r.data.identificacao.data));
   const pts = ptaprs.filter((r) => r.completo && daEmpresa(r.data.identificacao.empresa) && noPeriodo(r.data.identificacao.data));
   const petsF = pets.filter((r) => r.completo && daEmpresa(r.data.identificacao.empresa) && noPeriodo(r.data.identificacao.data));
   const dds = ddsList.filter((r) => r.completo && daEmpresa(r.data.identificacao.empresa) && noPeriodo(r.data.identificacao.data));
@@ -103,6 +104,14 @@ async function renderPainel() {
     .filter(([, v]) => v.c + v.nc)
     .map(([rotulo, v]) => { const valor = (v.c / (v.c + v.nc)) * 100; return { rotulo, valor, cor: corPct(valor) }; })
     .sort((a, b) => a.valor - b.valor);
+  const porDisciplina = DISCIPLINAS_INSPECAO.map((d) => {
+    let c = 0; let nc = 0;
+    insp.filter((r) => disciplinaDaInspecao(r) === d.id).forEach((r) => r.data.checklist.forEach((i) => {
+      if (i.resposta === 'Conforme') c++;
+      if (i.resposta === 'Não Conforme') nc++;
+    }));
+    return c + nc ? { rotulo: d.rotulo, valor: (c / (c + nc)) * 100, cor: d.cor } : null;
+  }).filter(Boolean);
   const ncArea = [...ncPorArea.entries()].map(([rotulo, valor]) => ({ rotulo, valor, cor: 'var(--vermelho)' }))
     .sort((a, b) => b.valor - a.valor).slice(0, 8);
 
@@ -138,7 +147,7 @@ async function renderPainel() {
     meses.push({
       chave,
       rotulo: d.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', ''),
-      valor: inspecoes.filter((r) => r.completo && daEmpresa(r.data.identificacao.empresa) && (r.data.identificacao.data || '').startsWith(chave)).length
+      valor: inspecoes.filter((r) => r.completo && daDisciplina(r) && daEmpresa(r.data.identificacao.empresa) && (r.data.identificacao.data || '').startsWith(chave)).length
     });
   }
 
@@ -165,6 +174,10 @@ async function renderPainel() {
     </div>
     <div class="filtros-acoes">
       <select id="painel-periodo">${PERIODOS_PAINEL.map((p) => `<option value="${p.id}" ${filtro.periodo === p.id ? 'selected' : ''}>${p.rotulo}</option>`).join('')}</select>
+      <select id="painel-disciplina">
+        <option value="">Todas as disciplinas</option>
+        ${DISCIPLINAS_INSPECAO.map((d) => `<option value="${escapeHtml(d.id)}" ${filtro.disciplina === d.id ? 'selected' : ''}>${escapeHtml(d.rotulo)}</option>`).join('')}
+      </select>
       <select id="painel-empresa">
         <option value="">Todas as empresas</option>
         ${empresas.map((e) => `<option ${filtro.empresa === e ? 'selected' : ''}>${escapeHtml(e)}</option>`).join('')}
@@ -195,6 +208,11 @@ async function renderPainel() {
         <p class="hint">Quanto mais relatos de quase acidentes e desvios tratados na base, menor a chance de acidentes no topo.</p>
       </section>
       <section class="painel-card">
+        <h3>Inspeções e conformidade por disciplina</h3>
+        ${barrasPainel(porDisciplina, { max: 100, sufixo: '%' })}
+        <p class="hint">${DISCIPLINAS_INSPECAO.map((d) => `${escapeHtml(d.id)}: ${insp.filter((r) => disciplinaDaInspecao(r) === d.id).length} inspeção(ões)`).join(' · ')}</p>
+      </section>
+      <section class="painel-card">
         <h3>Conformidade por tipo de inspeção</h3>
         ${barrasPainel(conformidadeTipo, { max: 100, sufixo: '%' })}
       </section>
@@ -219,6 +237,7 @@ async function renderPainel() {
   `;
 
   document.getElementById('painel-periodo').addEventListener('change', (e) => { filtro.periodo = e.target.value; renderPainel(); });
+  document.getElementById('painel-disciplina').addEventListener('change', (e) => { filtro.disciplina = e.target.value; renderPainel(); });
   document.getElementById('painel-empresa').addEventListener('change', (e) => { filtro.empresa = e.target.value; renderPainel(); });
   view.querySelectorAll('.kpi-clicavel').forEach((el) => {
     const ir = () => {
