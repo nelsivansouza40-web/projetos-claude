@@ -28,6 +28,7 @@ const App = {
       return;
     }
     pedirArmazenamentoPersistente();
+    await Sync.init();
     this.empresas = await DB.all('empresas');
     $('#btn-empresa').addEventListener('click', () => this.abrirEmpresa());
     $('#btn-backup').addEventListener('click', () => Backup.abrirPainel());
@@ -35,7 +36,10 @@ const App = {
     $('#modal-close').addEventListener('click', () => Modal.close());
     $('#modal').addEventListener('mousedown', (e) => { if (e.target.id === 'modal') Modal.close(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#modal').hidden) Modal.close(); });
-    $('#save-status').addEventListener('click', () => { if (Backup.handle && !Backup.permitido) Backup.reativar(); });
+    $('#save-status').addEventListener('click', () => {
+      if (Backup.handle && !Backup.permitido) Backup.reativar();
+      else if (Sync.cfg) this.ir('config');
+    });
     window.addEventListener('hashchange', () => this.navegar());
     window.addEventListener('beforeunload', () => { if (Backup._t) { clearTimeout(Backup._t); Backup.gravar(); } });
     if (!this.empresas.length) { this.primeiraEmpresa(); return; }
@@ -58,6 +62,7 @@ const App = {
     await Config.carregar(this.emp.id);
     await this.recarregarDados();
     await Backup.carregarVinculo();
+    await Sync.carregar(this.emp.id);
     Object.keys(Lista.estado).forEach((k) => delete Lista.estado[k]);
     this.marca();
     this.statusSalvo();
@@ -121,8 +126,9 @@ const App = {
     const hora = this.salvoEm ? 'Salvo às ' + this.salvoEm.toLocaleTimeString('pt-BR') : 'Dados salvos neste computador';
     let bk = '';
     if (Backup.handle) bk = Backup.permitido ? ' · backup automático ativo' : ' · clique para reativar o backup';
-    el.textContent = hora + bk;
-    el.style.cursor = Backup.handle && !Backup.permitido ? 'pointer' : '';
+    el.textContent = hora + bk + Sync.textoStatus();
+    el.style.cursor = (Backup.handle && !Backup.permitido) || Sync.cfg ? 'pointer' : '';
+    el.classList.toggle('sync-erro', !!(Sync.cfg && Sync.cfg.erro));
   },
 
   atualizarTela() {
@@ -217,7 +223,7 @@ const App = {
   },
 
   primeiraEmpresa() {
-    $('#main').innerHTML = '<div class="card"><h1>Bem-vindo ao Gestão SST</h1><p>Para começar, informe os dados da empresa. Eles aparecem no topo do sistema e nos documentos impressos (Ficha de EPI, OSS, 5W2H, calendário da CIPA).</p></div>';
+    $('#main').innerHTML = '<div class="card"><h1>Bem-vindo ao Gestão SST</h1><p>Para começar, informe os dados da empresa. Eles aparecem no topo do sistema e nos documentos impressos (Ficha de EPI, OSS, 5W2H, calendário da CIPA).</p><p>Quer conhecer o sistema antes? Use <b>Ver empresa de demonstração</b>: ela vem com dados fictícios em todos os módulos. Se a sua equipe já usa o sistema com uma planilha Google, use <b>Entrar em empresa da equipe</b>.</p></div>';
     this.novaEmpresa(true);
   },
 
@@ -237,7 +243,7 @@ const App = {
     };
     Modal.open({
       title: primeira ? 'Cadastrar a empresa' : 'Nova empresa', body: form,
-      foot: (primeira ? [] : [button('Cancelar', '', () => Modal.close())]).concat([button('Salvar empresa', 'btn-primary', salvar)]),
+      foot: (primeira ? [button('Ver empresa de demonstração', '', () => Demo.carregar()), button('Entrar em empresa da equipe', '', () => Sync.entrarEmEmpresa())] : [button('Cancelar', '', () => Modal.close())]).concat([button('Salvar empresa', 'btn-primary', salvar)]),
       onClose: () => { if (primeira && !this.emp) setTimeout(() => this.novaEmpresa(true), 0); }
     });
   },
@@ -252,6 +258,8 @@ const App = {
     $$('[data-usar]', lista).forEach((b) => b.addEventListener('click', async () => { Modal.close(); await this.trocarEmpresa(b.dataset.usar); toast('Empresa em uso: ' + this.emp.nome); }));
     const novaBtn = button('+ Cadastrar outra empresa', 'btn-sm', () => { Modal.close(); this.novaEmpresa(false); });
     lista.appendChild(novaBtn);
+    lista.appendChild(button('Entrar em empresa da equipe', 'btn-sm', () => { Modal.close(); Sync.entrarEmEmpresa(); }));
+    lista.appendChild(button('Empresa de demonstração', 'btn-sm', () => Demo.carregar()));
     const body = h('<div></div>');
     body.append(h('<h3>Dados da empresa em uso</h3>'), form, h('<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">'), lista);
     Modal.open({
@@ -260,6 +268,7 @@ const App = {
         button('Excluir esta empresa', 'btn-danger', async () => {
           const nome = this.emp.nome;
           if (!await confirmar('Excluir a empresa "' + nome + '" e TODOS os seus registros deste computador? Faça um backup antes. Esta ação não pode ser desfeita.', 'Excluir tudo', true)) return;
+          await Sync.esquecer(this.emp.id);
           await DB.apagarEmpresa(this.emp.id);
           this.empresas = await DB.all('empresas');
           this.emp = null;
@@ -299,6 +308,7 @@ const App = {
       button('Dados da empresa', '', () => this.abrirEmpresa()),
       button('Backup', '', () => Backup.abrirPainel()));
     main.appendChild(geral);
+    main.appendChild(Sync.card());
 
     const par = h('<div class="card"><h2>Parâmetros</h2><div class="cfg-grid">' +
       num('metaDias', 'Meta de dias sem acidentes') +
@@ -374,7 +384,8 @@ const App = {
       '<div class="card"><h2>2. Empresa configurável</h2><p>No botão <b>Empresa</b>, no topo, você informa nome, CNPJ, endereço, responsável e o logotipo. Esses dados aparecem no cabeçalho e em todos os documentos impressos. É possível cadastrar várias empresas e alternar entre elas — os dados de cada uma ficam separados.</p></div>' +
       '<div class="card"><h2>3. Trazer os dados da planilha</h2><p>Em <b>Configurações → Importar planilha Excel</b>, escolha o arquivo Gestão SST (.xlsx). O sistema lê as abas preenchidas (colaboradores, EPI e movimentações, acidentes, treinamentos, ASO, extintores etc.) e cria os colaboradores citados nas movimentações.</p></div>' +
       '<div class="card"><h2>4. Rotina sugerida</h2><ul><li>Cadastre colaboradores, EPIs e o conteúdo de <b>Atividades por função</b>.</li><li>Lance cada entrega em <b>Movimentação de EPI</b> e imprima a <b>Ficha de EPI</b> para assinatura.</li><li>Acompanhe <b>Pendências e vencimentos</b> (ASO, treinamentos, CA, extintores, documentos, CIPA).</li><li>Use os <b>Painéis</b> nas reuniões de CIPA e de resultados.</li></ul></div>' +
-      '<div class="card"><h2>5. Indicadores</h2><p>Taxa de frequência = acidentes × 1.000.000 ÷ HHT. Taxa de gravidade = (dias perdidos + dias debitados) × 1.000.000 ÷ HHT, conforme a NBR 14280. O HHT é estimado por colaboradores ativos × jornada diária × dias trabalhados no mês × meses do período (ajuste em Configurações).</p></div>';
+      '<div class="card"><h2>5. Trabalho em equipe</h2><p>Para vários computadores usarem o mesmo cadastro, conecte a empresa a uma planilha Google em <b>Configurações → Trabalho em equipe</b>. Nos outros computadores, use <b>Empresa → Entrar em empresa da equipe</b>. Cada um continua funcionando sem internet e sincroniza sozinho quando a conexão volta.</p></div>' +
+      '<div class="card"><h2>6. Indicadores</h2><p>Taxa de frequência = acidentes × 1.000.000 ÷ HHT. Taxa de gravidade = (dias perdidos + dias debitados) × 1.000.000 ÷ HHT, conforme a NBR 14280. O HHT é estimado por colaboradores ativos × jornada diária × dias trabalhados no mês × meses do período (ajuste em Configurações).</p></div>';
   }
 };
 

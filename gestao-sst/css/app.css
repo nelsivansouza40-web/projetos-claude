@@ -73,6 +73,7 @@ a { color: var(--brand); }
 .brand .subtitle { display: block; font-size: .75rem; opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .topbar-actions { display: flex; align-items: center; gap: 8px; }
 .save-status { font-size: .78rem; opacity: .9; white-space: nowrap; }
+.save-status.sync-erro { font-weight: 700; text-decoration: underline; }
 #topbar .btn-ghost { color: #fff; border-color: rgba(255,255,255,.45); }
 #topbar .btn-ghost:hover { background: rgba(255,255,255,.12); }
 .icon-btn { background: transparent; border: 0; color: inherit; font-size: 1.25rem; cursor: pointer; padding: 6px 8px; border-radius: 8px; }

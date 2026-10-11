@@ -57,18 +57,26 @@ const DB = (() => {
     });
   }
 
+  // Avisa a sincronização da equipe sobre cada gravação (ver sync.js).
+  const avisar = (name, obj, del) => { if (DB.aoMudar) { try { DB.aoMudar(name, obj, del); } catch (e) { /* não impede a gravação */ } } };
+
   return {
     open,
+    aoMudar: null,
     async all(name) { return p((await store(name)).getAll()); },
     async get(name, key) { return p((await store(name)).get(key)); },
-    async put(name, obj) { return p((await store(name, 'readwrite')).put(obj)); },
-    async del(name, key) { return p((await store(name, 'readwrite')).delete(key)); },
+    async put(name, obj) { const r = await p((await store(name, 'readwrite')).put(obj)); avisar(name, obj, false); return r; },
+    async del(name, key) { const r = await p((await store(name, 'readwrite')).delete(key)); avisar(name, key, true); return r; },
+    /** Gravação sem aviso: usada ao aplicar o que veio da planilha da equipe. */
+    async putRaw(name, obj) { return p((await store(name, 'readwrite')).put(obj)); },
+    async delRaw(name, key) { return p((await store(name, 'readwrite')).delete(key)); },
     async recsDaEmpresa(emp) {
       const s = await store('rec');
       return p(s.index('emp').getAll(emp));
     },
     async putMany(name, list) {
       await txDone([name], (tx) => { const s = tx.objectStore(name); list.forEach((o) => s.put(o)); });
+      list.forEach((o) => avisar(name, o, false));
     },
     async apagarEmpresa(emp) {
       const recs = await this.recsDaEmpresa(emp);
@@ -82,6 +90,7 @@ const DB = (() => {
     async limparModulos(emp, mods) {
       const recs = (await this.recsDaEmpresa(emp)).filter((r) => mods.includes(r.mod));
       await txDone(['rec'], (tx) => recs.forEach((r) => tx.objectStore('rec').delete(r.id)));
+      recs.forEach((r) => avisar('rec', r.id, true));
     }
   };
 })();

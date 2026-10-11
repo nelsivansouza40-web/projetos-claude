@@ -37,6 +37,23 @@ Dá para cadastrar várias empresas; os dados de cada uma ficam separados.
   regrava um `.json` escolhido pelo usuário segundos depois de cada alteração.
 - Backup manual (`.json`) e restauração pelo botão **Backup**.
 
+## Empresa de demonstração
+
+Na tela de boas-vindas ou em **Empresa → Empresa de demonstração**, o sistema
+cria a "Metalúrgica Modelo Ltda (DEMONSTRAÇÃO)", com cerca de 480 registros
+fictícios em todos os módulos. As datas são calculadas a partir do dia em que
+ela é criada, para que os painéis e as pendências mostrem situações atuais
+(ASO e extintores vencidos, EPI sem estoque, ações atrasadas). Serve para
+apresentar o sistema sem expor dados pessoais reais.
+
+## Trabalho em equipe
+
+Vários computadores podem usar o mesmo cadastro, sincronizados por uma planilha
+Google (servidor em Apps Script). Cada computador continua funcionando sem
+internet e envia as alterações quando a conexão volta; em conflito, vale a
+alteração mais recente. Instalação passo a passo em
+[`servidor/LEIA-ME.md`](servidor/LEIA-ME.md).
+
 ## Importar a planilha
 
 Em **Configurações → Importar planilha Excel (.xlsx)**. O leitor de `.xlsx` é
@@ -61,6 +78,10 @@ js/dashboards.js      painéis
 js/reports.js         Ficha de EPI, OSS, 5W2H, prontuário, calendário da CIPA
 js/xlsx-import.js     importação da planilha
 js/backup.js          backup manual e automático
+js/demo.js            empresa de demonstração (dados fictícios)
+js/sync.js            sincronização com a planilha Google da equipe
 js/app.js             navegação, empresa e configurações
 sw.js                 cache para uso offline quando publicado
+servidor/Code.gs      servidor da equipe (Google Apps Script)
+servidor/LEIA-ME.md   instalação do servidor
 ```
