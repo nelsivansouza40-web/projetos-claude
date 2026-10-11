@@ -46,7 +46,8 @@ function faixasDoElemento(el, base, limitePx) {
   const r = el.getBoundingClientRect();
   if (r.height < 1) return [];
   const filhos = Array.from(el.children).filter((c) => c.getBoundingClientRect().height >= 1);
-  if (r.height <= limitePx || !filhos.length) return [{ top: r.top - base, bottom: r.bottom - base }];
+  const titulo = /^H[2-4]$/.test(el.tagName);
+  if (r.height <= limitePx || !filhos.length) return [{ top: r.top - base, bottom: r.bottom - base, titulo }];
 
   const intervalos = filhos
     .map((c) => { const cr = c.getBoundingClientRect(); return { top: cr.top - base, bottom: cr.bottom - base, els: [c] }; })
@@ -66,7 +67,7 @@ function faixasDoElemento(el, base, limitePx) {
     if (bd.els.length === 1 && bd.bottom - bd.top > limitePx) {
       faixas.push(...faixasDoElemento(bd.els[0], base, limitePx));
     } else {
-      faixas.push({ top: bd.top, bottom: bd.bottom });
+      faixas.push({ top: bd.top, bottom: bd.bottom, titulo: bd.els.length === 1 && /^H[2-4]$/.test(bd.els[0].tagName) });
     }
   });
   return faixas;
@@ -80,7 +81,7 @@ function faixasDoRelatorio(article, limitePx) {
     const partes = filho.classList.contains('rep-secao') && filho.children.length ? Array.from(filho.children) : [filho];
     partes.forEach((el) => faixas.push(...faixasDoElemento(el, base, limitePx)));
   });
-  return faixas.map((f) => ({ top: f.top, height: f.bottom - f.top }));
+  return faixas.map((f) => ({ top: f.top, height: f.bottom - f.top, titulo: !!f.titulo }));
 }
 
 async function aguardarImagens(raiz) {
@@ -93,119 +94,157 @@ async function gerarPDFDoRelatorio(article, nomeArquivo, aoProgredir) {
   await carregarBibliotecasPDF();
   const { jsPDF } = window.jspdf;
 
-  // Copia o relatório para uma área fora da tela, com largura fixa, para o
-  // PDF sair igual no celular e no computador.
-  const palco = document.createElement('div');
-  palco.className = 'palco-pdf';
-  palco.style.cssText = `position:absolute;left:0;top:0;width:${PDF_LARGURA_LAYOUT_PX}px;background:#fff;z-index:9998;`;
+  // Seções marcadas com "rep-paisagem" (ex.: inventário de riscos e plano de
+  // ação do PGR) saem em folha deitada; o restante, em pé. O relatório é
+  // dividido em trechos consecutivos de mesma orientação, e cada trecho começa
+  // numa página nova.
+  const filhos = Array.from(article.children).filter((el) => !el.classList.contains('no-print'));
+  const trechos = [];
+  filhos.forEach((el) => {
+    const orientacao = el.classList.contains('rep-paisagem') ? 'l' : 'p';
+    const ultimo = trechos[trechos.length - 1];
+    if (ultimo && ultimo.orientacao === orientacao) ultimo.els.push(el);
+    else trechos.push({ orientacao, els: [el] });
+  });
+
   // A cópia precisa estar na área visível da página para o html2canvas
   // desenhá-la; uma cobertura com o progresso fica por cima enquanto isso.
   const cobertura = document.createElement('div');
   cobertura.className = 'cobertura-pdf';
   cobertura.innerHTML = '<div class="cobertura-pdf-caixa">Gerando PDF… <span>0%</span></div>';
-  const copia = article.cloneNode(true);
-  copia.style.cssText = 'max-width:none;width:100%;border:none;border-radius:0;padding:0;margin:0;';
-  copia.querySelectorAll('.no-print, .rep-assinatura-controles, .rep-assinatura-pad, button').forEach((el) => el.remove());
-  palco.appendChild(copia);
-  document.body.appendChild(palco);
   document.body.appendChild(cobertura);
   const progresso = (pct) => {
     cobertura.querySelector('span').textContent = pct + '%';
     if (aoProgredir) aoProgredir(pct);
   };
 
+  const ESCALA = 1.6;
+  const LOTE_PX = 3000;
+  const jpeg = (c) => c.toDataURL('image/jpeg', 0.82);
+  function recortar(origem, sy, altura) {
+    const c = document.createElement('canvas');
+    c.width = origem.width;
+    c.height = Math.max(1, Math.round(altura));
+    c.getContext('2d').drawImage(origem, 0, Math.round(sy), origem.width, c.height, 0, 0, c.width, c.height);
+    return c;
+  }
+
+  const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: trechos[0] && trechos[0].orientacao === 'l' ? 'landscape' : 'portrait', compress: true });
+  let primeiraPagina = true;
+  let palco = null;
+
   try {
-    await aguardarImagens(copia);
-    const pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
-    const larguraUtil = PDF_LARGURA_MM - 2 * PDF_MARGEM_MM;
-    const alturaUtil = PDF_ALTURA_MM - 2 * PDF_MARGEM_MM - 6; // 6 mm reservados para o número da página
-    const mmPorPx = larguraUtil / copia.offsetWidth;
+    for (let t = 0; t < trechos.length; t++) {
+      const trecho = trechos[t];
+      const deitada = trecho.orientacao === 'l';
+      const larguraPagina = deitada ? PDF_ALTURA_MM : PDF_LARGURA_MM;
+      const alturaPagina = deitada ? PDF_LARGURA_MM : PDF_ALTURA_MM;
+      const larguraUtil = larguraPagina - 2 * PDF_MARGEM_MM;
+      const alturaUtil = alturaPagina - 2 * PDF_MARGEM_MM - 6; // 6 mm reservados para o número da página
+      // Mesma escala de texto nas duas orientações: a folha deitada só ganha largura.
+      const larguraLayout = Math.round(PDF_LARGURA_LAYOUT_PX * larguraUtil / (PDF_LARGURA_MM - 2 * PDF_MARGEM_MM));
 
-    const ESCALA = 1.6;
-    const LOTE_PX = 3000;
-    const larguraPx = copia.offsetWidth;
-    const alturaTotalPx = copia.offsetHeight;
-    
-    const unidades = faixasDoRelatorio(copia, alturaUtil / mmPorPx);
+      // Copia o trecho para uma área com largura fixa, para o PDF sair igual
+      // no celular e no computador.
+      palco = document.createElement('div');
+      palco.className = 'palco-pdf';
+      palco.style.cssText = `position:absolute;left:0;top:0;width:${larguraLayout}px;background:#fff;z-index:9998;`;
+      const copia = article.cloneNode(false);
+      copia.style.cssText = 'display:flow-root;max-width:none;width:100%;border:none;border-radius:0;padding:0;margin:0;';
+      trecho.els.forEach((el) => copia.appendChild(el.cloneNode(true)));
+      copia.querySelectorAll('.no-print, .rep-assinatura-controles, .rep-assinatura-pad, button').forEach((el) => el.remove());
+      palco.appendChild(copia);
+      document.body.appendChild(palco);
+      await aguardarImagens(copia);
 
-    // Renderiza o relatório em lotes de ~3000 px (limite de tamanho de
-    // imagem dos celulares) e recorta cada unidade do lote correspondente.
-    let lote = null;
-    async function loteQueContem(top, height) {
-      if (lote && top >= lote.top && top + height <= lote.top + lote.height) return lote;
-      const alturaLote = Math.min(Math.max(LOTE_PX, height + 1), alturaTotalPx - top + 1);
-      const r = copia.getBoundingClientRect();
-      const canvas = await window.html2canvas(copia, {
-        backgroundColor: '#ffffff',
-        scale: ESCALA,
-        useCORS: true,
-        logging: false,
-        x: r.left + window.scrollX,
-        y: r.top + window.scrollY + top,
-        width: larguraPx,
-        height: alturaLote,
-        windowWidth: PDF_LARGURA_LAYOUT_PX
-      });
-      lote = { top, height: alturaLote, canvas };
-      return lote;
-    }
+      const mmPorPx = larguraUtil / copia.offsetWidth;
+      const larguraPx = copia.offsetWidth;
+      const alturaTotalPx = copia.offsetHeight;
+      const unidades = faixasDoRelatorio(copia, alturaUtil / mmPorPx);
 
-    function recortar(origem, sy, altura) {
-      const c = document.createElement('canvas');
-      c.width = origem.width;
-      c.height = Math.max(1, Math.round(altura));
-      c.getContext('2d').drawImage(origem, 0, Math.round(sy), origem.width, c.height, 0, 0, c.width, c.height);
-      return c;
-    }
+      // Renderiza em lotes de ~3000 px (limite de tamanho de imagem dos
+      // celulares) e recorta cada unidade do lote correspondente.
+      let lote = null;
+      const loteQueContem = async (top, height) => {
+        if (lote && top >= lote.top && top + height <= lote.top + lote.height) return lote;
+        const alturaLote = Math.min(Math.max(LOTE_PX, height + 1), alturaTotalPx - top + 1);
+        const r = copia.getBoundingClientRect();
+        const canvas = await window.html2canvas(copia, {
+          backgroundColor: '#ffffff',
+          scale: ESCALA,
+          useCORS: true,
+          logging: false,
+          x: r.left + window.scrollX,
+          y: r.top + window.scrollY + top,
+          width: larguraPx,
+          height: alturaLote,
+          windowWidth: larguraLayout
+        });
+        lote = { top, height: alturaLote, canvas };
+        return lote;
+      };
 
-    let y = PDF_MARGEM_MM;
-    let fundoAnteriorPx = null;
-    const limite = PDF_MARGEM_MM + alturaUtil;
+      const novaPagina = () => pdf.addPage('a4', deitada ? 'landscape' : 'portrait');
+      if (!primeiraPagina) novaPagina();
+      primeiraPagina = false;
 
-    for (let i = 0; i < unidades.length; i++) {
-      progresso(Math.round((i / unidades.length) * 100));
-      const u = unidades[i];
-      if (u.height < 1) continue;
-      const espacoAntesMm = fundoAnteriorPx === null ? 0 : Math.max(0, u.top - fundoAnteriorPx) * mmPorPx;
-      fundoAnteriorPx = u.top + u.height;
-      const alturaMm = u.height * mmPorPx;
-      if (y > PDF_MARGEM_MM) y += espacoAntesMm;
+      let y = PDF_MARGEM_MM;
+      let fundoAnteriorPx = null;
+      const limite = PDF_MARGEM_MM + alturaUtil;
 
-      const l = await loteQueContem(u.top, u.height);
-      const imagem = recortar(l.canvas, (u.top - l.top) * ESCALA, u.height * ESCALA);
-      const jpeg = (c) => c.toDataURL('image/jpeg', 0.82);
+      for (let i = 0; i < unidades.length; i++) {
+        progresso(Math.round(((t + i / unidades.length) / trechos.length) * 100));
+        const u = unidades[i];
+        if (u.height < 1) continue;
+        const espacoAntesMm = fundoAnteriorPx === null ? 0 : Math.max(0, u.top - fundoAnteriorPx) * mmPorPx;
+        fundoAnteriorPx = u.top + u.height;
+        const alturaMm = u.height * mmPorPx;
+        if (y > PDF_MARGEM_MM) y += espacoAntesMm;
 
-      if (alturaMm <= alturaUtil) {
-        if (y + alturaMm > limite) { pdf.addPage(); y = PDF_MARGEM_MM; }
-        pdf.addImage(jpeg(imagem), 'JPEG', PDF_MARGEM_MM, y, larguraUtil, alturaMm, undefined, 'FAST');
-        y += alturaMm;
-      } else {
-        // Bloco maior que uma página (ex.: tabela longa): fatia em pedaços.
-        const pxPorMm = imagem.height / alturaMm;
-        let feitoMm = 0;
-        while (feitoMm < alturaMm - 0.1) {
-          if (y >= limite - 10) { pdf.addPage(); y = PDF_MARGEM_MM; }
-          const fatiaMm = Math.min(alturaMm - feitoMm, limite - y);
-          const fatia = recortar(imagem, feitoMm * pxPorMm, fatiaMm * pxPorMm);
-          pdf.addImage(jpeg(fatia), 'JPEG', PDF_MARGEM_MM, y, larguraUtil, fatiaMm, undefined, 'FAST');
-          y += fatiaMm;
-          feitoMm += fatiaMm;
+        const l = await loteQueContem(u.top, u.height);
+        const imagem = recortar(l.canvas, (u.top - l.top) * ESCALA, u.height * ESCALA);
+
+        if (alturaMm <= alturaUtil) {
+          // Título não fica sozinho no pé da página: precisa caber junto com o
+          // bloco seguinte (ou com o começo dele, se o bloco for maior que a página).
+          const proxima = unidades[i + 1];
+          const proximaMm = proxima ? proxima.height * mmPorPx : 0;
+          const reservaMm = u.titulo && proxima ? (proximaMm <= alturaUtil ? proximaMm : 25) : 0;
+          if (y + alturaMm + reservaMm > limite && y > PDF_MARGEM_MM) { novaPagina(); y = PDF_MARGEM_MM; }
+          pdf.addImage(jpeg(imagem), 'JPEG', PDF_MARGEM_MM, y, larguraUtil, alturaMm, undefined, 'FAST');
+          y += alturaMm;
+        } else {
+          // Bloco maior que uma página: fatia em pedaços.
+          const pxPorMm = imagem.height / alturaMm;
+          let feitoMm = 0;
+          while (feitoMm < alturaMm - 0.1) {
+            if (y >= limite - 10) { novaPagina(); y = PDF_MARGEM_MM; }
+            const fatiaMm = Math.min(alturaMm - feitoMm, limite - y);
+            const fatia = recortar(imagem, feitoMm * pxPorMm, fatiaMm * pxPorMm);
+            pdf.addImage(jpeg(fatia), 'JPEG', PDF_MARGEM_MM, y, larguraUtil, fatiaMm, undefined, 'FAST');
+            y += fatiaMm;
+            feitoMm += fatiaMm;
+          }
         }
       }
+      palco.remove();
+      palco = null;
     }
 
     const total = pdf.getNumberOfPages();
     for (let p = 1; p <= total; p++) {
       pdf.setPage(p);
+      const w = pdf.internal.pageSize.getWidth();
+      const h = pdf.internal.pageSize.getHeight();
       pdf.setFontSize(8);
       pdf.setTextColor(110);
-      pdf.text(`Página ${p} de ${total}`, PDF_LARGURA_MM - PDF_MARGEM_MM, PDF_ALTURA_MM - PDF_MARGEM_MM + 2, { align: 'right' });
+      pdf.text(`Página ${p} de ${total}`, w - PDF_MARGEM_MM, h - PDF_MARGEM_MM + 2, { align: 'right' });
     }
     progresso(100);
     const blob = pdf.output('blob');
     return new File([blob], nomeArquivo, { type: 'application/pdf' });
   } finally {
-    palco.remove();
+    if (palco) palco.remove();
     cobertura.remove();
   }
 }

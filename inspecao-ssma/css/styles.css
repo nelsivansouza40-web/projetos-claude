@@ -539,6 +539,9 @@ main#view {
   .rep-quebra { break-before: auto; }
   .rep-foto-bloco { break-inside: avoid; }
   @page { size: A4; margin: 14mm; }
+  /* Inventário de riscos e plano de ação do PGR: folha deitada (paisagem). */
+  @page paisagem { size: A4 landscape; margin: 12mm; }
+  .rep-paisagem { page: paisagem; }
 }
 .detail-thumbs { margin-top: 8px; }
 .rep-inventario-pgr { font-size: 0.68rem; table-layout: fixed; width: 100%; }

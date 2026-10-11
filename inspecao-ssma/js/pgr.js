@@ -1320,12 +1320,12 @@ async function renderPGRReport(id) {
         ${montarResumoRiscosPGR(p.data.perigos)}
       </section>
 
-      <section class="rep-secao rep-quebra">
+      <section class="rep-secao rep-quebra rep-paisagem">
         <h3>6. Inventário de riscos</h3>
         ${inventarioHtml}
       </section>
 
-      <section class="rep-secao rep-quebra">
+      <section class="rep-secao rep-quebra rep-paisagem">
         <h3>7. Plano de ação</h3>
         ${planoAcaoHtml}
       </section>
