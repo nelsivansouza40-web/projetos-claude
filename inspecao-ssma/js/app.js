@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v34';
+const APP_VERSION = 'v36';
 
 const state = {
   screen: 'home',
@@ -96,6 +96,8 @@ async function updateSyncBar() {
   const registrosEPI = await DB.getAllFichasEPI();
   const registrosVeiculo = await DB.getAllVeiculos();
   const registrosPGR = await DB.getAllPGR();
+  const registrosRelatos = await DB.getAllRelatos();
+  const acoesAvulsas = await DB.getAllAcoes();
   const pendentesInsp = inspections.filter((i) => i.completo && i.syncStatus !== 'synced');
   const pendentesDDS = registrosDDS.filter((d) => d.completo && d.syncStatus !== 'synced');
   const pendentesDiag = registrosDiag.filter((d) => d.completo && d.syncStatus !== 'synced');
@@ -107,7 +109,9 @@ async function updateSyncBar() {
   const pendentesEPI = registrosEPI.filter((f) => f.completo && f.syncStatus !== 'synced');
   const pendentesVeiculo = registrosVeiculo.filter((v) => v.completo && v.syncStatus !== 'synced');
   const pendentesPGR = registrosPGR.filter((p) => p.completo && p.syncStatus !== 'synced');
-  const totalPendentes = pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length + pendentesEPI.length + pendentesVeiculo.length + pendentesPGR.length;
+  const pendentesRelatos = registrosRelatos.filter((r) => r.completo && r.syncStatus !== 'synced');
+  const pendentesAcoes = acoesAvulsas.filter((a) => a.syncStatus !== 'synced');
+  const totalPendentes = pendentesRelatos.length + pendentesAcoes.length + pendentesInsp.length + pendentesDDS.length + pendentesDiag.length + pendentesCipa.length + pendentesPTAPR.length + pendentesCert.length + pendentesPET.length + pendentesInvestigacao.length + pendentesEPI.length + pendentesVeiculo.length + pendentesPGR.length;
   if (totalPendentes === 0) {
     syncBarEl.hidden = true;
     return;
@@ -126,6 +130,8 @@ async function updateSyncBar() {
   if (pendentesEPI.length) partes.push(`${pendentesEPI.length} ficha(s) de EPI`);
   if (pendentesVeiculo.length) partes.push(`${pendentesVeiculo.length} vistoria(s) de veículo`);
   if (pendentesPGR.length) partes.push(`${pendentesPGR.length} PGR`);
+  if (pendentesRelatos.length) partes.push(`${pendentesRelatos.length} relato(s)`);
+  if (pendentesAcoes.length) partes.push(`${pendentesAcoes.length} ação(ões) avulsa(s)`);
   syncBarEl.innerHTML = `
     <span>${partes.join(' e ')} aguardando sincronização${online ? '' : ' (offline)'}</span>
     <button id="btn-sync-now" ${online ? '' : 'disabled'}>Sincronizar agora</button>
@@ -163,6 +169,10 @@ async function updateSyncBar() {
       if (state.screen === 'veiculo-detail') renderVeiculoDetail(state.veiculoId);
       if (state.screen === 'pgr-home') renderPGRHome();
       if (state.screen === 'pgr-detail') renderPGRDetail(state.pgrId);
+      if (state.screen === 'relatos-home') renderRelatosHome();
+      if (state.screen === 'relatos-detail') renderRelatoDetail(state.relatoId);
+      if (state.screen === 'acoes-home') renderAcoesHome();
+      if (state.screen === 'painel') renderPainel();
     });
   }
 }
@@ -190,6 +200,12 @@ function setActiveTab(tab) {
   if (tabEPI) tabEPI.classList.toggle('active', tab === 'epi');
   if (tabVeiculo) tabVeiculo.classList.toggle('active', tab === 'veiculo');
   if (tabPGR) tabPGR.classList.toggle('active', tab === 'pgr');
+  ['painel', 'acoes', 'relatos'].forEach((t) => {
+    const el = document.getElementById(`tab-${t}`);
+    if (el) el.classList.toggle('active', tab === t);
+  });
+  const ativa = document.querySelector('.tab-btn.active');
+  if (ativa && ativa.scrollIntoView) ativa.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 }
 
 async function refreshChrome() {
@@ -923,6 +939,9 @@ function abrirResultadoBusca(tipo, r) {
     case 'pgr':
       renderPGRDetail(r.id);
       break;
+    case 'relato':
+      if (r.completo) { renderRelatoDetail(r.id); } else { state.relatoId = r.id; renderRelatoForm(); }
+      break;
   }
 }
 
@@ -1008,6 +1027,13 @@ async function executarBuscaGlobal(termoBruto) {
     const d = r.data;
     if (bate(d.empresa) || bate(d.unidade) || d.perigos.some((h) => bate(h.perigo) || bate(h.setor))) {
       resultados.push({ tipo: 'pgr', registro: r, modulo: 'PGR', titulo: d.empresa || 'PGR', sub: d.unidade || '' });
+    }
+  });
+
+  (await DB.getAllRelatos()).forEach((r) => {
+    const d = r.data;
+    if (bate(d.tipo) || bate(d.empresa) || bate(d.area) || bate(d.local) || bate(d.descricao) || (!d.anonimo && bate(d.relator))) {
+      resultados.push({ tipo: 'relato', registro: r, modulo: 'Relato', titulo: `${d.tipo} — ${d.local || d.area || ''}`, sub: resumirTexto(d.descricao, 80) });
     }
   });
 
@@ -1230,6 +1256,9 @@ document.getElementById('tab-investigacao').addEventListener('click', renderInve
 document.getElementById('tab-epi').addEventListener('click', renderEPIHome);
 document.getElementById('tab-veiculo').addEventListener('click', renderVeiculoHome);
 document.getElementById('tab-pgr').addEventListener('click', renderPGRHome);
+document.getElementById('tab-painel').addEventListener('click', renderPainel);
+document.getElementById('tab-acoes').addEventListener('click', renderAcoesHome);
+document.getElementById('tab-relatos').addEventListener('click', renderRelatosHome);
 
 /* ---------------- INICIALIZAÇÃO ---------------- */
 

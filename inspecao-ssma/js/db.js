@@ -1,6 +1,6 @@
 /* Camada de persistência local (IndexedDB). Funciona 100% offline. */
 const DB_NAME = 'ssma_inspecoes_db';
-const DB_VERSION = 11;
+const DB_VERSION = 12;
 let dbPromise = null;
 
 function openDB() {
@@ -51,6 +51,12 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('pgr')) {
         db.createObjectStore('pgr', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('relatos')) {
+        db.createObjectStore('relatos', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('acoes')) {
+        db.createObjectStore('acoes', { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => resolve(e.target.result);
@@ -304,6 +310,42 @@ const DB = {
   },
   async deletePGR(id) {
     const store = await storeTx('pgr', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putRelato(r) {
+    const store = await storeTx('relatos', 'readwrite');
+    await reqToPromise(store.put(r));
+    return r;
+  },
+  async getRelato(id) {
+    const store = await storeTx('relatos', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllRelatos() {
+    const store = await storeTx('relatos', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deleteRelato(id) {
+    const store = await storeTx('relatos', 'readwrite');
+    return reqToPromise(store.delete(id));
+  },
+  async putAcao(a) {
+    const store = await storeTx('acoes', 'readwrite');
+    await reqToPromise(store.put(a));
+    return a;
+  },
+  async getAcao(id) {
+    const store = await storeTx('acoes', 'readonly');
+    return reqToPromise(store.get(id));
+  },
+  async getAllAcoes() {
+    const store = await storeTx('acoes', 'readonly');
+    const all = await reqToPromise(store.getAll());
+    return all.sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  async deleteAcao(id) {
+    const store = await storeTx('acoes', 'readwrite');
     return reqToPromise(store.delete(id));
   },
   async getSetting(key) {

@@ -8,7 +8,7 @@
 const PTAPR_STEPS = ['Identificação', 'Análise de Riscos', 'Equipe e Encerramento', 'Revisão'];
 
 function novoItemPTAPR(texto) {
-  return { id: uuid(), texto, resposta: '', observacao: '', personalizado: false };
+  return { id: uuid(), texto, resposta: '', observacao: '', personalizado: false, photoIds: [] };
 }
 
 function gerarChecklistPTAPR() {
@@ -313,6 +313,7 @@ function renderPTAPRItem(item, idx) {
       <div class="checklist-question">Item ${String(idx + 1).padStart(2, '0')} — ${escapeHtml(item.texto)}</div>
       <div class="radio-group">${radiosHtml}</div>
       <div class="checklist-details">
+        ${htmlFotosItem()}
         <label>Observação
           <textarea class="txt-observacao" rows="2">${escapeHtml(item.observacao)}</textarea>
         </label>
@@ -341,6 +342,8 @@ function renderPTAPRChecklistItems(container, pt) {
       item.observacao = obs.value;
       await salvarRascunhoPTAPR(pt);
     });
+
+    ligarFotosItem(card, pt, item, salvarRascunhoPTAPR);
   });
 }
 
@@ -578,11 +581,13 @@ async function renderPTAPRDetail(id) {
   const s = statusLabel(pt);
   const ident = pt.data.identificacao;
 
+  const fotosItens = await Promise.all(pt.data.checklist.map(htmlFotosItemDetalhe));
   const checklistHtml = pt.data.checklist.map((item, idx) => `
     <div class="detail-item">
       <div><strong>Item ${String(idx + 1).padStart(2, '0')}.</strong> ${escapeHtml(item.texto)}</div>
       <div class="detail-resposta resposta-${item.resposta === 'Conforme' ? 'ok' : item.resposta === 'Não Conforme' ? 'nc' : 'na'}">${escapeHtml(item.resposta || 'Sem resposta')}</div>
       ${item.observacao ? `<div class="detail-obs">Obs.: ${escapeHtml(item.observacao)}</div>` : ''}
+      ${fotosItens[idx]}
     </div>
   `).join('');
 
@@ -611,7 +616,7 @@ async function renderPTAPRDetail(id) {
     <h3>Análise de Riscos</h3>
     ${checklistHtml}
     ${pt.data.medidasControle ? `<h3>Medidas de controle adicionais</h3><div class="detail-block"><p>${escapeHtml(pt.data.medidasControle)}</p></div>` : ''}
-    ${photos.length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${photos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
+    ${fotosGerais(photos).length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${fotosGerais(photos).map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     <h3>Participantes / Executantes (${pt.data.equipe.length})</h3>
     ${equipeHtml}
     <h3>Encerramento</h3>
@@ -774,6 +779,7 @@ async function renderPTAPRReport(id) {
   const codigo = gerarCodigoPTAPR(pt);
   const geradoEm = new Date().toLocaleString('pt-BR');
   const fotosHtml = await montarFotosPTAPR(pt.data.fotosIds);
+  const fotosItensHtml = await montarFotosItensRelatorio(pt.data.checklist.map((item, idx) => ({ item, rotulo: 'Item ' + String(idx + 1).padStart(2, '0') })));
   const enc = pt.data.encerramento;
   const encerrada = !!enc.data;
 
@@ -823,7 +829,7 @@ async function renderPTAPRReport(id) {
 
       <section class="rep-secao rep-quebra">
         <h3>3. Evidência fotográfica</h3>
-        ${fotosHtml}
+        ${secaoFotosRelatorio(fotosItensHtml, pt.data.fotosIds, fotosHtml)}
       </section>
 
       <section class="rep-secao rep-quebra">

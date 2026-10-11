@@ -8,7 +8,7 @@
 const PET_STEPS = ['Identificação', 'Verificações Pré-Entrada', 'Testes Atmosféricos', 'Equipe e Encerramento', 'Revisão'];
 
 function novoItemPET(texto) {
-  return { id: uuid(), texto, resposta: '', observacao: '', personalizado: false };
+  return { id: uuid(), texto, resposta: '', observacao: '', personalizado: false, photoIds: [] };
 }
 
 function gerarChecklistPET() {
@@ -327,6 +327,7 @@ function renderPETItem(item, idx) {
       <div class="checklist-question">Item ${String(idx + 1).padStart(2, '0')} — ${escapeHtml(item.texto)}</div>
       <div class="radio-group">${radiosHtml}</div>
       <div class="checklist-details">
+        ${htmlFotosItem()}
         <label>Observação
           <textarea class="txt-observacao" rows="2">${escapeHtml(item.observacao)}</textarea>
         </label>
@@ -355,6 +356,8 @@ function renderPETChecklistItems(container, pet) {
       item.observacao = obs.value;
       await salvarRascunhoPET(pet);
     });
+
+    ligarFotosItem(card, pet, item, salvarRascunhoPET);
   });
 }
 
@@ -706,11 +709,13 @@ async function renderPETDetail(id) {
   const s = statusLabel(pet);
   const ident = pet.data.identificacao;
 
+  const fotosItens = await Promise.all(pet.data.checklist.map(htmlFotosItemDetalhe));
   const checklistHtml = pet.data.checklist.map((item, idx) => `
     <div class="detail-item">
       <div><strong>Item ${String(idx + 1).padStart(2, '0')}.</strong> ${escapeHtml(item.texto)}</div>
       <div class="detail-resposta resposta-${item.resposta === 'Conforme' ? 'ok' : item.resposta === 'Não Conforme' ? 'nc' : 'na'}">${escapeHtml(item.resposta || 'Sem resposta')}</div>
       ${item.observacao ? `<div class="detail-obs">Obs.: ${escapeHtml(item.observacao)}</div>` : ''}
+      ${fotosItens[idx]}
     </div>
   `).join('');
 
@@ -754,7 +759,7 @@ async function renderPETDetail(id) {
     ${checklistHtml}
     <h3>Testes Atmosféricos</h3>
     ${leiturasHtml}
-    ${photos.length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${photos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
+    ${fotosGerais(photos).length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${fotosGerais(photos).map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     <h3>Equipe autorizada (${pet.data.equipe.length})</h3>
     ${equipeHtml}
     <h3>Encerramento</h3>
@@ -939,6 +944,7 @@ async function renderPETReport(id) {
   const codigo = gerarCodigoPET(pet);
   const geradoEm = new Date().toLocaleString('pt-BR');
   const fotosHtml = await montarFotosPET(pet.data.fotosIds);
+  const fotosItensHtml = await montarFotosItensRelatorio(pet.data.checklist.map((item, idx) => ({ item, rotulo: 'Item ' + String(idx + 1).padStart(2, '0') })));
   const enc = pet.data.encerramento;
   const encerrada = !!enc.data;
 
@@ -993,7 +999,7 @@ async function renderPETReport(id) {
 
       <section class="rep-secao rep-quebra">
         <h3>4. Evidência fotográfica</h3>
-        ${fotosHtml}
+        ${secaoFotosRelatorio(fotosItensHtml, pet.data.fotosIds, fotosHtml)}
       </section>
 
       <section class="rep-secao rep-quebra">

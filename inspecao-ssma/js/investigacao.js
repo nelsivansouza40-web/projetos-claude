@@ -8,7 +8,7 @@
 const INVESTIGACAO_STEPS = ['Dados do Acidente', 'Investigação', 'Causas e Plano de Ação', 'Revisão'];
 
 function novoItemInvestigacao(texto) {
-  return { id: uuid(), texto, resposta: '', observacao: '' };
+  return { id: uuid(), texto, resposta: '', observacao: '', photoIds: [] };
 }
 
 function gerarPerguntasInvestigacao() {
@@ -364,6 +364,7 @@ function renderPerguntaInvestigacao(item, idx) {
       <div class="checklist-question">${String(idx + 1).padStart(2, '0')}. ${escapeHtml(item.texto)}</div>
       <div class="radio-group">${radiosHtml}</div>
       <div class="checklist-details">
+        ${htmlFotosItem()}
         <label>Observação / evidência
           <textarea class="txt-observacao" rows="2">${escapeHtml(item.observacao)}</textarea>
         </label>
@@ -391,6 +392,8 @@ function renderPerguntasInvestigacaoItems(container, inv) {
       item.observacao = obs.value;
       await salvarRascunhoInvestigacao(inv);
     });
+
+    ligarFotosItem(card, inv, item, salvarRascunhoInvestigacao);
   });
 }
 
@@ -521,6 +524,7 @@ function renderPlanoAcaoInvestigacao(container, inv) {
             <label class="campo-leitura">Status
               <select class="in-status">
                 <option ${a.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                <option ${a.status === 'Em andamento' ? 'selected' : ''}>Em andamento</option>
                 <option ${a.status === 'Concluída' ? 'selected' : ''}>Concluída</option>
               </select>
             </label>
@@ -636,11 +640,13 @@ async function renderInvestigacaoDetail(id) {
   const ac = inv.data.acidente;
   const acidentado = inv.data.acidentado;
 
+  const fotosItens = await Promise.all(inv.data.perguntas.map(htmlFotosItemDetalhe));
   const perguntasHtml = inv.data.perguntas.map((item, idx) => `
     <div class="detail-item">
       <div><strong>${String(idx + 1).padStart(2, '0')}.</strong> ${escapeHtml(item.texto)}</div>
       <div class="detail-resposta">${escapeHtml(item.resposta || 'Sem resposta')}</div>
       ${item.observacao ? `<div class="detail-obs">Obs.: ${escapeHtml(item.observacao)}</div>` : ''}
+      ${fotosItens[idx]}
     </div>
   `).join('');
 
@@ -672,7 +678,7 @@ async function renderInvestigacaoDetail(id) {
     ${perguntasHtml}
     ${inv.data.causasImediatas ? `<h3>Causas imediatas</h3><div class="detail-block"><p>${escapeHtml(inv.data.causasImediatas)}</p></div>` : ''}
     ${inv.data.causasBasicas ? `<h3>Causas básicas</h3><div class="detail-block"><p>${escapeHtml(inv.data.causasBasicas)}</p></div>` : ''}
-    ${photos.length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${photos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
+    ${fotosGerais(photos).length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${fotosGerais(photos).map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     <h3>Plano de ação (${inv.data.planoAcao.length})</h3>
     ${planoHtml}
     <div class="form-actions">
@@ -831,6 +837,7 @@ async function renderInvestigacaoReport(id) {
   const codigo = gerarCodigoInvestigacao(inv);
   const geradoEm = new Date().toLocaleString('pt-BR');
   const fotosHtml = await montarFotosInvestigacao(inv.data.fotosIds);
+  const fotosItensHtml = await montarFotosItensRelatorio(inv.data.perguntas.map((item, idx) => ({ item, rotulo: 'Pergunta ' + String(idx + 1).padStart(2, '0') })));
 
   view.innerHTML = `
     <div class="screen-header no-print">
@@ -895,7 +902,7 @@ async function renderInvestigacaoReport(id) {
 
       <section class="rep-secao rep-quebra">
         <h3>5. Evidência fotográfica</h3>
-        ${fotosHtml}
+        ${secaoFotosRelatorio(fotosItensHtml, inv.data.fotosIds, fotosHtml)}
       </section>
 
       <section class="rep-secao rep-quebra">

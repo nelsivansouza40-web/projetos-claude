@@ -448,6 +448,89 @@ main#view {
 
 .rep-rodape { margin-top: 24px; border-top: 1px solid var(--rep-border); padding-top: 8px; font-size: 0.7rem; color: var(--rep-ink-secondary); text-align: center; }
 
+/* ---------- Relatos, Central de ações e Painel ---------- */
+.chips-filtro { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+.chip-filtro {
+  border: 1px solid var(--cinza-borda); background: #fff; border-radius: 999px;
+  padding: 6px 12px; font-size: 0.8rem; cursor: pointer; color: var(--texto);
+}
+.chip-filtro span { font-weight: 700; margin-left: 4px; color: #5a6572; }
+.chip-filtro.ativo { background: var(--azul); border-color: var(--azul); color: #fff; }
+.chip-filtro.ativo span { color: #fff; }
+.checkbox-anonimo { align-self: flex-start; margin-top: 6px; }
+.form-section label.radio-pill, .form-section label.checkbox-pill { flex-direction: row; align-items: center; font-weight: 500; }
+#sync-bar[hidden] { display: none; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin: 10px 0 14px; }
+.kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi {
+  background: #fff; border: 1px solid var(--cinza-borda); border-left: 5px solid var(--azul);
+  border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px;
+  text-align: left; font: inherit; color: var(--texto);
+}
+.kpi-clicavel { cursor: pointer; }
+.kpi-clicavel:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+.kpi-valor { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
+.kpi-valor small { font-size: 0.75rem; font-weight: 600; color: #5a6572; }
+.kpi-rotulo { font-size: 0.78rem; color: #5a6572; }
+.kpi-ok { border-left-color: var(--verde); }
+.kpi-atencao { border-left-color: var(--amarelo); }
+.kpi-alerta { border-left-color: var(--vermelho); }
+.kpi-alerta .kpi-valor { color: var(--vermelho); }
+
+.filtros-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.filtros-acoes select, .filtros-acoes input {
+  padding: 8px 10px; border: 1px solid var(--cinza-borda); border-radius: 8px; font-size: 0.9rem; background: #fff;
+}
+.filtros-acoes input { flex: 1 1 200px; min-width: 0; }
+.acoes-envio { justify-content: flex-start; margin-bottom: 8px; }
+
+.acao-card {
+  list-style: none; background: #fff; border: 1px solid var(--cinza-borda); border-radius: 10px;
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;
+}
+.acao-topo { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge-origem { background: #e7edf3; color: var(--azul-escuro); }
+.acao-card .btn-abrir-origem { align-self: flex-start; padding: 0; }
+.acao-card .participante-linha { flex-wrap: wrap; }
+
+.painel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.painel-card { background: #fff; border: 1px solid var(--cinza-borda); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+.painel-card h3 { margin: 0 0 10px; font-size: 0.95rem; }
+.painel-barras { display: flex; flex-direction: column; gap: 6px; }
+.painel-barra-linha { display: grid; grid-template-columns: minmax(90px, 40%) 1fr 44px; align-items: center; gap: 8px; font-size: 0.8rem; }
+.painel-barra-rotulo { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.painel-barra-trilho { background: #eef1f4; border-radius: 4px; height: 14px; overflow: hidden; }
+.painel-barra { display: block; height: 100%; border-radius: 4px; }
+.painel-barra-valor { text-align: right; font-weight: 700; }
+.painel-colunas { display: flex; align-items: flex-end; gap: 8px; height: 150px; padding-top: 16px; }
+.painel-coluna { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+.painel-coluna-barra { width: 70%; background: var(--azul); border-radius: 4px 4px 0 0; min-height: 2px; }
+.painel-coluna-valor { font-size: 0.75rem; font-weight: 700; }
+.painel-coluna-rotulo { font-size: 0.72rem; color: #5a6572; text-transform: capitalize; }
+
+.compartilhar-opcoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-compartilhar { background: var(--verde); color: #fff; }
+.btn-compartilhar:hover { background: #17642a; }
+.painel-compartilhar { margin-bottom: 12px; }
+.cobertura-pdf { position: fixed; inset: 0; z-index: 9999; background: rgba(244,246,248,0.97); display: flex; align-items: center; justify-content: center; }
+.cobertura-pdf-caixa { background: #fff; border: 1px solid var(--cinza-borda); border-radius: 10px; padding: 18px 24px; font-weight: 600; color: var(--azul-escuro); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+.compartilhar-opcoes a { text-decoration: none; display: inline-block; }
+
+@media (max-width: 520px) {
+  .kpi-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .painel-grid { grid-template-columns: 1fr; }
+}
+
+/* Celular deitado (horizontal): cabeçalho mais baixo para sobrar área útil. */
+@media (orientation: landscape) and (max-height: 500px) {
+  #topbar { padding: 6px 16px; }
+  #topbar .subtitle { display: none; }
+  .tab-btn { padding: 7px 12px; }
+  .painel-colunas { height: 110px; }
+}
+
 @media print {
   .no-print, #topbar, #module-nav, #sync-bar { display: none !important; }
   body { background: #fff; padding: 0; }
@@ -456,4 +539,16 @@ main#view {
   .rep-quebra { break-before: auto; }
   .rep-foto-bloco { break-inside: avoid; }
   @page { size: A4; margin: 14mm; }
+  /* Inventário de riscos e plano de ação do PGR: folha deitada (paisagem). */
+  @page paisagem { size: A4 landscape; margin: 12mm; }
+  .rep-paisagem { page: paisagem; }
 }
+.detail-thumbs { margin-top: 8px; }
+.rep-inventario-pgr { font-size: 0.68rem; table-layout: fixed; width: 100%; }
+.rep-inventario-pgr td, .rep-inventario-pgr th { overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; padding: 3px 4px; }
+.rep-inventario-pgr th:nth-child(2) { width: 8%; }
+.rep-inventario-pgr th:nth-child(7) { width: 16%; }
+.rep-inventario-pgr th:nth-child(9), .rep-inventario-pgr th:nth-child(10) { width: 9%; }
+.rep-inventario-pgr th:first-child, .rep-inventario-pgr td:first-child { width: 2.2em; }
+.rep-inventario-pgr td, .rep-inventario-pgr th { vertical-align: top; }
+.rep-matriz-pgr td, .rep-matriz-pgr th { font-size: 0.75rem; }
