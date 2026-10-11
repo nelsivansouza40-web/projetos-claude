@@ -60,14 +60,22 @@ body {
   cursor: pointer;
 }
 
-#module-nav {
-  display: flex;
-  background: var(--azul-escuro);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+#module-nav { background: var(--azul-escuro); }
+#grupos-nav { display: grid; grid-template-columns: repeat(5, 1fr); }
+.grupo-btn {
+  background: none; border: none; color: rgba(255,255,255,0.75); font-weight: 700; font-size: 0.85rem;
+  padding: 11px 4px; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap;
 }
-#module-nav::-webkit-scrollbar { display: none; }
+@media (max-width: 380px) { .grupo-btn { font-size: 0.74rem; } }
+.grupo-btn.active { color: #fff; border-bottom-color: #fff; background: rgba(255,255,255,0.08); }
+#subnav {
+  display: flex; background: #e7edf3; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+#subnav[hidden] { display: none; }
+#subnav::-webkit-scrollbar { display: none; }
+#subnav .tab-btn[hidden] { display: none; }
+#subnav .tab-btn { color: #4a5868; padding: 9px 14px; }
+#subnav .tab-btn.active { color: var(--azul-escuro); border-bottom-color: var(--azul); }
 .tab-btn {
   flex: 0 0 auto;
   background: none;
@@ -544,6 +552,8 @@ main#view {
 }
 
 /* ---------- Programação, equipamentos/QR, marcação de foto, observação ---------- */
+.aviso-backup { background: #fff3cd; border: 1px solid #f0d488; color: #664d03; border-radius: 8px; padding: 8px 10px; font-size: 0.85rem; margin: 6px 0; }
+.aviso-backup .btn-link { padding: 0 4px; }
 .atalhos-inspecao { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
 .atalhos-inspecao .btn-secondary { margin: 0; display: inline-flex; align-items: center; gap: 6px; }
 .eq-ficha { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }

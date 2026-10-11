@@ -119,6 +119,8 @@ const Sync = {
         if (acao.syncStatus === 'synced') continue;
         try { await this.syncAcao(acao.id, endpoint); } catch (e) { falhas++; }
       }
+      // Lista consolidada de ações deste aparelho (painel do gestor / Looker Studio).
+      try { await this.syncAcoesConsolidadas(endpoint); } catch (e) { falhas++; }
     } finally {
       this.running = false;
       this.notify();
@@ -233,6 +235,25 @@ const Sync = {
     this.notify();
   },
 
+  /** Envia a lista de ações deste aparelho só quando ela mudou desde o último envio. */
+  async syncAcoesConsolidadas(endpoint) {
+    const acoes = (await coletarAcoes()).map((a) => ({
+      chave: a.chave, origem: a.origem, descricao: a.descricao, contexto: a.contexto,
+      empresa: a.empresa || '', area: a.area || '', responsavel: a.responsavel || '', prazo: a.prazo || '',
+      status: a.status, situacao: situacaoAcao(a).text, concluidaEm: a.concluidaEm || ''
+    }));
+    // A situação ("Atrasada 3 dias") muda com o tempo: entra no controle uma vez por dia.
+    const assinatura = hojeISO() + JSON.stringify(acoes);
+    if ((await DB.getSetting('acoesConsolidadasEnviadas')) === assinatura) return;
+    const usuario = (await DB.getSetting('nomeUsuario')) || '';
+    for (let i = 0; i < acoes.length || i === 0; i += 200) {
+      const resp = await postJson(endpoint, { action: 'upsertAcoesConsolidadas', usuario, acoes: acoes.slice(i, i + 200) });
+      if (!resp || resp.ok !== true) throw new Error((resp && resp.error) || 'Falha ao enviar a lista de ações.');
+      if (!acoes.length) break;
+    }
+    await DB.setSetting('acoesConsolidadasEnviadas', assinatura);
+  },
+
   async syncAcao(acaoId, endpointOverride) {
     const endpoint = endpointOverride || (await this.getEndpoint());
     if (!endpoint) throw new Error('Endereço de sincronização não configurado.');
@@ -277,7 +298,7 @@ const Sync = {
       if (!insp.metaSynced) {
         const payload = {
           action: 'upsertInspection',
-          inspection: buildInspectionMetaPayload(insp)
+          inspection: { ...buildInspectionMetaPayload(insp), usuario: (await DB.getSetting('nomeUsuario')) || '' }
         };
         const resp = await postJson(endpoint, payload);
         if (!resp || resp.ok !== true) {
@@ -1459,6 +1480,13 @@ function buildInspectionMetaPayload(insp) {
     updatedAt: insp.updatedAt,
     identificacao: insp.data.identificacao,
     disciplina: disciplinaDaInspecao(insp),
+    conformidade: (() => {
+      const c = insp.data.checklist.filter((i) => i.resposta === 'Conforme').length;
+      const nc = insp.data.checklist.filter((i) => i.resposta === 'Não Conforme').length;
+      return c + nc ? Math.round((c / (c + nc)) * 100) : '';
+    })(),
+    qtdNC: insp.data.checklist.filter((i) => i.resposta === 'Não Conforme').length,
+    duracaoMin: insp.data.concluidoEm ? Math.max(1, Math.round((insp.data.concluidoEm - insp.createdAt) / 60000)) : '',
     equipamento: insp.data.equipamento ? `${insp.data.equipamento.codigo} — ${insp.data.equipamento.nome}` : '',
     tipoInspecao: insp.data.tipoInspecao,
     checklist: insp.data.checklist.map((item) => ({
@@ -1516,6 +1544,8 @@ function blobParaBase64(blob) {
 }
 
 async function postJson(url, payload) {
+  const chave = await DB.getSetting('chaveAcesso');
+  if (chave) payload = { ...payload, chave };
   const resp = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
