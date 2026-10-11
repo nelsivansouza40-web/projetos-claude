@@ -946,12 +946,21 @@ function buildPGRMetaPayload(p) {
     dataElaboracao: p.data.dataElaboracao,
     proximaRevisao: p.data.proximaRevisao,
     caracterizacaoAmbiente: p.data.caracterizacaoAmbiente,
+    cnpj: p.data.cnpj || '',
+    cnae: p.data.cnae || '',
+    atividadePrincipal: p.data.atividadePrincipal || '',
+    grauRisco: p.data.grauRisco || '',
+    endereco: p.data.endereco || '',
+    regimeTrabalho: p.data.regimeTrabalho || '',
+    consultaTrabalhadores: p.data.consultaTrabalhadores || '',
+    revisoes: (p.data.revisoes || []).map((r) => `Rev. ${r.revisao} (${r.data || 's/ data'}): ${r.motivo || ''}`).join(' | '),
     ghes: ghes.map((g) => ({
       id: g.id,
       nome: g.nome,
       setor: g.setor,
       funcao: g.funcao,
-      numTrabalhadores: g.numTrabalhadores
+      numTrabalhadores: g.numTrabalhadores,
+      descricaoAtividades: g.descricaoAtividades || ''
     })),
     perigos: p.data.perigos.map((item) => ({
       id: item.id,
@@ -972,7 +981,12 @@ function buildPGRMetaPayload(p) {
       nivelRiscoResidual: classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual).nivel,
       responsavel: item.responsavel,
       prazo: item.prazo,
-      status: item.status
+      status: item.status,
+      referencia: item.referencia || '',
+      tipoAvaliacao: item.tipoAvaliacao || '',
+      resultadoAvaliacao: item.resultadoAvaliacao || '',
+      tipoMedida: item.tipoMedida || '',
+      acompanhamento: item.acompanhamento || ''
     })),
     treinamentos: (p.data.treinamentos || []).map((item) => ({
       id: item.id,

@@ -133,6 +133,9 @@ function getOrCreateSheet(name, headers) {
     sheet = ss.insertSheet(name);
     sheet.appendRow(headers);
     sheet.setFrozenRows(1);
+  } else if (sheet.getLastColumn() < headers.length) {
+    // Colunas novas são sempre acrescentadas no fim: atualiza só o cabeçalho.
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   }
   return sheet;
 }
@@ -864,7 +867,9 @@ function upsertPGR(p) {
     'Próxima Revisão', 'Caracterização do Processo e Ambiente de Trabalho',
     'Primeiros Socorros / Encaminhamento', 'Procedimento de Abandono',
     'Medidas para Emergências de Grande Magnitude', 'Periodicidade de Exercícios',
-    'Qtd. Perigos', 'Recebido em'
+    'Qtd. Perigos', 'Recebido em',
+    'CNPJ', 'CNAE', 'Atividade Principal', 'Grau de Risco', 'Endereço', 'Regime de Trabalho',
+    'Consulta aos Trabalhadores', 'Controle de Revisões'
   ]);
 
   const id = p.id;
@@ -882,7 +887,9 @@ function upsertPGR(p) {
     emergencia.medidasGrandeMagnitude,
     emergencia.periodicidadeExercicios,
     (p.perigos || []).length,
-    new Date()
+    new Date(),
+    p.cnpj, p.cnae, p.atividadePrincipal, p.grauRisco, p.endereco, p.regimeTrabalho,
+    p.consultaTrabalhadores, p.revisoes
   ];
 
   const idCol = 1;
@@ -898,14 +905,15 @@ function upsertPGR(p) {
   }
 
   const sheetGHEs = getOrCreateSheet(SHEET_PGR_GHES, [
-    'PGR ID', 'GHE ID', 'Nome', 'Setor', 'Função', 'Nº de Trabalhadores', 'Recebido em'
+    'PGR ID', 'GHE ID', 'Nome', 'Setor', 'Função', 'Nº de Trabalhadores', 'Recebido em',
+    'Descrição das Atividades'
   ]);
   const dataGHEs = sheetGHEs.getDataRange().getValues();
   for (let i = dataGHEs.length - 1; i >= 1; i--) {
     if (dataGHEs[i][0] === id) sheetGHEs.deleteRow(i + 1);
   }
   (p.ghes || []).forEach((g) => {
-    sheetGHEs.appendRow([id, g.id, g.nome, g.setor, g.funcao, g.numTrabalhadores, new Date()]);
+    sheetGHEs.appendRow([id, g.id, g.nome, g.setor, g.funcao, g.numTrabalhadores, new Date(), g.descricaoAtividades]);
   });
 
   const sheetPerigos = getOrCreateSheet(SHEET_PGR_PERIGOS, [
@@ -913,7 +921,9 @@ function upsertPGR(p) {
     'Tipo de Exposição', 'Tempo / Frequência de Exposição', 'Tipo de Risco',
     'Severidade', 'Probabilidade', 'Nível de Risco', 'Medidas Existentes',
     'Medidas Propostas', 'Severidade Residual', 'Probabilidade Residual',
-    'Nível de Risco Residual', 'Responsável', 'Prazo', 'Status', 'Recebido em'
+    'Nível de Risco Residual', 'Responsável', 'Prazo', 'Status', 'Recebido em',
+    'Referência / Limite', 'Tipo de Avaliação', 'Resultado da Avaliação', 'Tipo de Medida',
+    'Acompanhamento e Aferição'
   ]);
   // A lista de perigos pode ser editada livremente no app (removida,
   // reavaliada), então mantemos a planilha em espelho a cada sincronização.
@@ -927,7 +937,9 @@ function upsertPGR(p) {
       item.tipoExposicao, item.tempoExposicao, item.tipoRisco,
       item.severidade, item.probabilidade, item.nivelRisco, item.medidasExistentes,
       item.medidasPropostas, item.severidadeResidual, item.probabilidadeResidual,
-      item.nivelRiscoResidual, item.responsavel, item.prazo, item.status, new Date()
+      item.nivelRiscoResidual, item.responsavel, item.prazo, item.status, new Date(),
+      item.referencia, item.tipoAvaliacao, item.resultadoAvaliacao, item.tipoMedida,
+      item.acompanhamento
     ]);
   });
 

@@ -458,3 +458,6 @@ main#view {
   @page { size: A4; margin: 14mm; }
 }
 .detail-thumbs { margin-top: 8px; }
+.rep-inventario-pgr { font-size: 0.72rem; }
+.rep-inventario-pgr td, .rep-inventario-pgr th { vertical-align: top; }
+.rep-matriz-pgr td, .rep-matriz-pgr th { font-size: 0.75rem; }

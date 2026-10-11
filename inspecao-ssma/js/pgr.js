@@ -15,14 +15,19 @@ function novoPerigoPGR() {
     tipoExposicao: '',
     tempoExposicao: '',
     tipoRisco: TIPOS_RISCO_PGR[0],
+    referencia: '',
+    tipoAvaliacao: 'Qualitativa',
+    resultadoAvaliacao: '',
     severidade: '',
     probabilidade: '',
     medidasExistentes: '',
     medidasPropostas: '',
     severidadeResidual: '',
     probabilidadeResidual: '',
+    tipoMedida: 'Introduzir',
     responsavel: '',
     prazo: '',
+    acompanhamento: '',
     status: 'Pendente'
   };
 }
@@ -33,7 +38,8 @@ function novoGHEPGR() {
     nome: '',
     setor: '',
     funcao: '',
-    numTrabalhadores: ''
+    numTrabalhadores: '',
+    descricaoAtividades: ''
   };
 }
 
@@ -77,10 +83,18 @@ function novoPGRVazio() {
     data: {
       empresa: '',
       unidade: '',
+      cnpj: '',
+      cnae: '',
+      atividadePrincipal: '',
+      grauRisco: '',
+      endereco: '',
+      regimeTrabalho: '',
       responsavelPGR: '',
       dataElaboracao: hoje,
       proximaRevisao: daquiA2Anos,
+      revisoes: [{ id: uuid(), revisao: '00', motivo: 'Emissão original', data: hoje }],
       caracterizacaoAmbiente: '',
+      consultaTrabalhadores: '',
       ghes: [],
       perigos: [],
       treinamentos: [],
@@ -207,7 +221,40 @@ async function excluirPGR(id) {
 }
 
 async function startNewPGR() {
+  state.screen = 'pgr-novo';
+  view.innerHTML = `
+    <div class="screen-header">
+      <button id="btn-back-pgr-novo" class="btn-link">← Voltar</button>
+      <h1>Novo PGR</h1>
+    </div>
+    <p class="hint">Comece em branco ou a partir de um modelo pronto, já estruturado conforme a NR-01. Depois, ajuste os dados ao estabelecimento.</p>
+    <ul class="insp-list">
+      <li class="insp-card" data-modelo="">
+        <div class="insp-card-main">
+          <div class="insp-card-title">PGR em branco</div>
+          <div class="insp-card-sub">Cadastre GHEs, perigos e plano de ação do zero.</div>
+        </div>
+      </li>
+      ${MODELOS_PGR.map((m) => `
+        <li class="insp-card" data-modelo="${m.id}">
+          <div class="insp-card-main">
+            <div class="insp-card-title">Modelo: ${escapeHtml(m.nome)}</div>
+            <div class="insp-card-sub">${escapeHtml(m.descricao)}</div>
+          </div>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+  document.getElementById('btn-back-pgr-novo').addEventListener('click', renderPGRHome);
+  view.querySelectorAll('.insp-card[data-modelo]').forEach((el) => {
+    el.addEventListener('click', () => criarPGR(el.dataset.modelo));
+  });
+}
+
+async function criarPGR(modeloId) {
   const p = novoPGRVazio();
+  const modelo = MODELOS_PGR.find((m) => m.id === modeloId);
+  if (modelo) Object.assign(p.data, modelo.criar(p.data.dataElaboracao));
   await DB.putPGR(p);
   renderPGRDetail(p.id);
 }
@@ -222,6 +269,9 @@ async function renderPGRDetail(id) {
   p.data.ghes = p.data.ghes || [];
   p.data.treinamentos = p.data.treinamentos || [];
   p.data.caracterizacaoAmbiente = p.data.caracterizacaoAmbiente || '';
+  p.data.revisoes = p.data.revisoes || [];
+  p.data.consultaTrabalhadores = p.data.consultaTrabalhadores || '';
+  ['cnpj', 'cnae', 'atividadePrincipal', 'grauRisco', 'endereco', 'regimeTrabalho'].forEach((k) => { p.data[k] = p.data[k] || ''; });
   p.data.exerciciosSimulados = p.data.exerciciosSimulados || [];
   p.data.emergencia = p.data.emergencia || {
     meiosPrimeirosSocorros: '',
@@ -247,6 +297,26 @@ async function renderPGRDetail(id) {
       <label>Unidade / Projeto
         <input type="text" id="pgr-unidade" value="${escapeHtml(p.data.unidade)}">
       </label>
+      <div class="participante-linha">
+        <label class="campo-leitura">CNPJ
+          <input type="text" class="in-ident" data-campo="cnpj" value="${escapeHtml(p.data.cnpj)}">
+        </label>
+        <label class="campo-leitura">CNAE
+          <input type="text" class="in-ident" data-campo="cnae" placeholder="Ex.: 43.13-4-00" value="${escapeHtml(p.data.cnae)}">
+        </label>
+        <label class="campo-leitura">Grau de risco (NR-04)
+          <input type="text" class="in-ident" data-campo="grauRisco" value="${escapeHtml(p.data.grauRisco)}">
+        </label>
+      </div>
+      <label>Atividade principal
+        <input type="text" class="in-ident" data-campo="atividadePrincipal" value="${escapeHtml(p.data.atividadePrincipal)}">
+      </label>
+      <label>Endereço do estabelecimento
+        <input type="text" class="in-ident" data-campo="endereco" value="${escapeHtml(p.data.endereco)}">
+      </label>
+      <label>Regime de trabalho (jornada)
+        <input type="text" class="in-ident" data-campo="regimeTrabalho" placeholder="Ex.: Seg. a qui. 07h–17h; sex. 07h–16h; refeição 12h–13h" value="${escapeHtml(p.data.regimeTrabalho)}">
+      </label>
       <label>Responsável técnico pelo PGR
         <input type="text" id="pgr-responsavel" value="${escapeHtml(p.data.responsavelPGR)}">
       </label>
@@ -260,6 +330,16 @@ async function renderPGRDetail(id) {
       <label>Caracterização do processo e ambiente de trabalho
         <textarea id="pgr-caracterizacao-ambiente" rows="3" placeholder="Ex.: Obra de construção civil, execução de estrutura em concreto armado, com atividades em altura e uso de ferramentas elétricas.">${escapeHtml(p.data.caracterizacaoAmbiente)}</textarea>
       </label>
+      <label>Consulta aos trabalhadores e à CIPA (percepção dos riscos)
+        <textarea class="in-ident" data-campo="consultaTrabalhadores" rows="2" placeholder="Datas, participantes e principais contribuições da consulta.">${escapeHtml(p.data.consultaTrabalhadores)}</textarea>
+      </label>
+    </div>
+
+    <div class="lista-participantes">
+      <h3>Controle de revisões</h3>
+      <p class="hint">Registre cada emissão ou revisão do PGR (a NR-01 exige o histórico das atualizações).</p>
+      <div id="pgr-revisoes-container"></div>
+      <button type="button" id="btn-add-revisao-pgr" class="btn-secondary">+ Registrar revisão</button>
     </div>
 
     <div class="lista-participantes">
@@ -325,6 +405,17 @@ async function renderPGRDetail(id) {
   inputData.addEventListener('change', async () => { p.data.dataElaboracao = inputData.value; await salvarPGR(p); });
   const inputProximaRevisao = document.getElementById('pgr-proxima-revisao');
   inputProximaRevisao.addEventListener('change', async () => { p.data.proximaRevisao = inputProximaRevisao.value; await salvarPGR(p); renderPGRDetail(id); });
+  view.querySelectorAll('.in-ident').forEach((el) => {
+    el.addEventListener('blur', async () => { p.data[el.dataset.campo] = el.value.trim(); await salvarPGR(p); });
+  });
+  const revisoesContainer = document.getElementById('pgr-revisoes-container');
+  renderRevisoesPGR(revisoesContainer, p);
+  document.getElementById('btn-add-revisao-pgr').addEventListener('click', async () => {
+    const ultima = p.data.revisoes.length ? Number(p.data.revisoes[p.data.revisoes.length - 1].revisao) || 0 : -1;
+    p.data.revisoes.push({ id: uuid(), revisao: String(ultima + 1).padStart(2, '0'), motivo: '', data: new Date().toISOString().slice(0, 10) });
+    await salvarPGR(p);
+    renderRevisoesPGR(revisoesContainer, p);
+  });
   const inputCaracterizacao = document.getElementById('pgr-caracterizacao-ambiente');
   inputCaracterizacao.addEventListener('blur', async () => { p.data.caracterizacaoAmbiente = inputCaracterizacao.value.trim(); await salvarPGR(p); });
 
@@ -447,6 +538,18 @@ function renderPerigoPGR(item, idx, ghes) {
         </label>
       </div>
 
+      <label>Referência / limite de exposição
+        <input type="text" class="in-referencia" placeholder="Ex.: NR-15, Anexo 1 — 85 dB(A); nível de ação 80 dB(A)" value="${escapeHtml(item.referencia || '')}">
+      </label>
+      <div class="participante-linha">
+        <label class="campo-leitura">Tipo de avaliação
+          <select class="in-tipo-avaliacao">${TIPOS_AVALIACAO_PGR.map((t) => `<option ${item.tipoAvaliacao === t ? 'selected' : ''}>${escapeHtml(t)}</option>`).join('')}</select>
+        </label>
+        <label class="campo-leitura">Resultado da avaliação / medição
+          <input type="text" class="in-resultado-avaliacao" placeholder="Ex.: NE = 82 dB(A)" value="${escapeHtml(item.resultadoAvaliacao || '')}">
+        </label>
+      </div>
+
       <h4>Avaliação do risco (antes das medidas)</h4>
       <div class="participante-linha">
         <label class="campo-leitura">Severidade
@@ -462,8 +565,15 @@ function renderPerigoPGR(item, idx, ghes) {
       <label>Medidas de controle existentes
         <textarea class="in-medidas-existentes" rows="2">${escapeHtml(item.medidasExistentes)}</textarea>
       </label>
-      <label>Medidas de controle propostas
+      <h4>Plano de ação</h4>
+      <label class="campo-leitura">Tipo de medida (NR-01)
+        <select class="in-tipo-medida">${TIPOS_MEDIDA_PGR.map((t) => `<option ${item.tipoMedida === t ? 'selected' : ''}>${escapeHtml(t)}</option>`).join('')}</select>
+      </label>
+      <label>Medidas de prevenção propostas
         <textarea class="in-medidas-propostas" rows="2">${escapeHtml(item.medidasPropostas)}</textarea>
+      </label>
+      <label>Forma de acompanhamento e aferição dos resultados
+        <textarea class="in-acompanhamento" rows="2" placeholder="Ex.: Nova dosimetria após as medidas; inspeção mensal.">${escapeHtml(item.acompanhamento || '')}</textarea>
       </label>
 
       <h4>Risco residual (depois das medidas propostas)</h4>
@@ -517,7 +627,8 @@ function renderPerigosPGR(container, p) {
       ['.in-perigo', 'perigo'], ['.in-lesao-agravo', 'lesaoAgravo'], ['.in-fonte', 'fonte'],
       ['.in-tempo-exposicao', 'tempoExposicao'],
       ['.in-medidas-existentes', 'medidasExistentes'], ['.in-medidas-propostas', 'medidasPropostas'],
-      ['.in-responsavel-perigo', 'responsavel']
+      ['.in-responsavel-perigo', 'responsavel'], ['.in-referencia', 'referencia'],
+      ['.in-resultado-avaliacao', 'resultadoAvaliacao'], ['.in-acompanhamento', 'acompanhamento']
     ];
     camposTexto.forEach(([seletor, campo]) => {
       const el = card.querySelector(seletor);
@@ -535,6 +646,14 @@ function renderPerigosPGR(container, p) {
 
     card.querySelector('.in-tipo-risco').addEventListener('change', async (e) => {
       item.tipoRisco = e.target.value;
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-tipo-avaliacao').addEventListener('change', async (e) => {
+      item.tipoAvaliacao = e.target.value;
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-tipo-medida').addEventListener('change', async (e) => {
+      item.tipoMedida = e.target.value;
       await salvarPGR(p);
     });
     card.querySelector('.in-severidade').addEventListener('change', async (e) => {
@@ -575,6 +694,43 @@ function renderPerigosPGR(container, p) {
   });
 }
 
+/* ---------------- CONTROLE DE REVISÕES ---------------- */
+
+function renderRevisoesPGR(container, p) {
+  const revisoes = p.data.revisoes;
+  container.innerHTML = revisoes.length
+    ? revisoes.map((r, idx) => `
+      <div class="leitura-card" data-idx="${idx}">
+        <div class="participante-linha">
+          <label class="campo-leitura">Revisão
+            <input type="text" class="in-rev-numero" value="${escapeHtml(r.revisao)}">
+          </label>
+          <label class="campo-leitura">Data
+            <input type="date" class="in-rev-data" value="${escapeHtml(r.data)}">
+          </label>
+          <button type="button" class="btn-remover-item btn-remover-revisao" title="Remover revisão">✕</button>
+        </div>
+        <label>Motivo da revisão
+          <textarea class="in-rev-motivo" rows="2">${escapeHtml(r.motivo)}</textarea>
+        </label>
+      </div>
+    `).join('')
+    : '<p class="empty-state">Nenhuma revisão registrada.</p>';
+  revisoes.forEach((r, idx) => {
+    const card = container.querySelector(`.leitura-card[data-idx="${idx}"]`);
+    if (!card) return;
+    card.querySelector('.in-rev-numero').addEventListener('blur', async (e) => { r.revisao = e.target.value.trim(); await salvarPGR(p); });
+    card.querySelector('.in-rev-data').addEventListener('change', async (e) => { r.data = e.target.value; await salvarPGR(p); });
+    card.querySelector('.in-rev-motivo').addEventListener('blur', async (e) => { r.motivo = e.target.value.trim(); await salvarPGR(p); });
+    card.querySelector('.btn-remover-revisao').addEventListener('click', async () => {
+      if (!confirm('Remover este registro de revisão?')) return;
+      revisoes.splice(idx, 1);
+      await salvarPGR(p);
+      renderRevisoesPGR(container, p);
+    });
+  });
+}
+
 /* ---------------- GHE (GRUPOS HOMOGÊNEOS DE EXPOSIÇÃO) ---------------- */
 
 function renderGHEPGR(item, idx) {
@@ -597,6 +753,9 @@ function renderGHEPGR(item, idx) {
           <input type="number" class="in-ghe-num-trabalhadores" min="1" value="${escapeHtml(item.numTrabalhadores)}">
         </label>
       </div>
+      <label>Descrição das atividades
+        <textarea class="in-ghe-atividades" rows="2" placeholder="Atividades executadas pelo grupo (caracterização exigida no inventário de riscos).">${escapeHtml(item.descricaoAtividades || '')}</textarea>
+      </label>
     </div>
   `;
 }
@@ -624,6 +783,10 @@ function renderGHEsPGR(container, p, aoMudar) {
     });
     card.querySelector('.in-ghe-num-trabalhadores').addEventListener('blur', async (e) => {
       item.numTrabalhadores = e.target.value;
+      await salvarPGR(p);
+    });
+    card.querySelector('.in-ghe-atividades').addEventListener('blur', async (e) => {
+      item.descricaoAtividades = e.target.value.trim();
       await salvarPGR(p);
     });
 
@@ -819,6 +982,9 @@ function validarPGRParaRelatorio(p) {
   if (!p.data.empresa) {
     problemas.push('O nome da empresa não foi informado.');
   }
+  if (!p.data.responsavelPGR) {
+    problemas.push('O responsável técnico pelo PGR não foi informado (a NR-01 exige documento datado e assinado).');
+  }
   if (!p.data.perigos.length) {
     problemas.push('Nenhum perigo foi cadastrado.');
   }
@@ -854,32 +1020,108 @@ function montarResumoRiscosPGR(perigos) {
   `;
 }
 
-function montarInventarioRiscosPGR(perigos, ghes) {
-  if (!perigos.length) return '<p class="rep-hint">Nenhum perigo cadastrado.</p>';
-  const linhas = perigos.map((item, idx) => {
-    const antes = classificarRiscoPGR(item.severidade, item.probabilidade);
-    const depois = classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual);
-    const exposicao = [item.tipoExposicao, item.tempoExposicao].filter(Boolean).join(' — ');
-    return `
-      <tr>
-        <td>${idx + 1}</td>
-        <td>${escapeHtml(item.perigo)}</td>
-        <td>${escapeHtml(item.lesaoAgravo || '—')}</td>
-        <td>${escapeHtml(item.tipoRisco)}</td>
-        <td>${escapeHtml(nomeGHEPGR(ghes, item.gheId) || '—')}</td>
-        <td>${escapeHtml(exposicao || '—')}</td>
-        <td>${escapeHtml(item.medidasExistentes || '—')}</td>
-        <td class="rep-td-status rep-status-${antes.cls === 'badge-ok' ? 'ok' : antes.cls === 'badge-pendente' ? 'na' : 'nc'}">${antes.nivel}${antes.valor ? ' (' + antes.valor + ')' : ''}</td>
-        <td class="rep-td-status rep-status-${depois.cls === 'badge-ok' ? 'ok' : depois.cls === 'badge-pendente' ? 'na' : 'nc'}">${depois.nivel}${depois.valor ? ' (' + depois.valor + ')' : ''}</td>
-      </tr>
-    `;
-  }).join('');
+const CORES_NIVEL_PGR = { 'Baixo': '#C6EFCE', 'Moderado': '#FFEB9C', 'Alto': '#F8CBAD', 'Crítico': '#FF8B8B' };
+
+function celulaNivelPGR(c) {
+  if (!c.valor) return '<td>—</td>';
+  return `<td style="background:${CORES_NIVEL_PGR[c.nivel]};font-weight:700">${c.nivel} (${c.valor})</td>`;
+}
+
+function montarIdentificacaoPGR(p) {
+  const d = p.data;
   return `
-    <table class="rep-table">
-      <thead><tr><th>Nº</th><th>Perigo / Risco</th><th>Lesão / Agravo à Saúde</th><th>Tipo</th><th>GHE</th><th>Exposição</th><th>Medidas de controle existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
-      <tbody>${linhas}</tbody>
+    <table class="rep-tabela-ident">
+      <tr><th>Empresa</th><td>${escapeHtml(d.empresa)}</td><th>CNPJ</th><td>${escapeHtml(d.cnpj || '—')}</td></tr>
+      <tr><th>CNAE / atividade</th><td>${escapeHtml([d.cnae, d.atividadePrincipal].filter(Boolean).join(' — ') || '—')}</td><th>Grau de risco</th><td>${escapeHtml(d.grauRisco || '—')}</td></tr>
+      <tr><th>Unidade</th><td>${escapeHtml(d.unidade || '—')}</td><th>Endereço</th><td>${escapeHtml(d.endereco || '—')}</td></tr>
+      <tr><th>Regime de trabalho</th><td colspan="3">${escapeHtml(d.regimeTrabalho || '—')}</td></tr>
+      <tr><th>Responsável técnico</th><td>${escapeHtml(d.responsavelPGR || '—')}</td><th>Data de elaboração / revisão</th><td>${d.dataElaboracao ? formatarDataBR(d.dataElaboracao) : '—'}</td></tr>
+      <tr><th>Próxima revisão prevista</th><td colspan="3">${d.proximaRevisao ? formatarDataBR(d.proximaRevisao) : '—'}</td></tr>
     </table>
   `;
+}
+
+function montarRevisoesPGR(revisoes) {
+  if (!revisoes || !revisoes.length) return '<p class="rep-hint">Nenhuma revisão registrada.</p>';
+  return `
+    <table class="rep-table">
+      <thead><tr><th>Revisão</th><th>Motivo</th><th>Data</th></tr></thead>
+      <tbody>${revisoes.map((r) => `<tr><td>${escapeHtml(r.revisao)}</td><td>${escapeHtml(r.motivo || '—')}</td><td>${r.data ? formatarDataBR(r.data) : '—'}</td></tr>`).join('')}</tbody>
+    </table>
+  `;
+}
+
+/* Critérios de avaliação e tomada de decisão (NR-01): escalas, matriz e ações. */
+function montarCriteriosPGR() {
+  const escala = (titulo, niveis) => `
+    <table class="rep-table">
+      <thead><tr><th>${titulo}</th><th>Grau</th><th>Descrição</th></tr></thead>
+      <tbody>${niveis.map((n) => `<tr><td>${n.valor}</td><td>${escapeHtml(n.label)}</td><td>${escapeHtml(n.descricao)}</td></tr>`).join('')}</tbody>
+    </table>`;
+  let matriz = '<table class="rep-table rep-matriz-pgr"><thead><tr><th>Severidade \\ Probabilidade</th>' +
+    NIVEIS_PROBABILIDADE_PGR.map((n) => `<th>${n.valor} — ${escapeHtml(n.label)}</th>`).join('') + '</tr></thead><tbody>';
+  for (let sv = 5; sv >= 1; sv--) {
+    matriz += `<tr><th>${sv} — ${escapeHtml(NIVEIS_SEVERIDADE_PGR[sv - 1].label)}</th>` +
+      [1, 2, 3, 4, 5].map((pr) => {
+        const c = classificarRiscoPGR(sv, pr);
+        return `<td style="background:${CORES_NIVEL_PGR[c.nivel]};text-align:center">${c.valor}<br>${c.nivel}</td>`;
+      }).join('') + '</tr>';
+  }
+  matriz += '</tbody></table>';
+  return `
+    <p>Nível de risco = Severidade (S) × Probabilidade (P), de 1 a 25. A severidade considera a magnitude da consequência e o número de trabalhadores possivelmente afetados; a probabilidade considera a eficácia das medidas existentes e, quando houver, a comparação da exposição com o nível de ação e o limite.</p>
+    ${escala('S', NIVEIS_SEVERIDADE_PGR)}
+    ${escala('P', NIVEIS_PROBABILIDADE_PGR)}
+    ${matriz}
+    <table class="rep-table">
+      <thead><tr><th>Nível</th><th>Faixa</th><th>Ação requerida</th><th>Prazo máximo</th></tr></thead>
+      <tbody>${CRITERIOS_DECISAO_PGR.map((c) => `<tr><td style="background:${CORES_NIVEL_PGR[c.nivel]};font-weight:700">${c.nivel}</td><td>${c.faixa}</td><td>${escapeHtml(c.acao)}</td><td>${escapeHtml(c.prazo)}</td></tr>`).join('')}</tbody>
+    </table>
+    <p class="rep-hint">Hierarquia das medidas de prevenção (NR-01): eliminação do fator de risco; proteção coletiva; medidas administrativas ou de organização do trabalho; EPI.</p>
+  `;
+}
+
+function montarGHEsRelatorioPGR(ghes) {
+  if (!ghes.length) return '<p class="rep-hint">Nenhum GHE cadastrado.</p>';
+  return `
+    <table class="rep-table">
+      <thead><tr><th>GHE</th><th>Setor / função</th><th>Descrição das atividades</th><th>Nº trab.</th></tr></thead>
+      <tbody>${ghes.map((g) => `<tr><td>${escapeHtml(g.nome || '—')}</td><td>${escapeHtml([g.setor, g.funcao].filter(Boolean).join(' / ') || '—')}</td><td>${escapeHtml(g.descricaoAtividades || '—')}</td><td>${escapeHtml(g.numTrabalhadores || '—')}</td></tr>`).join('')}</tbody>
+    </table>
+  `;
+}
+
+/* Inventário de riscos agrupado por GHE, com os dados exigidos pela NR-01. */
+function montarInventarioRiscosPGR(perigos, ghes) {
+  if (!perigos.length) return '<p class="rep-hint">Nenhum perigo cadastrado.</p>';
+  const grupos = ghes.map((g) => ({ titulo: g.nome || 'GHE sem nome', ghe: g, itens: [] }));
+  const semGHE = { titulo: 'Perigos sem GHE vinculado', itens: [] };
+  perigos.forEach((item, idx) => {
+    const g = grupos.find((x) => x.ghe.id === item.gheId);
+    (g || semGHE).itens.push({ item, numero: idx + 1 });
+  });
+  return grupos.concat([semGHE]).filter((g) => g.itens.length).map((g) => `
+    <h4>${escapeHtml(g.titulo)}${g.ghe && g.ghe.numTrabalhadores ? ` — ${escapeHtml(g.ghe.numTrabalhadores)} trabalhador(es)` : ''}</h4>
+    <table class="rep-table rep-inventario-pgr">
+      <thead><tr><th>Nº</th><th>Tipo</th><th>Perigo / fator de risco</th><th>Fonte ou circunstância</th><th>Lesão ou agravo</th><th>Exposição</th><th>Referência e avaliação</th><th>Medidas existentes</th><th>Risco inicial</th><th>Risco residual</th></tr></thead>
+      <tbody>${g.itens.map(({ item, numero }) => {
+        const exposicao = [item.tipoExposicao, item.tempoExposicao].filter(Boolean).join(' — ');
+        const avaliacao = [item.referencia ? 'Ref.: ' + item.referencia : '', item.tipoAvaliacao ? item.tipoAvaliacao + (item.resultadoAvaliacao ? ': ' + item.resultadoAvaliacao : '') : item.resultadoAvaliacao].filter(Boolean).join(' | ');
+        return `<tr>
+          <td>${numero}</td>
+          <td>${escapeHtml(item.tipoRisco)}</td>
+          <td>${escapeHtml(item.perigo)}</td>
+          <td>${escapeHtml(item.fonte || '—')}</td>
+          <td>${escapeHtml(item.lesaoAgravo || '—')}</td>
+          <td>${escapeHtml(exposicao || '—')}</td>
+          <td>${escapeHtml(avaliacao || '—')}</td>
+          <td>${escapeHtml(item.medidasExistentes || '—')}</td>
+          ${celulaNivelPGR(classificarRiscoPGR(item.severidade, item.probabilidade))}
+          ${celulaNivelPGR(classificarRiscoPGR(item.severidadeResidual, item.probabilidadeResidual))}
+        </tr>`;
+      }).join('')}</tbody>
+    </table>
+  `).join('');
 }
 
 function montarCronogramaTreinamentoPGR(treinamentos, ghes) {
@@ -904,26 +1146,28 @@ function montarCronogramaTreinamentoPGR(treinamentos, ghes) {
   `;
 }
 
-function montarPlanoAcaoPGR(perigos) {
+function montarPlanoAcaoPGR(perigos, ghes) {
   const comAcao = perigos
     .map((item, idx) => ({ item, numero: idx + 1 }))
     .filter(({ item }) => item.medidasPropostas || item.responsavel || item.prazo);
-  if (!comAcao.length) return '<p class="rep-hint">Nenhuma ação corretiva ou preventiva registrada.</p>';
+  if (!comAcao.length) return '<p class="rep-hint">Nenhuma medida de prevenção registrada.</p>';
   const linhas = comAcao.map(({ item, numero }) => `
     <tr>
       <td>${numero}</td>
-      <td>${escapeHtml(item.medidasPropostas || '—')}</td>
+      <td>${escapeHtml(item.medidasPropostas || '—')}<br><span class="rep-hint">${escapeHtml(item.perigo)} — ${escapeHtml(nomeGHEPGR(ghes, item.gheId) || 'sem GHE')}</span></td>
+      <td>${escapeHtml(item.tipoMedida || '—')}</td>
       <td>${escapeHtml(item.responsavel || '—')}</td>
       <td>${item.prazo ? formatarDataBR(item.prazo) : '—'}</td>
+      <td>${escapeHtml(item.acompanhamento || '—')}</td>
       <td>${escapeHtml(item.status || '—')}</td>
     </tr>
   `).join('');
   return `
     <table class="rep-table">
-      <thead><tr><th>Nº</th><th>Ação corretiva / preventiva</th><th>Responsável</th><th>Prazo</th><th>Status</th></tr></thead>
+      <thead><tr><th>Nº</th><th>Medida de prevenção</th><th>Tipo</th><th>Responsável</th><th>Prazo</th><th>Acompanhamento e aferição</th><th>Status</th></tr></thead>
       <tbody>${linhas}</tbody>
     </table>
-    <p class="rep-hint">O número da ação corresponde ao número do perigo no Inventário de Riscos.</p>
+    <p class="rep-hint">O número da medida corresponde ao número do perigo no inventário de riscos. Concluída a medida, reavalie o risco residual e atualize o inventário.</p>
   `;
 }
 
@@ -1009,11 +1253,12 @@ async function renderPGRReport(id) {
   p.data.treinamentos = p.data.treinamentos || [];
   p.data.exerciciosSimulados = p.data.exerciciosSimulados || [];
   p.data.emergencia = p.data.emergencia || {};
+  p.data.revisoes = p.data.revisoes || [];
 
   const codigo = gerarCodigoPGR(p);
   const geradoEm = new Date().toLocaleString('pt-BR');
   const inventarioHtml = montarInventarioRiscosPGR(p.data.perigos, p.data.ghes);
-  const planoAcaoHtml = montarPlanoAcaoPGR(p.data.perigos);
+  const planoAcaoHtml = montarPlanoAcaoPGR(p.data.perigos, p.data.ghes);
   const cronogramaHtml = montarCronogramaTreinamentoPGR(p.data.treinamentos, p.data.ghes);
   const emergenciaHtml = await montarPreparacaoEmergenciaPGR(p);
 
@@ -1042,42 +1287,60 @@ async function renderPGRReport(id) {
       </header>
 
       <section class="rep-secao">
-        <h3>1. Identificação</h3>
-        <table class="rep-tabela-ident">
-          <tr><th>Empresa</th><td>${escapeHtml(p.data.empresa)}</td><th>Unidade</th><td>${escapeHtml(p.data.unidade || '—')}</td></tr>
-          <tr><th>Responsável técnico</th><td>${escapeHtml(p.data.responsavelPGR || '—')}</td><th>Data de elaboração</th><td>${p.data.dataElaboracao ? formatarDataBR(p.data.dataElaboracao) : '—'}</td></tr>
-          <tr><th>Próxima revisão prevista</th><td colspan="3">${p.data.proximaRevisao ? formatarDataBR(p.data.proximaRevisao) : '—'}</td></tr>
-        </table>
-        <p class="rep-hint"><strong>Caracterização do processo e ambiente de trabalho:</strong> ${escapeHtml(p.data.caracterizacaoAmbiente || '—')}</p>
+        <h3>1. Identificação da organização</h3>
+        ${montarIdentificacaoPGR(p)}
+        <p class="rep-hint">PGR elaborado conforme o capítulo 1.5 da NR-01 (Gerenciamento de Riscos Ocupacionais), incluindo os fatores de risco psicossociais relacionados ao trabalho (Portaria MTE nº 1.419/2024). Composto, no mínimo, pelo inventário de riscos (item 6) e pelo plano de ação (item 7).</p>
       </section>
 
       <section class="rep-secao">
-        <h3>2. Resumo dos riscos mapeados</h3>
+        <h3>2. Controle de revisões</h3>
+        ${montarRevisoesPGR(p.data.revisoes)}
+      </section>
+
+      <section class="rep-secao rep-quebra">
+        <h3>3. Critérios de avaliação e tomada de decisão</h3>
+        ${montarCriteriosPGR()}
+      </section>
+
+      <section class="rep-secao rep-quebra">
+        <h3>4. Caracterização dos processos, ambientes e atividades</h3>
+        <p>${escapeHtml(p.data.caracterizacaoAmbiente || '—')}</p>
+        ${montarGHEsRelatorioPGR(p.data.ghes)}
+        <p><strong>Consulta aos trabalhadores e à CIPA:</strong> ${escapeHtml(p.data.consultaTrabalhadores || '—')}</p>
+      </section>
+
+      <section class="rep-secao">
+        <h3>5. Resumo dos riscos mapeados</h3>
         ${montarResumoRiscosPGR(p.data.perigos)}
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>3. Inventário de Riscos</h3>
+        <h3>6. Inventário de riscos</h3>
         ${inventarioHtml}
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>4. Plano de Ação</h3>
+        <h3>7. Plano de ação</h3>
         ${planoAcaoHtml}
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>5. Cronograma de Treinamento</h3>
+        <h3>8. Cronograma de capacitação</h3>
         ${cronogramaHtml}
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>6. Preparação e Resposta a Emergências</h3>
+        <h3>9. Preparação e resposta a emergências</h3>
         ${emergenciaHtml}
       </section>
 
+      <section class="rep-secao">
+        <h3>10. Acompanhamento e revisão</h3>
+        <p>O plano de ação deve ser acompanhado mensalmente. A avaliação de riscos deve ser revista a cada 2 anos (3 anos com certificação em sistema de gestão de SST) e sempre que houver mudanças nos processos, acidentes ou doenças relacionadas ao trabalho, medidas ineficazes ou solicitação dos trabalhadores ou da CIPA. O histórico das atualizações do inventário deve ser mantido por, no mínimo, 20 anos.</p>
+      </section>
+
       <section class="rep-secao rep-assinaturas">
-        <h3>7. Responsável técnico</h3>
+        <h3>11. Responsável técnico</h3>
         <div class="rep-assinatura-grid">
           ${blocoAssinatura(p, 'responsavelPGR', 'Responsável técnico pelo PGR', p.data.responsavelPGR)}
         </div>
