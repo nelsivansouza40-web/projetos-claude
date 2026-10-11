@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v39';
+const APP_VERSION = 'v40';
 
 const state = {
   screen: 'home',
@@ -132,10 +132,29 @@ async function updateSyncBar() {
   if (pendentesPGR.length) partes.push(`${pendentesPGR.length} PGR`);
   if (pendentesRelatos.length) partes.push(`${pendentesRelatos.length} relato(s)`);
   if (pendentesAcoes.length) partes.push(`${pendentesAcoes.length} ação(ões) avulsa(s)`);
+  const comErro = [
+    ...inspections.map((r) => ['Inspeção', r.data.tipoInspecao, r]),
+    ...registrosDDS.map((r) => ['DDS', r.data.tema, r]),
+    ...registrosDiag.map((r) => ['Diagnóstico', r.data.identificacao && r.data.identificacao.escopo, r]),
+    ...registrosCipaReunioes.map((r) => ['CIPA', 'Reunião', r]),
+    ...registrosPTAPR.map((r) => ['PT/APR', r.data.identificacao && r.data.identificacao.atividade, r]),
+    ...registrosCert.map((r) => ['Certificado', r.data.colaborador, r]),
+    ...registrosPET.map((r) => ['PET', r.data.identificacao && r.data.identificacao.localEspaco, r]),
+    ...registrosInvestigacao.map((r) => ['Investigação', r.data.acidentado && r.data.acidentado.nome, r]),
+    ...registrosEPI.map((r) => ['Ficha de EPI', r.data.colaborador, r]),
+    ...registrosVeiculo.map((r) => ['Veículo', r.data.identificacao && r.data.identificacao.placa, r]),
+    ...registrosPGR.map((r) => ['PGR', r.data.empresa, r]),
+    ...registrosRelatos.map((r) => ['Relato', r.data.tipo, r]),
+    ...acoesAvulsas.map((r) => ['Ação avulsa', r.descricao, r])
+  ].filter(([, , r]) => r.syncStatus === 'erro');
+  state.errosSincronizacao = comErro.map(([modulo, titulo, r]) => ({ modulo, titulo: titulo || 'Sem título', erro: r.syncError || 'Erro sem mensagem' }));
   syncBarEl.innerHTML = `
     <span>${partes.join(' e ')} aguardando sincronização${online ? '' : ' (offline)'}</span>
+    ${comErro.length ? `<button id="btn-ver-erros" class="btn-ver-erros">Ver erros (${comErro.length})</button>` : ''}
     <button id="btn-sync-now" ${online ? '' : 'disabled'}>Sincronizar agora</button>
   `;
+  const btnErros = document.getElementById('btn-ver-erros');
+  if (btnErros) btnErros.addEventListener('click', renderErrosSincronizacao);
   const btn = document.getElementById('btn-sync-now');
   if (btn) {
     btn.addEventListener('click', async () => {
@@ -175,6 +194,29 @@ async function updateSyncBar() {
       if (state.screen === 'painel') renderPainel();
     });
   }
+}
+
+/** Lista os registros que falharam ao sincronizar, com o motivo de cada um. */
+function renderErrosSincronizacao() {
+  state.screen = 'erros-sync';
+  const erros = state.errosSincronizacao || [];
+  view.innerHTML = `
+    <div class="screen-header">
+      <button id="btn-back-erros" class="btn-link">← Voltar</button>
+      <h1>Erros de sincronização</h1>
+    </div>
+    <p class="hint">Os registros continuam salvos no aparelho. Envie um print desta tela para o suporte, se precisar.</p>
+    <ul class="insp-list">
+      ${erros.length ? erros.map((e) => `
+        <li class="acao-card">
+          <div class="acao-topo"><span class="badge badge-origem">${escapeHtml(e.modulo)}</span></div>
+          <div class="insp-card-title">${escapeHtml(e.titulo)}</div>
+          <p class="erro-msg">${escapeHtml(e.erro)}</p>
+        </li>`).join('') : '<li class="empty-state">Nenhum erro registrado.</li>'}
+    </ul>
+    <p class="hint">Versão do app: ${APP_VERSION}</p>
+  `;
+  document.getElementById('btn-back-erros').addEventListener('click', renderHome);
 }
 
 function setActiveTab(tab) {

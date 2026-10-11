@@ -459,6 +459,7 @@ main#view {
 .chip-filtro.ativo span { color: #fff; }
 .checkbox-anonimo { align-self: flex-start; margin-top: 6px; }
 .badge-disciplina { color: #fff; }
+#sync-bar .btn-ver-erros { background: #fff; color: var(--vermelho); border: 1px solid var(--vermelho); }
 .disciplinas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
 .disciplina-card {
   background: #fff; border: 1px solid var(--cinza-borda); border-left: 8px solid var(--cor-disciplina);
