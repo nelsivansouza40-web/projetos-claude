@@ -2,37 +2,35 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0f4c81">
-  <title>Auditoria de RAC</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Auditoria RAC">
-  <meta name="format-detection" content="telephone=no">
-  <link rel="stylesheet" href="css/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auditoria de RAC – novo endereço</title>
+  <meta http-equiv="refresh" content="3; url=https://nelsivansouza40-web.github.io/RAC-CAMPO/">
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #f4f6f8; color: #1c2530; }
+    main { max-width: 520px; margin: 48px auto; padding: 0 16px; }
+    .card { background: #fff; border: 1px solid #d7dde3; border-radius: 10px; padding: 20px; }
+    h1 { font-size: 1.2rem; color: #0a3a63; margin: 0 0 10px; }
+    a.btn { display: block; text-align: center; background: #0f4c81; color: #fff; padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none; margin-top: 14px; }
+    p { line-height: 1.45; }
+  </style>
 </head>
 <body>
-  <header id="topbar">
-    <button class="brand" id="btn-home" type="button">
-      <strong>AUDITORIA DE RAC</strong>
-      <span class="subtitle">Check Básico de Campo · funciona sem internet</span>
-    </button>
-    <div class="topbar-actions">
-      <span id="conn" class="conn"></span>
-      <button id="btn-config" class="icon-btn" type="button" title="Configurações">⚙</button>
+  <main>
+    <div class="card">
+      <h1>A Auditoria de RAC mudou de endereço</h1>
+      <p>O aplicativo agora tem endereço próprio, separado do Inspeções SSMA. Você será levado em instantes.</p>
+      <p>No celular, instale pelo endereço novo. As auditorias já feitas continuam guardadas no aparelho.</p>
+      <a class="btn" href="https://nelsivansouza40-web.github.io/RAC-CAMPO/">Abrir o novo endereço</a>
     </div>
-  </header>
-
-  <main id="view"></main>
-  <div id="toast" hidden></div>
-
-  <script src="js/db.js"></script>
-  <script src="js/checklist.js"></script>
-  <script src="js/relatorio.js"></script>
-  <script src="js/app.js"></script>
+  </main>
+  <script>
+    // Remove a versão antiga guardada no aparelho (service worker desta pasta).
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((regs) => regs
+        .filter((r) => r.scope.endsWith('/rac-vale/'))
+        .forEach((r) => r.unregister()));
+    }
+    setTimeout(() => location.replace('https://nelsivansouza40-web.github.io/RAC-CAMPO/'), 1500);
+  </script>
 </body>
 </html>

@@ -29,7 +29,8 @@ jobs:
         uses: actions/configure-pages@v5
 
       # Inspeções SSMA continua na raiz do site (mesmo endereço de sempre);
-      # Gestão SST fica na subpasta /gestao-sst/ e Auditoria de RAC em /rac-vale/.
+      # Gestão SST fica na subpasta /gestao-sst/; /rac-vale/ só redireciona para o
+      # repositório próprio da Auditoria de RAC (RAC-CAMPO).
       - name: Montar o site
         run: |
           mkdir -p _site
