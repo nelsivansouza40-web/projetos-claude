@@ -381,6 +381,16 @@ function atualizarResumo(el, aud) {
   });
 }
 
+function linhaReferencia(it) {
+  if (!it.ref && !it.prioritario) return '';
+  const prazo = textoPrazo(it);
+  return `<div class="item-ref">
+    ${it.prioritario ? '<span class="tag-prio">Requisito prioritário</span>' : ''}
+    ${it.ref ? `<span>PNR-000069: ${escapeHtml(refLimpa(it))}</span>` : ''}
+    ${prazo ? `<span class="tag-prazo">${escapeHtml(prazo)}</span>` : ''}
+  </div>`;
+}
+
 function renderItem(box, aud, secao, it) {
   const r = aud.respostas[it.id] || {};
   const botoes = Object.entries(RESPOSTAS).map(([k, rot]) =>
@@ -388,6 +398,7 @@ function renderItem(box, aud, secao, it) {
   box.className = `item ${r.r ? 'resp-' + r.r.toLowerCase() : 'pendente'}`;
   box.innerHTML = `
     <div class="item-texto"><span class="num">${it.num}</span>${escapeHtml(it.texto)}</div>
+    ${linhaReferencia(it)}
     <div class="resp-linha">${botoes}</div>
     <div class="foto-linha">
       ${usarCameraDoApp()
@@ -602,10 +613,10 @@ function baixarArquivo(nome, conteudo, tipo) {
 function exportarPlanilha(aud) {
   const csv = (v) => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
   const i = aud.ident;
-  const linhas = [['Data', 'Hora', 'Empresa', 'Contrato', 'Unidade', 'Área', 'Atividade', 'Auditor', 'Seção', 'Item', 'Descrição', 'Resposta', 'Observação', 'Ação corretiva', 'Responsável', 'Prazo', 'Fotos']];
+  const linhas = [['Data', 'Hora', 'Empresa', 'Contrato', 'Unidade', 'Área', 'Atividade', 'Auditor', 'Seção', 'Item', 'Descrição', 'Referência PNR-000069', 'Prioritário', 'Resposta', 'Observação', 'Ação corretiva', 'Responsável', 'Prazo', 'Fotos']];
   secoesDaAuditoria(aud).forEach((s) => s.itens.forEach((it) => {
     const r = aud.respostas[it.id] || {};
-    linhas.push([formatarDataBR(i.data), i.hora, i.empresa, i.contrato, i.unidade, i.area, i.atividade, i.auditor, s.titulo, it.num, it.texto,
+    linhas.push([formatarDataBR(i.data), i.hora, i.empresa, i.contrato, i.unidade, i.area, i.atividade, i.auditor, s.titulo, it.num, it.texto, refLimpa(it), it.prioritario ? 'Sim' : 'Não',
       RESPOSTAS[r.r] || 'Sem resposta', r.obs, r.acao, r.responsavel, formatarDataBR(r.prazo), (r.fotos || []).length]);
   }));
   const conteudo = '﻿' + linhas.map((l) => l.map(csv).join(';')).join('\r\n');
