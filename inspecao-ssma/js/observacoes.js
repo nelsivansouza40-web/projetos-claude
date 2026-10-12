@@ -198,6 +198,8 @@ async function renderObservacaoForm(id) {
       <div class="thumbs" id="thumbs-obs"></div>
       <h3>Ação corretiva (se necessária)</h3>
       <label>O que será feito<textarea name="acaoCorretiva" rows="2">${escapeHtml(d.tratamento.acaoCorretiva)}</textarea></label>
+      <label>Criticidade do comportamento de risco</label>
+      ${htmlEscolhaCriticidade('criticidade', d.tratamento.criticidade || '')}
       <div class="participante-linha">
         <label class="campo-leitura">Responsável<input type="text" name="responsavel" value="${escapeHtml(d.tratamento.responsavel)}"></label>
         <label class="campo-leitura">Prazo<input type="date" name="prazo" value="${escapeHtml(d.tratamento.prazo)}"></label>
@@ -216,6 +218,7 @@ async function renderObservacaoForm(id) {
     d.tratamento.acaoCorretiva = (fd.get('acaoCorretiva') || '').trim();
     d.tratamento.responsavel = (fd.get('responsavel') || '').trim();
     d.tratamento.prazo = fd.get('prazo') || '';
+    d.tratamento.criticidade = fd.get('criticidade') || '';
   }
   async function refreshThumbs() {
     const el = document.getElementById('thumbs-obs');

@@ -19,6 +19,7 @@ function novaAcaoAvulsa() {
     responsavel: '',
     prazo: '',
     status: 'Pendente',
+    criticidade: '',
     observacao: ''
   };
 }
@@ -54,17 +55,20 @@ async function coletarAcoes() {
     DB.getAllInspections(), DB.getAllInvestigacoes(), DB.getAllPGR(), DB.getAllRelatos(), DB.getAllAcoes(), DB.getAllItems('observacoes')
   ]);
   const acoes = [];
+  const reincidencia = analisarReincidencias(inspecoes).porItem;
 
   inspecoes.filter((i) => i.completo).forEach((insp) => {
     const id = insp.data.identificacao;
     const f = insp.data.fechamento;
+    const criticidadeInspecao = maiorCriticidade(insp.data.checklist.filter((i) => i.resposta === 'Não Conforme').map((i) => i.criticidade));
     const contexto = `${disciplinaDaInspecao(insp)} · ${insp.data.tipoInspecao || 'Inspeção'} · ${formatarDataBR(id.data)}`;
     const descricaoFechamento = f.medidaDefinitiva || f.medidaImediata;
     if (descricaoFechamento) {
       acoes.push({
         chave: `insp:${insp.id}:fechamento`, origem: 'Inspeção', registroId: insp.id, ref: 'fechamento',
         descricao: descricaoFechamento, contexto, empresa: id.empresa, area: id.area,
-        responsavel: f.responsavelAcao, prazo: f.prazo, status: f.statusAcao || 'Pendente', concluidaEm: f.concluidaEmAcao || ''
+        responsavel: f.responsavelAcao, prazo: f.prazo, status: f.statusAcao || 'Pendente', concluidaEm: f.concluidaEmAcao || '',
+        criticidade: criticidadeInspecao, reincidente: false, acomp: f.acompAcao || {}
       });
     }
     insp.data.checklist.forEach((item) => {
@@ -73,7 +77,9 @@ async function coletarAcoes() {
         chave: `insp:${insp.id}:${item.id}`, origem: 'Inspeção', registroId: insp.id, ref: item.id,
         descricao: item.medida, contexto: `${contexto} · NC: ${item.texto}`, empresa: id.empresa, area: id.area,
         responsavel: item.responsavelAcao || f.responsavelAcao, prazo: item.prazoAcao || f.prazo,
-        status: item.statusAcao || 'Pendente', concluidaEm: item.concluidaEmAcao || ''
+        status: item.statusAcao || 'Pendente', concluidaEm: item.concluidaEmAcao || '',
+        criticidade: item.criticidade || '', reincidente: !!(reincidencia.get(`${insp.id}:${item.id}`) || {}).reincidente,
+        acomp: item.acompAcao || {}
       });
     });
   });
@@ -85,7 +91,8 @@ async function coletarAcoes() {
       acoes.push({
         chave: `inv:${inv.id}:${a.id}`, origem: 'Investigação', registroId: inv.id, ref: a.id,
         descricao: a.descricao, contexto: `Acidente ${formatarDataBR(ac.data)} · ${ac.local || ''}`,
-        empresa: ac.empresa, area: ac.local, responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente', concluidaEm: a.concluidaEm || ''
+        empresa: ac.empresa, area: ac.local, responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente', concluidaEm: a.concluidaEm || '',
+        criticidade: criticidadeDaGravidade(ac.gravidade), reincidente: false, acomp: a.acomp || {}
       });
     });
   });
@@ -97,7 +104,8 @@ async function coletarAcoes() {
       acoes.push({
         chave: `pgr:${pgr.id}:${p.id}`, origem: 'PGR', registroId: pgr.id, ref: p.id,
         descricao: p.medidasPropostas, contexto: `PGR ${d.empresa || ''} · ${nomeGHEPGR(d.ghes, p.gheId) || 'sem GHE'} · ${p.perigo}`,
-        empresa: d.empresa, area: d.unidade, responsavel: p.responsavel, prazo: p.prazo, status: p.status || 'Pendente', concluidaEm: p.concluidaEm || ''
+        empresa: d.empresa, area: d.unidade, responsavel: p.responsavel, prazo: p.prazo, status: p.status || 'Pendente', concluidaEm: p.concluidaEm || '',
+        criticidade: criticidadeDoNivelPGR(classificarRiscoPGR(p.severidade, p.probabilidade).nivel), reincidente: false, acomp: p.acomp || {}
       });
     });
   });
@@ -108,7 +116,8 @@ async function coletarAcoes() {
     acoes.push({
       chave: `rel:${r.id}`, origem: 'Relato', registroId: r.id, ref: 'tratamento',
       descricao: t.acaoCorretiva, contexto: `${r.data.tipo} · ${formatarDataBR(r.data.data)} · ${r.data.local || r.data.area}`,
-      empresa: r.data.empresa, area: r.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente', concluidaEm: t.concluidaEm || ''
+      empresa: r.data.empresa, area: r.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente', concluidaEm: t.concluidaEm || '',
+      criticidade: criticidadeDoPotencialRelato(r.data.potencial), reincidente: false, acomp: t.acomp || {}
     });
   });
 
@@ -118,7 +127,8 @@ async function coletarAcoes() {
     acoes.push({
       chave: `obs:${o.id}`, origem: 'Observação', registroId: o.id, ref: 'tratamento',
       descricao: t.acaoCorretiva, contexto: `Observação comportamental · ${formatarDataBR(o.data.data)} · ${o.data.atividade}`,
-      empresa: o.data.empresa, area: o.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente', concluidaEm: t.concluidaEm || ''
+      empresa: o.data.empresa, area: o.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente', concluidaEm: t.concluidaEm || '',
+      criticidade: t.criticidade || '', reincidente: false, acomp: t.acomp || {}
     });
   });
 
@@ -126,7 +136,8 @@ async function coletarAcoes() {
     acoes.push({
       chave: `av:${a.id}`, origem: 'Avulsa', registroId: a.id, ref: '',
       descricao: a.descricao, contexto: a.origemTexto && a.origemTexto !== 'Avulsa' ? a.origemTexto : (a.observacao || 'Ação avulsa'), empresa: a.empresa, area: a.area,
-      responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente', concluidaEm: a.concluidaEm || ''
+      responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente', concluidaEm: a.concluidaEm || '',
+      criticidade: a.criticidade || '', reincidente: false, acomp: a.acomp || {}
     });
   });
 
@@ -153,12 +164,14 @@ async function atualizarAcaoNaOrigem(acao, campos) {
       if ('responsavel' in campos) f.responsavelAcao = campos.responsavel;
       if ('prazo' in campos) f.prazo = campos.prazo;
       if ('status' in campos) { f.statusAcao = campos.status; f.concluidaEmAcao = campos.concluidaEm; }
+      if ('acomp' in campos) f.acompAcao = campos.acomp;
     } else {
       const item = insp.data.checklist.find((i) => i.id === acao.ref);
       if (!item) return;
       if ('responsavel' in campos) item.responsavelAcao = campos.responsavel;
       if ('prazo' in campos) item.prazoAcao = campos.prazo;
       if ('status' in campos) { item.statusAcao = campos.status; item.concluidaEmAcao = campos.concluidaEm; }
+      if ('acomp' in campos) item.acompAcao = campos.acomp;
     }
     marcarPendente(insp);
     await DB.putInspection(insp);
@@ -221,6 +234,11 @@ function filtrarAcoes(acoes, filtro) {
     if (filtro.situacao === 'atrasadas' && sit !== 'atrasada') return false;
     if (filtro.situacao === 'embreve' && sit !== 'embreve') return false;
     if (filtro.situacao === 'concluidas' && sit !== 'concluida') return false;
+    const etapa = etapaEficacia(a);
+    if (filtro.situacao === 'verificar' && !(etapa && etapa.chave === 'verificar')) return false;
+    if (filtro.situacao === 'semevidencia' && !(etapa && etapa.chave === 'semevidencia')) return false;
+    if (filtro.situacao === 'criticas' && (sit === 'concluida' || !ehCriticidadeAlta(a.criticidade))) return false;
+    if (filtro.situacao === 'reincidentes' && !a.reincidente) return false;
     if (filtro.origem && filtro.origem !== 'Todas' && a.origem !== filtro.origem) return false;
     if (termo) {
       const alvo = [a.descricao, a.contexto, a.responsavel, a.empresa, a.area].join(' ').toLowerCase();
@@ -231,6 +249,9 @@ function filtrarAcoes(acoes, filtro) {
     const ox = ORDEM_SITUACAO[situacaoAcao(x).chave];
     const oy = ORDEM_SITUACAO[situacaoAcao(y).chave];
     if (ox !== oy) return ox - oy;
+    const cx = PESO_CRITICIDADE[x.criticidade] || 0;
+    const cy = PESO_CRITICIDADE[y.criticidade] || 0;
+    if (cx !== cy) return cy - cx;
     return (x.prazo || '9999').localeCompare(y.prazo || '9999');
   });
 }
@@ -248,6 +269,14 @@ async function renderAcoesHome() {
 
   const conta = (chave) => todas.filter((a) => situacaoAcao(a).chave === chave).length;
   const abertas = todas.filter((a) => a.status !== 'Concluída').length;
+  const contaEtapa = (chave) => todas.filter((a) => { const e = etapaEficacia(a); return e && e.chave === chave; }).length;
+  const criticasAbertas = todas.filter((a) => a.status !== 'Concluída' && ehCriticidadeAlta(a.criticidade)).length;
+  const opcoesSituacao = [
+    ['abertas', 'Abertas'], ['atrasadas', 'Atrasadas'], ['embreve', 'Vencem em 7 dias'],
+    ['criticas', 'Altas e críticas abertas'], ['reincidentes', 'Reincidentes'],
+    ['verificar', 'Verificar eficácia'], ['semevidencia', 'Concluídas sem evidência'],
+    ['concluidas', 'Concluídas'], ['todas', 'Todas']
+  ];
   const origens = ['Todas', 'Inspeção', 'Investigação', 'PGR', 'Relato', 'Observação', 'Avulsa'];
 
   view.innerHTML = `
@@ -255,19 +284,17 @@ async function renderAcoesHome() {
       <h1>Central de ações</h1>
       <button id="btn-nova-acao" class="btn-primary">+ Nova ação</button>
     </div>
-    <div class="kpi-grid kpi-grid-4">
+    <div class="kpi-grid kpi-grid-acoes">
       <button type="button" class="kpi kpi-clicavel" data-sit="abertas"><span class="kpi-valor">${abertas}</span><span class="kpi-rotulo">Abertas</span></button>
       <button type="button" class="kpi kpi-clicavel kpi-alerta" data-sit="atrasadas"><span class="kpi-valor">${conta('atrasada')}</span><span class="kpi-rotulo">Atrasadas</span></button>
       <button type="button" class="kpi kpi-clicavel kpi-atencao" data-sit="embreve"><span class="kpi-valor">${conta('embreve')}</span><span class="kpi-rotulo">Vencem em 7 dias</span></button>
+      <button type="button" class="kpi kpi-clicavel ${criticasAbertas ? 'kpi-alerta' : 'kpi-ok'}" data-sit="criticas"><span class="kpi-valor">${criticasAbertas}</span><span class="kpi-rotulo">Altas e críticas abertas</span></button>
+      <button type="button" class="kpi kpi-clicavel ${contaEtapa('verificar') ? 'kpi-atencao' : ''}" data-sit="verificar"><span class="kpi-valor">${contaEtapa('verificar')}</span><span class="kpi-rotulo">Verificar eficácia</span></button>
       <button type="button" class="kpi kpi-clicavel kpi-ok" data-sit="concluidas"><span class="kpi-valor">${conta('concluida')}</span><span class="kpi-rotulo">Concluídas</span></button>
     </div>
     <div class="filtros-acoes">
       <select id="filtro-situacao">
-        <option value="abertas" ${filtro.situacao === 'abertas' ? 'selected' : ''}>Abertas</option>
-        <option value="atrasadas" ${filtro.situacao === 'atrasadas' ? 'selected' : ''}>Atrasadas</option>
-        <option value="embreve" ${filtro.situacao === 'embreve' ? 'selected' : ''}>Vencem em 7 dias</option>
-        <option value="concluidas" ${filtro.situacao === 'concluidas' ? 'selected' : ''}>Concluídas</option>
-        <option value="todas" ${filtro.situacao === 'todas' ? 'selected' : ''}>Todas</option>
+        ${opcoesSituacao.map(([v, r]) => `<option value="${v}" ${filtro.situacao === v ? 'selected' : ''}>${r}</option>`).join('')}
       </select>
       <select id="filtro-origem">
         ${origens.map((o) => `<option ${filtro.origem === o ? 'selected' : ''}>${o}</option>`).join('')}
@@ -301,8 +328,16 @@ async function renderAcoesHome() {
       };
       card.querySelector('.in-acao-responsavel').addEventListener('change', (e) => salvar({ responsavel: e.target.value.trim() }));
       card.querySelector('.in-acao-prazo').addEventListener('change', (e) => salvar({ prazo: e.target.value }));
-      card.querySelector('.in-acao-status').addEventListener('change', (e) => salvar({ status: e.target.value }));
+      card.querySelector('.in-acao-status').addEventListener('change', (e) => {
+        // Concluir exige a evidência do que foi feito; cancelar volta ao status anterior.
+        if (e.target.value === 'Concluída') abrirDialogoConclusao(a, true);
+        else salvar({ status: e.target.value });
+      });
       card.querySelector('.btn-abrir-origem').addEventListener('click', () => abrirOrigemAcao(a));
+      const btnEvid = card.querySelector('.btn-registrar-evidencia');
+      if (btnEvid) btnEvid.addEventListener('click', () => abrirDialogoConclusao(a, false));
+      const btnVerif = card.querySelector('.btn-verificar-eficacia');
+      if (btnVerif) btnVerif.addEventListener('click', () => abrirDialogoEficacia(a));
     });
   }
   desenharLista();
@@ -331,11 +366,27 @@ async function renderAcoesHome() {
 
 function cardAcao(a, idx) {
   const sit = situacaoAcao(a);
+  const etapa = etapaEficacia(a);
+  const ac = a.acomp || {};
+  const ultimaFalha = (ac.historico || []).slice(-1)[0];
+  let acompanhamento = '';
+  if (a.status === 'Concluída' && ac.evidencia) {
+    acompanhamento = `<p class="acao-evidencia"><strong>Evidência:</strong> ${escapeHtml(ac.evidencia)}${(ac.evidenciaFotos || []).length ? ` · ${ac.evidenciaFotos.length} foto(s)` : ''}</p>`;
+    if (ac.eficacia !== 'Eficaz') acompanhamento += '<button type="button" class="btn-secondary btn-verificar-eficacia">Verificar eficácia</button>';
+    else if (ac.eficaciaObs) acompanhamento += `<p class="acao-evidencia"><strong>Verificação:</strong> ${escapeHtml(ac.eficaciaObs)}</p>`;
+  } else if (a.status === 'Concluída') {
+    acompanhamento = '<button type="button" class="btn-secondary btn-registrar-evidencia">Registrar evidência</button>';
+  } else if (ultimaFalha) {
+    acompanhamento = `<p class="acao-evidencia acao-falha"><strong>Não eficaz em ${formatarDataBR(ultimaFalha.verificadaEm)}:</strong> ${escapeHtml(ultimaFalha.observacao)}</p>`;
+  }
   return `
     <li class="acao-card" data-idx="${idx}">
       <div class="acao-topo">
         <span class="badge badge-origem">${escapeHtml(a.origem)}</span>
         <span class="badge ${sit.cls}">${sit.text}</span>
+        ${a.criticidade ? `<span class="badge ${classeCriticidade(a.criticidade)}">Criticidade ${escapeHtml(a.criticidade)}</span>` : ''}
+        ${a.reincidente ? '<span class="badge badge-erro">Reincidente</span>' : ''}
+        ${etapa ? `<span class="badge ${etapa.cls}">${escapeHtml(etapa.text)}</span>` : ''}
       </div>
       <div class="insp-card-title">${escapeHtml(a.descricao)}</div>
       <div class="insp-card-sub">${escapeHtml(a.contexto)}</div>
@@ -350,9 +401,159 @@ function cardAcao(a, idx) {
           <select class="in-acao-status">${STATUS_ACAO.map((s) => `<option ${a.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
         </label>
       </div>
+      ${acompanhamento}
       <button type="button" class="btn-link btn-abrir-origem">Abrir ${a.origem === 'Avulsa' ? 'ação' : 'registro de origem'} →</button>
     </li>
   `;
+}
+
+/* ---------------- EVIDÊNCIA E EFICÁCIA ---------------- */
+
+function abrirDialogo(html) {
+  const fundo = document.createElement('div');
+  fundo.className = 'dialogo-fundo no-print';
+  fundo.innerHTML = `<div class="dialogo-caixa" role="dialog">${html}</div>`;
+  document.body.appendChild(fundo);
+  return fundo;
+}
+
+/** Concluir a ação (ou completar a evidência de uma ação já concluída). */
+async function abrirDialogoConclusao(acao, mudarStatus) {
+  const ac = acao.acomp || {};
+  const fotos = [...(ac.evidenciaFotos || [])];
+  const novas = [];
+  const dlg = abrirDialogo(`
+    <h2>${mudarStatus ? 'Concluir ação' : 'Registrar evidência'}</h2>
+    <p class="hint">${escapeHtml(acao.descricao)}</p>
+    <form id="form-conclusao" class="form-section">
+      <label>O que foi feito e onde está a evidência? *
+        <textarea name="evidencia" rows="3" required placeholder="Ex.: guarda-corpo instalado no mezanino; ordem de serviço 1234">${escapeHtml(ac.evidencia || '')}</textarea>
+      </label>
+      <label>Fotos da evidência</label>
+      <div class="foto-botoes">
+        <label class="file-label">📷 Tirar foto<input type="file" accept="image/*" capture="environment" class="input-foto-evid"></label>
+        <label class="file-label">🖼️ Da galeria<input type="file" accept="image/*" multiple class="input-foto-evid"></label>
+      </div>
+      <div class="thumbs" id="thumbs-evid"></div>
+      <label>Verificar a eficácia em *
+        <input type="date" name="verificarEm" required value="${escapeHtml(ac.verificarEm || somarDias(hojeISO(), DIAS_PADRAO_VERIFICACAO))}">
+        <small>Data para voltar ao local e confirmar se o risco foi eliminado ou reduzido.</small>
+      </label>
+      <div class="form-actions">
+        <button type="button" class="btn-link" data-cancelar>Cancelar</button>
+        <button type="submit" class="btn-primary">${mudarStatus ? 'Concluir ação' : 'Salvar evidência'}</button>
+      </div>
+    </form>`);
+  const thumbs = dlg.querySelector('#thumbs-evid');
+  async function desenharFotos() {
+    await renderThumbnails(thumbs, fotos);
+    thumbs.querySelectorAll('.btn-remover-foto').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const pid = btn.dataset.photoId;
+        fotos.splice(fotos.indexOf(pid), 1);
+        if (novas.includes(pid)) await DB.deletePhoto(pid);
+        desenharFotos();
+      });
+    });
+  }
+  desenharFotos();
+  dlg.querySelectorAll('.input-foto-evid').forEach((input) => {
+    input.addEventListener('change', async (e) => {
+      const antes = fotos.length;
+      await adicionarFotos({ id: `acao:${acao.chave}` }, fotos, e.target.files, 'evidencia');
+      novas.push(...fotos.slice(antes));
+      e.target.value = '';
+      desenharFotos();
+    });
+  });
+  dlg.querySelector('[data-cancelar]').addEventListener('click', async () => {
+    for (const pid of novas) await DB.deletePhoto(pid);
+    dlg.remove();
+    renderAcoesHome();
+  });
+  dlg.querySelector('#form-conclusao').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const evidencia = (fd.get('evidencia') || '').trim();
+    if (!evidencia) return;
+    const campos = {
+      acomp: {
+        ...ac, evidencia, evidenciaFotos: fotos, verificarEm: fd.get('verificarEm') || '',
+        eficacia: '', eficaciaEm: '', eficaciaPor: '', eficaciaObs: ''
+      }
+    };
+    if (mudarStatus) campos.status = 'Concluída';
+    await atualizarAcaoNaOrigem(acao, campos);
+    dlg.remove();
+    updateSyncBar();
+    renderAcoesHome();
+  });
+}
+
+/** Verificação de eficácia: eficaz encerra; não eficaz reabre com novo prazo. */
+async function abrirDialogoEficacia(acao) {
+  const ac = acao.acomp || {};
+  const nome = (await DB.getSetting('nomeUsuario')) || '';
+  const dlg = abrirDialogo(`
+    <h2>Verificar eficácia</h2>
+    <p class="hint">${escapeHtml(acao.descricao)}</p>
+    <p><strong>Evidência registrada:</strong> ${escapeHtml(ac.evidencia || '—')}</p>
+    <div class="thumbs" id="thumbs-verif"></div>
+    <form id="form-eficacia" class="form-section">
+      <fieldset>
+        <legend>No local, a ação eliminou ou reduziu o risco? *</legend>
+        <div class="radio-group">
+          <label class="radio-pill radio-ok"><input type="radio" name="resultado" value="Eficaz" required> Eficaz</label>
+          <label class="radio-pill radio-nc"><input type="radio" name="resultado" value="Não eficaz"> Não eficaz</label>
+        </div>
+      </fieldset>
+      <label>O que foi observado na verificação <span id="obs-obrigatoria" hidden>*</span>
+        <textarea name="observacao" rows="3"></textarea>
+      </label>
+      <label>Verificado por *
+        <input type="text" name="verificador" required value="${escapeHtml(nome)}">
+      </label>
+      <label id="campo-novo-prazo" hidden>Novo prazo para corrigir *
+        <input type="date" name="novoPrazo" value="${somarDias(hojeISO(), 15)}">
+      </label>
+      <div class="form-actions">
+        <button type="button" class="btn-link" data-cancelar>Cancelar</button>
+        <button type="submit" class="btn-primary">Registrar verificação</button>
+      </div>
+    </form>`);
+  renderThumbnails(dlg.querySelector('#thumbs-verif'), ac.evidenciaFotos || []).then(() => {
+    dlg.querySelectorAll('#thumbs-verif .btn-remover-foto').forEach((b) => b.remove());
+  });
+  const form = dlg.querySelector('#form-eficacia');
+  form.querySelectorAll('input[name=resultado]').forEach((r) => r.addEventListener('change', () => {
+    const naoEficaz = form.resultado.value === 'Não eficaz';
+    dlg.querySelector('#campo-novo-prazo').hidden = !naoEficaz;
+    dlg.querySelector('#obs-obrigatoria').hidden = !naoEficaz;
+    form.observacao.required = naoEficaz;
+    form.novoPrazo.required = naoEficaz;
+  }));
+  dlg.querySelector('[data-cancelar]').addEventListener('click', () => dlg.remove());
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const resultado = fd.get('resultado');
+    const observacao = (fd.get('observacao') || '').trim();
+    const verificador = (fd.get('verificador') || '').trim();
+    if (resultado === 'Eficaz') {
+      await atualizarAcaoNaOrigem(acao, {
+        acomp: { ...ac, eficacia: 'Eficaz', eficaciaEm: hojeISO(), eficaciaPor: verificador, eficaciaObs: observacao }
+      });
+    } else {
+      const historico = [...(ac.historico || []), {
+        concluidaEm: acao.concluidaEm || '', evidencia: ac.evidencia || '', evidenciaFotos: ac.evidenciaFotos || [],
+        verificadaEm: hojeISO(), verificadaPor: verificador, observacao
+      }];
+      await atualizarAcaoNaOrigem(acao, { status: 'Em andamento', prazo: fd.get('novoPrazo') || acao.prazo, acomp: { historico } });
+    }
+    dlg.remove();
+    updateSyncBar();
+    renderAcoesHome();
+  });
 }
 
 /** Texto curto, pronto para colar no WhatsApp ou no e-mail. */
@@ -361,7 +562,8 @@ function textoListaAcoes(acoes) {
   const linhas = acoes.slice(0, LIMITE).map((a, i) => {
     const sit = situacaoAcao(a);
     const prazo = a.prazo ? formatarDataBR(a.prazo) : 'sem prazo';
-    return `${i + 1}. ${a.descricao}\n   Origem: ${a.origem} — ${a.contexto}\n   Responsável: ${a.responsavel || 'não definido'} · Prazo: ${prazo} · ${sit.text}`;
+    const extras = [a.criticidade ? `Criticidade: ${a.criticidade}` : '', a.reincidente ? 'Reincidente' : ''].filter(Boolean).join(' · ');
+    return `${i + 1}. ${a.descricao}\n   Origem: ${a.origem} — ${a.contexto}${extras ? `\n   ${extras}` : ''}\n   Responsável: ${a.responsavel || 'não definido'} · Prazo: ${prazo} · ${sit.text}`;
   });
   const extra = acoes.length > LIMITE ? `\n\n…e mais ${acoes.length - LIMITE} ação(ões). Consulte a Central de ações no app.` : '';
   return `*Ações de SSMA — ${new Date().toLocaleDateString('pt-BR')}*\n${acoes.length} ação(ões) na lista.\n\n${linhas.join('\n\n')}${extra}`;
@@ -393,6 +595,12 @@ async function renderAcaoAvulsaForm(id) {
       <label>Área / Setor
         <input type="text" name="area" value="${escapeHtml(a.area)}">
       </label>
+      <label>Criticidade
+        <select name="criticidade">
+          <option value="">Não classificada</option>
+          ${CRITICIDADES.map((c) => `<option ${a.criticidade === c ? 'selected' : ''}>${c}</option>`).join('')}
+        </select>
+      </label>
       <div class="participante-linha">
         <label class="campo-leitura">Responsável *
           <input type="text" name="responsavel" required value="${escapeHtml(a.responsavel)}">
@@ -422,6 +630,7 @@ async function renderAcaoAvulsaForm(id) {
     a.origemTexto = (fd.get('origemTexto') || '').trim() || 'Avulsa';
     a.empresa = (fd.get('empresa') || '').trim();
     a.area = (fd.get('area') || '').trim();
+    a.criticidade = fd.get('criticidade') || '';
     a.responsavel = (fd.get('responsavel') || '').trim();
     a.prazo = fd.get('prazo') || '';
     a.status = fd.get('status') || 'Pendente';

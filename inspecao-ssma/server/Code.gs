@@ -82,7 +82,7 @@ const SHEET_RELATOS = 'Relatos';
 const SHEET_ACOES = 'Acoes_Avulsas';
 const SHEET_OBSERVACOES = 'Observacoes_Comportamentais';
 
-const VERSAO_SERVIDOR = '2026-10-12';
+const VERSAO_SERVIDOR = '2026-10-12b';
 
 /** Abrir o endereço do app da Web no navegador mostra se o servidor está no ar. */
 function doGet() {
@@ -237,6 +237,8 @@ function upsertInspection(insp) {
   gravarColunaExtra(sheetInsp, rowIndex, 'Qtd. NC', insp.qtdNC);
   gravarColunaExtra(sheetInsp, rowIndex, 'Duração (min)', insp.duracaoMin);
   gravarColunaExtra(sheetInsp, rowIndex, 'Registrado por', body_usuario_(insp));
+  gravarColunaExtra(sheetInsp, rowIndex, 'Qtd. NC Alta/Crítica', insp.qtdNCAltasCriticas === undefined ? '' : insp.qtdNCAltasCriticas);
+  gravarColunaExtra(sheetInsp, rowIndex, 'Qtd. NC Reincidentes', insp.qtdNCReincidentes === undefined ? '' : insp.qtdNCReincidentes);
 
   // Se o painel de ações já foi criado, o status marcado na Central de ações
   // do app atualiza a coluna "Status da Ação" desta inspeção.
@@ -250,20 +252,24 @@ function upsertInspection(insp) {
 
   const sheetItens = getOrCreateSheet(SHEET_ITENS, [
     'Inspeção ID', 'Item ID', 'Questão', 'Resposta', 'Observação',
-    'Medida de Controle', 'Personalizado', 'Recebido em'
+    'Medida de Controle', 'Personalizado', 'Recebido em', 'Criticidade', 'Reincidente',
+    'Data', 'Área', 'Empresa', 'Tipo de Inspeção'
   ]);
+  // Uma linha por item; atualizada a cada envio (a criticidade e a resposta
+  // podem mudar quando a inspeção é editada). Base do mapa de calor no Looker.
   const itensExistentes = sheetItens.getDataRange().getValues();
   (insp.checklist || []).forEach((item) => {
-    let jaExiste = false;
+    const linhaItem = [
+      id, item.id, item.texto, item.resposta, item.observacao,
+      item.medida, item.personalizado, new Date(), item.criticidade || '', item.reincidente ? 'Sim' : 'Não',
+      insp.identificacao.data, insp.identificacao.area, insp.identificacao.empresa, insp.tipoInspecao
+    ];
+    let linhaExistente = -1;
     for (let i = 1; i < itensExistentes.length; i++) {
-      if (itensExistentes[i][0] === id && itensExistentes[i][1] === item.id) { jaExiste = true; break; }
+      if (itensExistentes[i][0] === id && itensExistentes[i][1] === item.id) { linhaExistente = i + 1; break; }
     }
-    if (!jaExiste) {
-      sheetItens.appendRow([
-        id, item.id, item.texto, item.resposta, item.observacao,
-        item.medida, item.personalizado, new Date()
-      ]);
-    }
+    if (linhaExistente > 0) sheetItens.getRange(linhaExistente, 1, 1, linhaItem.length).setValues([linhaItem]);
+    else sheetItens.appendRow(linhaItem);
   });
 
   return { ok: true, remoteRef: inspFolder.getId() };
@@ -1049,7 +1055,9 @@ function body_usuario_(registro) {
 function upsertAcoesConsolidadas(acoes, usuario) {
   const sheet = getOrCreateSheet('Acoes_Consolidadas', [
     'Chave', 'Origem', 'Ação', 'Contexto', 'Empresa', 'Área', 'Responsável', 'Prazo',
-    'Status', 'Situação', 'Concluída em', 'Concluída no prazo', 'Registrado por', 'Atualizado em'
+    'Status', 'Situação', 'Concluída em', 'Concluída no prazo', 'Registrado por', 'Atualizado em',
+    'Criticidade', 'Reincidente', 'Evidência', 'Fotos da evidência', 'Verificar eficácia em',
+    'Eficácia', 'Verificada em', 'Verificada por', 'Reaberturas (não eficaz)'
   ]);
   const dados = sheet.getDataRange().getValues();
   const linhaPorChave = {};
@@ -1058,7 +1066,9 @@ function upsertAcoesConsolidadas(acoes, usuario) {
   (acoes || []).forEach((a) => {
     const noPrazo = a.status === 'Concluída' && a.concluidaEm && a.prazo ? (a.concluidaEm <= a.prazo ? 'Sim' : 'Não') : '';
     const linha = [a.chave, a.origem, a.descricao, a.contexto, a.empresa, a.area, a.responsavel, a.prazo,
-      a.status, a.situacao, a.concluidaEm, noPrazo, usuario || '', new Date()];
+      a.status, a.situacao, a.concluidaEm, noPrazo, usuario || '', new Date(),
+      a.criticidade || '', a.reincidente || '', a.evidencia || '', a.fotosEvidencia || '', a.verificarEm || '',
+      a.eficacia || '', a.eficaciaEm || '', a.eficaciaPor || '', a.reaberturas || 0];
     if (linhaPorChave[a.chave]) sheet.getRange(linhaPorChave[a.chave], 1, 1, linha.length).setValues([linha]);
     else novas.push(linha);
   });

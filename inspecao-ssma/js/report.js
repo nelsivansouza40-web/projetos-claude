@@ -151,13 +151,15 @@ async function montarRegistroFotografico(checklist) {
   return blocos.join('');
 }
 
-function montarTabelaResumo(checklist) {
+function montarTabelaResumo(checklist, reincidencia = new Map(), inspId = '') {
   const linhas = checklist.map((item, idx) => `
     <tr>
       <td>${String(idx + 1).padStart(2, '0')}</td>
       <td>${escapeHtml(item.texto)}</td>
       <td class="rep-td-status rep-status-${item.resposta === 'Conforme' ? 'ok' : item.resposta === 'Não Conforme' ? 'nc' : 'na'}">
         ${escapeHtml(item.resposta || '—')}
+        ${item.resposta === 'Não Conforme' && item.criticidade ? `<br><small>Criticidade ${escapeHtml(item.criticidade)}</small>` : ''}
+        ${item.resposta === 'Não Conforme' && (reincidencia.get(`${inspId}:${item.id}`) || {}).reincidente ? '<br><small><strong>Reincidente</strong></small>' : ''}
       </td>
     </tr>
   `).join('');
@@ -315,10 +317,12 @@ async function renderReport(id) {
   const codigo = gerarCodigoDocumento(insp);
   const geradoEm = new Date().toLocaleString('pt-BR');
 
-  const [registroFotografico, fotosComplementares] = await Promise.all([
+  const [registroFotografico, fotosComplementares, todasInspecoes] = await Promise.all([
     montarRegistroFotografico(insp.data.checklist),
-    montarFotosComplementares(f.fotosComplementaresIds)
+    montarFotosComplementares(f.fotosComplementaresIds),
+    DB.getAllInspections()
   ]);
+  const reincidencia = analisarReincidencias(todasInspecoes).porItem;
 
   view.innerHTML = `
     <div class="screen-header no-print">
@@ -365,7 +369,7 @@ async function renderReport(id) {
 
       <section class="rep-secao rep-quebra">
         <h3>3. Resumo dos itens verificados</h3>
-        ${montarTabelaResumo(insp.data.checklist)}
+        ${montarTabelaResumo(insp.data.checklist, reincidencia, insp.id)}
       </section>
 
       <section class="rep-secao rep-quebra">

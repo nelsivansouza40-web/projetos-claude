@@ -119,6 +119,7 @@ async function renderPainel() {
   const sit = (chave) => acoesF.filter((a) => situacaoAcao(a).chave === chave).length;
   const abertas = acoesF.filter((a) => a.status !== 'Concluída').length;
   const atrasadas = sit('atrasada');
+  const verificarEficacia = acoesF.filter((a) => { const e = etapaEficacia(a); return e && e.chave === 'verificar'; }).length;
 
   // Acidentes e dias sem acidente (considera todos os registros da empresa).
   const todasDatasAcidente = investigacoes.filter((r) => r.completo && daEmpresa(r.data.acidente.empresa))
@@ -176,6 +177,7 @@ async function renderPainel() {
   view.innerHTML = `
     <div class="screen-header">
       <h1>Painel de indicadores</h1>
+      <button type="button" id="btn-ir-inteligencia" class="btn-secondary">Inteligência por área →</button>
     </div>
     <div class="filtros-acoes">
       <select id="painel-periodo">${PERIODOS_PAINEL.map((p) => `<option value="${p.id}" ${filtro.periodo === p.id ? 'selected' : ''}>${p.rotulo}</option>`).join('')}</select>
@@ -196,6 +198,7 @@ async function renderPainel() {
       ${kpi(naoConformes, 'Não conformidades', naoConformes ? 'kpi-atencao' : '')}
       ${kpi(abertas, 'Ações abertas', '', 'acoes')}
       ${kpi(atrasadas, 'Ações atrasadas', atrasadas ? 'kpi-alerta' : 'kpi-ok', 'acoes-atrasadas')}
+      ${kpi(verificarEficacia, 'Verificar eficácia', verificarEficacia ? 'kpi-atencao' : '', 'acoes-verificar')}
       ${kpi(rels.length, 'Relatos', '', 'relatos')}
       ${kpi(acid.length, 'Acidentes', acid.length ? 'kpi-alerta' : 'kpi-ok', 'investigacao')}
       ${kpi(pts.length + petsF.length, 'PT/APR e PET')}
@@ -243,6 +246,7 @@ async function renderPainel() {
     <p class="hint">Indicadores calculados com os registros gravados neste aparelho. As ações mostram a situação de hoje, sem filtro de período.</p>
   `;
 
+  document.getElementById('btn-ir-inteligencia').addEventListener('click', renderInteligencia);
   document.getElementById('painel-periodo').addEventListener('change', (e) => { filtro.periodo = e.target.value; renderPainel(); });
   document.getElementById('painel-disciplina').addEventListener('change', (e) => { filtro.disciplina = e.target.value; renderPainel(); });
   document.getElementById('painel-empresa').addEventListener('change', (e) => { filtro.empresa = e.target.value; renderPainel(); });
@@ -254,7 +258,8 @@ async function renderPainel() {
       if (alvo === 'investigacao') return renderInvestigacaoHome();
       if (alvo === 'programacao') return renderProgramacaoHome();
       if (alvo === 'observacoes') return renderObservacoesHome();
-      state.filtroAcoes = { situacao: alvo === 'acoes-atrasadas' ? 'atrasadas' : 'abertas', origem: 'Todas', busca: '' };
+      const situacao = alvo === 'acoes-atrasadas' ? 'atrasadas' : alvo === 'acoes-verificar' ? 'verificar' : 'abertas';
+      state.filtroAcoes = { situacao, origem: 'Todas', busca: '' };
       return renderAcoesHome();
     };
     el.addEventListener('click', ir);

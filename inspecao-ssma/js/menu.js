@@ -7,7 +7,7 @@
 const GRUPOS_MENU = [
   { id: 'inspecoes', rotulo: 'Inspeções', abas: ['inspecoes', 'diagnostico', 'veiculo'] },
   { id: 'permissoes', rotulo: 'Permissões', abas: ['ptapr', 'pet'] },
-  { id: 'gestao', rotulo: 'Gestão', abas: ['painel', 'acoes', 'relatos', 'observacoes', 'investigacao'] },
+  { id: 'gestao', rotulo: 'Gestão', abas: ['painel', 'inteligencia', 'acoes', 'relatos', 'observacoes', 'investigacao'] },
   { id: 'pessoas', rotulo: 'Pessoas', abas: ['dds', 'cipa', 'certificados', 'epi'] },
   { id: 'pgr', rotulo: 'PGR', abas: ['pgr'] }
 ];
