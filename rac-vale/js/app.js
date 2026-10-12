@@ -92,6 +92,81 @@ function redimensionarImagem(file, maxLado = 1280, qualidade = 0.72) {
   });
 }
 
+/* ---------------- Câmera no computador ----------------
+ * No celular, "Tirar foto" usa a câmera nativa (input com capture).
+ * No computador o navegador ignora o capture e abre só a janela de
+ * arquivos; por isso ali a foto é tirada pela webcam dentro do app.
+ */
+
+function usarCameraDoApp() {
+  const toque = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  return !toque && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+
+function abrirCamera() {
+  return new Promise((resolve) => {
+    const fundo = document.createElement('div');
+    fundo.className = 'camera-fundo';
+    fundo.innerHTML = `
+      <div class="camera-caixa">
+        <video autoplay playsinline muted></video>
+        <p class="camera-msg muted">Abrindo a câmera...</p>
+        <div class="acoes-linha">
+          <button type="button" class="btn sec" data-cam="cancelar">Cancelar</button>
+          <button type="button" class="btn sec" data-cam="trocar" hidden>Trocar câmera</button>
+          <button type="button" class="btn" data-cam="capturar" disabled>Capturar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(fundo);
+    const video = fundo.querySelector('video');
+    const msg = fundo.querySelector('.camera-msg');
+    const btnCapturar = fundo.querySelector('[data-cam="capturar"]');
+    const btnTrocar = fundo.querySelector('[data-cam="trocar"]');
+    let stream = null;
+    let cameras = [];
+    let indice = 0;
+
+    const parar = () => { if (stream) stream.getTracks().forEach((t) => t.stop()); stream = null; };
+    const fechar = (resultado) => { parar(); fundo.remove(); resolve(resultado); };
+
+    const iniciar = async () => {
+      parar();
+      btnCapturar.disabled = true;
+      try {
+        const video_ = cameras[indice] ? { deviceId: { exact: cameras[indice].deviceId } } : { facingMode: 'environment' };
+        stream = await navigator.mediaDevices.getUserMedia({ video: { ...video_, width: { ideal: 1280 }, height: { ideal: 960 } }, audio: false });
+        video.srcObject = stream;
+        await video.play();
+        msg.hidden = true;
+        btnCapturar.disabled = false;
+        if (!cameras.length) {
+          cameras = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === 'videoinput');
+          const atual = stream.getVideoTracks()[0].getSettings().deviceId;
+          indice = Math.max(0, cameras.findIndex((c) => c.deviceId === atual));
+        }
+        btnTrocar.hidden = cameras.length < 2;
+      } catch (err) {
+        msg.hidden = false;
+        msg.textContent = err && err.name === 'NotAllowedError'
+          ? 'O navegador bloqueou o acesso à câmera. Libere a permissão no cadeado da barra de endereço ou use "Foto da galeria".'
+          : 'Nenhuma câmera disponível neste computador. Use "Foto da galeria".';
+      }
+    };
+
+    fundo.querySelector('[data-cam="cancelar"]').onclick = () => fechar(null);
+    btnTrocar.onclick = () => { indice = (indice + 1) % cameras.length; iniciar(); };
+    btnCapturar.onclick = () => {
+      const esc = Math.min(1, 1280 / Math.max(video.videoWidth, video.videoHeight));
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(video.videoWidth * esc);
+      cv.height = Math.round(video.videoHeight * esc);
+      cv.getContext('2d').drawImage(video, 0, 0, cv.width, cv.height);
+      fechar(cv.toDataURL('image/jpeg', 0.72));
+    };
+    iniciar();
+  });
+}
+
 /* ---------------- Início ---------------- */
 
 async function renderInicio() {
@@ -315,7 +390,9 @@ function renderItem(box, aud, secao, it) {
     <div class="item-texto"><span class="num">${it.num}</span>${escapeHtml(it.texto)}</div>
     <div class="resp-linha">${botoes}</div>
     <div class="foto-linha">
-      <label class="btn mini sec">Tirar foto<input type="file" accept="image/*" capture="environment" hidden data-foto></label>
+      ${usarCameraDoApp()
+        ? '<button type="button" class="btn mini sec" data-camera>Tirar foto</button>'
+        : '<label class="btn mini sec">Tirar foto<input type="file" accept="image/*" capture="environment" hidden data-foto></label>'}
       <label class="btn mini sec">Foto da galeria<input type="file" accept="image/*" multiple hidden data-foto></label>
     </div>
     <div class="fotos" data-fotos></div>
@@ -342,15 +419,17 @@ function renderItem(box, aud, secao, it) {
   box.querySelectorAll('[data-campo]').forEach((inp) => {
     inp.oninput = () => { resp()[inp.dataset.campo] = inp.value; salvarDepois(aud); };
   });
+  const guardarFoto = async (dataUrl) => {
+    const foto = { id: uid(), auditoriaId: aud.id, itemId: it.id, dataUrl, createdAt: Date.now() };
+    await DB.put('fotos', foto);
+    const atual = resp();
+    atual.fotos = (atual.fotos || []).concat(foto.id);
+  };
   box.querySelectorAll('[data-foto]').forEach((inp) => { inp.onchange = async (e) => {
     const files = [...e.target.files];
     for (const f of files) {
       try {
-        const dataUrl = await redimensionarImagem(f);
-        const foto = { id: uid(), auditoriaId: aud.id, itemId: it.id, dataUrl, createdAt: Date.now() };
-        await DB.put('fotos', foto);
-        const atual = resp();
-        atual.fotos = (atual.fotos || []).concat(foto.id);
+        await guardarFoto(await redimensionarImagem(f));
       } catch (err) {
         toast('Não foi possível ler a foto.');
       }
@@ -358,6 +437,16 @@ function renderItem(box, aud, secao, it) {
     await salvarAgora(aud);
     renderItem(box, aud, secao, it);
   }; });
+  const btnCamera = box.querySelector('[data-camera]');
+  if (btnCamera) {
+    btnCamera.onclick = async () => {
+      const dataUrl = await abrirCamera();
+      if (!dataUrl) return;
+      await guardarFoto(dataUrl);
+      await salvarAgora(aud);
+      renderItem(box, aud, secao, it);
+    };
+  }
   renderMiniaturas(box.querySelector('[data-fotos]'), aud, it, () => renderItem(box, aud, secao, it));
 }
 
