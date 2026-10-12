@@ -241,7 +241,7 @@ async function novaAuditoria() {
       atividade: '',
       auditor: await DB.getSetting('auditorPadrao', ''),
       acompanhante: '',
-      logo: await DB.getSetting('logoPadrao', '')
+      logo: await logoPadraoAtual()
     },
     racs: [],
     respostas: {},
@@ -801,7 +801,7 @@ async function renderConfig() {
   view().querySelectorAll('input[name]').forEach((inp) => {
     inp.onchange = () => DB.setSetting(inp.name, inp.value.trim());
   });
-  let logoPadrao = await DB.getSetting('logoPadrao', '');
+  let logoPadrao = await logoPadraoAtual();
   blocoLogo(view().querySelector('[data-logo-padrao]'), () => logoPadrao, async (valor) => {
     logoPadrao = valor;
     await DB.setSetting('logoPadrao', valor);
@@ -810,6 +810,26 @@ async function renderConfig() {
 }
 
 /* ---------------- Logomarca ---------------- */
+
+// Logomarca do projeto piloto (REDE Montagens Eletromecânicas), usada como
+// padrão enquanto o usuário não escolher outra ou remover nas configurações.
+const LOGO_EMBUTIDA = 'icons/logo-padrao.png';
+
+async function logoPadraoAtual() {
+  const salva = await DB.getSetting('logoPadrao', null);
+  if (salva !== null) return salva;
+  try {
+    const blob = await (await fetch(LOGO_EMBUTIDA)).blob();
+    return await new Promise((resolve, reject) => {
+      const leitor = new FileReader();
+      leitor.onload = () => resolve(leitor.result);
+      leitor.onerror = reject;
+      leitor.readAsDataURL(blob);
+    });
+  } catch (err) {
+    return '';
+  }
+}
 
 // Reduz a imagem para no máximo 600 x 200 px, mantendo a transparência (PNG).
 function redimensionarLogo(file) {

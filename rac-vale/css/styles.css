@@ -197,7 +197,7 @@ canvas.assinatura { width: 100%; height: 140px; border: 1px dashed var(--cinza);
 .relatorio h2 { font-size: 1rem; color: var(--azul-escuro); border-bottom: 2px solid var(--azul); padding-bottom: 3px; margin: 18px 0 8px; }
 .rel-cab { display: flex; justify-content: space-between; gap: 10px; border-bottom: 3px solid var(--azul); padding-bottom: 8px; margin-bottom: 10px; }
 .rel-cab { align-items: center; }
-.rel-logo img { max-height: 56px; max-width: 170px; object-fit: contain; display: block; }
+.rel-logo img { max-height: 84px; max-width: 170px; object-fit: contain; display: block; }
 .rel-titulo { flex: 1; }
 .logo-prev { min-height: 48px; display: flex; align-items: center; }
 .logo-prev img { max-height: 70px; max-width: 220px; object-fit: contain; border: 1px solid var(--cinza-borda); border-radius: 6px; padding: 4px; background: #fff; }
@@ -237,6 +237,10 @@ canvas.assinatura { width: 100%; height: 140px; border: 1px dashed var(--cinza);
   .rel-ident th { width: auto; }
   .resumo-topo { top: 54px; }
   .relatorio { padding: 12px; font-size: 0.8rem; }
+  .rel-cab { flex-wrap: wrap; }
+  .rel-logo img { max-height: 64px; }
+  .rel-titulo h1 { font-size: 1.05rem; }
+  .rel-cod { width: 100%; text-align: left; }
   .rel-tab th, .rel-tab td { padding: 4px; }
   .rel-tab .c-resp { width: 76px; }
 }

@@ -3,7 +3,7 @@
  * internet, servindo os arquivos a partir do cache local do dispositivo.
  * Auditorias e fotos ficam no IndexedDB (não neste cache).
  */
-const CACHE_VERSION = 'rac-campo-v8';
+const CACHE_VERSION = 'rac-campo-v9';
 const APP_SHELL = [
   './',
   './index.html',
@@ -14,7 +14,8 @@ const APP_SHELL = [
   './js/relatorio.js',
   './js/app.js',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './icons/logo-padrao.png'
 ];
 
 self.addEventListener('install', (event) => {
