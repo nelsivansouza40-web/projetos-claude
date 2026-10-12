@@ -84,7 +84,8 @@ async function renderRelatorio(id) {
     ${aud.status !== 'concluida' ? '<p class="aviso nao-imprimir">Auditoria em rascunho: o relatório mostra o preenchimento atual.</p>' : ''}
     <article class="relatorio">
       <header class="rel-cab">
-        <div>
+        ${i.logo ? `<div class="rel-logo"><img src="${i.logo}" alt="Logomarca da empresa"></div>` : ''}
+        <div class="rel-titulo">
           <h1>Relatório de Auditoria de RAC</h1>
           <div>Check Básico de Campo · Referência: PNR-000069 Rev. 11</div>
         </div>

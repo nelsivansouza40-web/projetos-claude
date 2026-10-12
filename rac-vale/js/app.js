@@ -240,7 +240,8 @@ async function novaAuditoria() {
       area: '',
       atividade: '',
       auditor: await DB.getSetting('auditorPadrao', ''),
-      acompanhante: ''
+      acompanhante: '',
+      logo: await DB.getSetting('logoPadrao', '')
     },
     racs: [],
     respostas: {},
@@ -289,6 +290,11 @@ function renderIdentificacao(el, aud) {
 
   el.innerHTML = `
     <section class="card">
+      <h3>Logomarca da empresa</h3>
+      <p class="muted">Aparece no cabeçalho do relatório desta auditoria.</p>
+      <div data-logo-bloco></div>
+    </section>
+    <section class="card">
       <h3>Identificação da auditoria</h3>
       <div class="grade">
         ${campo('Data', 'data', i.data, 'date')}
@@ -314,6 +320,10 @@ function renderIdentificacao(el, aud) {
 
   el.querySelectorAll('input[name]').forEach((inp) => {
     inp.oninput = () => { aud.ident[inp.name] = inp.value; salvarDepois(aud); };
+  });
+  blocoLogo(el.querySelector('[data-logo-bloco]'), () => aud.ident.logo, async (valor) => {
+    aud.ident.logo = valor;
+    await salvarAgora(aud);
   });
   el.querySelectorAll('.rac-opcao input').forEach((cb) => {
     cb.onchange = () => {
@@ -779,6 +789,11 @@ async function renderConfig() {
       </div>
     </section>
     <section class="card">
+      <h3>Logomarca padrão</h3>
+      <p class="muted">Entra automaticamente no cabeçalho de cada nova auditoria. Em cada auditoria é possível trocar ou remover.</p>
+      <div data-logo-padrao></div>
+    </section>
+    <section class="card">
       <h3>Sobre</h3>
       <p class="muted">Checklist: ${escapeHtml(CHECKLIST_VERSAO)}. Referência: PNR-000069 Rev. 11 – Requisitos de Atividades Críticas.</p>
     </section>
@@ -786,7 +801,65 @@ async function renderConfig() {
   view().querySelectorAll('input[name]').forEach((inp) => {
     inp.onchange = () => DB.setSetting(inp.name, inp.value.trim());
   });
+  let logoPadrao = await DB.getSetting('logoPadrao', '');
+  blocoLogo(view().querySelector('[data-logo-padrao]'), () => logoPadrao, async (valor) => {
+    logoPadrao = valor;
+    await DB.setSetting('logoPadrao', valor);
+  });
   document.getElementById('btn-ok').onclick = () => irPara('#/');
+}
+
+/* ---------------- Logomarca ---------------- */
+
+// Reduz a imagem para no máximo 600 x 200 px, mantendo a transparência (PNG).
+function redimensionarLogo(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const esc = Math.min(1, 600 / img.width, 200 / img.height);
+      const cv = document.createElement('canvas');
+      cv.width = Math.max(1, Math.round(img.width * esc));
+      cv.height = Math.max(1, Math.round(img.height * esc));
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      URL.revokeObjectURL(url);
+      resolve(cv.toDataURL('image/png'));
+    };
+    img.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
+    img.src = url;
+  });
+}
+
+function blocoLogo(el, obter, gravar) {
+  const desenhar = () => {
+    const logo = obter();
+    el.innerHTML = `
+      <div class="logo-prev">${logo ? `<img src="${logo}" alt="Logomarca da empresa">` : '<span class="muted">Nenhuma logomarca inserida.</span>'}</div>
+      <div class="acoes-linha pequena">
+        <label class="btn mini">${logo ? 'Trocar logomarca' : 'Inserir logomarca da empresa'}<input type="file" accept="image/*" hidden data-logo-arquivo></label>
+        ${logo ? '<button type="button" class="btn mini perigo" data-logo-remover>Remover logomarca</button>' : ''}
+      </div>`;
+    el.querySelector('[data-logo-arquivo]').onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        await gravar(await redimensionarLogo(file));
+        toast('Logomarca inserida.');
+      } catch (err) {
+        toast('Não foi possível ler a imagem.');
+      }
+      desenhar();
+    };
+    const rem = el.querySelector('[data-logo-remover]');
+    if (rem) {
+      rem.onclick = async () => {
+        if (!confirm('Remover a logomarca?')) return;
+        await gravar('');
+        desenhar();
+      };
+    }
+  };
+  desenhar();
 }
 
 /* ---------------- Rotas ---------------- */

@@ -196,6 +196,11 @@ canvas.assinatura { width: 100%; height: 140px; border: 1px dashed var(--cinza);
 .relatorio h1 { font-size: 1.2rem; margin: 0 0 4px; color: var(--azul-escuro); }
 .relatorio h2 { font-size: 1rem; color: var(--azul-escuro); border-bottom: 2px solid var(--azul); padding-bottom: 3px; margin: 18px 0 8px; }
 .rel-cab { display: flex; justify-content: space-between; gap: 10px; border-bottom: 3px solid var(--azul); padding-bottom: 8px; margin-bottom: 10px; }
+.rel-cab { align-items: center; }
+.rel-logo img { max-height: 56px; max-width: 170px; object-fit: contain; display: block; }
+.rel-titulo { flex: 1; }
+.logo-prev { min-height: 48px; display: flex; align-items: center; }
+.logo-prev img { max-height: 70px; max-width: 220px; object-fit: contain; border: 1px solid var(--cinza-borda); border-radius: 6px; padding: 4px; background: #fff; }
 .rel-cod { text-align: right; font-size: 0.8rem; }
 .rel-ident { width: 100%; border-collapse: collapse; }
 .rel-ident th, .rel-ident td { border: 1px solid var(--cinza-borda); padding: 5px 6px; text-align: left; vertical-align: top; }
