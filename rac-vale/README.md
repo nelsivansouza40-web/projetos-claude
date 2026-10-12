@@ -55,17 +55,36 @@ novos no fim da seção.
    tela (opcionais), com botões para salvar e limpar.
 4. **Relatório**: identificação, índice de conformidade, plano de ação,
    itens verificados com fotos, pontos observados e assinaturas. Sai em PDF pela opção
-   "Salvar em PDF / imprimir" e em planilha (CSV) para Excel.
+   "Salvar em PDF / imprimir" e em planilha (CSV) para Excel. A
+   logomarca da empresa sai no cabeçalho (padrão do piloto: REDE
+   Montagens Eletromecânicas; pode ser trocada em cada auditoria ou nas
+   configurações).
 
 Índice de conformidade = conformes ÷ (conformes + não conformes). Itens N/A
 não entram no cálculo.
 
-## Instalação no aparelho
+## Instalação no aparelho (iPhone e Android)
 
-1. Publique a pasta `rac-vale/` em um endereço HTTPS (GitHub Pages,
-   Netlify ou servidor interno).
-2. Abra o endereço no celular e use "Adicionar à tela inicial".
-3. A partir daí o aplicativo abre sem internet.
+O aplicativo é um PWA: roda no navegador e pode ser instalado na tela
+inicial, sem loja de aplicativos. Depois de instalado, funciona sem
+internet. Só é preciso estar online no primeiro acesso.
+
+- **Android (Chrome):** abra o endereço; toque em "Instalar aplicativo" na
+  tela inicial do app (ou menu ⋮ > Instalar aplicativo).
+- **iPhone (Safari):** abra o endereço no **Safari**; toque em Compartilhar
+  (quadrado com seta para cima) > Adicionar à Tela de Início. No iPhone,
+  instalar é importante: o iOS pode apagar os dados de sites não
+  instalados que ficam dias sem uso.
+
+Cuidados já tratados para os dois sistemas:
+- campos com fonte de 16 px (o iPhone não dá zoom ao tocar no campo);
+- área do entalhe (notch) respeitada no topo e no rodapé;
+- "Tirar foto" abre a câmera nativa no celular e a webcam no computador;
+- edições gravadas na hora quando o app vai para segundo plano;
+- pedido de armazenamento persistente ao navegador;
+- no iPhone, planilha e cópia de segurança saem pela folha de
+  compartilhar (Salvar em Arquivos, e-mail, WhatsApp); o relatório em PDF
+  sai pela impressão > Compartilhar > Salvar em Arquivos.
 
 ## Cópia de segurança
 
