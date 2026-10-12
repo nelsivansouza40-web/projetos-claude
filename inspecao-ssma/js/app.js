@@ -1266,8 +1266,11 @@ function redimensionarImagemDataUrl(file, maxLargura = 960, qualidade = 0.75) {
 async function aplicarImagemFundoTopbar() {
   const dataUrl = await DB.getSetting('topbarBgImage');
   const topbar = document.getElementById('topbar');
+  // A película sobre a imagem acompanha a cor principal escolhida em "Aparência".
+  const hex = (getComputedStyle(document.documentElement).getPropertyValue('--azul').trim() || '#0f4c81').replace('#', '');
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.substr(i, 2), 16));
   topbar.style.backgroundImage = dataUrl
-    ? `linear-gradient(rgba(15,76,129,0.82), rgba(15,76,129,0.82)), url(${dataUrl})`
+    ? `linear-gradient(rgba(${r},${g},${b},0.82), rgba(${r},${g},${b},0.82)), url(${dataUrl})`
     : 'none';
 }
 
