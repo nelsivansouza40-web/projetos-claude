@@ -118,6 +118,19 @@ async function renderRelatorio(id) {
       <h2>Itens verificados</h2>
       ${detalhe}
 
+      ${(aud.pontos || []).length ? `<h2>Pontos observados e registro fotográfico</h2>
+        ${aud.pontos.map((p, n) => {
+          const imgs = (p.fotos || []).map((fid) => fotos[fid]).filter(Boolean)
+            .map((ft) => `<img src="${ft.dataUrl}" alt="Foto do ponto observado ${n + 1}">`).join('');
+          const gps = typeof p.lat === 'number'
+            ? ` · <a href="https://www.google.com/maps?q=${p.lat.toFixed(6)},${p.lon.toFixed(6)}" target="_blank" rel="noopener">GPS ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}</a>` : '';
+          return `<div class="rel-ponto">
+            <div class="rel-ponto-cab"><strong>Ponto observado ${n + 1}</strong>${p.local ? ` · Local: ${escapeHtml(p.local)}` : ''}${gps}</div>
+            ${p.descricao ? `<p class="rel-texto">${escapeHtml(p.descricao)}</p>` : ''}
+            ${imgs ? `<div class="rel-fotos">${imgs}</div>` : ''}
+          </div>`;
+        }).join('')}` : ''}
+
       ${f.comentarios ? `<h2>Comentários do auditor</h2><p class="rel-texto">${escapeHtml(f.comentarios)}</p>` : ''}
 
       <div class="rel-assinaturas">

@@ -244,6 +244,7 @@ async function novaAuditoria() {
     },
     racs: [],
     respostas: {},
+    pontos: [],
     fechamento: { comentarios: '', nomeResponsavel: '', assinaturaAuditor: '', assinaturaResponsavel: '' }
   };
   await salvarAgora(aud);
@@ -400,12 +401,7 @@ function renderItem(box, aud, secao, it) {
     <div class="item-texto"><span class="num">${it.num}</span>${escapeHtml(it.texto)}</div>
     ${linhaReferencia(it)}
     <div class="resp-linha">${botoes}</div>
-    <div class="foto-linha">
-      ${usarCameraDoApp()
-        ? '<button type="button" class="btn mini sec" data-camera>Tirar foto</button>'
-        : '<label class="btn mini sec">Tirar foto<input type="file" accept="image/*" capture="environment" hidden data-foto></label>'}
-      <label class="btn mini sec">Foto da galeria<input type="file" accept="image/*" multiple hidden data-foto></label>
-    </div>
+    ${htmlBotoesFoto()}
     <div class="fotos" data-fotos></div>
     <label class="campo obs"><span>Observação</span><textarea data-campo="obs" rows="2">${escapeHtml(r.obs || '')}</textarea></label>
     ${r.r === 'NC' ? `
@@ -430,55 +426,17 @@ function renderItem(box, aud, secao, it) {
   box.querySelectorAll('[data-campo]').forEach((inp) => {
     inp.oninput = () => { resp()[inp.dataset.campo] = inp.value; salvarDepois(aud); };
   });
-  const guardarFoto = async (dataUrl) => {
-    const foto = { id: uid(), auditoriaId: aud.id, itemId: it.id, dataUrl, createdAt: Date.now() };
-    await DB.put('fotos', foto);
-    const atual = resp();
-    atual.fotos = (atual.fotos || []).concat(foto.id);
-  };
-  box.querySelectorAll('[data-foto]').forEach((inp) => { inp.onchange = async (e) => {
-    const files = [...e.target.files];
-    for (const f of files) {
-      try {
-        await guardarFoto(await redimensionarImagem(f));
-      } catch (err) {
-        toast('Não foi possível ler a foto.');
-      }
-    }
-    await salvarAgora(aud);
-    renderItem(box, aud, secao, it);
-  }; });
-  const btnCamera = box.querySelector('[data-camera]');
-  if (btnCamera) {
-    btnCamera.onclick = async () => {
-      const dataUrl = await abrirCamera();
-      if (!dataUrl) return;
-      await guardarFoto(dataUrl);
-      await salvarAgora(aud);
-      renderItem(box, aud, secao, it);
-    };
-  }
+  ligarBotoesFoto(box, aud, it.id, (fid) => { const atual = resp(); atual.fotos = (atual.fotos || []).concat(fid); }, () => renderItem(box, aud, secao, it));
   renderMiniaturas(box.querySelector('[data-fotos]'), aud, it, () => renderItem(box, aud, secao, it));
 }
 
-async function renderMiniaturas(el, aud, it, aoMudar) {
-  const ids = (aud.respostas[it.id] || {}).fotos || [];
-  for (const fid of ids) {
-    const f = await DB.get('fotos', fid);
-    if (!f) continue;
-    const d = document.createElement('div');
-    d.className = 'mini';
-    d.innerHTML = `<img src="${f.dataUrl}" alt="Foto do item"><button title="Remover foto">×</button>`;
-    d.querySelector('button').onclick = async () => {
-      if (!confirm('Remover esta foto?')) return;
-      await DB.del('fotos', fid);
-      const r = aud.respostas[it.id];
-      r.fotos = r.fotos.filter((x) => x !== fid);
-      await salvarAgora(aud);
-      aoMudar();
-    };
-    el.appendChild(d);
-  }
+function renderMiniaturas(el, aud, it, aoMudar) {
+  miniaturasDe(el, aud, (aud.respostas[it.id] || {}).fotos || [], async (fid) => {
+    const r = aud.respostas[it.id];
+    r.fotos = r.fotos.filter((x) => x !== fid);
+    await salvarAgora(aud);
+    aoMudar();
+  });
 }
 
 /* ---------------- Fechamento ---------------- */
@@ -519,17 +477,31 @@ function renderFechamento(el, aud) {
       <textarea id="comentarios" rows="4" placeholder="Pontos positivos, oportunidades de melhoria, combinados com a área...">${escapeHtml(f.comentarios)}</textarea>
     </section>
     <section class="card">
+      <h3>Pontos observados e registro fotográfico</h3>
+      <p class="muted">Registre pontos observados na frente auditada (boas práticas ou desvios), com o local e as fotos.</p>
+      <div id="pontos"></div>
+      <button type="button" class="btn sec grande" id="btn-add-ponto">+ Adicionar ponto observado</button>
+    </section>
+    <section class="card">
       <h3>Assinaturas (opcional)</h3>
       <div class="assinaturas">
         <div>
           <span class="muted">Auditor: ${escapeHtml(aud.ident.auditor || '—')}</span>
           <canvas class="assinatura" data-assin="assinaturaAuditor"></canvas>
-          <button class="btn mini sec" data-limpar="assinaturaAuditor">Limpar</button>
+          <div class="assin-acoes">
+            <button type="button" class="btn mini" data-salvar-assin="assinaturaAuditor">Salvar assinatura</button>
+            <button type="button" class="btn mini perigo" data-limpar="assinaturaAuditor">Limpar assinatura</button>
+          </div>
+          <div class="assin-status" data-status="assinaturaAuditor"></div>
         </div>
         <div>
           <label class="campo"><span>Responsável da área</span><input id="nome-resp" value="${escapeHtml(f.nomeResponsavel)}"></label>
           <canvas class="assinatura" data-assin="assinaturaResponsavel"></canvas>
-          <button class="btn mini sec" data-limpar="assinaturaResponsavel">Limpar</button>
+          <div class="assin-acoes">
+            <button type="button" class="btn mini" data-salvar-assin="assinaturaResponsavel">Salvar assinatura</button>
+            <button type="button" class="btn mini perigo" data-limpar="assinaturaResponsavel">Limpar assinatura</button>
+          </div>
+          <div class="assin-status" data-status="assinaturaResponsavel"></div>
         </div>
       </div>
     </section>
@@ -542,13 +514,37 @@ function renderFechamento(el, aud) {
   document.getElementById('comentarios').oninput = (e) => { f.comentarios = e.target.value; salvarDepois(aud); };
   document.getElementById('nome-resp').oninput = (e) => { f.nomeResponsavel = e.target.value; salvarDepois(aud); };
   el.querySelectorAll('canvas[data-assin]').forEach((cv) => prepararAssinatura(cv, aud));
-  el.querySelectorAll('[data-limpar]').forEach((b) => {
-    b.onclick = () => {
-      f[b.dataset.limpar] = '';
-      salvarDepois(aud);
-      prepararAssinatura(el.querySelector(`canvas[data-assin="${b.dataset.limpar}"]`), aud);
+  el.querySelectorAll('[data-salvar-assin]').forEach((b) => {
+    b.onclick = async () => {
+      const chave = b.dataset.salvarAssin;
+      const cv = el.querySelector(`canvas[data-assin="${chave}"]`);
+      if (!cv.dataset.rabiscado && !f[chave]) { toast('Assine no quadro antes de salvar.'); return; }
+      if (cv.dataset.rabiscado) f[chave] = cv.toDataURL('image/png');
+      await salvarAgora(aud);
+      atualizarStatusAssinatura(el, aud, chave);
+      toast('Assinatura salva.');
     };
   });
+  el.querySelectorAll('[data-limpar]').forEach((b) => {
+    b.onclick = async () => {
+      const chave = b.dataset.limpar;
+      f[chave] = '';
+      await salvarAgora(aud);
+      prepararAssinatura(el.querySelector(`canvas[data-assin="${chave}"]`), aud);
+      atualizarStatusAssinatura(el, aud, chave);
+      toast('Assinatura apagada.');
+    };
+  });
+  ['assinaturaAuditor', 'assinaturaResponsavel'].forEach((k) => atualizarStatusAssinatura(el, aud, k));
+  renderPontos(el.querySelector('#pontos'), aud);
+  document.getElementById('btn-add-ponto').onclick = async () => {
+    aud.pontos = aud.pontos || [];
+    aud.pontos.push({ id: uid(), descricao: '', local: '', fotos: [] });
+    await salvarAgora(aud);
+    renderPontos(el.querySelector('#pontos'), aud);
+    const ult = el.querySelector('#pontos .ponto:last-child textarea');
+    if (ult) ult.focus();
+  };
   document.getElementById('btn-check').onclick = async () => { await salvarAgora(aud); irPara(`#/auditoria/${aud.id}/checklist`); };
   document.getElementById('btn-concluir').onclick = async () => {
     const faltas = pendenciasParaConcluir(aud);
@@ -590,12 +586,133 @@ function prepararAssinatura(cv, aud) {
   };
   cv.onpointerdown = (e) => { desenhando = true; cv.setPointerCapture(e.pointerId); const [x, y] = pos(e); ctx.beginPath(); ctx.moveTo(x, y); };
   cv.onpointermove = (e) => { if (!desenhando) return; const [x, y] = pos(e); ctx.lineTo(x, y); ctx.stroke(); };
+  cv.dataset.rabiscado = '';
   cv.onpointerup = () => {
     if (!desenhando) return;
     desenhando = false;
+    cv.dataset.rabiscado = '1';
     aud.fechamento[chave] = cv.toDataURL('image/png');
     salvarDepois(aud);
+    const st = document.querySelector(`[data-status="${chave}"]`);
+    if (st) { st.textContent = 'Assinatura feita. Toque em "Salvar assinatura" para confirmar.'; st.className = 'assin-status pendente'; }
   };
+}
+
+function atualizarStatusAssinatura(el, aud, chave) {
+  const st = el.querySelector(`[data-status="${chave}"]`);
+  if (!st) return;
+  const tem = !!aud.fechamento[chave];
+  st.textContent = tem ? 'Assinatura salva.' : 'Sem assinatura.';
+  st.className = 'assin-status ' + (tem ? 'ok' : '');
+}
+
+/* ---------------- Pontos observados ---------------- */
+
+function htmlBotoesFoto() {
+  return `<div class="foto-linha">
+      ${usarCameraDoApp()
+        ? '<button type="button" class="btn mini sec" data-camera>Tirar foto</button>'
+        : '<label class="btn mini sec">Tirar foto<input type="file" accept="image/*" capture="environment" hidden data-foto></label>'}
+      <label class="btn mini sec">Foto da galeria<input type="file" accept="image/*" multiple hidden data-foto></label>
+    </div>`;
+}
+
+// Liga os botões de foto de um bloco; cada foto é gravada e entregue a aoGravar(id).
+function ligarBotoesFoto(box, aud, refId, aoGravar, aoTerminar) {
+  const gravar = async (dataUrl) => {
+    const foto = { id: uid(), auditoriaId: aud.id, itemId: refId, dataUrl, createdAt: Date.now() };
+    await DB.put('fotos', foto);
+    aoGravar(foto.id);
+  };
+  box.querySelectorAll('[data-foto]').forEach((inp) => {
+    inp.onchange = async (e) => {
+      for (const file of [...e.target.files]) {
+        try { await gravar(await redimensionarImagem(file)); } catch (err) { toast('Não foi possível ler a foto.'); }
+      }
+      await salvarAgora(aud);
+      aoTerminar();
+    };
+  });
+  const cam = box.querySelector('[data-camera]');
+  if (cam) {
+    cam.onclick = async () => {
+      const dataUrl = await abrirCamera();
+      if (!dataUrl) return;
+      await gravar(dataUrl);
+      await salvarAgora(aud);
+      aoTerminar();
+    };
+  }
+}
+
+async function miniaturasDe(el, aud, ids, aoRemover) {
+  for (const fid of ids) {
+    const f = await DB.get('fotos', fid);
+    if (!f) continue;
+    const d = document.createElement('div');
+    d.className = 'mini';
+    d.innerHTML = `<img src="${f.dataUrl}" alt="Foto"><button type="button" title="Remover foto">×</button>`;
+    d.querySelector('button').onclick = async () => {
+      if (!confirm('Remover esta foto?')) return;
+      await DB.del('fotos', fid);
+      aoRemover(fid);
+    };
+    el.appendChild(d);
+  }
+}
+
+function renderPontos(cont, aud) {
+  const pontos = aud.pontos || [];
+  cont.innerHTML = pontos.length ? '' : '<p class="muted">Nenhum ponto observado registrado.</p>';
+  pontos.forEach((p, n) => {
+    const box = document.createElement('div');
+    box.className = 'ponto';
+    box.innerHTML = `
+      <div class="ponto-cab"><strong>Ponto observado ${n + 1}</strong>
+        <button type="button" class="btn mini perigo" data-remover>Remover</button></div>
+      <label class="campo"><span>Ponto observado</span><textarea rows="3" data-p="descricao" placeholder="Descreva o que foi observado">${escapeHtml(p.descricao)}</textarea></label>
+      <label class="campo"><span>Local</span><input data-p="local" value="${escapeHtml(p.local)}" placeholder="Ex.: Frente 3, plataforma do britador"></label>
+      <div class="acoes-linha pequena">
+        <button type="button" class="btn mini sec" data-gps>Usar localização do aparelho</button>
+        <span class="muted" data-gps-txt>${typeof p.lat === 'number' ? `GPS: ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}` : ''}</span>
+      </div>
+      ${htmlBotoesFoto()}
+      <div class="fotos" data-fotos></div>
+      <button type="button" class="btn mini" data-salvar-ponto>Salvar ponto observado</button>`;
+    cont.appendChild(box);
+
+    box.querySelectorAll('[data-p]').forEach((inp) => {
+      inp.oninput = () => { p[inp.dataset.p] = inp.value; salvarDepois(aud); };
+    });
+    box.querySelector('[data-salvar-ponto]').onclick = async () => {
+      await salvarAgora(aud);
+      toast(`Ponto observado ${n + 1} salvo.`);
+    };
+    box.querySelector('[data-remover]').onclick = async () => {
+      if (!confirm('Remover este ponto observado e suas fotos?')) return;
+      for (const fid of p.fotos || []) await DB.del('fotos', fid);
+      aud.pontos = aud.pontos.filter((x) => x.id !== p.id);
+      await salvarAgora(aud);
+      renderPontos(cont, aud);
+    };
+    box.querySelector('[data-gps]').onclick = () => {
+      if (!navigator.geolocation) { toast('Localização indisponível neste aparelho.'); return; }
+      const txt = box.querySelector('[data-gps-txt]');
+      txt.textContent = 'Obtendo localização...';
+      navigator.geolocation.getCurrentPosition((pos) => {
+        p.lat = pos.coords.latitude;
+        p.lon = pos.coords.longitude;
+        txt.textContent = `GPS: ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}`;
+        salvarDepois(aud);
+      }, () => { txt.textContent = 'Não foi possível obter a localização.'; }, { enableHighAccuracy: true, timeout: 15000 });
+    };
+    ligarBotoesFoto(box, aud, 'ponto:' + p.id, (fid) => { p.fotos = (p.fotos || []).concat(fid); }, () => renderPontos(cont, aud));
+    miniaturasDe(box.querySelector('[data-fotos]'), aud, p.fotos || [], async (fid) => {
+      p.fotos = p.fotos.filter((x) => x !== fid);
+      await salvarAgora(aud);
+      renderPontos(cont, aud);
+    });
+  });
 }
 
 /* ---------------- Exportação e cópia de segurança ---------------- */
