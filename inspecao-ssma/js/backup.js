@@ -53,7 +53,7 @@ async function montarCopiaDeSeguranca(comFotos, aoProgredir) {
       }
     } else if (nome === 'settings') {
       // A chave de acesso do servidor não vai para o arquivo.
-      tabelas.settings = registros.filter((r) => r.key !== 'chaveAcesso');
+      tabelas.settings = registros.filter((r) => !['chaveAcesso', 'pinUsuario'].includes(r.key));
     } else {
       tabelas[nome] = registros;
     }

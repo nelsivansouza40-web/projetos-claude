@@ -68,7 +68,7 @@ async function coletarAcoes() {
         chave: `insp:${insp.id}:fechamento`, origem: 'Inspeção', registroId: insp.id, ref: 'fechamento',
         descricao: descricaoFechamento, contexto, empresa: id.empresa, area: id.area,
         responsavel: f.responsavelAcao, prazo: f.prazo, status: f.statusAcao || 'Pendente', concluidaEm: f.concluidaEmAcao || '',
-        criticidade: criticidadeInspecao, reincidente: false, acomp: f.acompAcao || {}
+        criticidade: criticidadeInspecao, reincidente: false, acomp: f.acompAcao || {}, atualizadoEm: f.acaoAtualizadaEm || 0, acaoSync: f.acaoSync || ''
       });
     }
     insp.data.checklist.forEach((item) => {
@@ -79,7 +79,7 @@ async function coletarAcoes() {
         responsavel: item.responsavelAcao || f.responsavelAcao, prazo: item.prazoAcao || f.prazo,
         status: item.statusAcao || 'Pendente', concluidaEm: item.concluidaEmAcao || '',
         criticidade: item.criticidade || '', reincidente: !!(reincidencia.get(`${insp.id}:${item.id}`) || {}).reincidente,
-        acomp: item.acompAcao || {}
+        acomp: item.acompAcao || {}, atualizadoEm: item.acaoAtualizadaEm || 0, acaoSync: item.acaoSync || ''
       });
     });
   });
@@ -92,7 +92,7 @@ async function coletarAcoes() {
         chave: `inv:${inv.id}:${a.id}`, origem: 'Investigação', registroId: inv.id, ref: a.id,
         descricao: a.descricao, contexto: `Acidente ${formatarDataBR(ac.data)} · ${ac.local || ''}`,
         empresa: ac.empresa, area: ac.local, responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente', concluidaEm: a.concluidaEm || '',
-        criticidade: criticidadeDaGravidade(ac.gravidade), reincidente: false, acomp: a.acomp || {}
+        criticidade: criticidadeDaGravidade(ac.gravidade), reincidente: false, acomp: a.acomp || {}, atualizadoEm: a.acaoAtualizadaEm || 0, acaoSync: a.acaoSync || ''
       });
     });
   });
@@ -105,7 +105,7 @@ async function coletarAcoes() {
         chave: `pgr:${pgr.id}:${p.id}`, origem: 'PGR', registroId: pgr.id, ref: p.id,
         descricao: p.medidasPropostas, contexto: `PGR ${d.empresa || ''} · ${nomeGHEPGR(d.ghes, p.gheId) || 'sem GHE'} · ${p.perigo}`,
         empresa: d.empresa, area: d.unidade, responsavel: p.responsavel, prazo: p.prazo, status: p.status || 'Pendente', concluidaEm: p.concluidaEm || '',
-        criticidade: criticidadeDoNivelPGR(classificarRiscoPGR(p.severidade, p.probabilidade).nivel), reincidente: false, acomp: p.acomp || {}
+        criticidade: criticidadeDoNivelPGR(classificarRiscoPGR(p.severidade, p.probabilidade).nivel), reincidente: false, acomp: p.acomp || {}, atualizadoEm: p.acaoAtualizadaEm || 0, acaoSync: p.acaoSync || ''
       });
     });
   });
@@ -117,7 +117,7 @@ async function coletarAcoes() {
       chave: `rel:${r.id}`, origem: 'Relato', registroId: r.id, ref: 'tratamento',
       descricao: t.acaoCorretiva, contexto: `${r.data.tipo} · ${formatarDataBR(r.data.data)} · ${r.data.local || r.data.area}`,
       empresa: r.data.empresa, area: r.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente', concluidaEm: t.concluidaEm || '',
-      criticidade: criticidadeDoPotencialRelato(r.data.potencial), reincidente: false, acomp: t.acomp || {}
+      criticidade: criticidadeDoPotencialRelato(r.data.potencial), reincidente: false, acomp: t.acomp || {}, atualizadoEm: t.acaoAtualizadaEm || 0, acaoSync: t.acaoSync || ''
     });
   });
 
@@ -128,7 +128,7 @@ async function coletarAcoes() {
       chave: `obs:${o.id}`, origem: 'Observação', registroId: o.id, ref: 'tratamento',
       descricao: t.acaoCorretiva, contexto: `Observação comportamental · ${formatarDataBR(o.data.data)} · ${o.data.atividade}`,
       empresa: o.data.empresa, area: o.data.area, responsavel: t.responsavel, prazo: t.prazo, status: t.status || 'Pendente', concluidaEm: t.concluidaEm || '',
-      criticidade: t.criticidade || '', reincidente: false, acomp: t.acomp || {}
+      criticidade: t.criticidade || '', reincidente: false, acomp: t.acomp || {}, atualizadoEm: t.acaoAtualizadaEm || 0, acaoSync: t.acaoSync || ''
     });
   });
 
@@ -137,80 +137,139 @@ async function coletarAcoes() {
       chave: `av:${a.id}`, origem: 'Avulsa', registroId: a.id, ref: '',
       descricao: a.descricao, contexto: a.origemTexto && a.origemTexto !== 'Avulsa' ? a.origemTexto : (a.observacao || 'Ação avulsa'), empresa: a.empresa, area: a.area,
       responsavel: a.responsavel, prazo: a.prazo, status: a.status || 'Pendente', concluidaEm: a.concluidaEm || '',
-      criticidade: a.criticidade || '', reincidente: false, acomp: a.acomp || {}
+      criticidade: a.criticidade || '', reincidente: false, acomp: a.acomp || {}, atualizadoEm: a.acaoAtualizadaEm || 0, acaoSync: a.acaoSync || ''
     });
   });
 
   return acoes;
 }
 
-/** Grava a alteração de responsável, prazo ou status no registro de origem. */
-async function atualizarAcaoNaOrigem(acao, campos) {
-  // Data de conclusão: base do indicador "ações concluídas no prazo".
-  if ('status' in campos) campos = { ...campos, concluidaEm: campos.status === 'Concluída' ? hojeISO() : '' };
-  const marcarPendente = (r) => {
-    r.updatedAt = Date.now();
-    if (r.completo) {
-      r.metaSynced = false;
-      r.syncStatus = 'pendente';
-    }
+/**
+ * Localiza o objeto que guarda a ação dentro do registro de origem.
+ * Retorna { registro, holder, campo(nome), salvar() } ou null.
+ */
+async function localizarAcao(acao) {
+  const mapaInspecao = {
+    responsavel: 'responsavelAcao', prazo: acao.ref === 'fechamento' ? 'prazo' : 'prazoAcao',
+    status: 'statusAcao', concluidaEm: 'concluidaEmAcao', acomp: 'acompAcao'
   };
-
+  const direto = (c) => c;
   if (acao.origem === 'Inspeção') {
-    const insp = await DB.getInspection(acao.registroId);
-    if (!insp) return;
-    const f = insp.data.fechamento;
-    if (acao.ref === 'fechamento') {
-      if ('responsavel' in campos) f.responsavelAcao = campos.responsavel;
-      if ('prazo' in campos) f.prazo = campos.prazo;
-      if ('status' in campos) { f.statusAcao = campos.status; f.concluidaEmAcao = campos.concluidaEm; }
-      if ('acomp' in campos) f.acompAcao = campos.acomp;
-    } else {
-      const item = insp.data.checklist.find((i) => i.id === acao.ref);
-      if (!item) return;
-      if ('responsavel' in campos) item.responsavelAcao = campos.responsavel;
-      if ('prazo' in campos) item.prazoAcao = campos.prazo;
-      if ('status' in campos) { item.statusAcao = campos.status; item.concluidaEmAcao = campos.concluidaEm; }
-      if ('acomp' in campos) item.acompAcao = campos.acomp;
-    }
-    marcarPendente(insp);
-    await DB.putInspection(insp);
-  } else if (acao.origem === 'Investigação') {
-    const inv = await DB.getInvestigacao(acao.registroId);
-    const a = inv && inv.data.planoAcao.find((x) => x.id === acao.ref);
-    if (!a) return;
-    Object.assign(a, campos);
-    marcarPendente(inv);
-    await DB.putInvestigacao(inv);
-  } else if (acao.origem === 'PGR') {
-    const pgr = await DB.getPGR(acao.registroId);
-    const p = pgr && pgr.data.perigos.find((x) => x.id === acao.ref);
-    if (!p) return;
-    Object.assign(p, campos);
-    marcarPendente(pgr);
-    await DB.putPGR(pgr);
-  } else if (acao.origem === 'Relato') {
-    const r = await DB.getRelato(acao.registroId);
-    if (!r) return;
-    Object.assign(r.data.tratamento, campos);
-    marcarPendente(r);
-    await DB.putRelato(r);
-  } else if (acao.origem === 'Observação') {
-    const o = await DB.getItem('observacoes', acao.registroId);
-    if (!o) return;
-    Object.assign(o.data.tratamento, campos);
-    marcarPendente(o);
-    o.updatedAt = Date.now();
-    await DB.putItem('observacoes', o);
-  } else if (acao.origem === 'Avulsa') {
-    const a = await DB.getAcao(acao.registroId);
-    if (!a) return;
-    Object.assign(a, campos);
-    a.updatedAt = Date.now();
-    a.syncStatus = 'pendente';
-    await DB.putAcao(a);
+    const r = await DB.getInspection(acao.registroId);
+    const h = r && (acao.ref === 'fechamento' ? r.data.fechamento : r.data.checklist.find((i) => i.id === acao.ref));
+    return h ? { registro: r, holder: h, campo: (c) => mapaInspecao[c] || c, salvar: () => DB.putInspection(r) } : null;
   }
-  Object.assign(acao, campos);
+  if (acao.origem === 'Investigação') {
+    const r = await DB.getInvestigacao(acao.registroId);
+    const h = r && r.data.planoAcao.find((x) => x.id === acao.ref);
+    return h ? { registro: r, holder: h, campo: direto, salvar: () => DB.putInvestigacao(r) } : null;
+  }
+  if (acao.origem === 'PGR') {
+    const r = await DB.getPGR(acao.registroId);
+    const h = r && r.data.perigos.find((x) => x.id === acao.ref);
+    return h ? { registro: r, holder: h, campo: direto, salvar: () => DB.putPGR(r) } : null;
+  }
+  if (acao.origem === 'Relato') {
+    const r = await DB.getRelato(acao.registroId);
+    return r ? { registro: r, holder: r.data.tratamento, campo: direto, salvar: () => DB.putRelato(r) } : null;
+  }
+  if (acao.origem === 'Observação') {
+    const r = await DB.getItem('observacoes', acao.registroId);
+    return r ? { registro: r, holder: r.data.tratamento, campo: direto, salvar: () => DB.putItem('observacoes', r) } : null;
+  }
+  if (acao.origem === 'Avulsa') {
+    const r = await DB.getAcao(acao.registroId);
+    return r ? { registro: r, holder: r, campo: direto, salvar: () => DB.putAcao(r), avulsa: true } : null;
+  }
+  return null;
+}
+
+/** Marca o registro de origem para reenvio à planilha. */
+function marcarRegistroPendente(loc) {
+  const r = loc.registro;
+  r.updatedAt = Date.now();
+  if (loc.avulsa) { r.syncStatus = 'pendente'; return; }
+  if (r.completo) {
+    r.metaSynced = false;
+    r.syncStatus = 'pendente';
+  }
+}
+
+/** Assinatura do acompanhamento: detecta alteração feita fora da Central (nos formulários). */
+function assinaturaAcompanhamento(a) {
+  return JSON.stringify([a.responsavel || '', a.prazo || '', a.status || 'Pendente', a.acomp || {}]);
+}
+
+/**
+ * Grava a alteração de responsável, prazo, status ou acompanhamento.
+ * Ação deste aparelho: grava no registro de origem. Ação de outro aparelho
+ * (remota): grava na cópia local da equipe e entra na fila de envio.
+ * opcoes.atualizadoEm: usado ao aplicar uma alteração vinda da planilha.
+ */
+async function atualizarAcaoNaOrigem(acao, campos, opcoes = {}) {
+  // Data de conclusão: base do indicador "ações concluídas no prazo".
+  if ('status' in campos && !('concluidaEm' in campos)) campos = { ...campos, concluidaEm: campos.status === 'Concluída' ? hojeISO() : '' };
+  const quando = opcoes.atualizadoEm || Date.now();
+
+  if (acao.remoto) {
+    await atualizarAcaoEquipe(acao.chave, campos, quando);
+    Object.assign(acao, campos, { atualizadoEm: quando });
+    return;
+  }
+
+  const loc = await localizarAcao(acao);
+  if (!loc) return;
+  Object.entries(campos).forEach(([c, v]) => { loc.holder[loc.campo(c)] = v; });
+  loc.holder.acaoAtualizadaEm = quando;
+  if (opcoes.atualizadoEm) {
+    // Veio da planilha: já está igual lá, não precisa voltar como alteração.
+    const atual = { ...acao, ...campos };
+    loc.holder.acaoSync = assinaturaAcompanhamento(atual);
+  }
+  marcarRegistroPendente(loc);
+  await loc.salvar();
+  Object.assign(acao, campos, { atualizadoEm: quando });
+}
+
+/* ---------------- AÇÕES DA EQUIPE (OUTROS APARELHOS) ---------------- */
+
+/** Cópia local das ações de toda a equipe, baixada da planilha na sincronização. */
+async function lerAcoesEquipe() {
+  return (await DB.getSetting('acoesEquipe')) || [];
+}
+
+async function atualizarAcaoEquipe(chave, campos, quando) {
+  const lista = await lerAcoesEquipe();
+  const item = lista.find((x) => x.chave === chave);
+  if (!item) return;
+  Object.assign(item, campos, { atualizadoEm: quando });
+  await DB.setSetting('acoesEquipe', lista);
+  const fila = (await DB.getSetting('filaAcoesEquipe')) || [];
+  if (!fila.includes(chave)) fila.push(chave);
+  await DB.setSetting('filaAcoesEquipe', fila);
+}
+
+/** Converte uma linha da planilha em ação da Central (registro de outro aparelho). */
+function acaoDaEquipe(x) {
+  const partes = String(x.chave).split(':');
+  return {
+    ...x, remoto: true, registroId: partes[1] || '', ref: partes[2] || '',
+    acomp: x.acomp || {}, status: x.status || 'Pendente',
+    contexto: `${x.contexto || ''}${x.registradoPor ? ` · registrado por ${x.registradoPor}` : ''}`
+  };
+}
+
+/** Ações deste aparelho mais as da equipe que não estão neste aparelho. */
+async function coletarAcoesComEquipe() {
+  const locais = await coletarAcoes();
+  const chaves = new Set(locais.map((a) => a.chave));
+  const equipe = (await lerAcoesEquipe()).filter((x) => !chaves.has(x.chave)).map(acaoDaEquipe);
+  return [...locais, ...equipe];
+}
+
+/** O usuário deste aparelho é o responsável pela ação? */
+function ehMinhaAcao(a, nome) {
+  return !!nome && normalizarTexto(a.responsavel) === normalizarTexto(nome);
 }
 
 function abrirOrigemAcao(acao) {
@@ -240,6 +299,7 @@ function filtrarAcoes(acoes, filtro) {
     if (filtro.situacao === 'criticas' && (sit === 'concluida' || !ehCriticidadeAlta(a.criticidade))) return false;
     if (filtro.situacao === 'reincidentes' && !a.reincidente) return false;
     if (filtro.origem && filtro.origem !== 'Todas' && a.origem !== filtro.origem) return false;
+    if (filtro.minhas && !ehMinhaAcao(a, filtro.nome)) return false;
     if (termo) {
       const alvo = [a.descricao, a.contexto, a.responsavel, a.empresa, a.area].join(' ').toLowerCase();
       if (!alvo.includes(termo)) return false;
@@ -263,14 +323,21 @@ const LIMITE_ACOES_TELA = 150;
 async function renderAcoesHome() {
   state.screen = 'acoes-home';
   setActiveTab('acoes');
-  if (!state.filtroAcoes) state.filtroAcoes = { situacao: 'abertas', origem: 'Todas', busca: '' };
+  const responsavel = PERFIL_ATUAL === 'Responsável';
+  if (!state.filtroAcoes) state.filtroAcoes = { situacao: 'abertas', origem: 'Todas', busca: '', minhas: responsavel };
   const filtro = state.filtroAcoes;
-  const todas = await coletarAcoes();
+  filtro.nome = (await DB.getSetting('nomeUsuario')) || '';
+  if (!filtro.nome) filtro.minhas = false;
+  const todas = await coletarAcoesComEquipe();
+  const daEquipe = todas.filter((a) => a.remoto).length;
+  const sincronizadoEm = await DB.getSetting('acoesEquipeEm');
 
-  const conta = (chave) => todas.filter((a) => situacaoAcao(a).chave === chave).length;
-  const abertas = todas.filter((a) => a.status !== 'Concluída').length;
-  const contaEtapa = (chave) => todas.filter((a) => { const e = etapaEficacia(a); return e && e.chave === chave; }).length;
-  const criticasAbertas = todas.filter((a) => a.status !== 'Concluída' && ehCriticidadeAlta(a.criticidade)).length;
+  // Os números do topo seguem o filtro "só as minhas".
+  const base = filtro.minhas ? todas.filter((a) => ehMinhaAcao(a, filtro.nome)) : todas;
+  const conta = (chave) => base.filter((a) => situacaoAcao(a).chave === chave).length;
+  const abertas = base.filter((a) => a.status !== 'Concluída').length;
+  const contaEtapa = (chave) => base.filter((a) => { const e = etapaEficacia(a); return e && e.chave === chave; }).length;
+  const criticasAbertas = base.filter((a) => a.status !== 'Concluída' && ehCriticidadeAlta(a.criticidade)).length;
   const opcoesSituacao = [
     ['abertas', 'Abertas'], ['atrasadas', 'Atrasadas'], ['embreve', 'Vencem em 7 dias'],
     ['criticas', 'Altas e críticas abertas'], ['reincidentes', 'Reincidentes'],
@@ -282,7 +349,12 @@ async function renderAcoesHome() {
   view.innerHTML = `
     <div class="screen-header">
       <h1>Central de ações</h1>
-      <button id="btn-nova-acao" class="btn-primary">+ Nova ação</button>
+      ${responsavel ? '' : '<button id="btn-nova-acao" class="btn-primary">+ Nova ação</button>'}
+    </div>
+    <div class="equipe-barra">
+      <label class="check-inline"><input type="checkbox" id="filtro-minhas" ${filtro.minhas ? 'checked' : ''} ${filtro.nome ? '' : 'disabled'}> Só as minhas ações${filtro.nome ? ` (${escapeHtml(filtro.nome)})` : ' (informe seu nome em Configurações)'}</label>
+      <button type="button" id="btn-atualizar-equipe" class="btn-link">Atualizar com a equipe</button>
+      <span class="hint">${daEquipe ? `${daEquipe} ação(ões) de outros aparelhos. ` : ''}${sincronizadoEm ? `Lista da equipe de ${new Date(sincronizadoEm).toLocaleString('pt-BR')}.` : 'Lista da equipe ainda não baixada.'}</span>
     </div>
     <div class="kpi-grid kpi-grid-acoes">
       <button type="button" class="kpi kpi-clicavel" data-sit="abertas"><span class="kpi-valor">${abertas}</span><span class="kpi-rotulo">Abertas</span></button>
@@ -333,7 +405,8 @@ async function renderAcoesHome() {
         if (e.target.value === 'Concluída') abrirDialogoConclusao(a, true);
         else salvar({ status: e.target.value });
       });
-      card.querySelector('.btn-abrir-origem').addEventListener('click', () => abrirOrigemAcao(a));
+      const btnOrigem = card.querySelector('.btn-abrir-origem');
+      if (btnOrigem) btnOrigem.addEventListener('click', () => abrirOrigemAcao(a));
       const btnEvid = card.querySelector('.btn-registrar-evidencia');
       if (btnEvid) btnEvid.addEventListener('click', () => abrirDialogoConclusao(a, false));
       const btnVerif = card.querySelector('.btn-verificar-eficacia');
@@ -342,7 +415,16 @@ async function renderAcoesHome() {
   }
   desenharLista();
 
-  document.getElementById('btn-nova-acao').addEventListener('click', () => renderAcaoAvulsaForm(null));
+  const btnNova = document.getElementById('btn-nova-acao');
+  if (btnNova) btnNova.addEventListener('click', () => renderAcaoAvulsaForm(null));
+  document.getElementById('filtro-minhas').addEventListener('change', (e) => { filtro.minhas = e.target.checked; renderAcoesHome(); });
+  document.getElementById('btn-atualizar-equipe').addEventListener('click', async (e) => {
+    const btn = e.target;
+    btn.disabled = true;
+    btn.textContent = 'Atualizando…';
+    try { await Sync.syncAll(); } catch (err) { alert('Não foi possível atualizar agora: ' + err.message); }
+    renderAcoesHome();
+  });
   view.querySelectorAll('.kpi-clicavel').forEach((btn) => {
     btn.addEventListener('click', () => {
       filtro.situacao = btn.dataset.sit;
@@ -370,9 +452,13 @@ function cardAcao(a, idx) {
   const ac = a.acomp || {};
   const ultimaFalha = (ac.historico || []).slice(-1)[0];
   let acompanhamento = '';
+  const responsavel = PERFIL_ATUAL === 'Responsável';
+  const links = [...new Set([...(ac.evidenciaLinks || []), ...String(a.fotosEvidencia || '').split(' ').filter(Boolean)])];
   if (a.status === 'Concluída' && ac.evidencia) {
-    acompanhamento = `<p class="acao-evidencia"><strong>Evidência:</strong> ${escapeHtml(ac.evidencia)}${(ac.evidenciaFotos || []).length ? ` · ${ac.evidenciaFotos.length} foto(s)` : ''}</p>`;
-    if (ac.eficacia !== 'Eficaz') acompanhamento += '<button type="button" class="btn-secondary btn-verificar-eficacia">Verificar eficácia</button>';
+    acompanhamento = `<p class="acao-evidencia"><strong>Evidência:</strong> ${escapeHtml(ac.evidencia)}${(ac.evidenciaFotos || []).length ? ` · ${ac.evidenciaFotos.length} foto(s)` : ''}
+      ${links.map((l, i) => `<a href="${escapeHtml(l)}" target="_blank" rel="noopener">foto ${i + 1}</a>`).join(' ')}</p>`;
+    // A verificação de eficácia é feita por SSMA, não por quem executou a ação.
+    if (ac.eficacia !== 'Eficaz' && !responsavel) acompanhamento += '<button type="button" class="btn-secondary btn-verificar-eficacia">Verificar eficácia</button>';
     else if (ac.eficaciaObs) acompanhamento += `<p class="acao-evidencia"><strong>Verificação:</strong> ${escapeHtml(ac.eficaciaObs)}</p>`;
   } else if (a.status === 'Concluída') {
     acompanhamento = '<button type="button" class="btn-secondary btn-registrar-evidencia">Registrar evidência</button>';
@@ -383,6 +469,7 @@ function cardAcao(a, idx) {
     <li class="acao-card" data-idx="${idx}">
       <div class="acao-topo">
         <span class="badge badge-origem">${escapeHtml(a.origem)}</span>
+        ${a.remoto ? '<span class="badge badge-sync">Equipe</span>' : ''}
         <span class="badge ${sit.cls}">${sit.text}</span>
         ${a.criticidade ? `<span class="badge ${classeCriticidade(a.criticidade)}">Criticidade ${escapeHtml(a.criticidade)}</span>` : ''}
         ${a.reincidente ? '<span class="badge badge-erro">Reincidente</span>' : ''}
@@ -392,17 +479,19 @@ function cardAcao(a, idx) {
       <div class="insp-card-sub">${escapeHtml(a.contexto)}</div>
       <div class="participante-linha">
         <label class="campo-leitura">Responsável
-          <input type="text" class="in-acao-responsavel" value="${escapeHtml(a.responsavel || '')}">
+          <input type="text" class="in-acao-responsavel" value="${escapeHtml(a.responsavel || '')}" ${responsavel ? 'disabled' : ''}>
         </label>
         <label class="campo-leitura">Prazo
-          <input type="date" class="in-acao-prazo" value="${escapeHtml(a.prazo || '')}">
+          <input type="date" class="in-acao-prazo" value="${escapeHtml(a.prazo || '')}" ${responsavel ? 'disabled' : ''}>
         </label>
         <label class="campo-leitura">Status
           <select class="in-acao-status">${STATUS_ACAO.map((s) => `<option ${a.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
         </label>
       </div>
       ${acompanhamento}
-      <button type="button" class="btn-link btn-abrir-origem">Abrir ${a.origem === 'Avulsa' ? 'ação' : 'registro de origem'} →</button>
+      ${a.remoto
+        ? '<p class="hint">Registro de outro aparelho: as alterações seguem para a planilha da equipe na próxima sincronização.</p>'
+        : `<button type="button" class="btn-link btn-abrir-origem">Abrir ${a.origem === 'Avulsa' ? 'ação' : 'registro de origem'} →</button>`}
     </li>
   `;
 }

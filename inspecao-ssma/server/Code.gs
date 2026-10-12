@@ -31,6 +31,9 @@
  *  - { action: "upsertAcao", acao }                 -> Ação avulsa da Central de ações
  *  - { action: "upsertObservacao", observacao }     -> Observação comportamental
  *  - { action: "upsertAcoesConsolidadas", acoes }   -> lista de ações do aparelho (painel do gestor)
+ *  - { action: "listarAcoes" }                     -> ações de toda a equipe (Central de ações)
+ *  - { action: "atualizarAcao", acao }              -> alteração feita em outro aparelho
+ *  - { action: "login", usuarioLogin, pin }         -> confere usuário e PIN (aba Usuarios)
  *  - { action: "uploadPhoto", inspectionId, photo } -> uma foto por vez
  *    (inspectionId também é usado para fotos de DDS, Diagnóstico, reuniões
  *    de CIPA, PT/APR, certificados, PET, investigações de acidente e
@@ -82,7 +85,13 @@ const SHEET_RELATOS = 'Relatos';
 const SHEET_ACOES = 'Acoes_Avulsas';
 const SHEET_OBSERVACOES = 'Observacoes_Comportamentais';
 
-const VERSAO_SERVIDOR = '2026-10-12b';
+const SHEET_USUARIOS = 'Usuarios';
+const SHEET_HISTORICO_ACOES = 'Historico_Acoes';
+
+const VERSAO_SERVIDOR = '2026-10-13';
+
+/** Nome do usuário autenticado na requisição atual (vazio quando o login não está ativo). */
+let USUARIO_ATUAL = '';
 
 /** Abrir o endereço do app da Web no navegador mostra se o servidor está no ar. */
 function doGet() {
@@ -107,10 +116,31 @@ function doPost(e) {
     return jsonResponse({ ok: false, error: 'Chave de acesso inválida. Confira a chave nas Configurações do app.' });
   }
 
+  // Login por usuário e PIN: fica ativo quando a aba "Usuarios" tem ao menos
+  // um usuário ativo. Sem usuários cadastrados, o app funciona como antes.
+  const usuarios = lerUsuarios_();
+  if (body.action === 'login') return jsonResponse(fazerLogin_(usuarios, body.usuarioLogin, body.pin));
+  if (usuarios.length && body.action !== 'ping') {
+    const autenticado = autenticar_(usuarios, body.usuarioLogin, body.pin);
+    if (!autenticado) {
+      return jsonResponse({ ok: false, loginInvalido: true, error: 'Usuário ou PIN inválido. Entre novamente em Configurações → Acesso do usuário.' });
+    }
+    USUARIO_ATUAL = autenticado.nome;
+  }
+
+  // Leituras não precisam de trava; gravações são feitas uma de cada vez,
+  // para dois celulares não escreverem a mesma linha ao mesmo tempo.
+  const somenteLeitura = ['ping', 'listarAcoes'].indexOf(body.action) >= 0;
+  const trava = somenteLeitura ? null : LockService.getScriptLock();
   try {
+    if (trava) trava.waitLock(30000);
     switch (body.action) {
       case 'ping':
-        return jsonResponse({ ok: true, versao: VERSAO_SERVIDOR });
+        return jsonResponse({ ok: true, versao: VERSAO_SERVIDOR, loginAtivo: usuarios.length > 0 });
+      case 'listarAcoes':
+        return jsonResponse(listarAcoes());
+      case 'atualizarAcao':
+        return jsonResponse(atualizarAcao(body.acao));
       case 'upsertInspection':
         return jsonResponse(upsertInspection(body.inspection));
       case 'upsertDDS':
@@ -150,6 +180,8 @@ function doPost(e) {
     }
   } catch (err) {
     return jsonResponse({ ok: false, error: err.message });
+  } finally {
+    if (trava) trava.releaseLock();
   }
 }
 
@@ -217,11 +249,7 @@ function upsertInspection(insp) {
   ];
 
   const idCol = 1;
-  const data = sheetInsp.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetInsp, id);
   if (rowIndex > 0) {
     sheetInsp.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -305,11 +333,7 @@ function upsertDDS(dds) {
   ];
 
   const idCol = 1;
-  const data = sheetDDS.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetDDS, id);
   if (rowIndex > 0) {
     sheetDDS.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -362,11 +386,7 @@ function upsertDiagnostico(diag) {
   ];
 
   const idCol = 1;
-  const data = sheetDiag.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetDiag, id);
   if (rowIndex > 0) {
     sheetDiag.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -411,11 +431,7 @@ function upsertCipaGestao(gestao) {
   ];
 
   const idCol = 1;
-  const data = sheetGestao.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetGestao, id);
   if (rowIndex > 0) {
     sheetGestao.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -467,11 +483,7 @@ function upsertCipaReuniao(reuniao) {
   ];
 
   const idCol = 1;
-  const data = sheetReunioes.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetReunioes, id);
   if (rowIndex > 0) {
     sheetReunioes.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -533,11 +545,7 @@ function upsertPTAPR(pt) {
   ];
 
   const idCol = 1;
-  const data = sheetPT.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetPT, id);
   if (rowIndex > 0) {
     sheetPT.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -604,11 +612,7 @@ function upsertCertificado(cert) {
   ];
 
   const idCol = 1;
-  const data = sheetCert.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetCert, id);
   if (rowIndex > 0) {
     sheetCert.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -655,11 +659,7 @@ function upsertPET(pet) {
   ];
 
   const idCol = 1;
-  const data = sheetPET.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetPET, id);
   if (rowIndex > 0) {
     sheetPET.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -759,11 +759,7 @@ function upsertInvestigacao(inv) {
   ];
 
   const idCol = 1;
-  const data = sheetInv.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetInv, id);
   if (rowIndex > 0) {
     sheetInv.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -816,11 +812,7 @@ function upsertFichaEPI(ficha) {
   ];
 
   const idCol = 1;
-  const data = sheetFicha.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetFicha, id);
   if (rowIndex > 0) {
     sheetFicha.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -878,11 +870,7 @@ function upsertVeiculo(v) {
   ];
 
   const idCol = 1;
-  const data = sheetVeiculo.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetVeiculo, id);
   if (rowIndex > 0) {
     sheetVeiculo.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -951,11 +939,7 @@ function upsertPGR(p) {
   ];
 
   const idCol = 1;
-  const data = sheetPGR.getDataRange().getValues();
-  let rowIndex = -1;
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][idCol - 1] === id) { rowIndex = i + 1; break; }
-  }
+  let rowIndex = linhaDoId(sheetPGR, id);
   if (rowIndex > 0) {
     sheetPGR.getRange(rowIndex, 1, 1, linha.length).setValues([linha]);
   } else {
@@ -1045,47 +1029,195 @@ function gravarColunaExtra(sheet, rowIndex, titulo, valor) {
 }
 
 function body_usuario_(registro) {
+  if (USUARIO_ATUAL) return USUARIO_ATUAL;
   return registro && registro.usuario ? registro.usuario : '';
+}
+
+/** Linha (1-based) do registro com este ID na coluna A, ou -1. Busca direta, sem ler a aba inteira. */
+function linhaDoId(sheet, id) {
+  if (!id || sheet.getLastRow() < 2) return -1;
+  const achado = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1)
+    .createTextFinder(String(id)).matchEntireCell(true).findNext();
+  return achado ? achado.getRow() : -1;
+}
+
+/* ---------------- USUÁRIOS E LOGIN ---------------- */
+
+function normalizarNome_(t) {
+  return String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function normalizarPerfil_(p) {
+  const n = normalizarNome_(p);
+  if (n.indexOf('gestor') === 0) return 'Gestor';
+  if (n.indexOf('respons') === 0) return 'Responsável';
+  return 'Inspetor';
+}
+
+/**
+ * Aba "Usuarios": Nome | PIN | Perfil (Inspetor, Responsável ou Gestor) | Ativo (Sim/Não).
+ * Criada vazia na primeira requisição; o login só passa a valer quando houver usuário ativo.
+ */
+function lerUsuarios_() {
+  const sheet = getOrCreateSheet(SHEET_USUARIOS, ['Nome', 'PIN', 'Perfil', 'Ativo']);
+  if (sheet.getLastRow() < 2) return [];
+  return sheet.getRange(2, 1, sheet.getLastRow() - 1, 4).getValues()
+    .filter((l) => String(l[0]).trim() && String(l[1]).trim() && normalizarNome_(l[3]) !== 'nao')
+    .map((l) => ({ nome: String(l[0]).trim(), pin: String(l[1]).trim(), perfil: normalizarPerfil_(l[2]) }));
+}
+
+function pinConfere_(esperado, informado) {
+  const a = String(esperado).trim();
+  const b = String(informado || '').trim();
+  if (!b) return false;
+  if (a === b) return true;
+  // A planilha pode guardar "0123" como o número 123.
+  return /^\d+$/.test(a) && /^\d+$/.test(b) && Number(a) === Number(b);
+}
+
+function autenticar_(usuarios, login, pin) {
+  const nome = normalizarNome_(login);
+  return usuarios.find((u) => normalizarNome_(u.nome) === nome && pinConfere_(u.pin, pin)) || null;
+}
+
+/** Login com limite de tentativas: 5 erros seguidos bloqueiam o usuário por 15 minutos. */
+function fazerLogin_(usuarios, login, pin) {
+  if (!usuarios.length) return { ok: true, loginAtivo: false };
+  const cache = CacheService.getScriptCache();
+  const chaveFalhas = 'falhas_' + normalizarNome_(login);
+  const falhas = Number(cache.get(chaveFalhas) || 0);
+  if (falhas >= 5) return { ok: false, error: 'Muitas tentativas erradas. Aguarde 15 minutos e tente de novo.' };
+  const u = autenticar_(usuarios, login, pin);
+  if (!u) {
+    cache.put(chaveFalhas, String(falhas + 1), 900);
+    return { ok: false, error: 'Usuário ou PIN inválido.' };
+  }
+  cache.remove(chaveFalhas);
+  return { ok: true, loginAtivo: true, nome: u.nome, perfil: u.perfil };
+}
+
+/* ---------------- AÇÕES COMPARTILHADAS ---------------- */
+
+const CABECALHO_ACOES = [
+  'Chave', 'Origem', 'Ação', 'Contexto', 'Empresa', 'Área', 'Responsável', 'Prazo',
+  'Status', 'Situação', 'Concluída em', 'Concluída no prazo', 'Registrado por', 'Atualizado em',
+  'Criticidade', 'Reincidente', 'Evidência', 'Fotos da evidência', 'Verificar eficácia em',
+  'Eficácia', 'Verificada em', 'Verificada por', 'Reaberturas (não eficaz)',
+  'Atualização (ms)', 'Acompanhamento (JSON)', 'Última alteração por'
+];
+// Colunas de acompanhamento: valem as da alteração mais recente (Atualização em ms),
+// venha ela do aparelho que criou o registro ou de outro aparelho da equipe.
+const COLS_ACOMPANHAMENTO = [6, 7, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+const COLS_HISTORICO = { 6: 'Responsável', 7: 'Prazo', 8: 'Status', 16: 'Evidência', 18: 'Verificar eficácia em', 19: 'Eficácia' };
+
+function textoCelula_(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  return v === null || v === undefined ? '' : String(v);
+}
+
+function linhaAcao_(a, usuario, existente) {
+  const noPrazo = a.status === 'Concluída' && a.concluidaEm && a.prazo ? (a.concluidaEm <= a.prazo ? 'Sim' : 'Não') : '';
+  return [
+    a.chave, a.origem, a.descricao, a.contexto, a.empresa, a.area, a.responsavel, a.prazo,
+    a.status, a.situacao, a.concluidaEm, noPrazo, existente ? existente[12] : (usuario || ''), new Date(),
+    a.criticidade || '', a.reincidente || '', a.evidencia || '', a.fotosEvidencia || '', a.verificarEm || '',
+    a.eficacia || '', a.eficaciaEm || '', a.eficaciaPor || '', a.reaberturas || 0,
+    Number(a.atualizadoEm) || 0, a.acomp ? JSON.stringify(a.acomp) : '', usuario || ''
+  ];
+}
+
+function registrarHistorico_(usuario, antes, depois) {
+  const mudancas = [];
+  Object.keys(COLS_HISTORICO).forEach((col) => {
+    const de = textoCelula_(antes ? antes[col] : '');
+    const para = textoCelula_(depois[col]);
+    if (de !== para) mudancas.push([new Date(), usuario || '', depois[0], depois[2], COLS_HISTORICO[col], de, para]);
+  });
+  if (!mudancas.length) return;
+  const sheet = getOrCreateSheet(SHEET_HISTORICO_ACOES, ['Data/hora', 'Usuário', 'Chave', 'Ação', 'Campo', 'Antes', 'Depois']);
+  sheet.getRange(sheet.getLastRow() + 1, 1, mudancas.length, 7).setValues(mudancas);
 }
 
 /**
  * Lista consolidada de ações de todos os aparelhos (uma linha por ação,
- * identificada pela chave). É a base do painel do gestor no Looker Studio.
+ * identificada pela chave). É a base do painel do gestor no Looker Studio e
+ * da Central de ações compartilhada.
  */
 function upsertAcoesConsolidadas(acoes, usuario) {
-  const sheet = getOrCreateSheet('Acoes_Consolidadas', [
-    'Chave', 'Origem', 'Ação', 'Contexto', 'Empresa', 'Área', 'Responsável', 'Prazo',
-    'Status', 'Situação', 'Concluída em', 'Concluída no prazo', 'Registrado por', 'Atualizado em',
-    'Criticidade', 'Reincidente', 'Evidência', 'Fotos da evidência', 'Verificar eficácia em',
-    'Eficácia', 'Verificada em', 'Verificada por', 'Reaberturas (não eficaz)'
-  ]);
-  const dados = sheet.getDataRange().getValues();
+  usuario = USUARIO_ATUAL || usuario || '';
+  const sheet = getOrCreateSheet('Acoes_Consolidadas', CABECALHO_ACOES);
+  const n = CABECALHO_ACOES.length;
+  const dados = sheet.getLastRow() > 1 ? sheet.getRange(2, 1, sheet.getLastRow() - 1, n).getValues() : [];
   const linhaPorChave = {};
-  for (let i = 1; i < dados.length; i++) linhaPorChave[dados[i][0]] = i + 1;
+  dados.forEach((l, i) => { linhaPorChave[l[0]] = i; });
   const novas = [];
   (acoes || []).forEach((a) => {
-    const noPrazo = a.status === 'Concluída' && a.concluidaEm && a.prazo ? (a.concluidaEm <= a.prazo ? 'Sim' : 'Não') : '';
-    const linha = [a.chave, a.origem, a.descricao, a.contexto, a.empresa, a.area, a.responsavel, a.prazo,
-      a.status, a.situacao, a.concluidaEm, noPrazo, usuario || '', new Date(),
-      a.criticidade || '', a.reincidente || '', a.evidencia || '', a.fotosEvidencia || '', a.verificarEm || '',
-      a.eficacia || '', a.eficaciaEm || '', a.eficaciaPor || '', a.reaberturas || 0];
-    if (linhaPorChave[a.chave]) sheet.getRange(linhaPorChave[a.chave], 1, 1, linha.length).setValues([linha]);
-    else novas.push(linha);
+    const idx = linhaPorChave[a.chave];
+    const existente = idx === undefined ? null : dados[idx];
+    let linha = linhaAcao_(a, usuario, existente);
+    if (existente) {
+      // Alteração mais nova feita em outro aparelho: mantém o acompanhamento da planilha.
+      if ((Number(existente[23]) || 0) > (Number(a.atualizadoEm) || 0)) {
+        COLS_ACOMPANHAMENTO.forEach((c) => { linha[c] = existente[c]; });
+      } else {
+        registrarHistorico_(usuario, existente, linha);
+      }
+      sheet.getRange(idx + 2, 1, 1, n).setValues([linha]);
+    } else {
+      novas.push(linha);
+    }
   });
-  if (novas.length) sheet.getRange(sheet.getLastRow() + 1, 1, novas.length, novas[0].length).setValues(novas);
+  if (novas.length) sheet.getRange(sheet.getLastRow() + 1, 1, novas.length, n).setValues(novas);
   return { ok: true, total: (acoes || []).length };
+}
+
+/** Alteração feita na Central de ações de um aparelho que não criou o registro. */
+function atualizarAcao(a) {
+  if (!a || !a.chave) return { ok: false, error: 'Ação sem identificação.' };
+  const sheet = getOrCreateSheet('Acoes_Consolidadas', CABECALHO_ACOES);
+  const n = CABECALHO_ACOES.length;
+  const row = linhaDoId(sheet, a.chave);
+  if (row < 0) return { ok: false, error: 'Ação não encontrada na planilha. Ela ainda não foi enviada pelo aparelho que a criou.' };
+  const existente = sheet.getRange(row, 1, 1, n).getValues()[0];
+  if ((Number(existente[23]) || 0) >= (Number(a.atualizadoEm) || 0)) return { ok: true, ignorada: true };
+  const linha = existente.slice();
+  const nova = linhaAcao_(Object.assign({
+    chave: existente[0], origem: existente[1], descricao: existente[2], contexto: existente[3],
+    empresa: existente[4], area: existente[5], criticidade: existente[14], reincidente: existente[15]
+  }, a), USUARIO_ATUAL || a.usuario || '', existente);
+  COLS_ACOMPANHAMENTO.forEach((c) => { linha[c] = nova[c]; });
+  linha[13] = new Date();
+  registrarHistorico_(USUARIO_ATUAL || a.usuario || '', existente, linha);
+  sheet.getRange(row, 1, 1, n).setValues([linha]);
+  return { ok: true };
+}
+
+/** Todas as ações da planilha, para a Central de ações de cada aparelho. */
+function listarAcoes() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('Acoes_Consolidadas');
+  if (!sheet || sheet.getLastRow() < 2) return { ok: true, acoes: [] };
+  const n = Math.min(CABECALHO_ACOES.length, sheet.getLastColumn());
+  const linhas = sheet.getRange(2, 1, sheet.getLastRow() - 1, n).getValues();
+  const acoes = linhas.filter((l) => l[0]).map((l) => {
+    let acomp = {};
+    try { acomp = l[24] ? JSON.parse(l[24]) : {}; } catch (e) { acomp = {}; }
+    return {
+      chave: textoCelula_(l[0]), origem: textoCelula_(l[1]), descricao: textoCelula_(l[2]), contexto: textoCelula_(l[3]),
+      empresa: textoCelula_(l[4]), area: textoCelula_(l[5]), responsavel: textoCelula_(l[6]), prazo: textoCelula_(l[7]),
+      status: textoCelula_(l[8]) || 'Pendente', concluidaEm: textoCelula_(l[10]), registradoPor: textoCelula_(l[12]),
+      criticidade: textoCelula_(l[14]), reincidente: textoCelula_(l[15]) === 'Sim', fotosEvidencia: textoCelula_(l[17]),
+      atualizadoEm: Number(l[23]) || 0, acomp: acomp, alteradoPor: textoCelula_(l[25])
+    };
+  });
+  return { ok: true, acoes: acoes };
 }
 
 /** Grava (ou atualiza, pelo ID na coluna A) uma linha na aba informada. */
 function gravarLinhaPorId(sheet, linha) {
-  const data = sheet.getDataRange().getValues();
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][0] === linha[0]) {
-      sheet.getRange(i + 1, 1, 1, linha.length).setValues([linha]);
-      return;
-    }
-  }
-  sheet.appendRow(linha);
+  const row = linhaDoId(sheet, linha[0]);
+  if (row > 0) sheet.getRange(row, 1, 1, linha.length).setValues([linha]);
+  else sheet.appendRow(linha);
 }
 
 function upsertRelato(r) {
