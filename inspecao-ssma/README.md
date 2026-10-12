@@ -56,6 +56,16 @@ configurado.
   descrição da não conformidade principal, medidas de controle, evidência
   fotográfica complementar e necessidade de reinspeção.
 
+## Equipe: login, perfis e ações compartilhadas
+
+- Usuários cadastrados na aba **Usuarios** da planilha entram com nome e PIN
+  (Configurações → Acesso do usuário). Sem usuários cadastrados, não há login.
+- Perfis: Gestor (tudo), Inspetor (inspeções, permissões, relatos, observações
+  e ações) e Responsável (só a Central de ações, com as ações em seu nome).
+- A Central de ações mostra as ações de toda a equipe. O responsável conclui
+  no próprio celular; vale a alteração mais recente; a aba Historico_Acoes
+  registra quem alterou o quê. Detalhes no `docs/GUIA_GESTOR.md`.
+
 ## Inteligência SSMA (Gestão → Inteligência)
 
 - **Criticidade** (Baixa, Média, Alta, Crítica) em cada não conformidade,
