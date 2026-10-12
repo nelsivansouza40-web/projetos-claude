@@ -22,7 +22,7 @@
  * identificador de cada resposta depende da posição); acrescente itens
  * novos no fim da seção.
  */
-const CHECKLIST_VERSAO = '2026-10 rev. 3 (Check Básico de Campo ampliado – PNR-000069 Rev. 11)';
+const CHECKLIST_VERSAO = '2026-10 rev. 4 (Check Básico de Campo ampliado – PNR-000069 Rev. 11)';
 
 const req = (texto, ref = '', prazo = '') => ({ texto, ref, prazo });
 
@@ -51,7 +51,11 @@ const CHECKLIST_RAC = [
       req('Aberturas de piso, grades, guarda-corpos ou alçapões removidos isoladas com barreira física, rígida e fixa, e sinalizadas.', '1.7.7.b (prioritário); 1.7.7.e'),
       req('Escada vertical fixa acima de 1,80 m com linha de vida e trava-quedas, trava-quedas retrátil, ancoragem com talabarte duplo ou gaiola aceita pela legislação.', '1.6.5.b'),
       req('Plano de emergência com cenário de resgate em altura, equipe preparada e equipamentos de resgate disponíveis.', '1.7.5.a'),
-      req('Operadores de PTA e inspetores de andaime capacitados.', '1.8.1.b; 1.8.1.c', '2025-06-30')
+      req('Operadores de PTA e inspetores de andaime capacitados.', '1.8.1.b; 1.8.1.c', '2025-06-30'),
+      req('Remoção de piso, grade, guarda-corpo ou alçapão prevista no planejamento e aprovada pelo dono da área por PTS com análise de risco.', '1.7.7.a'),
+      req('Alçapões inventariados e com uso controlado por cadeado.', '1.7.7.g'),
+      req('Cesto suspenso usado somente em resgate e emergência; cestos acoplado e suspenso com braços estabilizadores totalmente abertos.', '1.7.3.a; 1.7.3.b'),
+      req('Entrada e saída do cesto da PTA elevado com elemento de ligação conectado a sistema de ancoragem projetado.', '1.7.3.c')
     ]
   },
   {
@@ -107,7 +111,10 @@ const CHECKLIST_RAC = [
       req('Faróis acesos, sem uso de celular em operação e colete refletivo para quem circula nas vias e na lavra.', '3.7.a.I; 3.7.a.II; 3.7.a.IV'),
       req('Programa de testagem de álcool e drogas implementado.', '3.7.c.XVI', '2025-06-30'),
       req('Caminhões fora de estrada com sistema anticolisão com frenagem automática ou, até o prazo, com as condicionantes do Anexo V (câmeras, rádio, luz de ré, segregação, controle de acesso e plano de trânsito).', '3.6.3.h', '2028-12-20'),
-      req('Retarder hidráulico nos caminhões com PBT a partir de 30 t usados em declives acentuados.', '3.6.3.w', '2027-05-01')
+      req('Retarder hidráulico nos caminhões com PBT a partir de 30 t usados em declives acentuados.', '3.6.3.w', '2027-05-01'),
+      req('Movimentação sob linha elétrica energizada não isolada a menos de 6 m supervisionada por profissional de elétrica e técnico de mina, com rádio.', '3.7.c.XV'),
+      req('Manipulador de pneus (tire handler) usado para pneus com diâmetro a partir de 1.350 mm.', '3.7.c.IX'),
+      req('Reboque e desatolamento conforme procedimento (rebocador ou prancha; cabos de fibra com anti-chicoteamento homologados).', '3.7.c.XI; 3.7.c.XII')
     ]
   },
   {
@@ -158,7 +165,12 @@ const CHECKLIST_RAC = [
       req('Comunicação por rádio em frequência exclusiva entre operador e sinaleiro.', '5.7.d'),
       req('Acessórios com inspeção periódica em dia; acessórios defeituosos ou desgastados segregados para descarte.', '5.7.e.II (prioritário); 5.7.j'),
       req('Sensor de sobrecarga com parada e alarme, e controle remoto no guindauto, funcionando.', '5.6.2.k; 5.6.2.q (prioritários)'),
-      req('Sem uso de equipamentos de içamento improvisados ou adaptados sem autorização do fabricante ou projeto de engenharia.', '5.7.p')
+      req('Sem uso de equipamentos de içamento improvisados ou adaptados sem autorização do fabricante ou projeto de engenharia.', '5.7.p'),
+      req('Anemômetro no guindaste e na grua, respeitando a velocidade máxima de vento admitida.', '5.6.2.o; Anexo III.e'),
+      req('Chaves de fim de curso e botoeira de emergência funcionando.', '5.6.2.h; 5.6.2.p'),
+      req('Alarme sonoro de movimentação funcionando (grua, ponte rolante e talha elétrica).', '5.6.2.b'),
+      req('Limite de 70% do fator de utilização em desmontagens com retirada dos pontos de sustentação da carga.', '5.7.i'),
+      req('Acesso à área isolada do içamento somente com autorização.', '5.7.o')
     ]
   },
   {
@@ -182,7 +194,11 @@ const CHECKLIST_RAC = [
       req('Equipe de resgate comunicada previamente sobre a entrada e as atividades.', '6.7.3.j'),
       req('Sensor de movimento eletrônico nos trabalhadores quando o vigia não consegue vê-los (túneis, galerias).', '6.6.d', '2025-12-31'),
       req('Suprimento de ar respirável conforme o Programa de Proteção Respiratória, verificado continuamente.', '6.6.b; 6.7.3.g'),
-      req('Protocolo de estresse térmico com regime de trabalho e descanso, quando previsto na análise de risco.', '6.7.3.k')
+      req('Protocolo de estresse térmico com regime de trabalho e descanso, quando previsto na análise de risco.', '6.7.3.k'),
+      req('Supervisor de entrada garantindo o teste dos medidores, o monitoramento contínuo, o resgate disponível e a presença do vigia.', '6.9.a.II; 6.9.a.III; 6.9.a.IV; 6.9.a.V'),
+      req('Somente trabalhadores autorizados e relacionados na permissão de entrada acessam o espaço.', '6.9.b.II'),
+      req('Locais de armazenagem com risco de engolfamento ou afogamento tratados e inventariados como espaço confinado.', '6.7.1.b'),
+      req('Inspeções de espaço confinado feitas preferencialmente com drone (Anexo IV).', '6.6.e')
     ]
   },
   {
@@ -287,7 +303,10 @@ const CHECKLIST_RAC = [
       req('Acesso a painéis de distribuição e subestações controlado.', '10.7.1.r'),
       req('Trabalhadores treinados em prevenção de riscos em eletricidade (e em SEP e áreas classificadas, quando aplicável).', '10.8'),
       req('Manobra de disjuntores e contatores feita de forma remota em painéis não resistentes a arco interno.', '10.7.4.g', '2027-12-31'),
-      req('Medição de temperatura em painéis de alta tensão sem abertura dos painéis.', '10.7.1.s', '2027-12-31')
+      req('Medição de temperatura em painéis de alta tensão sem abertura dos painéis.', '10.7.1.s', '2027-12-31'),
+      req('Sem trabalho ao potencial em alta tensão e sem intervenção em circuito de potência de alta tensão sem desenergização completa.', '10.7.1.b; 10.7.1.c'),
+      req('Trabalho energizado em alta tensão nunca realizado individualmente; critérios locais definidos para baixa tensão.', '10.7.1.f; 10.7.1.g'),
+      req('Estudo de energia incidente do arco elétrico elaborado para os equipamentos.', '10.7.1.h')
     ]
   },
   {
@@ -337,7 +356,11 @@ const CHECKLIST_RAC = [
       req('Área destinada a trabalho a quente com bancada, armário corta-fogo, extintores extras e cilindros protegidos de fagulhas.', '12.6.4.a (prioritário)', '2025-12-30'),
       req('Em área classificada: inertização, ventilação, isolamento da linha, controle de acesso, sistema hidráulico preventivo e explosividade igual a zero.', '12.6.5', '2025-12-30'),
       req('Inventário das áreas não destinadas a trabalho a quente.', '12.7.1.c', '2025-06-30'),
-      req('Em áreas remotas: aceiro ou vegetação molhada, bombas costais e vigilância reforçada.', '12.6.3.f', '2025-12-30')
+      req('Em áreas remotas: aceiro ou vegetação molhada, bombas costais e vigilância reforçada.', '12.6.3.f', '2025-12-30'),
+      req('Reguladores de pressão calibrados, certificados e compatíveis com o gás usado.', '12.6.1.g', '2025-12-30'),
+      req('Cilindro de oxicorte com controle de pressão e vazão com dois manômetros (exceto GLP).', '12.6.6.a', '2025-12-30'),
+      req('Sistema homem-morto nas soldas MIG/MAG e TIG.', '12.6.7.c', '2025-12-30'),
+      req('Vigia preparado para acionar a emergência conforme o plano de atendimento a emergência em caso de incêndio.', '12.9.2.a; 12.8.1')
     ]
   },
   {
