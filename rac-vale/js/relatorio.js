@@ -42,7 +42,7 @@ async function renderRelatorio(id) {
             .map((f) => `<img src="${f.dataUrl}" alt="Evidência do item ${it.num}">`).join('');
           return `<tr class="${r.r ? 'r-' + r.r.toLowerCase() : ''}">
             <td class="c-num">${it.num}</td>
-            <td>${escapeHtml(it.texto)}${det.join('')}${imgs ? `<div class="rel-fotos">${imgs}</div>` : ''}</td>
+            <td>${escapeHtml(it.texto)}${it.ref ? `<div class="rel-ref">PNR-000069: ${escapeHtml(refLimpa(it))}${it.prioritario ? ' · Requisito prioritário' : ''}</div>` : ''}${det.join('')}${imgs ? `<div class="rel-fotos">${imgs}</div>` : ''}</td>
             <td class="c-resp">${RESPOSTAS[r.r] || 'Sem resposta'}</td></tr>`;
         }).join('')}
       </tbody>

@@ -6,33 +6,36 @@ fotos ficam gravadas no próprio aparelho.
 
 ## Conteúdo do checklist
 
-RAC 01, 02, 03, 04, 05, 07, 08, 10 e as observações gerais: perguntas do
-arquivo "1- Check list - RAC.xlsx" (Check Básico de Campo – Auditorias de
-RAC), com correção apenas de erros de digitação e de cópia.
+Cada RAC tem no mínimo 15 itens (264 no total, incluindo as observações
+gerais). Os primeiros itens de cada seção vêm do arquivo "1- Check list -
+RAC.xlsx" (RAC 01, 02, 03, 04, 05, 07, 08, 10 e observações), com correção
+apenas de erros de digitação e de cópia; os itens dos RAC 06, 09, 11, 12 e
+13 e todos os itens complementares vêm da PNR-000069 Rev. 11, selecionando
+o que é verificável em campo e priorizando os requisitos prioritários do
+Anexo VI.
 
-RAC 06, 09, 11, 12 e 13: montados a partir da PNR-000069 Rev. 11 no mesmo
-padrão do checklist original (itens curtos e verificáveis em campo:
-documento da atividade, controle físico do risco, equipamento inspecionado
-com checklist, capacitação), dando prioridade aos requisitos prioritários
-do Anexo VI. Em `js/checklist.js`, cada um desses itens indica o requisito
-de origem no campo `ref`. A lista do RAC 06 foi aprovada pelo gestor.
+Em cada item o aplicativo mostra o requisito de origem na PNR-000069, a
+marcação "Requisito prioritário" (Anexo VI) e, enquanto estiver correndo,
+o prazo de implementação do Anexo V (ou a indicação de que o prazo é
+definido no plano de ação da área). Essas informações também saem no
+relatório e na planilha.
 
-| Seção | Itens | Origem |
+| Seção | Itens | Prioritários |
 |---|---|---|
-| RAC 01 – Trabalhos em Altura | 8 | Checklist original |
-| RAC 02 – Veículos Automotores Leves | 7 | Checklist original |
-| RAC 03 – Operação de Equipamentos Móveis | 6 | Checklist original |
-| RAC 04 – Bloqueio, Identificação e Zero Energia | 6 | Checklist original |
-| RAC 05 – Içamento de Carga | 8 | Checklist original |
-| RAC 06 – Espaços Confinados | 11 | PNR-000069 Rev. 11 |
-| RAC 07 – Proteção de Máquinas | 4 | Checklist original |
-| RAC 08 – Atividades no Terreno | 2 | Checklist original |
-| RAC 09 – Explosivos | 8 | PNR-000069 Rev. 11 |
-| RAC 10 – Trabalhos em Eletricidade | 5 | Checklist original |
-| RAC 11 – Metal Líquido | 8 | PNR-000069 Rev. 11 |
-| RAC 12 – Trabalho a Quente | 9 | PNR-000069 Rev. 11 |
-| RAC 13 – Abertura de Linhas e Equipamentos | 8 | PNR-000069 Rev. 11 |
-| Observações gerais (sempre avaliadas) | 6 | Checklist original |
+| RAC 01 – Trabalhos em Altura | 21 | 4 |
+| RAC 02 – Veículos Automotores Leves | 22 | 9 |
+| RAC 03 – Operação de Equipamentos Móveis | 22 | 10 |
+| RAC 04 – Bloqueio, Identificação e Zero Energia | 19 | 6 |
+| RAC 05 – Içamento de Carga | 20 | 10 |
+| RAC 06 – Espaços Confinados | 18 | 5 |
+| RAC 07 – Proteção de Máquinas | 19 | 4 |
+| RAC 08 – Atividades no Terreno | 19 | 6 |
+| RAC 09 – Explosivos | 21 | 7 |
+| RAC 10 – Trabalhos em Eletricidade | 22 | 7 |
+| RAC 11 – Metal Líquido | 19 | 0 (a norma não define prioritários) |
+| RAC 12 – Trabalho a Quente | 19 | 6 |
+| RAC 13 – Abertura de Linhas e Equipamentos | 17 | 6 |
+| Observações gerais (sempre avaliadas) | 6 | – |
 
 Para alterar perguntas, edite somente `js/checklist.js`. Depois de haver
 auditorias registradas, não mude a ordem dos itens existentes (o
