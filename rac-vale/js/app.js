@@ -1,0 +1,612 @@
+/*
+ * Auditoria de RAC – Check Básico de Campo.
+ * Fluxo: Identificação > Checklist > Fechamento > Relatório.
+ * Tudo é gravado no aparelho a cada alteração (IndexedDB).
+ */
+const view = () => document.getElementById('view');
+const RESPOSTAS = { C: 'Conforme', NC: 'Não conforme', NA: 'N/A' };
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function uid() {
+  return (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+}
+
+function hojeISO() {
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+}
+
+function horaAgora() {
+  return new Date().toTimeString().slice(0, 5);
+}
+
+function formatarDataBR(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : (iso || '');
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.hidden = false;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { el.hidden = true; }, 2600);
+}
+
+/* ---------------- Cálculos ---------------- */
+
+function estatisticas(aud, secao) {
+  const secoes = secao ? [secao] : secoesDaAuditoria(aud);
+  let c = 0, nc = 0, na = 0, total = 0;
+  secoes.forEach((s) => s.itens.forEach((it) => {
+    total++;
+    const r = (aud.respostas[it.id] || {}).r;
+    if (r === 'C') c++; else if (r === 'NC') nc++; else if (r === 'NA') na++;
+  }));
+  const base = c + nc;
+  return { c, nc, na, total, pendentes: total - c - nc - na, indice: base ? Math.round((c / base) * 100) : null };
+}
+
+function classeIndice(indice) {
+  if (indice === null) return 'neutro';
+  if (indice >= 90) return 'bom';
+  if (indice >= 70) return 'atencao';
+  return 'critico';
+}
+
+/* ---------------- Persistência ---------------- */
+
+let salvarTimer = null;
+function salvarDepois(aud) {
+  aud.updatedAt = Date.now();
+  clearTimeout(salvarTimer);
+  salvarTimer = setTimeout(() => DB.put('auditorias', aud), 300);
+}
+
+async function salvarAgora(aud) {
+  clearTimeout(salvarTimer);
+  aud.updatedAt = Date.now();
+  await DB.put('auditorias', aud);
+}
+
+function redimensionarImagem(file, maxLado = 1280, qualidade = 0.72) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const esc = Math.min(1, maxLado / Math.max(img.width, img.height));
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(img.width * esc);
+      cv.height = Math.round(img.height * esc);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      URL.revokeObjectURL(url);
+      resolve(cv.toDataURL('image/jpeg', qualidade));
+    };
+    img.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
+    img.src = url;
+  });
+}
+
+/* ---------------- Início ---------------- */
+
+async function renderInicio() {
+  const auds = await DB.getAll('auditorias');
+  const cards = auds.map((a) => {
+    const st = estatisticas(a);
+    const status = a.status === 'concluida' ? '<span class="tag ok">Concluída</span>' : '<span class="tag rascunho">Rascunho</span>';
+    return `
+      <div class="card aud-card">
+        <div class="aud-top">
+          <div>
+            <strong>${escapeHtml(a.ident.empresa || 'Empresa não informada')}</strong>
+            <div class="muted">${formatarDataBR(a.ident.data)} · ${escapeHtml(a.ident.area || a.ident.unidade || 'Área não informada')}</div>
+            <div class="muted">Auditor: ${escapeHtml(a.ident.auditor || '—')}</div>
+          </div>
+          <div class="indice ${classeIndice(st.indice)}">${st.indice === null ? '—' : st.indice + '%'}</div>
+        </div>
+        <div class="aud-meta">${status} <span class="muted">${st.nc} não conforme(s) · ${st.pendentes} pendente(s)</span></div>
+        <div class="acoes-linha">
+          <button class="btn" data-abrir="${a.id}">${a.status === 'concluida' ? 'Ver / editar' : 'Continuar'}</button>
+          <button class="btn sec" data-relatorio="${a.id}">Relatório</button>
+          <button class="btn perigo" data-excluir="${a.id}">Excluir</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  view().innerHTML = `
+    <section class="intro card">
+      <h2>Check Básico de Campo – Auditorias de RAC</h2>
+      <p class="muted">Selecione os RAC aplicáveis à frente auditada. Cada item recebe Conforme, Não conforme ou N/A, com observação, foto e ação para as não conformidades. O índice considera apenas os itens Conforme e Não conforme.</p>
+      <button class="btn grande" id="btn-nova">+ Nova auditoria</button>
+    </section>
+    <h3 class="titulo-lista">Auditorias registradas (${auds.length})</h3>
+    ${cards || '<p class="muted vazio">Nenhuma auditoria registrada neste aparelho.</p>'}
+    <section class="card">
+      <h3>Cópia de segurança</h3>
+      <p class="muted">Os dados ficam somente neste aparelho. Exporte uma cópia periodicamente (inclui as fotos).</p>
+      <div class="acoes-linha">
+        <button class="btn sec" id="btn-backup">Exportar cópia</button>
+        <label class="btn sec">Restaurar cópia<input type="file" id="inp-restaurar" accept="application/json" hidden></label>
+      </div>
+    </section>`;
+
+  document.getElementById('btn-nova').onclick = novaAuditoria;
+  document.getElementById('btn-backup').onclick = exportarBackup;
+  document.getElementById('inp-restaurar').onchange = (e) => restaurarBackup(e.target.files[0]);
+  view().querySelectorAll('[data-abrir]').forEach((b) => { b.onclick = () => irPara(`#/auditoria/${b.dataset.abrir}/identificacao`); });
+  view().querySelectorAll('[data-relatorio]').forEach((b) => { b.onclick = () => irPara(`#/relatorio/${b.dataset.relatorio}`); });
+  view().querySelectorAll('[data-excluir]').forEach((b) => {
+    b.onclick = async () => {
+      if (!confirm('Excluir esta auditoria e suas fotos? Esta ação não pode ser desfeita.')) return;
+      await DB.excluirAuditoria(b.dataset.excluir);
+      renderInicio();
+    };
+  });
+}
+
+async function novaAuditoria() {
+  const aud = {
+    id: uid(),
+    status: 'rascunho',
+    versaoChecklist: CHECKLIST_VERSAO,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    ident: {
+      data: hojeISO(),
+      hora: horaAgora(),
+      empresa: await DB.getSetting('empresaPadrao', ''),
+      contrato: '',
+      unidade: await DB.getSetting('unidadePadrao', ''),
+      area: '',
+      atividade: '',
+      auditor: await DB.getSetting('auditorPadrao', ''),
+      acompanhante: ''
+    },
+    racs: [],
+    respostas: {},
+    fechamento: { comentarios: '', nomeResponsavel: '', assinaturaAuditor: '', assinaturaResponsavel: '' }
+  };
+  await salvarAgora(aud);
+  irPara(`#/auditoria/${aud.id}/identificacao`);
+}
+
+/* ---------------- Formulário ---------------- */
+
+const PASSOS = [
+  { id: 'identificacao', rotulo: '1. Identificação' },
+  { id: 'checklist', rotulo: '2. Checklist' },
+  { id: 'fechamento', rotulo: '3. Fechamento' }
+];
+
+async function renderAuditoria(id, passo) {
+  const aud = await DB.get('auditorias', id);
+  if (!aud) { irPara('#/'); return; }
+  const abas = PASSOS.map((p) => `<button class="passo ${p.id === passo ? 'ativo' : ''}" data-passo="${p.id}">${p.rotulo}</button>`).join('');
+  view().innerHTML = `
+    <div class="passos">${abas}</div>
+    <div id="conteudo"></div>`;
+  view().querySelectorAll('[data-passo]').forEach((b) => {
+    b.onclick = async () => { await salvarAgora(aud); irPara(`#/auditoria/${id}/${b.dataset.passo}`); };
+  });
+  const el = document.getElementById('conteudo');
+  if (passo === 'checklist') return renderChecklist(el, aud);
+  if (passo === 'fechamento') return renderFechamento(el, aud);
+  return renderIdentificacao(el, aud);
+}
+
+function campo(rotulo, nome, valor, tipo = 'text', extra = '') {
+  return `<label class="campo"><span>${rotulo}</span><input type="${tipo}" name="${nome}" value="${escapeHtml(valor)}" ${extra}></label>`;
+}
+
+function renderIdentificacao(el, aud) {
+  const i = aud.ident;
+  const racs = CHECKLIST_RAC.filter((s) => !s.sempre).map((s) => `
+    <label class="rac-opcao">
+      <input type="checkbox" value="${s.id}" ${aud.racs.includes(s.id) ? 'checked' : ''}>
+      <span><strong>${escapeHtml(s.titulo)}</strong><small>${s.itens.length} itens</small></span>
+    </label>`).join('');
+
+  el.innerHTML = `
+    <section class="card">
+      <h3>Identificação da auditoria</h3>
+      <div class="grade">
+        ${campo('Data', 'data', i.data, 'date')}
+        ${campo('Hora', 'hora', i.hora, 'time')}
+        ${campo('Empresa / contratada', 'empresa', i.empresa)}
+        ${campo('Contrato', 'contrato', i.contrato)}
+        ${campo('Unidade / projeto', 'unidade', i.unidade)}
+        ${campo('Área / frente de trabalho', 'area', i.area)}
+        ${campo('Atividade auditada', 'atividade', i.atividade)}
+        ${campo('Auditor', 'auditor', i.auditor)}
+        ${campo('Acompanhante da área', 'acompanhante', i.acompanhante)}
+      </div>
+    </section>
+    <section class="card">
+      <h3>RAC aplicáveis</h3>
+      <p class="muted">Marque os RAC presentes na frente auditada. As observações gerais entram sempre.</p>
+      <div class="rac-lista">${racs}</div>
+    </section>
+    <div class="rodape-acoes">
+      <button class="btn sec" id="btn-voltar">Início</button>
+      <button class="btn" id="btn-seguir">Ir para o checklist</button>
+    </div>`;
+
+  el.querySelectorAll('input[name]').forEach((inp) => {
+    inp.oninput = () => { aud.ident[inp.name] = inp.value; salvarDepois(aud); };
+  });
+  el.querySelectorAll('.rac-opcao input').forEach((cb) => {
+    cb.onchange = () => {
+      aud.racs = [...el.querySelectorAll('.rac-opcao input:checked')].map((x) => x.value);
+      salvarDepois(aud);
+    };
+  });
+  document.getElementById('btn-voltar').onclick = async () => { await salvarAgora(aud); irPara('#/'); };
+  document.getElementById('btn-seguir').onclick = async () => {
+    if (!aud.racs.length && !confirm('Nenhum RAC marcado. Seguir só com as observações gerais?')) return;
+    await salvarAgora(aud);
+    irPara(`#/auditoria/${aud.id}/checklist`);
+  };
+}
+
+function renderChecklist(el, aud) {
+  const secoes = secoesDaAuditoria(aud);
+  el.innerHTML = `
+    <div id="resumo-topo" class="card resumo-topo"></div>
+    ${secoes.map((s) => `
+      <section class="card secao" data-secao="${s.id}">
+        <div class="secao-cab">
+          <h3>${escapeHtml(s.titulo)}</h3>
+          <span class="indice-sec" data-indice="${s.id}"></span>
+        </div>
+        <div class="acoes-linha pequena">
+          <button class="btn mini sec" data-todos-c="${s.id}">Marcar pendentes como Conforme</button>
+        </div>
+        ${s.itens.map((it) => `<div class="item" data-item="${it.id}"></div>`).join('')}
+      </section>`).join('')}
+    <div class="rodape-acoes">
+      <button class="btn sec" id="btn-ident">Identificação</button>
+      <button class="btn" id="btn-fech">Ir para o fechamento</button>
+    </div>`;
+
+  secoes.forEach((s) => s.itens.forEach((it) => renderItem(el.querySelector(`[data-item="${it.id}"]`), aud, s, it)));
+  atualizarResumo(el, aud);
+
+  el.querySelectorAll('[data-todos-c]').forEach((b) => {
+    b.onclick = () => {
+      const s = secaoPorId(b.dataset.todosC);
+      s.itens.forEach((it) => {
+        const r = aud.respostas[it.id] || (aud.respostas[it.id] = {});
+        if (!r.r) { r.r = 'C'; renderItem(el.querySelector(`[data-item="${it.id}"]`), aud, s, it); }
+      });
+      salvarDepois(aud);
+      atualizarResumo(el, aud);
+    };
+  });
+  document.getElementById('btn-ident').onclick = async () => { await salvarAgora(aud); irPara(`#/auditoria/${aud.id}/identificacao`); };
+  document.getElementById('btn-fech').onclick = async () => { await salvarAgora(aud); irPara(`#/auditoria/${aud.id}/fechamento`); };
+}
+
+function atualizarResumo(el, aud) {
+  const st = estatisticas(aud);
+  el.querySelector('#resumo-topo').innerHTML = `
+    <div class="resumo-num"><span class="indice ${classeIndice(st.indice)}">${st.indice === null ? '—' : st.indice + '%'}</span><small>Índice geral</small></div>
+    <div class="resumo-num"><strong>${st.c}</strong><small>Conforme</small></div>
+    <div class="resumo-num"><strong class="txt-critico">${st.nc}</strong><small>Não conforme</small></div>
+    <div class="resumo-num"><strong>${st.na}</strong><small>N/A</small></div>
+    <div class="resumo-num"><strong class="txt-atencao">${st.pendentes}</strong><small>Pendentes</small></div>`;
+  secoesDaAuditoria(aud).forEach((s) => {
+    const e = estatisticas(aud, s);
+    const alvo = el.querySelector(`[data-indice="${s.id}"]`);
+    if (alvo) alvo.innerHTML = `<span class="indice pequeno ${classeIndice(e.indice)}">${e.indice === null ? '—' : e.indice + '%'}</span>`;
+  });
+}
+
+function renderItem(box, aud, secao, it) {
+  const r = aud.respostas[it.id] || {};
+  const botoes = Object.entries(RESPOSTAS).map(([k, rot]) =>
+    `<button class="resp ${k.toLowerCase()} ${r.r === k ? 'marcada' : ''}" data-r="${k}">${rot}</button>`).join('');
+  const temDetalhe = r.r === 'NC' || r.obs || (r.fotos && r.fotos.length);
+  box.className = `item ${r.r ? 'resp-' + r.r.toLowerCase() : 'pendente'}`;
+  box.innerHTML = `
+    <div class="item-texto"><span class="num">${it.num}</span>${escapeHtml(it.texto)}</div>
+    <div class="resp-linha">${botoes}</div>
+    <details ${temDetalhe ? 'open' : ''}>
+      <summary>Observação e fotos${r.fotos && r.fotos.length ? ` (${r.fotos.length})` : ''}</summary>
+      <label class="campo"><span>Observação</span><textarea data-campo="obs" rows="2">${escapeHtml(r.obs || '')}</textarea></label>
+      <div class="fotos" data-fotos></div>
+      <label class="btn mini sec">Adicionar foto<input type="file" accept="image/*" capture="environment" multiple hidden data-foto></label>
+    </details>
+    ${r.r === 'NC' ? `
+      <div class="nc-bloco">
+        <label class="campo"><span>Ação corretiva *</span><textarea data-campo="acao" rows="2">${escapeHtml(r.acao || '')}</textarea></label>
+        <div class="grade">
+          <label class="campo"><span>Responsável</span><input data-campo="responsavel" value="${escapeHtml(r.responsavel || '')}"></label>
+          <label class="campo"><span>Prazo</span><input type="date" data-campo="prazo" value="${escapeHtml(r.prazo || '')}"></label>
+        </div>
+      </div>` : ''}`;
+
+  const resp = () => aud.respostas[it.id] || (aud.respostas[it.id] = {});
+  box.querySelectorAll('[data-r]').forEach((b) => {
+    b.onclick = () => {
+      const atual = resp();
+      atual.r = atual.r === b.dataset.r ? undefined : b.dataset.r;
+      salvarDepois(aud);
+      renderItem(box, aud, secao, it);
+      atualizarResumo(document.getElementById('conteudo'), aud);
+    };
+  });
+  box.querySelectorAll('[data-campo]').forEach((inp) => {
+    inp.oninput = () => { resp()[inp.dataset.campo] = inp.value; salvarDepois(aud); };
+  });
+  box.querySelector('[data-foto]').onchange = async (e) => {
+    const files = [...e.target.files];
+    for (const f of files) {
+      try {
+        const dataUrl = await redimensionarImagem(f);
+        const foto = { id: uid(), auditoriaId: aud.id, itemId: it.id, dataUrl, createdAt: Date.now() };
+        await DB.put('fotos', foto);
+        const atual = resp();
+        atual.fotos = (atual.fotos || []).concat(foto.id);
+      } catch (err) {
+        toast('Não foi possível ler a foto.');
+      }
+    }
+    await salvarAgora(aud);
+    renderItem(box, aud, secao, it);
+  };
+  renderMiniaturas(box.querySelector('[data-fotos]'), aud, it, () => renderItem(box, aud, secao, it));
+}
+
+async function renderMiniaturas(el, aud, it, aoMudar) {
+  const ids = (aud.respostas[it.id] || {}).fotos || [];
+  for (const fid of ids) {
+    const f = await DB.get('fotos', fid);
+    if (!f) continue;
+    const d = document.createElement('div');
+    d.className = 'mini';
+    d.innerHTML = `<img src="${f.dataUrl}" alt="Foto do item"><button title="Remover foto">×</button>`;
+    d.querySelector('button').onclick = async () => {
+      if (!confirm('Remover esta foto?')) return;
+      await DB.del('fotos', fid);
+      const r = aud.respostas[it.id];
+      r.fotos = r.fotos.filter((x) => x !== fid);
+      await salvarAgora(aud);
+      aoMudar();
+    };
+    el.appendChild(d);
+  }
+}
+
+/* ---------------- Fechamento ---------------- */
+
+function pendenciasParaConcluir(aud) {
+  const faltas = [];
+  if (!aud.ident.empresa) faltas.push('Informe a empresa na identificação.');
+  if (!aud.ident.auditor) faltas.push('Informe o auditor na identificação.');
+  secoesDaAuditoria(aud).forEach((s) => s.itens.forEach((it) => {
+    const r = aud.respostas[it.id] || {};
+    if (!r.r) faltas.push(`${s.titulo}, item ${it.num}: sem resposta.`);
+    else if (r.r === 'NC' && !(r.acao || '').trim()) faltas.push(`${s.titulo}, item ${it.num}: não conforme sem ação corretiva.`);
+  }));
+  return faltas;
+}
+
+function renderFechamento(el, aud) {
+  const st = estatisticas(aud);
+  const porSecao = secoesDaAuditoria(aud).map((s) => {
+    const e = estatisticas(aud, s);
+    return `<tr><td>${escapeHtml(s.titulo)}</td><td>${e.c}</td><td>${e.nc}</td><td>${e.na}</td><td>${e.pendentes}</td><td><span class="indice pequeno ${classeIndice(e.indice)}">${e.indice === null ? '—' : e.indice + '%'}</span></td></tr>`;
+  }).join('');
+  const f = aud.fechamento;
+
+  el.innerHTML = `
+    <section class="card">
+      <h3>Resultado</h3>
+      <div class="tabela-rolagem">
+        <table class="tabela">
+          <thead><tr><th>Seção</th><th>C</th><th>NC</th><th>N/A</th><th>Pend.</th><th>Índice</th></tr></thead>
+          <tbody>${porSecao}</tbody>
+          <tfoot><tr><th>Geral</th><th>${st.c}</th><th>${st.nc}</th><th>${st.na}</th><th>${st.pendentes}</th><th><span class="indice pequeno ${classeIndice(st.indice)}">${st.indice === null ? '—' : st.indice + '%'}</span></th></tr></tfoot>
+        </table>
+      </div>
+    </section>
+    <section class="card">
+      <h3>Comentários do auditor</h3>
+      <textarea id="comentarios" rows="4" placeholder="Pontos positivos, oportunidades de melhoria, combinados com a área...">${escapeHtml(f.comentarios)}</textarea>
+    </section>
+    <section class="card">
+      <h3>Assinaturas (opcional)</h3>
+      <div class="assinaturas">
+        <div>
+          <span class="muted">Auditor: ${escapeHtml(aud.ident.auditor || '—')}</span>
+          <canvas class="assinatura" data-assin="assinaturaAuditor"></canvas>
+          <button class="btn mini sec" data-limpar="assinaturaAuditor">Limpar</button>
+        </div>
+        <div>
+          <label class="campo"><span>Responsável da área</span><input id="nome-resp" value="${escapeHtml(f.nomeResponsavel)}"></label>
+          <canvas class="assinatura" data-assin="assinaturaResponsavel"></canvas>
+          <button class="btn mini sec" data-limpar="assinaturaResponsavel">Limpar</button>
+        </div>
+      </div>
+    </section>
+    <div id="faltas"></div>
+    <div class="rodape-acoes">
+      <button class="btn sec" id="btn-check">Checklist</button>
+      <button class="btn" id="btn-concluir">${aud.status === 'concluida' ? 'Salvar e ver relatório' : 'Concluir auditoria'}</button>
+    </div>`;
+
+  document.getElementById('comentarios').oninput = (e) => { f.comentarios = e.target.value; salvarDepois(aud); };
+  document.getElementById('nome-resp').oninput = (e) => { f.nomeResponsavel = e.target.value; salvarDepois(aud); };
+  el.querySelectorAll('canvas[data-assin]').forEach((cv) => prepararAssinatura(cv, aud));
+  el.querySelectorAll('[data-limpar]').forEach((b) => {
+    b.onclick = () => {
+      f[b.dataset.limpar] = '';
+      salvarDepois(aud);
+      prepararAssinatura(el.querySelector(`canvas[data-assin="${b.dataset.limpar}"]`), aud);
+    };
+  });
+  document.getElementById('btn-check').onclick = async () => { await salvarAgora(aud); irPara(`#/auditoria/${aud.id}/checklist`); };
+  document.getElementById('btn-concluir').onclick = async () => {
+    const faltas = pendenciasParaConcluir(aud);
+    if (faltas.length) {
+      document.getElementById('faltas').innerHTML = `
+        <section class="card alerta"><h3>Faltam ${faltas.length} ponto(s) para concluir</h3>
+        <ul>${faltas.slice(0, 15).map((x) => `<li>${escapeHtml(x)}</li>`).join('')}</ul>
+        ${faltas.length > 15 ? `<p class="muted">e mais ${faltas.length - 15}.</p>` : ''}</section>`;
+      document.getElementById('faltas').scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    aud.status = 'concluida';
+    aud.concluidaEm = aud.concluidaEm || Date.now();
+    await salvarAgora(aud);
+    irPara(`#/relatorio/${aud.id}`);
+  };
+}
+
+function prepararAssinatura(cv, aud) {
+  const chave = cv.dataset.assin;
+  const largura = cv.parentElement.clientWidth || 300;
+  cv.width = largura;
+  cv.height = 140;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, cv.width, cv.height);
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = '#0a2540';
+  if (aud.fechamento[chave]) {
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0, cv.width, cv.height);
+    img.src = aud.fechamento[chave];
+  }
+  let desenhando = false;
+  const pos = (e) => {
+    const r = cv.getBoundingClientRect();
+    return [e.clientX - r.left, e.clientY - r.top];
+  };
+  cv.onpointerdown = (e) => { desenhando = true; cv.setPointerCapture(e.pointerId); const [x, y] = pos(e); ctx.beginPath(); ctx.moveTo(x, y); };
+  cv.onpointermove = (e) => { if (!desenhando) return; const [x, y] = pos(e); ctx.lineTo(x, y); ctx.stroke(); };
+  cv.onpointerup = () => {
+    if (!desenhando) return;
+    desenhando = false;
+    aud.fechamento[chave] = cv.toDataURL('image/png');
+    salvarDepois(aud);
+  };
+}
+
+/* ---------------- Exportação e cópia de segurança ---------------- */
+
+function baixarArquivo(nome, conteudo, tipo) {
+  const blob = conteudo instanceof Blob ? conteudo : new Blob([conteudo], { type: tipo });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = nome;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+
+function exportarPlanilha(aud) {
+  const csv = (v) => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
+  const i = aud.ident;
+  const linhas = [['Data', 'Hora', 'Empresa', 'Contrato', 'Unidade', 'Área', 'Atividade', 'Auditor', 'Seção', 'Item', 'Descrição', 'Resposta', 'Observação', 'Ação corretiva', 'Responsável', 'Prazo', 'Fotos']];
+  secoesDaAuditoria(aud).forEach((s) => s.itens.forEach((it) => {
+    const r = aud.respostas[it.id] || {};
+    linhas.push([formatarDataBR(i.data), i.hora, i.empresa, i.contrato, i.unidade, i.area, i.atividade, i.auditor, s.titulo, it.num, it.texto,
+      RESPOSTAS[r.r] || 'Sem resposta', r.obs, r.acao, r.responsavel, formatarDataBR(r.prazo), (r.fotos || []).length]);
+  }));
+  const conteudo = '﻿' + linhas.map((l) => l.map(csv).join(';')).join('\r\n');
+  baixarArquivo(`Auditoria_RAC_${i.data}_${(i.empresa || 'empresa').replace(/[^\w]+/g, '_')}.csv`, conteudo, 'text/csv;charset=utf-8');
+}
+
+async function exportarBackup() {
+  const auditorias = await DB.getAll('auditorias');
+  const fotos = await DB.getAll('fotos');
+  const pacote = { app: 'rac-campo', versao: 1, geradoEm: new Date().toISOString(), auditorias, fotos };
+  baixarArquivo(`Copia_RAC_Campo_${hojeISO()}.json`, JSON.stringify(pacote), 'application/json');
+}
+
+async function restaurarBackup(file) {
+  if (!file) return;
+  try {
+    const pacote = JSON.parse(await file.text());
+    if (pacote.app !== 'rac-campo') throw new Error('arquivo de outro aplicativo');
+    if (!confirm(`Restaurar ${pacote.auditorias.length} auditoria(s)? Registros com o mesmo identificador serão substituídos.`)) return;
+    for (const a of pacote.auditorias) await DB.put('auditorias', a);
+    for (const f of pacote.fotos || []) await DB.put('fotos', f);
+    toast('Cópia restaurada.');
+    renderInicio();
+  } catch (err) {
+    alert('Não foi possível restaurar: ' + err.message);
+  }
+}
+
+/* ---------------- Configurações ---------------- */
+
+async function renderConfig() {
+  const auditor = await DB.getSetting('auditorPadrao', '');
+  const empresa = await DB.getSetting('empresaPadrao', '');
+  const unidade = await DB.getSetting('unidadePadrao', '');
+  view().innerHTML = `
+    <section class="card">
+      <h3>Preenchimento automático</h3>
+      <p class="muted">Estes dados entram automaticamente em cada nova auditoria.</p>
+      <div class="grade">
+        ${campo('Auditor', 'auditorPadrao', auditor)}
+        ${campo('Empresa / contratada', 'empresaPadrao', empresa)}
+        ${campo('Unidade / projeto', 'unidadePadrao', unidade)}
+      </div>
+    </section>
+    <section class="card">
+      <h3>Sobre</h3>
+      <p class="muted">Checklist: ${escapeHtml(CHECKLIST_VERSAO)}. Referência: PNR-000069 Rev. 11 – Requisitos de Atividades Críticas.</p>
+    </section>
+    <div class="rodape-acoes"><button class="btn" id="btn-ok">Voltar</button></div>`;
+  view().querySelectorAll('input[name]').forEach((inp) => {
+    inp.onchange = () => DB.setSetting(inp.name, inp.value.trim());
+  });
+  document.getElementById('btn-ok').onclick = () => irPara('#/');
+}
+
+/* ---------------- Rotas ---------------- */
+
+function irPara(hash) {
+  if (location.hash === hash) rotear();
+  else location.hash = hash;
+}
+
+async function rotear() {
+  window.scrollTo(0, 0);
+  document.body.classList.remove('modo-relatorio');
+  const partes = location.hash.replace(/^#\/?/, '').split('/');
+  if (partes[0] === 'auditoria' && partes[1]) return renderAuditoria(partes[1], partes[2] || 'identificacao');
+  if (partes[0] === 'relatorio' && partes[1]) return renderRelatorio(partes[1]);
+  if (partes[0] === 'config') return renderConfig();
+  return renderInicio();
+}
+
+function atualizarConexao() {
+  const el = document.getElementById('conn');
+  el.textContent = navigator.onLine ? 'Online' : 'Offline';
+  el.className = 'conn ' + (navigator.onLine ? 'on' : 'off');
+}
+
+function init() {
+  document.getElementById('btn-home').onclick = () => irPara('#/');
+  document.getElementById('btn-config').onclick = () => irPara('#/config');
+  window.addEventListener('hashchange', rotear);
+  window.addEventListener('online', atualizarConexao);
+  window.addEventListener('offline', atualizarConexao);
+  atualizarConexao();
+  rotear();
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
