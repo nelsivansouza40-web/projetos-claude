@@ -6,11 +6,12 @@ dados do app (hoje, **INSPEÇÕES SSMA_2026**):
 1. Ativar a chave de acesso (proteção do servidor).
 2. Montar o painel da equipe no Looker Studio.
 3. Migrar planilha e script para a conta corporativa.
+4. Cadastrar usuários, perfis e ações compartilhadas.
 
-Antes de tudo, a planilha precisa estar com o **Code.gs versão 2026-10-12b ou
+Antes de tudo, a planilha precisa estar com o **Code.gs versão 2026-10-13 ou
 mais nova**. Para conferir, abra no navegador o endereço do app da Web (o que
 termina em `/exec`): a página deve mostrar *"Servidor do Inspeções SSMA
-funcionando. Versão 2026-10-12b."*
+funcionando. Versão 2026-10-13."*
 
 Para atualizar: copie o `server/Code.gs` deste repositório, cole no Apps Script
 substituindo o conteúdo e use **Implantar → Gerenciar implantações → editar →
@@ -153,3 +154,52 @@ como pede a LGPD.
 - Informe aos trabalhadores, na integração, que inspeções, relatos e
   observações são registrados em sistema eletrônico. O relato anônimo e a
   observação comportamental não gravam o nome do trabalhador.
+
+---
+
+## 4. Usuários, perfis e ações compartilhadas
+
+### 4.1 Cadastrar usuários
+
+Depois de atualizar o Code.gs, a planilha ganha a aba **Usuarios**, vazia.
+Enquanto ela estiver vazia, o app funciona como antes, sem login.
+
+| Nome | PIN | Perfil | Ativo |
+|---|---|---|---|
+| Nelsivan Souza | 4821 | Gestor | Sim |
+| Carlos Lima | 0420 | Responsável | Sim |
+| Maria Santos | 7315 | Inspetor | Sim |
+
+- **Nome**: como a pessoa vai digitar no app (maiúsculas e acentos não importam).
+  Use o mesmo nome que aparece no campo "Responsável" das ações: é por ele
+  que o app separa as ações de cada um.
+- **PIN**: 4 a 6 números, diferente para cada pessoa.
+- **Perfil**:
+  - **Gestor**: vê todos os módulos.
+  - **Inspetor**: inspeções, permissões, relatos, observações e ações.
+  - **Responsável**: só a Central de ações, já filtrada nas ações dele. Pode
+    concluir com evidência, mas não altera responsável e prazo nem verifica a
+    eficácia (a verificação é feita por SSMA).
+- **Ativo**: "Não" bloqueia a pessoa sem apagar o histórico.
+
+**Atenção:** a partir do primeiro usuário cadastrado, o login passa a ser
+obrigatório. Cada celular precisa entrar em **Configurações → Acesso do
+usuário** com nome e PIN, senão a sincronização para. Cadastre todos antes e
+avise a equipe. Cinco PINs errados seguidos bloqueiam o usuário por 15 minutos.
+
+O PIN fica visível na aba Usuarios: compartilhe a planilha só com a gestão de
+SSMA. É uma proteção adequada para o piloto; para uso corporativo amplo, o
+caminho é um banco de dados com login da empresa.
+
+### 4.2 Como as ações passam a funcionar
+
+- Cada celular baixa da planilha as ações de toda a equipe a cada
+  sincronização (ou pelo botão **Atualizar com a equipe** na Central).
+- O responsável conclui a ação no próprio celular. A conclusão, a evidência e
+  as fotos vão para a planilha e, depois, para o celular de quem criou o
+  registro.
+- Quando duas pessoas mexem na mesma ação, vale a alteração mais recente.
+- A aba **Historico_Acoes** registra cada mudança de responsável, prazo,
+  status, evidência e eficácia, com data, hora e o nome de quem fez.
+- A tela **Inteligência** continua mostrando os dados do próprio aparelho.
+  A visão da equipe inteira é a do Looker Studio (item 2).

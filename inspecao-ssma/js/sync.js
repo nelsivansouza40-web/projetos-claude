@@ -43,6 +43,7 @@ const Sync = {
     // Um registro com erro não pode travar a fila: cada um é tentado
     // separadamente, e o erro fica gravado no próprio registro.
     let falhas = 0;
+    loginRecusado = false;
     try {
       const inspections = await DB.getAllInspections();
       for (const insp of inspections) {
@@ -125,6 +126,7 @@ const Sync = {
       this.running = false;
       this.notify();
     }
+    if (falhas && loginRecusado) throw new Error('A planilha exige login: entre com seu usuário e PIN em Configurações → Acesso do usuário.');
     if (falhas) throw new Error(`${falhas} registro(s) não sincronizaram. Abra cada um para ver o motivo.`);
   },
 
@@ -235,56 +237,129 @@ const Sync = {
     this.notify();
   },
 
-  /** Envia a lista de ações deste aparelho só quando ela mudou desde o último envio. */
+  /**
+   * Ações compartilhadas com a equipe, em quatro passos:
+   * 1) envia as alterações feitas aqui em ações de outros aparelhos;
+   * 2) dá data nova às alterações feitas nos formulários (fora da Central);
+   * 3) baixa as ações da equipe e aplica aqui as alterações mais novas;
+   * 4) envia a lista deste aparelho (só quando mudou).
+   * Em cada ação, vale a alteração mais recente, venha de onde vier.
+   */
   async syncAcoesConsolidadas(endpoint) {
+    await this.enviarFilaAcoesEquipe(endpoint);
+
+    for (const a of await coletarAcoes()) {
+      if (a.acaoSync && a.acaoSync !== assinaturaAcompanhamento(a)) {
+        const loc = await localizarAcao(a);
+        if (loc) { loc.holder.acaoAtualizadaEm = Date.now(); await loc.salvar(); }
+      }
+    }
+
+    const lista = await postJson(endpoint, { action: 'listarAcoes' });
+    if (lista && lista.ok && Array.isArray(lista.acoes)) {
+      const locais = new Map((await coletarAcoes()).map((a) => [a.chave, a]));
+      for (const r of lista.acoes) {
+        const local = locais.get(r.chave);
+        if (!local || (Number(r.atualizadoEm) || 0) <= (Number(local.atualizadoEm) || 0)) continue;
+        await atualizarAcaoNaOrigem(local, {
+          responsavel: r.responsavel, prazo: r.prazo, status: r.status, concluidaEm: r.concluidaEm, acomp: r.acomp || {}
+        }, { atualizadoEm: Number(r.atualizadoEm) });
+      }
+      // Alterações locais ainda não enviadas continuam valendo na cópia da equipe.
+      const fila = (await DB.getSetting('filaAcoesEquipe')) || [];
+      const anteriores = await lerAcoesEquipe();
+      const equipe = lista.acoes.map((r) => (fila.includes(r.chave) ? anteriores.find((x) => x.chave === r.chave) || r : r));
+      await DB.setSetting('acoesEquipe', equipe);
+      await DB.setSetting('acoesEquipeEm', Date.now());
+    } else if (lista && lista.error && !/desconhecida/i.test(lista.error)) {
+      throw new Error(lista.error);
+    }
+
     const coletadas = await coletarAcoes();
     // Fotos de evidência de conclusão: vão para a pasta do registro de origem no Drive.
     const linksEvidencia = {};
     for (const a of coletadas) {
-      // Inclui as fotos das conclusões anteriores julgadas não eficazes (histórico).
-      const ac = a.acomp || {};
-      const ids = [...(ac.evidenciaFotos || []), ...(ac.historico || []).flatMap((h) => h.evidenciaFotos || [])];
-      linksEvidencia[a.chave] = [];
-      for (const pid of ids) {
-        const foto = await DB.getPhoto(pid);
-        if (!foto) continue;
-        if (!foto.synced) {
-          const resp = await postJson(endpoint, {
-            action: 'uploadPhoto',
-            inspectionId: a.registroId,
-            photo: { id: foto.id, questionRef: 'evidencia_acao', mimeType: foto.mimeType, fileName: foto.fileName, base64: await blobToBase64(foto.blob), remoteRef: null }
-          });
-          if (!resp || resp.ok !== true) throw new Error((resp && resp.error) || 'Falha ao enviar foto de evidência.');
-          foto.synced = true;
-          foto.remoteUrl = resp.fileUrl || null;
-          await DB.putPhoto(foto);
-        }
-        if (foto.remoteUrl) linksEvidencia[a.chave].push(foto.remoteUrl);
-      }
+      linksEvidencia[a.chave] = await this.enviarFotosEvidencia(endpoint, a.registroId, a.acomp || {});
     }
-    const acoes = coletadas.map((a) => {
-      const ac = a.acomp || {};
-      const etapa = etapaEficacia(a);
-      return {
-        chave: a.chave, origem: a.origem, descricao: a.descricao, contexto: a.contexto,
-        empresa: a.empresa || '', area: a.area || '', responsavel: a.responsavel || '', prazo: a.prazo || '',
-        status: a.status, situacao: situacaoAcao(a).text, concluidaEm: a.concluidaEm || '',
-        criticidade: a.criticidade || '', reincidente: a.reincidente ? 'Sim' : 'Não',
-        evidencia: ac.evidencia || '', fotosEvidencia: linksEvidencia[a.chave].join(' '),
-        verificarEm: ac.verificarEm || '', eficacia: etapa ? etapa.text : '',
-        eficaciaEm: ac.eficaciaEm || '', eficaciaPor: ac.eficaciaPor || '', reaberturas: (ac.historico || []).length
-      };
-    });
+    const acoes = coletadas.map((a) => ({
+      chave: a.chave, origem: a.origem, descricao: a.descricao, contexto: a.contexto,
+      empresa: a.empresa || '', area: a.area || '', criticidade: a.criticidade || '', reincidente: a.reincidente ? 'Sim' : 'Não',
+      ...camposPlanilhaAcao(a, linksEvidencia[a.chave]), atualizadoEm: a.atualizadoEm || 0
+    }));
     // A situação ("Atrasada 3 dias") muda com o tempo: entra no controle uma vez por dia.
     const assinatura = hojeISO() + JSON.stringify(acoes);
-    if ((await DB.getSetting('acoesConsolidadasEnviadas')) === assinatura) return;
-    const usuario = (await DB.getSetting('nomeUsuario')) || '';
-    for (let i = 0; i < acoes.length || i === 0; i += 200) {
-      const resp = await postJson(endpoint, { action: 'upsertAcoesConsolidadas', usuario, acoes: acoes.slice(i, i + 200) });
-      if (!resp || resp.ok !== true) throw new Error((resp && resp.error) || 'Falha ao enviar a lista de ações.');
-      if (!acoes.length) break;
+    if ((await DB.getSetting('acoesConsolidadasEnviadas')) !== assinatura) {
+      const usuario = (await DB.getSetting('nomeUsuario')) || '';
+      for (let i = 0; i < acoes.length || i === 0; i += 200) {
+        const resp = await postJson(endpoint, { action: 'upsertAcoesConsolidadas', usuario, acoes: acoes.slice(i, i + 200) });
+        if (!resp || resp.ok !== true) throw new Error((resp && resp.error) || 'Falha ao enviar a lista de ações.');
+        if (!acoes.length) break;
+      }
+      await DB.setSetting('acoesConsolidadasEnviadas', assinatura);
     }
-    await DB.setSetting('acoesConsolidadasEnviadas', assinatura);
+
+    // Guarda como ficou cada ação nesta sincronização (base do passo 2 da próxima).
+    for (const a of coletadas) {
+      const assin = assinaturaAcompanhamento(a);
+      if (a.acaoSync === assin) continue;
+      const loc = await localizarAcao(a);
+      if (loc) { loc.holder.acaoSync = assin; await loc.salvar(); }
+    }
+  },
+
+  /** Envia as fotos de evidência (atuais e do histórico) e devolve os links do Drive. */
+  async enviarFotosEvidencia(endpoint, registroId, ac) {
+    const ids = [...(ac.evidenciaFotos || []), ...(ac.historico || []).flatMap((h) => h.evidenciaFotos || [])];
+    const links = [...(ac.evidenciaLinks || [])];
+    for (const pid of ids) {
+      const foto = await DB.getPhoto(pid);
+      if (!foto) continue;
+      if (!foto.synced) {
+        const resp = await postJson(endpoint, {
+          action: 'uploadPhoto',
+          inspectionId: registroId,
+          photo: { id: foto.id, questionRef: 'evidencia_acao', mimeType: foto.mimeType, fileName: foto.fileName, base64: await blobToBase64(foto.blob), remoteRef: null }
+        });
+        if (!resp || resp.ok !== true) throw new Error((resp && resp.error) || 'Falha ao enviar foto de evidência.');
+        foto.synced = true;
+        foto.remoteUrl = resp.fileUrl || null;
+        await DB.putPhoto(foto);
+      }
+      if (foto.remoteUrl && !links.includes(foto.remoteUrl)) links.push(foto.remoteUrl);
+    }
+    return links;
+  },
+
+  /** Alterações feitas aqui em ações registradas por outros aparelhos. */
+  async enviarFilaAcoesEquipe(endpoint) {
+    const fila = (await DB.getSetting('filaAcoesEquipe')) || [];
+    if (!fila.length) return;
+    const lista = await lerAcoesEquipe();
+    const restantes = [];
+    let erro = null;
+    for (const chave of fila) {
+      const item = lista.find((x) => x.chave === chave);
+      if (!item) continue;
+      try {
+        const acao = acaoDaEquipe(item);
+        const links = await this.enviarFotosEvidencia(endpoint, acao.registroId, item.acomp || {});
+        item.acomp = { ...(item.acomp || {}), evidenciaLinks: links };
+        const resp = await postJson(endpoint, {
+          action: 'atualizarAcao',
+          acao: { chave, ...camposPlanilhaAcao({ ...acao, acomp: item.acomp }, links), atualizadoEm: item.atualizadoEm }
+        });
+        if (!resp || resp.ok !== true) {
+          const msg = (resp && resp.error) || 'Falha ao enviar a alteração da ação.';
+          throw new Error(/desconhecida/i.test(msg) ? 'O servidor da planilha está desatualizado: cole o Code.gs novo no Apps Script.' : msg);
+        }
+      } catch (e) {
+        restantes.push(chave);
+        erro = e;
+      }
+    }
+    await DB.setSetting('acoesEquipe', lista);
+    await DB.setSetting('filaAcoesEquipe', restantes);
+    if (erro) throw erro;
   },
 
   async syncAcao(acaoId, endpointOverride) {
@@ -1585,9 +1660,30 @@ function blobParaBase64(blob) {
   });
 }
 
+/** Colunas de acompanhamento da ação na planilha (iguais para o dono e para a equipe). */
+function camposPlanilhaAcao(a, links = []) {
+  const ac = a.acomp || {};
+  const etapa = etapaEficacia(a);
+  return {
+    responsavel: a.responsavel || '', prazo: a.prazo || '', status: a.status || 'Pendente',
+    situacao: situacaoAcao(a).text, concluidaEm: a.concluidaEm || '',
+    evidencia: ac.evidencia || '', fotosEvidencia: links.join(' '),
+    verificarEm: ac.verificarEm || '', eficacia: etapa ? etapa.text : '',
+    eficaciaEm: ac.eficaciaEm || '', eficaciaPor: ac.eficaciaPor || '', reaberturas: (ac.historico || []).length,
+    acomp: { ...ac, evidenciaLinks: links.length ? links : (ac.evidenciaLinks || []) }
+  };
+}
+
+let loginRecusado = false;
+
 async function postJson(url, payload) {
   const chave = await DB.getSetting('chaveAcesso');
   if (chave) payload = { ...payload, chave };
+  // Login por usuário e PIN (quando a planilha tem a aba Usuarios preenchida).
+  if (!('usuarioLogin' in payload)) {
+    const usuarioLogin = await DB.getSetting('usuarioLogin');
+    if (usuarioLogin) payload = { ...payload, usuarioLogin, pin: (await DB.getSetting('pinUsuario')) || '' };
+  }
   const resp = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1596,7 +1692,9 @@ async function postJson(url, payload) {
   if (!resp.ok) {
     throw new Error('Erro HTTP ' + resp.status + ' ao contatar o servidor.');
   }
-  return resp.json();
+  const dados = await resp.json();
+  if (dados && dados.loginInvalido) loginRecusado = true;
+  return dados;
 }
 
 window.addEventListener('online', () => {

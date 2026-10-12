@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v42';
+const APP_VERSION = 'v43';
 
 const state = {
   screen: 'home',
@@ -1315,6 +1315,8 @@ async function renderSettings() {
   const chaveAcesso = (await DB.getSetting('chaveAcesso')) || '';
   const topbarBgImage = await DB.getSetting('topbarBgImage');
   const secaoBackup = await htmlSecaoBackup();
+  const usuarioLogin = (await DB.getSetting('usuarioLogin')) || '';
+  const loginAtivo = !!usuarioLogin;
 
   view.innerHTML = `
     <div class="screen-header">
@@ -1330,6 +1332,29 @@ async function renderSettings() {
       </label>
       ${topbarBgImage ? '<button id="btn-remover-topbar-bg" class="btn-link">Remover imagem de fundo</button>' : ''}
       <p id="topbar-bg-resultado" class="hint"></p>
+    </div>
+    <div class="form-section" id="secao-acesso">
+      <h3>Acesso do usuário e perfil</h3>
+      ${loginAtivo ? `
+        <p>Conectado como <strong>${escapeHtml(usuarioLogin)}</strong> · perfil <strong>${escapeHtml(PERFIL_ATUAL)}</strong>.</p>
+        <button type="button" id="btn-sair" class="btn-secondary">Sair deste aparelho</button>
+      ` : `
+        <p class="hint">Quando o gestor cadastra usuários na aba <strong>Usuarios</strong> da planilha, cada pessoa entra com nome e PIN. O perfil vem do cadastro.</p>
+        <label>Usuário (nome como está na planilha)
+          <input type="text" id="input-login" autocomplete="username" value="${escapeHtml((await DB.getSetting('nomeUsuario')) || '')}">
+        </label>
+        <label>PIN
+          <input type="password" id="input-pin" inputmode="numeric" autocomplete="current-password">
+        </label>
+        <button type="button" id="btn-entrar" class="btn-primary">Entrar</button>
+        <label>Perfil deste aparelho (quando a planilha não usa login)
+          <select id="input-perfil">
+            ${Object.keys(PERFIS_USO).map((p) => `<option ${PERFIL_ATUAL === p ? 'selected' : ''}>${p}</option>`).join('')}
+          </select>
+        </label>
+        <p class="hint">Gestor vê todos os módulos. Inspetor: inspeções, permissões, relatos, observações e ações. Responsável: só a Central de ações, com as ações em seu nome.</p>
+      `}
+      <p id="acesso-resultado" class="hint"></p>
     </div>
     <div class="form-section">
       <label>Endereço de sincronização (Google Apps Script Web App)
@@ -1371,8 +1396,55 @@ async function renderSettings() {
     </div>
   `;
 
-  document.getElementById('btn-back-home').addEventListener('click', renderHome);
+  document.getElementById('btn-back-home').addEventListener('click', irParaInicio);
   ligarSecaoBackup();
+
+  const resAcesso = document.getElementById('acesso-resultado');
+  const btnEntrar = document.getElementById('btn-entrar');
+  if (btnEntrar) btnEntrar.addEventListener('click', async () => {
+    const url = (await Sync.getEndpoint()) || document.getElementById('input-endpoint').value.trim();
+    const login = document.getElementById('input-login').value.trim();
+    const pin = document.getElementById('input-pin').value.trim();
+    if (!url) { resAcesso.textContent = 'Configure antes o endereço de sincronização, abaixo.'; return; }
+    if (!login || !pin) { resAcesso.textContent = 'Informe usuário e PIN.'; return; }
+    if (!navigator.onLine) { resAcesso.textContent = 'Para entrar é preciso estar com internet.'; return; }
+    btnEntrar.disabled = true;
+    resAcesso.textContent = 'Conferindo…';
+    try {
+      const resp = await postJson(url, { action: 'login', usuarioLogin: login, pin });
+      if (!resp || !resp.ok) { resAcesso.textContent = (resp && resp.error) || 'Não foi possível entrar.'; btnEntrar.disabled = false; return; }
+      if (!resp.loginAtivo) {
+        resAcesso.textContent = 'A planilha ainda não tem usuários cadastrados: o login não é necessário. Escolha o perfil abaixo.';
+        btnEntrar.disabled = false;
+        return;
+      }
+      await DB.setSetting('usuarioLogin', resp.nome);
+      await DB.setSetting('pinUsuario', pin);
+      await DB.setSetting('nomeUsuario', resp.nome);
+      await DB.setSetting('perfilUso', resp.perfil);
+      state.filtroAcoes = null;
+      await carregarPerfilUso();
+      renderSettings();
+      Sync.syncAll().catch(() => {});
+    } catch (e) {
+      resAcesso.textContent = 'Falha ao conectar: ' + e.message;
+      btnEntrar.disabled = false;
+    }
+  });
+  const btnSair = document.getElementById('btn-sair');
+  if (btnSair) btnSair.addEventListener('click', async () => {
+    if (!confirm('Sair deste aparelho? Os registros guardados aqui continuam no aparelho, mas a sincronização só volta depois de entrar de novo.')) return;
+    await DB.setSetting('usuarioLogin', '');
+    await DB.setSetting('pinUsuario', '');
+    renderSettings();
+  });
+  const selPerfil = document.getElementById('input-perfil');
+  if (selPerfil) selPerfil.addEventListener('change', async () => {
+    await DB.setSetting('perfilUso', selPerfil.value);
+    state.filtroAcoes = null;
+    await carregarPerfilUso();
+    resAcesso.textContent = `Perfil ${selPerfil.value} aplicado neste aparelho.`;
+  });
 
   document.getElementById('input-topbar-bg').addEventListener('change', async (e) => {
     const file = e.target.files[0];
@@ -1512,8 +1584,17 @@ async function init() {
   // checagem, essa chamada atrasada substituía a tela atual sem aviso.
   // Etiqueta QR lida pela câmera do celular: abre direto a ficha do equipamento.
   if (state.screen === 'home' && await tratarLinkEquipamento()) { Sync.syncAll().catch(() => {}); return; }
-  if (state.screen === 'home') await renderHome();
+  await carregarPerfilUso();
+  if (state.screen === 'home') await irParaInicio();
   Sync.syncAll().catch(() => {});
+}
+
+/** Tela inicial conforme o perfil: quem não usa inspeções abre direto na Central de ações. */
+function irParaInicio() {
+  if (abaPermitida('inspecoes')) return renderHome();
+  const tab = document.getElementById('tab-acoes');
+  if (tab) tab.click();
+  else return renderAcoesHome();
 }
 
 init();

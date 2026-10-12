@@ -70,7 +70,8 @@ body {
 }
 
 #module-nav { background: var(--azul-escuro); }
-#grupos-nav { display: grid; grid-template-columns: repeat(5, 1fr); }
+#grupos-nav { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
+#grupos-nav[hidden] { display: none; }
 .grupo-btn {
   background: none; border: none; color: rgba(255,255,255,0.75); font-weight: 700; font-size: 0.85rem;
   padding: 11px 4px; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap;
@@ -721,3 +722,10 @@ main#view {
 .tabela-simples { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .tabela-simples th, .tabela-simples td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--cinza-borda); vertical-align: top; }
 #form-criterios small { display: block; color: #555; font-weight: 400; margin-top: 2px; }
+
+/* ---------- Ações da equipe e perfis ---------- */
+.equipe-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 4px 0 10px; }
+.equipe-barra .hint { margin: 0; flex-basis: 100%; }
+.check-inline { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; }
+.check-inline input { width: auto; margin: 0; }
+.acao-card input:disabled { background: #f1f2ee; color: #555; }
