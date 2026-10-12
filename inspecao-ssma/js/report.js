@@ -222,7 +222,7 @@ function iniciarCanvasAssinaturaRelatorio(canvas) {
   ctx.scale(2, 2);
   ctx.lineWidth = 2;
   ctx.lineCap = 'round';
-  ctx.strokeStyle = '#0f4c81';
+  ctx.strokeStyle = '#1f2a14';
 
   let desenhando = false;
   function posicao(e) {

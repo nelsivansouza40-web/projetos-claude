@@ -1,10 +1,15 @@
 :root {
-  --azul: #0f4c81;
-  --azul-escuro: #0a3a63;
+  /* Cor principal (verde musgo). Os nomes --azul e --azul-escuro foram
+     mantidos porque o app inteiro usa essas variáveis. */
+  --azul: #556b2f;
+  --azul-escuro: #3f5022;
+  --tom-claro: #e6ecdb;   /* fundos de menus, botões secundários e etiquetas */
+  --tom-medio: #d3e0bd;   /* destaques suaves (etapa concluída, seleção) */
+  --tom-texto: #33421c;   /* texto sobre os tons claros */
   --verde: #1e7e34;
   --vermelho: #b02a2a;
   --amarelo: #a86b00;
-  --cinza-bg: #f4f6f8;
+  --cinza-bg: #f2f4ec;
   --cinza-borda: #d7dde3;
   --texto: #1c2530;
 }
@@ -16,7 +21,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   background: var(--cinza-bg);
   color: var(--texto);
-  padding-bottom: 24px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  -webkit-text-size-adjust: 100%;
 }
 
 #topbar {
@@ -25,6 +31,9 @@ body {
   background-position: center;
   color: #fff;
   padding: 12px 16px;
+  padding-top: calc(12px + env(safe-area-inset-top));
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -69,7 +78,7 @@ body {
 @media (max-width: 380px) { .grupo-btn { font-size: 0.74rem; } }
 .grupo-btn.active { color: #fff; border-bottom-color: #fff; background: rgba(255,255,255,0.08); }
 #subnav {
-  display: flex; background: #e7edf3; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  display: flex; background: var(--tom-claro); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 #subnav[hidden] { display: none; }
 #subnav::-webkit-scrollbar { display: none; }
@@ -143,7 +152,7 @@ main#view {
 }
 .btn-primary { background: var(--azul); color: #fff; }
 .btn-primary:hover { background: var(--azul-escuro); }
-.btn-secondary { background: #e7edf3; color: var(--azul-escuro); margin: 10px 0; }
+.btn-secondary { background: var(--tom-claro); color: var(--azul-escuro); margin: 10px 0; }
 .btn-link { background: none; color: var(--azul); padding: 6px 4px; }
 .btn-danger { background: #fff; color: var(--vermelho); border: 1px solid var(--vermelho); }
 .btn-pequeno { padding: 6px 12px; font-size: 0.8rem; margin: 0; }
@@ -170,9 +179,9 @@ main#view {
   border-radius: 999px;
   white-space: nowrap;
 }
-.badge-rascunho { background: #e7edf3; color: #33475b; }
+.badge-rascunho { background: var(--tom-claro); color: #33475b; }
 .badge-pendente { background: #fff3cd; color: #664d03; }
-.badge-sync { background: #cfe2ff; color: #084298; }
+.badge-sync { background: var(--tom-medio); color: var(--tom-texto); }
 .badge-ok { background: #d1e7dd; color: #0a3622; }
 .badge-erro { background: #f8d7da; color: #58151c; }
 .badge-alto { background: #ffe0b2; color: #7a4100; }
@@ -206,12 +215,12 @@ main#view {
 .steps-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 14px; }
 .step-dot {
   width: 28px; height: 28px; border-radius: 50%;
-  background: #e7edf3; color: #6b7280;
+  background: var(--tom-claro); color: #6b7280;
   display: flex; align-items: center; justify-content: center;
   font-size: 0.8rem; font-weight: 700;
 }
 .step-dot.active { background: var(--azul); color: #fff; }
-.step-dot.done { background: #cfe2ff; color: var(--azul-escuro); }
+.step-dot.done { background: var(--tom-medio); color: var(--azul-escuro); }
 
 .checklist { display: flex; flex-direction: column; gap: 12px; }
 .checklist-card {
@@ -233,7 +242,7 @@ main#view {
 .radio-pill input { margin: 0; }
 .radio-ok:has(input:checked) { background: #d1e7dd; border-color: var(--verde); }
 .radio-nc:has(input:checked) { background: #f8d7da; border-color: var(--vermelho); }
-.radio-na:has(input:checked) { background: #e7edf3; border-color: #6b7280; }
+.radio-na:has(input:checked) { background: var(--tom-claro); border-color: #6b7280; }
 .radio-parcial:has(input:checked) { background: #fff3cd; border-color: var(--amarelo); }
 
 .tipos-trabalho-grid { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -246,7 +255,7 @@ main#view {
   cursor: pointer;
 }
 .checkbox-pill input { margin: 0; }
-.checkbox-pill:has(input:checked) { background: #cfe2ff; border-color: var(--azul); }
+.checkbox-pill:has(input:checked) { background: var(--tom-medio); border-color: var(--azul); }
 
 .leitura-card {
   background: #f9fafb; border: 1px solid var(--cinza-borda); border-radius: 10px; padding: 10px;
@@ -279,7 +288,7 @@ main#view {
 
 .file-label {
   display: inline-flex; align-items: center; justify-content: center;
-  background: #e7edf3; color: var(--azul-escuro);
+  background: var(--tom-claro); color: var(--azul-escuro);
   border-radius: 8px; padding: 8px 12px; font-size: 0.8rem;
   cursor: pointer; width: fit-content;
 }
@@ -316,7 +325,7 @@ main#view {
 .diag-categoria-header h3 { margin: 0; font-size: 1rem; color: var(--azul-escuro); }
 .diag-score-mini {
   font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px;
-  background: #e7edf3; color: var(--azul-escuro); white-space: nowrap;
+  background: var(--tom-claro); color: var(--azul-escuro); white-space: nowrap;
 }
 .resumo-categorias { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem; margin-top: 8px; }
 
@@ -448,6 +457,7 @@ main#view {
 .rep-canvas-assinatura {
   display: block; width: 100%; height: 110px; border: 1px dashed var(--cinza-borda);
   border-radius: 6px; background: #fff; touch-action: none; cursor: crosshair;
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
 }
 
 .rep-table-presenca .rep-td-assinatura { width: 160px; }
@@ -510,7 +520,7 @@ main#view {
   padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;
 }
 .acao-topo { display: flex; flex-wrap: wrap; gap: 6px; }
-.badge-origem { background: #e7edf3; color: var(--azul-escuro); }
+.badge-origem { background: var(--tom-claro); color: var(--azul-escuro); }
 .acao-card .btn-abrir-origem { align-self: flex-start; padding: 0; }
 .acao-card .participante-linha { flex-wrap: wrap; }
 
@@ -520,7 +530,7 @@ main#view {
 .painel-barras { display: flex; flex-direction: column; gap: 6px; }
 .painel-barra-linha { display: grid; grid-template-columns: minmax(90px, 40%) 1fr 44px; align-items: center; gap: 8px; font-size: 0.8rem; }
 .painel-barra-rotulo { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.painel-barra-trilho { background: #eef1f4; border-radius: 4px; height: 14px; overflow: hidden; }
+.painel-barra-trilho { background: #e9ece2; border-radius: 4px; height: 14px; overflow: hidden; }
 .painel-barra { display: block; height: 100%; border-radius: 4px; }
 .painel-barra-valor { text-align: right; font-weight: 700; }
 .painel-colunas { display: flex; align-items: flex-end; gap: 8px; height: 150px; padding-top: 16px; }
@@ -608,3 +618,38 @@ main#view {
 .rep-inventario-pgr th:first-child, .rep-inventario-pgr td:first-child { width: 2.2em; }
 .rep-inventario-pgr td, .rep-inventario-pgr th { vertical-align: top; }
 .rep-matriz-pgr td, .rep-matriz-pgr th { font-size: 0.75rem; }
+
+/* ---------- iPhone (iOS) e Android ---------- */
+/* Em telas de toque, campos com 16px: abaixo disso o iPhone dá zoom ao tocar. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea { font-size: 16px; }
+}
+.marcacao-area canvas { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.cartao-instalar { background: #eef2e4; border: 1px solid var(--azul); border-radius: 10px; padding: 12px 14px; margin: 0 0 12px; }
+.cartao-instalar p { margin: 4px 0 6px; font-size: 0.88rem; color: #33475b; }
+.cartao-instalar ol { margin: 4px 0 0; padding-left: 20px; font-size: 0.88rem; }
+.cartao-instalar .btn-primary { margin-top: 4px; }
+.dica-pdf-ios { margin: 8px 0; }
+.aviso-instalar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); background: rgba(10, 20, 30, 0.35); }
+.aviso-instalar-caixa { max-width: 520px; margin: 0 auto; background: #fff; border-radius: 12px; border: 1px solid var(--azul); padding: 14px 16px; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+.aviso-instalar-caixa p { margin: 6px 0; font-size: 0.9rem; color: #33475b; }
+.aviso-instalar-caixa ol { margin: 4px 0 8px; padding-left: 20px; font-size: 0.9rem; }
+.aviso-instalar-caixa .btn-primary { width: 100%; margin: 6px 0; }
+.aviso-instalar-caixa .btn-link { display: block; margin: 4px auto 0; }
+@media print { .aviso-instalar { display: none !important; } }
+
+/* ---------- Aparência (botão Aa) ---------- */
+.icon-btn-texto { font-weight: 800; font-size: 0.95rem; }
+.aparencia-fundo { position: fixed; inset: 0; z-index: 70; background: rgba(10, 20, 30, 0.45); display: flex; align-items: flex-end; justify-content: center; padding: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+@media (min-width: 700px) { .aparencia-fundo { align-items: center; } }
+.aparencia-caixa { background: #fff; color: var(--texto); border-radius: 12px; width: min(560px, 100%); max-height: 85vh; overflow-y: auto; padding: 14px 16px; box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
+.aparencia-cab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 1.05rem; }
+.aparencia-grupo { margin: 12px 0; }
+.aparencia-titulo { font-size: 0.85rem; font-weight: 700; color: #33475b; margin-bottom: 6px; }
+.aparencia-opcoes { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.aparencia-opcao { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 6px; border: 2px solid var(--cinza-borda); border-radius: 10px; background: #fff; color: var(--texto); font-size: 0.8rem; cursor: pointer; min-height: 72px; }
+.aparencia-opcao.ativa { border-color: var(--azul); box-shadow: 0 0 0 2px rgba(0,0,0,0.05); font-weight: 700; }
+.aparencia-amostra { display: block; width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
+.aparencia-amostra-texto { font-style: normal; font-weight: 800; color: var(--azul); line-height: 34px; }
+.aparencia-caixa .btn-secondary { width: 100%; margin-top: 6px; }
+@media print { .aparencia-fundo { display: none !important; } }

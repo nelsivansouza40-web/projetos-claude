@@ -311,6 +311,7 @@ async function renderHome() {
       <button id="btn-new-insp" class="btn-primary">+ Nova inspeção</button>
     </div>
     ${lembreteBackup}
+    ${cartaoInstalacao()}
     <div class="atalhos-inspecao">
       <button type="button" id="btn-programacao" class="btn-secondary">Programação${progAlerta.atrasadas ? ` <span class="badge badge-erro">${progAlerta.atrasadas} atrasada(s)</span>` : progAlerta.embreve ? ` <span class="badge badge-pendente">${progAlerta.embreve} vencendo</span>` : ''}</button>
       <button type="button" id="btn-equipamentos" class="btn-secondary">Equipamentos e QR</button>
@@ -320,6 +321,7 @@ async function renderHome() {
     <div class="chips-filtro">${chips}</div>
     <ul class="insp-list">${itemsHtml}</ul>
   `;
+  ligarCartaoInstalacao();
   const btnIrBackup = document.getElementById('btn-ir-backup');
   if (btnIrBackup) btnIrBackup.addEventListener('click', renderSettings);
   document.getElementById('btn-programacao').addEventListener('click', renderProgramacaoHome);
@@ -1264,8 +1266,11 @@ function redimensionarImagemDataUrl(file, maxLargura = 960, qualidade = 0.75) {
 async function aplicarImagemFundoTopbar() {
   const dataUrl = await DB.getSetting('topbarBgImage');
   const topbar = document.getElementById('topbar');
+  // A película sobre a imagem acompanha a cor principal escolhida em "Aparência".
+  const hex = (getComputedStyle(document.documentElement).getPropertyValue('--azul').trim() || '#556b2f').replace('#', '');
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.substr(i, 2), 16));
   topbar.style.backgroundImage = dataUrl
-    ? `linear-gradient(rgba(15,76,129,0.82), rgba(15,76,129,0.82)), url(${dataUrl})`
+    ? `linear-gradient(rgba(${r},${g},${b},0.82), rgba(${r},${g},${b},0.82)), url(${dataUrl})`
     : 'none';
 }
 
