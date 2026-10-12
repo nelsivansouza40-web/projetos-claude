@@ -3,7 +3,7 @@
  * internet, servindo os arquivos a partir do cache local do dispositivo.
  * Dados de inspeções e fotos ficam no IndexedDB (não neste cache).
  */
-const CACHE_VERSION = 'ssma-v46';
+const CACHE_VERSION = 'ssma-v47';
 const APP_SHELL = [
   './',
   './index.html',
@@ -44,12 +44,14 @@ const APP_SHELL = [
   './js/observacoes.js',
   './js/backup.js',
   './js/menu.js',
+  './js/plataforma.js',
   './js/app.js',
   './js/compartilhar.js',
   './js/vendor/jspdf.umd.min.js',
   './js/vendor/html2canvas.min.js',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', (event) => {

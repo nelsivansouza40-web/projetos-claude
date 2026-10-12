@@ -311,6 +311,7 @@ async function renderHome() {
       <button id="btn-new-insp" class="btn-primary">+ Nova inspeção</button>
     </div>
     ${lembreteBackup}
+    ${cartaoInstalacao()}
     <div class="atalhos-inspecao">
       <button type="button" id="btn-programacao" class="btn-secondary">Programação${progAlerta.atrasadas ? ` <span class="badge badge-erro">${progAlerta.atrasadas} atrasada(s)</span>` : progAlerta.embreve ? ` <span class="badge badge-pendente">${progAlerta.embreve} vencendo</span>` : ''}</button>
       <button type="button" id="btn-equipamentos" class="btn-secondary">Equipamentos e QR</button>
@@ -320,6 +321,7 @@ async function renderHome() {
     <div class="chips-filtro">${chips}</div>
     <ul class="insp-list">${itemsHtml}</ul>
   `;
+  ligarCartaoInstalacao();
   const btnIrBackup = document.getElementById('btn-ir-backup');
   if (btnIrBackup) btnIrBackup.addEventListener('click', renderSettings);
   document.getElementById('btn-programacao').addEventListener('click', renderProgramacaoHome);
