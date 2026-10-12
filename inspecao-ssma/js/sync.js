@@ -237,11 +237,44 @@ const Sync = {
 
   /** Envia a lista de ações deste aparelho só quando ela mudou desde o último envio. */
   async syncAcoesConsolidadas(endpoint) {
-    const acoes = (await coletarAcoes()).map((a) => ({
-      chave: a.chave, origem: a.origem, descricao: a.descricao, contexto: a.contexto,
-      empresa: a.empresa || '', area: a.area || '', responsavel: a.responsavel || '', prazo: a.prazo || '',
-      status: a.status, situacao: situacaoAcao(a).text, concluidaEm: a.concluidaEm || ''
-    }));
+    const coletadas = await coletarAcoes();
+    // Fotos de evidência de conclusão: vão para a pasta do registro de origem no Drive.
+    const linksEvidencia = {};
+    for (const a of coletadas) {
+      // Inclui as fotos das conclusões anteriores julgadas não eficazes (histórico).
+      const ac = a.acomp || {};
+      const ids = [...(ac.evidenciaFotos || []), ...(ac.historico || []).flatMap((h) => h.evidenciaFotos || [])];
+      linksEvidencia[a.chave] = [];
+      for (const pid of ids) {
+        const foto = await DB.getPhoto(pid);
+        if (!foto) continue;
+        if (!foto.synced) {
+          const resp = await postJson(endpoint, {
+            action: 'uploadPhoto',
+            inspectionId: a.registroId,
+            photo: { id: foto.id, questionRef: 'evidencia_acao', mimeType: foto.mimeType, fileName: foto.fileName, base64: await blobToBase64(foto.blob), remoteRef: null }
+          });
+          if (!resp || resp.ok !== true) throw new Error((resp && resp.error) || 'Falha ao enviar foto de evidência.');
+          foto.synced = true;
+          foto.remoteUrl = resp.fileUrl || null;
+          await DB.putPhoto(foto);
+        }
+        if (foto.remoteUrl) linksEvidencia[a.chave].push(foto.remoteUrl);
+      }
+    }
+    const acoes = coletadas.map((a) => {
+      const ac = a.acomp || {};
+      const etapa = etapaEficacia(a);
+      return {
+        chave: a.chave, origem: a.origem, descricao: a.descricao, contexto: a.contexto,
+        empresa: a.empresa || '', area: a.area || '', responsavel: a.responsavel || '', prazo: a.prazo || '',
+        status: a.status, situacao: situacaoAcao(a).text, concluidaEm: a.concluidaEm || '',
+        criticidade: a.criticidade || '', reincidente: a.reincidente ? 'Sim' : 'Não',
+        evidencia: ac.evidencia || '', fotosEvidencia: linksEvidencia[a.chave].join(' '),
+        verificarEm: ac.verificarEm || '', eficacia: etapa ? etapa.text : '',
+        eficaciaEm: ac.eficaciaEm || '', eficaciaPor: ac.eficaciaPor || '', reaberturas: (ac.historico || []).length
+      };
+    });
     // A situação ("Atrasada 3 dias") muda com o tempo: entra no controle uma vez por dia.
     const assinatura = hojeISO() + JSON.stringify(acoes);
     if ((await DB.getSetting('acoesConsolidadasEnviadas')) === assinatura) return;
@@ -298,7 +331,10 @@ const Sync = {
       if (!insp.metaSynced) {
         const payload = {
           action: 'upsertInspection',
-          inspection: { ...buildInspectionMetaPayload(insp), usuario: (await DB.getSetting('nomeUsuario')) || '' }
+          inspection: {
+            ...buildInspectionMetaPayload(insp, analisarReincidencias(await DB.getAllInspections()).porItem),
+            usuario: (await DB.getSetting('nomeUsuario')) || ''
+          }
         };
         const resp = await postJson(endpoint, payload);
         if (!resp || resp.ok !== true) {
@@ -1473,7 +1509,9 @@ function buildDDSMetaPayload(dds) {
   };
 }
 
-function buildInspectionMetaPayload(insp) {
+function buildInspectionMetaPayload(insp, reincidencia = new Map()) {
+  const ncs = insp.data.checklist.filter((i) => i.resposta === 'Não Conforme');
+  const ehReincidente = (item) => !!(reincidencia.get(`${insp.id}:${item.id}`) || {}).reincidente;
   return {
     id: insp.id,
     createdAt: insp.createdAt,
@@ -1485,7 +1523,9 @@ function buildInspectionMetaPayload(insp) {
       const nc = insp.data.checklist.filter((i) => i.resposta === 'Não Conforme').length;
       return c + nc ? Math.round((c / (c + nc)) * 100) : '';
     })(),
-    qtdNC: insp.data.checklist.filter((i) => i.resposta === 'Não Conforme').length,
+    qtdNC: ncs.length,
+    qtdNCAltasCriticas: ncs.filter((i) => ehCriticidadeAlta(i.criticidade)).length,
+    qtdNCReincidentes: ncs.filter(ehReincidente).length,
     duracaoMin: insp.data.concluidoEm ? Math.max(1, Math.round((insp.data.concluidoEm - insp.createdAt) / 60000)) : '',
     equipamento: insp.data.equipamento ? `${insp.data.equipamento.codigo} — ${insp.data.equipamento.nome}` : '',
     tipoInspecao: insp.data.tipoInspecao,
@@ -1498,6 +1538,8 @@ function buildInspectionMetaPayload(insp) {
       responsavelAcao: item.responsavelAcao || '',
       prazoAcao: item.prazoAcao || '',
       statusAcao: item.statusAcao || '',
+      criticidade: item.resposta === 'Não Conforme' ? (item.criticidade || '') : '',
+      reincidente: item.resposta === 'Não Conforme' && ehReincidente(item),
       personalizado: !!item.personalizado
     })),
     fechamento: insp.data.fechamento

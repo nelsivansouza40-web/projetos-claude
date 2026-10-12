@@ -7,10 +7,16 @@ dados do app (hoje, **INSPEÇÕES SSMA_2026**):
 2. Montar o painel da equipe no Looker Studio.
 3. Migrar planilha e script para a conta corporativa.
 
-Antes de tudo, a planilha precisa estar com o **Code.gs versão 2026-10-12 ou
+Antes de tudo, a planilha precisa estar com o **Code.gs versão 2026-10-12b ou
 mais nova**. Para conferir, abra no navegador o endereço do app da Web (o que
 termina em `/exec`): a página deve mostrar *"Servidor do Inspeções SSMA
-funcionando. Versão 2026-10-12."*
+funcionando. Versão 2026-10-12b."*
+
+Para atualizar: copie o `server/Code.gs` deste repositório, cole no Apps Script
+substituindo o conteúdo e use **Implantar → Gerenciar implantações → editar →
+Nova versão**. O endereço `/exec` continua o mesmo. Enquanto o servidor não for
+atualizado, o app continua funcionando; só as colunas novas não chegam à
+planilha.
 
 ---
 
@@ -48,7 +54,8 @@ a planilha e mostra a equipe inteira, sempre atualizado.
 | Aba | Uma linha por | Colunas úteis |
 |---|---|---|
 | `Inspecoes` | inspeção | Data, Empresa, Área, Inspetor, Tipo de Inspeção, Disciplina, Conformidade (%), Qtd. NC, Duração (min), Registrado por |
-| `Acoes_Consolidadas` | ação (de todos os módulos e de todos os celulares) | Origem, Responsável, Prazo, Status, Situação, Concluída em, Concluída no prazo, Registrado por |
+| `Acoes_Consolidadas` | ação (de todos os módulos e de todos os celulares) | Origem, Área, Responsável, Prazo, Status, Situação, Concluída em, Concluída no prazo, Registrado por, Criticidade, Reincidente, Evidência, Fotos da evidência, Verificar eficácia em, Eficácia, Verificada em, Reaberturas (não eficaz) |
+| `Itens_Checklist` | item de checklist respondido | Questão, Resposta, Criticidade, Reincidente, Data, Área, Empresa, Tipo de Inspeção |
 | `Relatos` | relato | Tipo, Data, Área, Potencial, Status da Ação |
 | `Observacoes_Comportamentais` | observação | Data, Área, Observador, Seguros, De Risco, % Seguro |
 
@@ -62,7 +69,7 @@ registro.
    **Inspecoes** → deixe marcado "Usar a primeira linha como cabeçalho" →
    **Adicionar**.
 3. Menu **Recurso → Gerenciar fontes de dados adicionadas → Adicionar**. Repita
-   para `Acoes_Consolidadas`, `Relatos` e `Observacoes_Comportamentais`.
+   para `Acoes_Consolidadas`, `Itens_Checklist`, `Relatos` e `Observacoes_Comportamentais`.
 4. Na fonte `Inspecoes`, confira se **Data** está como tipo *Data*. Se
    estiver como texto, clique no tipo e mude para *Data (AAAA-MM-DD)*.
 
@@ -80,6 +87,11 @@ registro.
 | Ações atrasadas por responsável | Acoes_Consolidadas | Tabela · Dimensões: Responsável, Ação, Prazo · Filtro: Situação contém "Atrasada" |
 | Relatos por tipo | Relatos | Pizza · Dimensão: Tipo |
 | Comportamento seguro | Observacoes_Comportamentais | Cartão: Soma de Seguros ÷ (Soma de Seguros + Soma de De Risco) |
+| Mapa de calor área × tipo | Itens_Checklist | Tabela dinâmica · Linha: Área · Coluna: Tipo de Inspeção · Métrica: Contagem · Filtro: Resposta = Não Conforme · Estilo: mapa de calor |
+| Desvios altos e críticos | Itens_Checklist | Cartão · Filtro: Resposta = Não Conforme e Criticidade em (Alta, Crítica) |
+| Reincidências | Itens_Checklist | Tabela · Dimensões: Área, Questão · Métrica: Contagem · Filtro: Reincidente = Sim |
+| Ações aguardando verificação | Acoes_Consolidadas | Tabela · Filtro: Eficácia contém "Verificar" |
+| Eficácia das ações | Acoes_Consolidadas | Cartão: ações com Eficácia começando por "Eficaz" ÷ (essas + Soma de Reaberturas) |
 
 **Campo calculado "% no prazo"** (fonte `Acoes_Consolidadas` → Adicionar um
 campo):

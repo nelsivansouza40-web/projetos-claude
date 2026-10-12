@@ -5,7 +5,7 @@
  * automaticamente na Central de ações. */
 
 const TIPOS_RELATO = ['Quase acidente', 'Condição insegura', 'Comportamento de risco', 'Sugestão de melhoria'];
-const POTENCIAIS_RELATO = ['Baixo', 'Médio', 'Alto'];
+const POTENCIAIS_RELATO = ['Baixo', 'Médio', 'Alto', 'Crítico'];
 const STATUS_ACAO = ['Pendente', 'Em andamento', 'Concluída'];
 
 function novoRelatoVazio() {
@@ -52,7 +52,8 @@ async function salvarRascunhoRelato(r) {
 }
 
 function classePotencialRelato(p) {
-  if (p === 'Alto') return 'badge-erro';
+  if (p === 'Crítico') return 'badge-erro';
+  if (p === 'Alto') return 'badge-alto';
   if (p === 'Médio') return 'badge-pendente';
   return 'badge-ok';
 }
@@ -181,7 +182,7 @@ async function renderRelatoForm() {
     <label class="radio-pill radio-tipo-relato"><input type="radio" name="tipo" value="${escapeHtml(t)}" ${d.tipo === t ? 'checked' : ''}> ${escapeHtml(t)}</label>
   `).join('');
   const potHtml = POTENCIAIS_RELATO.map((p) => `
-    <label class="radio-pill ${p === 'Alto' ? 'radio-nc' : p === 'Médio' ? 'radio-parcial' : 'radio-ok'}"><input type="radio" name="potencial" value="${p}" ${d.potencial === p ? 'checked' : ''}> ${p}</label>
+    <label class="radio-pill ${p === 'Crítico' ? 'radio-nc' : p === 'Alto' ? 'radio-alto' : p === 'Médio' ? 'radio-parcial' : 'radio-ok'}"><input type="radio" name="potencial" value="${p}" ${d.potencial === p ? 'checked' : ''}> ${p}</label>
   `).join('');
 
   view.innerHTML = `

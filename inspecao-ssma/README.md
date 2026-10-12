@@ -56,6 +56,20 @@ configurado.
   descrição da não conformidade principal, medidas de controle, evidência
   fotográfica complementar e necessidade de reinspeção.
 
+## Inteligência SSMA (Gestão → Inteligência)
+
+- **Criticidade** (Baixa, Média, Alta, Crítica) em cada não conformidade,
+  nos relatos (potencial) e nas observações comportamentais.
+- **Reincidência**: o mesmo item não conforme na mesma área em até 90 dias.
+  O inspetor é avisado no próprio checklist.
+- **Evidência e eficácia**: concluir uma ação na Central de ações exige
+  descrever o que foi feito (com foto opcional) e marcar a data de
+  verificação. Na verificação, "Eficaz" encerra; "Não eficaz" reabre a ação
+  com novo prazo e guarda o histórico.
+- **Visão por área**: pontos de atenção automáticos, mapa de calor
+  área × tipo de inspeção, tendência de 30 dias e o Índice de Maturidade
+  Preventiva (IMP), com pesos e meta ajustáveis na própria tela.
+
 Os itens de checklist de "Inspeção Geral de SST" seguem o modelo de
 referência de 25 perguntas. Os itens das demais modalidades (Trabalho em
 Altura, Espaço Confinado, Eletricidade, etc.) são um ponto de partida

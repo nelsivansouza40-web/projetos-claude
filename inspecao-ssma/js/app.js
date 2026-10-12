@@ -196,6 +196,7 @@ async function updateSyncBar() {
       if (state.screen === 'relatos-detail') renderRelatoDetail(state.relatoId);
       if (state.screen === 'acoes-home') renderAcoesHome();
       if (state.screen === 'painel') renderPainel();
+      if (state.screen === 'inteligencia') renderInteligencia();
       if (state.screen === 'observacoes-home') renderObservacoesHome();
     });
   }
@@ -247,7 +248,7 @@ function setActiveTab(tab) {
   if (tabEPI) tabEPI.classList.toggle('active', tab === 'epi');
   if (tabVeiculo) tabVeiculo.classList.toggle('active', tab === 'veiculo');
   if (tabPGR) tabPGR.classList.toggle('active', tab === 'pgr');
-  ['painel', 'acoes', 'relatos', 'observacoes'].forEach((t) => {
+  ['painel', 'inteligencia', 'acoes', 'relatos', 'observacoes'].forEach((t) => {
     const el = document.getElementById(`tab-${t}`);
     if (el) el.classList.toggle('active', tab === t);
   });
@@ -602,7 +603,13 @@ function renderStepChecklist(content, insp) {
   `;
 
   const container = document.getElementById('checklist-container');
+  historicoNCAtual = new Map();
   renderChecklistItems(container, insp);
+  // Itens já não conformes nesta área nos últimos 90 dias: aviso de reincidência.
+  historicoNCDaArea(insp).then((mapa) => {
+    historicoNCAtual = mapa;
+    if (mapa.size && document.getElementById('checklist-container') === container) renderChecklistItems(container, insp);
+  });
 
   document.getElementById('btn-salvar-modelo').addEventListener('click', () => salvarChecklistComoModelo(insp));
   document.getElementById('btn-add-item').addEventListener('click', async () => {
@@ -628,6 +635,8 @@ function renderStepChecklist(content, insp) {
   });
 }
 
+let historicoNCAtual = new Map();
+
 function renderChecklistItems(container, insp) {
   if (insp.data.checklist.length === 0) {
     container.innerHTML = '<p class="empty-state">Nenhum item cadastrado para este tipo de inspeção. Adicione itens personalizados abaixo.</p>';
@@ -639,11 +648,19 @@ function renderChecklistItems(container, insp) {
     const card = container.querySelector(`[data-idx="${idx}"]`);
     if (!card) return;
 
-    card.querySelectorAll('input[type=radio]').forEach((radio) => {
+    card.querySelectorAll(`input[name="resp-${idx}"]`).forEach((radio) => {
       radio.addEventListener('change', async () => {
         item.resposta = radio.value;
+        if (item.resposta !== 'Não Conforme') item.criticidade = '';
         await salvarRascunho(insp);
         renderChecklistItems(container, insp);
+      });
+    });
+
+    card.querySelectorAll(`input[name="crit-${idx}"]`).forEach((radio) => {
+      radio.addEventListener('change', async () => {
+        item.criticidade = radio.value;
+        await salvarRascunho(insp);
       });
     });
 
@@ -700,6 +717,13 @@ function renderChecklistItem(item, idx) {
   `).join('');
 
   const destacar = item.resposta === 'Não Conforme';
+  const ultimaNC = destacar ? historicoNCAtual.get(normalizarTexto(item.texto)) : '';
+  const blocoNC = destacar ? `
+      <div class="nc-criticidade">
+        <span class="nc-criticidade-titulo">Criticidade do desvio *</span>
+        ${htmlEscolhaCriticidade(`crit-${idx}`, item.criticidade || '')}
+        ${ultimaNC ? `<p class="alerta-reincidencia">Reincidente: este item já foi não conforme nesta área em ${formatarDataBR(ultimaNC)}.</p>` : ''}
+      </div>` : '';
 
   return `
     <div class="checklist-card ${destacar ? 'destaque-nc' : ''}" data-idx="${idx}">
@@ -708,6 +732,7 @@ function renderChecklistItem(item, idx) {
         ${item.personalizado ? '<button type="button" class="btn-remover-item" title="Remover item">✕</button>' : ''}
       </div>
       <div class="radio-group">${radiosHtml}</div>
+      ${blocoNC}
       <div class="checklist-details">
         <div class="foto-botoes">
           <label class="file-label">📷 Tirar foto
@@ -899,6 +924,7 @@ async function renderStepRevisao(content, insp) {
   const nc = insp.data.checklist.filter((i) => i.resposta === 'Não Conforme').length;
   const conforme = insp.data.checklist.filter((i) => i.resposta === 'Conforme').length;
   const naoRespondidos = insp.data.checklist.filter((i) => !i.resposta).length;
+  const semCriticidade = insp.data.checklist.filter((i) => i.resposta === 'Não Conforme' && !i.criticidade).length;
 
   content.innerHTML = `
     <div class="resumo">
@@ -911,6 +937,7 @@ async function renderStepRevisao(content, insp) {
         <li class="ok">Conformes: ${conforme}</li>
         <li class="nc">Não conformes: ${nc}</li>
         ${naoRespondidos ? `<li class="alerta">${naoRespondidos} item(ns) sem resposta</li>` : ''}
+        ${semCriticidade ? `<li class="alerta">${semCriticidade} não conformidade(s) sem criticidade</li>` : ''}
       </ul>
       <p>Classificação geral: <strong>${escapeHtml(insp.data.fechamento.classificacaoGeral || '—')}</strong></p>
       <p>Necessita reinspeção: <strong>${escapeHtml(insp.data.fechamento.necessitaReinspecao || '—')}</strong></p>
@@ -929,6 +956,9 @@ async function renderStepRevisao(content, insp) {
 
   document.getElementById('btn-concluir').addEventListener('click', async () => {
     if (naoRespondidos > 0 && !confirm(`Existem ${naoRespondidos} item(ns) sem resposta. Deseja concluir mesmo assim?`)) {
+      return;
+    }
+    if (semCriticidade > 0 && !confirm(`Existem ${semCriticidade} não conformidade(s) sem criticidade. Sem ela, o desvio não entra na priorização nem no mapa de calor. Deseja concluir mesmo assim?`)) {
       return;
     }
     await aplicarLocalizacaoPendente(insp);
@@ -964,6 +994,7 @@ async function renderDetail(id) {
   const insp = await DB.getInspection(id);
   const photos = await DB.getPhotosByInspection(id);
   const s = statusLabel(insp);
+  const reincidencia = analisarReincidencias(await DB.getAllInspections()).porItem;
 
   const checklistHtml = insp.data.checklist.map((item, idx) => {
     const itemPhotos = photos.filter((p) => p.questionRef === `item:${item.id}`);
@@ -971,6 +1002,8 @@ async function renderDetail(id) {
       <div class="detail-item">
         <div><strong>Q${String(idx + 1).padStart(2, '0')}.</strong> ${escapeHtml(item.texto)}</div>
         <div class="detail-resposta resposta-${item.resposta === 'Conforme' ? 'ok' : item.resposta === 'Não Conforme' ? 'nc' : 'na'}">${escapeHtml(item.resposta || 'Sem resposta')}</div>
+        ${item.resposta === 'Não Conforme' && item.criticidade ? `<span class="badge ${classeCriticidade(item.criticidade)}">Criticidade ${escapeHtml(item.criticidade)}</span>` : ''}
+        ${item.resposta === 'Não Conforme' && (reincidencia.get(`${insp.id}:${item.id}`) || {}).reincidente ? '<span class="badge badge-erro">Reincidente</span>' : ''}
         ${item.observacao ? `<div class="detail-obs">Obs.: ${escapeHtml(item.observacao)}</div>` : ''}
         ${item.medida ? `<div class="detail-obs">Medida: ${escapeHtml(item.medida)}</div>` : ''}
         ${itemPhotos.length ? `<div class="thumbs">${itemPhotos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
@@ -1432,6 +1465,7 @@ document.getElementById('tab-epi').addEventListener('click', renderEPIHome);
 document.getElementById('tab-veiculo').addEventListener('click', renderVeiculoHome);
 document.getElementById('tab-pgr').addEventListener('click', renderPGRHome);
 document.getElementById('tab-painel').addEventListener('click', renderPainel);
+document.getElementById('tab-inteligencia').addEventListener('click', renderInteligencia);
 document.getElementById('tab-acoes').addEventListener('click', renderAcoesHome);
 document.getElementById('tab-relatos').addEventListener('click', renderRelatosHome);
 document.getElementById('tab-observacoes').addEventListener('click', renderObservacoesHome);

@@ -653,3 +653,71 @@ main#view {
 .aparencia-amostra-texto { font-style: normal; font-weight: 800; color: var(--azul); line-height: 34px; }
 .aparencia-caixa .btn-secondary { width: 100%; margin-top: 6px; }
 @media print { .aparencia-fundo { display: none !important; } }
+
+/* ---------- Inteligência SSMA: criticidade, reincidência, eficácia e IMP ---------- */
+.radio-alto:has(input:checked) { background: #ffe0b2; border-color: #c26a00; }
+.nc-criticidade { margin: 8px 0 4px; padding: 8px 10px; background: #fff; border: 1px dashed var(--vermelho); border-radius: 8px; }
+.nc-criticidade-titulo { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; }
+.criticidade-group { flex-wrap: wrap; }
+.alerta-reincidencia { margin: 8px 0 0; padding: 6px 8px; border-radius: 6px; background: #f8d7da; color: #58151c; font-weight: 700; font-size: 0.85rem; }
+
+.kpi-grid-acoes { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+.acao-topo { display: flex; flex-wrap: wrap; gap: 4px; }
+.acao-evidencia { margin: 6px 0; font-size: 0.85rem; }
+.acao-falha { color: #58151c; }
+.acao-card .btn-verificar-eficacia, .acao-card .btn-registrar-evidencia { margin: 6px 0; }
+
+.dialogo-fundo { position: fixed; inset: 0; z-index: 75; background: rgba(10, 20, 30, 0.45); display: flex; align-items: flex-end; justify-content: center; padding: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+@media (min-width: 700px) { .dialogo-fundo { align-items: center; } }
+.dialogo-caixa { background: #fff; color: var(--texto); border-radius: 12px; width: min(560px, 100%); max-height: 88vh; overflow-y: auto; padding: 14px 16px; box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
+.dialogo-caixa h2 { margin: 0 0 6px; font-size: 1.1rem; }
+@media print { .dialogo-fundo { display: none !important; } }
+
+.secao-titulo { font-size: 1.05rem; margin: 18px 0 8px; }
+.pontos-atencao { list-style: none; margin: 0; padding: 0; }
+.pontos-atencao li { padding: 8px 0; border-bottom: 1px solid var(--cinza-borda); font-size: 0.9rem; line-height: 1.4; }
+.pontos-atencao li:last-child { border-bottom: none; }
+.ponto-marca { display: inline-block; min-width: 84px; margin-right: 8px; padding: 1px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; text-align: center; }
+.ponto-n3 .ponto-marca { background: #f8d7da; color: #58151c; }
+.ponto-n2 .ponto-marca { background: #ffe0b2; color: #7a4100; }
+.ponto-n1 .ponto-marca { background: var(--tom-claro); color: var(--tom-texto); }
+
+.calor-rolagem { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.calor-tabela { border-collapse: separate; border-spacing: 2px; font-size: 0.82rem; min-width: 100%; }
+.calor-tabela th { font-weight: 600; text-align: left; padding: 4px 6px; color: var(--texto); }
+.calor-tabela thead th { vertical-align: bottom; max-width: 90px; font-size: 0.75rem; line-height: 1.2; }
+.calor-tabela tbody th { white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+.calor-tabela td { min-width: 44px; height: 36px; text-align: center; font-weight: 700; border-radius: 4px; cursor: default; }
+.calor-tabela td sup { font-size: 0.65rem; margin-left: 1px; }
+.calor-vazio { background: #f3f4f1; color: #a0a69a; font-weight: 400 !important; }
+.calor-legenda { display: flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 0.75rem; color: #555; }
+.calor-legenda i { display: inline-block; width: 22px; height: 12px; border-radius: 2px; }
+
+.area-topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+.area-topo h3 { margin: 0; }
+.imp-selo { font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: #eceee8; color: #333; }
+.imp-verde.imp-selo, .kpi.imp-verde { background: #d1e7dd; color: #0a3622; }
+.imp-amarelo.imp-selo, .kpi.imp-amarelo { background: #fff3cd; color: #5c3c00; }
+.imp-laranja.imp-selo, .kpi.imp-laranja { background: #ffe0b2; color: #7a4100; }
+.imp-vermelho.imp-selo, .kpi.imp-vermelho { background: #f8d7da; color: #58151c; }
+.kpi.imp-verde { border-left-color: var(--verde); }
+.kpi.imp-amarelo { border-left-color: var(--amarelo); }
+.kpi.imp-laranja { border-left-color: #c26a00; }
+.kpi.imp-vermelho { border-left-color: var(--vermelho); }
+.area-numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 10px 0; }
+.area-numeros div { background: var(--cinza-bg); border-radius: 6px; padding: 6px; text-align: center; }
+.area-numeros dt { font-size: 0.7rem; color: #555; }
+.area-numeros dd { margin: 2px 0 0; font-size: 1.15rem; font-weight: 700; }
+.area-numeros dd.num-alerta { color: var(--vermelho); }
+.area-linha { margin: 4px 0; font-size: 0.86rem; }
+.tend { font-weight: 700; }
+.tend-sobe { color: var(--vermelho); }
+.tend-desce { color: var(--verde); }
+.area-detalhe { margin: 6px 0; font-size: 0.85rem; }
+.area-detalhe summary { cursor: pointer; color: var(--azul); }
+.imp-tabela { width: 100%; border-collapse: collapse; margin-top: 6px; }
+.imp-tabela td { padding: 3px 0; border-bottom: 1px solid var(--cinza-borda); }
+.imp-tabela td:last-child { text-align: right; font-weight: 700; }
+.tabela-simples { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.tabela-simples th, .tabela-simples td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--cinza-borda); vertical-align: top; }
+#form-criterios small { display: block; color: #555; font-weight: 400; margin-top: 2px; }
