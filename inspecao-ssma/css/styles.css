@@ -1,10 +1,15 @@
 :root {
-  --azul: #0f4c81;
-  --azul-escuro: #0a3a63;
+  /* Cor principal (verde musgo). Os nomes --azul e --azul-escuro foram
+     mantidos porque o app inteiro usa essas variáveis. */
+  --azul: #556b2f;
+  --azul-escuro: #3f5022;
+  --tom-claro: #e6ecdb;   /* fundos de menus, botões secundários e etiquetas */
+  --tom-medio: #d3e0bd;   /* destaques suaves (etapa concluída, seleção) */
+  --tom-texto: #33421c;   /* texto sobre os tons claros */
   --verde: #1e7e34;
   --vermelho: #b02a2a;
   --amarelo: #a86b00;
-  --cinza-bg: #f4f6f8;
+  --cinza-bg: #f2f4ec;
   --cinza-borda: #d7dde3;
   --texto: #1c2530;
 }
@@ -73,7 +78,7 @@ body {
 @media (max-width: 380px) { .grupo-btn { font-size: 0.74rem; } }
 .grupo-btn.active { color: #fff; border-bottom-color: #fff; background: rgba(255,255,255,0.08); }
 #subnav {
-  display: flex; background: #e7edf3; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  display: flex; background: var(--tom-claro); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 #subnav[hidden] { display: none; }
 #subnav::-webkit-scrollbar { display: none; }
@@ -147,7 +152,7 @@ main#view {
 }
 .btn-primary { background: var(--azul); color: #fff; }
 .btn-primary:hover { background: var(--azul-escuro); }
-.btn-secondary { background: #e7edf3; color: var(--azul-escuro); margin: 10px 0; }
+.btn-secondary { background: var(--tom-claro); color: var(--azul-escuro); margin: 10px 0; }
 .btn-link { background: none; color: var(--azul); padding: 6px 4px; }
 .btn-danger { background: #fff; color: var(--vermelho); border: 1px solid var(--vermelho); }
 .btn-pequeno { padding: 6px 12px; font-size: 0.8rem; margin: 0; }
@@ -174,9 +179,9 @@ main#view {
   border-radius: 999px;
   white-space: nowrap;
 }
-.badge-rascunho { background: #e7edf3; color: #33475b; }
+.badge-rascunho { background: var(--tom-claro); color: #33475b; }
 .badge-pendente { background: #fff3cd; color: #664d03; }
-.badge-sync { background: #cfe2ff; color: #084298; }
+.badge-sync { background: var(--tom-medio); color: var(--tom-texto); }
 .badge-ok { background: #d1e7dd; color: #0a3622; }
 .badge-erro { background: #f8d7da; color: #58151c; }
 .badge-alto { background: #ffe0b2; color: #7a4100; }
@@ -210,12 +215,12 @@ main#view {
 .steps-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 14px; }
 .step-dot {
   width: 28px; height: 28px; border-radius: 50%;
-  background: #e7edf3; color: #6b7280;
+  background: var(--tom-claro); color: #6b7280;
   display: flex; align-items: center; justify-content: center;
   font-size: 0.8rem; font-weight: 700;
 }
 .step-dot.active { background: var(--azul); color: #fff; }
-.step-dot.done { background: #cfe2ff; color: var(--azul-escuro); }
+.step-dot.done { background: var(--tom-medio); color: var(--azul-escuro); }
 
 .checklist { display: flex; flex-direction: column; gap: 12px; }
 .checklist-card {
@@ -237,7 +242,7 @@ main#view {
 .radio-pill input { margin: 0; }
 .radio-ok:has(input:checked) { background: #d1e7dd; border-color: var(--verde); }
 .radio-nc:has(input:checked) { background: #f8d7da; border-color: var(--vermelho); }
-.radio-na:has(input:checked) { background: #e7edf3; border-color: #6b7280; }
+.radio-na:has(input:checked) { background: var(--tom-claro); border-color: #6b7280; }
 .radio-parcial:has(input:checked) { background: #fff3cd; border-color: var(--amarelo); }
 
 .tipos-trabalho-grid { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -250,7 +255,7 @@ main#view {
   cursor: pointer;
 }
 .checkbox-pill input { margin: 0; }
-.checkbox-pill:has(input:checked) { background: #cfe2ff; border-color: var(--azul); }
+.checkbox-pill:has(input:checked) { background: var(--tom-medio); border-color: var(--azul); }
 
 .leitura-card {
   background: #f9fafb; border: 1px solid var(--cinza-borda); border-radius: 10px; padding: 10px;
@@ -283,7 +288,7 @@ main#view {
 
 .file-label {
   display: inline-flex; align-items: center; justify-content: center;
-  background: #e7edf3; color: var(--azul-escuro);
+  background: var(--tom-claro); color: var(--azul-escuro);
   border-radius: 8px; padding: 8px 12px; font-size: 0.8rem;
   cursor: pointer; width: fit-content;
 }
@@ -320,7 +325,7 @@ main#view {
 .diag-categoria-header h3 { margin: 0; font-size: 1rem; color: var(--azul-escuro); }
 .diag-score-mini {
   font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px;
-  background: #e7edf3; color: var(--azul-escuro); white-space: nowrap;
+  background: var(--tom-claro); color: var(--azul-escuro); white-space: nowrap;
 }
 .resumo-categorias { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem; margin-top: 8px; }
 
@@ -515,7 +520,7 @@ main#view {
   padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;
 }
 .acao-topo { display: flex; flex-wrap: wrap; gap: 6px; }
-.badge-origem { background: #e7edf3; color: var(--azul-escuro); }
+.badge-origem { background: var(--tom-claro); color: var(--azul-escuro); }
 .acao-card .btn-abrir-origem { align-self: flex-start; padding: 0; }
 .acao-card .participante-linha { flex-wrap: wrap; }
 
@@ -525,7 +530,7 @@ main#view {
 .painel-barras { display: flex; flex-direction: column; gap: 6px; }
 .painel-barra-linha { display: grid; grid-template-columns: minmax(90px, 40%) 1fr 44px; align-items: center; gap: 8px; font-size: 0.8rem; }
 .painel-barra-rotulo { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.painel-barra-trilho { background: #eef1f4; border-radius: 4px; height: 14px; overflow: hidden; }
+.painel-barra-trilho { background: #e9ece2; border-radius: 4px; height: 14px; overflow: hidden; }
 .painel-barra { display: block; height: 100%; border-radius: 4px; }
 .painel-barra-valor { text-align: right; font-weight: 700; }
 .painel-colunas { display: flex; align-items: flex-end; gap: 8px; height: 150px; padding-top: 16px; }
@@ -620,7 +625,7 @@ main#view {
   input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea { font-size: 16px; }
 }
 .marcacao-area canvas { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-.cartao-instalar { background: #eef4fa; border: 1px solid var(--azul); border-radius: 10px; padding: 12px 14px; margin: 0 0 12px; }
+.cartao-instalar { background: #eef2e4; border: 1px solid var(--azul); border-radius: 10px; padding: 12px 14px; margin: 0 0 12px; }
 .cartao-instalar p { margin: 4px 0 6px; font-size: 0.88rem; color: #33475b; }
 .cartao-instalar ol { margin: 4px 0 0; padding-left: 20px; font-size: 0.88rem; }
 .cartao-instalar .btn-primary { margin-top: 4px; }

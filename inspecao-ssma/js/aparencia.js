@@ -5,20 +5,30 @@
  */
 
 const APARENCIA_FUNDOS = [
-  { id: 'padrao', rotulo: 'Cinza claro', cor: '#f4f6f8' },
+  { id: 'padrao', rotulo: 'Musgo claro', cor: '#f2f4ec' },
   { id: 'branco', rotulo: 'Branco', cor: '#ffffff' },
+  { id: 'salvia', rotulo: 'Sálvia', cor: '#e9efe4' },
+  { id: 'menta', rotulo: 'Menta', cor: '#ebf5ee' },
+  { id: 'oliva', rotulo: 'Oliva claro', cor: '#f4f5e6' },
+  { id: 'agua', rotulo: 'Verde-água', cor: '#e8f3f1' },
+  // Opções da primeira versão do painel, mantidas a pedido do gestor.
+  { id: 'cinza', rotulo: 'Cinza claro', cor: '#f4f6f8' },
   { id: 'azul', rotulo: 'Azul claro', cor: '#e8f1fb' },
-  { id: 'verde', rotulo: 'Verde claro', cor: '#eaf6ee' },
   { id: 'bege', rotulo: 'Bege', cor: '#f7f1e6' },
   { id: 'lilas', rotulo: 'Lilás claro', cor: '#f1edf9' }
 ];
 
 const APARENCIA_CORES = [
-  { id: 'padrao', rotulo: 'Azul', cor: '#0f4c81', escura: '#0a3a63' },
-  { id: 'verde', rotulo: 'Verde', cor: '#1e6b3a', escura: '#14502b' },
-  { id: 'vinho', rotulo: 'Vinho', cor: '#7a1f2b', escura: '#5a1520' },
-  { id: 'grafite', rotulo: 'Grafite', cor: '#37474f', escura: '#263238' },
-  { id: 'laranja', rotulo: 'Laranja', cor: '#a8460a', escura: '#7c3407' }
+  { id: 'padrao', rotulo: 'Verde musgo', cor: '#556b2f', escura: '#3f5022', claro: '#e6ecdb', medio: '#d3e0bd', texto: '#33421c' },
+  { id: 'oliva', rotulo: 'Verde oliva', cor: '#6b7a1f', escura: '#525d17', claro: '#ebeed9', medio: '#dbe1b6', texto: '#3e4612' },
+  { id: 'floresta', rotulo: 'Verde floresta', cor: '#2f5d3a', escura: '#22472b', claro: '#e1ece3', medio: '#c6dccb', texto: '#1d3d25' },
+  { id: 'esmeralda', rotulo: 'Verde esmeralda', cor: '#1f6f50', escura: '#165239', claro: '#ddefe7', medio: '#bfe0d1', texto: '#124232' },
+  { id: 'petroleo', rotulo: 'Verde petróleo', cor: '#2f6b62', escura: '#22504a', claro: '#dfedeb', medio: '#c2ddd9', texto: '#1b403a' },
+  // Opções da primeira versão do painel, mantidas a pedido do gestor.
+  { id: 'azul', rotulo: 'Azul', cor: '#0f4c81', escura: '#0a3a63', claro: '#e7edf3', medio: '#cfe2ff', texto: '#084298' },
+  { id: 'vinho', rotulo: 'Vinho', cor: '#7a1f2b', escura: '#5a1520', claro: '#f3e6e8', medio: '#ebcdd2', texto: '#5a1520' },
+  { id: 'grafite', rotulo: 'Grafite', cor: '#37474f', escura: '#263238', claro: '#e8ecee', medio: '#d3dbdf', texto: '#263238' },
+  { id: 'laranja', rotulo: 'Laranja', cor: '#a8460a', escura: '#7c3407', claro: '#f6ebe2', medio: '#f0d5c2', texto: '#6b2d06' }
 ];
 
 const APARENCIA_TEXTOS = [
@@ -49,6 +59,9 @@ function aplicarAparencia(ap = lerAparencia()) {
   raiz.style.setProperty('--cinza-bg', fundo.cor);
   raiz.style.setProperty('--azul', cor.cor);
   raiz.style.setProperty('--azul-escuro', cor.escura);
+  raiz.style.setProperty('--tom-claro', cor.claro);
+  raiz.style.setProperty('--tom-medio', cor.medio);
+  raiz.style.setProperty('--tom-texto', cor.texto);
   raiz.style.fontSize = texto.escala;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', cor.cor);
