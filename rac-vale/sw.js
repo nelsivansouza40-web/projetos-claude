@@ -3,7 +3,7 @@
  * internet, servindo os arquivos a partir do cache local do dispositivo.
  * Auditorias e fotos ficam no IndexedDB (não neste cache).
  */
-const CACHE_VERSION = 'rac-campo-v2';
+const CACHE_VERSION = 'rac-campo-v3';
 const APP_SHELL = [
   './',
   './index.html',

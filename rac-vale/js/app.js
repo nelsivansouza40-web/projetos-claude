@@ -319,10 +319,7 @@ function renderItem(box, aud, secao, it) {
       <label class="btn mini sec">Foto da galeria<input type="file" accept="image/*" multiple hidden data-foto></label>
     </div>
     <div class="fotos" data-fotos></div>
-    <details ${r.r === 'NC' || r.obs ? 'open' : ''}>
-      <summary>Observação${r.obs ? ' (preenchida)' : ''}</summary>
-      <label class="campo"><span>Observação</span><textarea data-campo="obs" rows="2">${escapeHtml(r.obs || '')}</textarea></label>
-    </details>
+    <label class="campo obs"><span>Observação</span><textarea data-campo="obs" rows="2">${escapeHtml(r.obs || '')}</textarea></label>
     ${r.r === 'NC' ? `
       <div class="nc-bloco">
         <label class="campo"><span>Ação corretiva *</span><textarea data-campo="acao" rows="2">${escapeHtml(r.acao || '')}</textarea></label>
