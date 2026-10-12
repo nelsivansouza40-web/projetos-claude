@@ -310,17 +310,16 @@ function renderItem(box, aud, secao, it) {
   const r = aud.respostas[it.id] || {};
   const botoes = Object.entries(RESPOSTAS).map(([k, rot]) =>
     `<button class="resp ${k.toLowerCase()} ${r.r === k ? 'marcada' : ''}" data-r="${k}">${rot}</button>`).join('');
-  const temDetalhe = r.r === 'NC' || r.obs || (r.fotos && r.fotos.length);
   box.className = `item ${r.r ? 'resp-' + r.r.toLowerCase() : 'pendente'}`;
   box.innerHTML = `
     <div class="item-texto"><span class="num">${it.num}</span>${escapeHtml(it.texto)}</div>
     <div class="resp-linha">${botoes}</div>
-    <details ${temDetalhe ? 'open' : ''}>
-      <summary>Observação e fotos${r.fotos && r.fotos.length ? ` (${r.fotos.length})` : ''}</summary>
-      <label class="campo"><span>Observação</span><textarea data-campo="obs" rows="2">${escapeHtml(r.obs || '')}</textarea></label>
-      <div class="fotos" data-fotos></div>
-      <label class="btn mini sec">Adicionar foto<input type="file" accept="image/*" capture="environment" multiple hidden data-foto></label>
-    </details>
+    <div class="foto-linha">
+      <label class="btn mini sec">Tirar foto<input type="file" accept="image/*" capture="environment" hidden data-foto></label>
+      <label class="btn mini sec">Foto da galeria<input type="file" accept="image/*" multiple hidden data-foto></label>
+    </div>
+    <div class="fotos" data-fotos></div>
+    <label class="campo obs"><span>Observação</span><textarea data-campo="obs" rows="2">${escapeHtml(r.obs || '')}</textarea></label>
     ${r.r === 'NC' ? `
       <div class="nc-bloco">
         <label class="campo"><span>Ação corretiva *</span><textarea data-campo="acao" rows="2">${escapeHtml(r.acao || '')}</textarea></label>
@@ -343,7 +342,7 @@ function renderItem(box, aud, secao, it) {
   box.querySelectorAll('[data-campo]').forEach((inp) => {
     inp.oninput = () => { resp()[inp.dataset.campo] = inp.value; salvarDepois(aud); };
   });
-  box.querySelector('[data-foto]').onchange = async (e) => {
+  box.querySelectorAll('[data-foto]').forEach((inp) => { inp.onchange = async (e) => {
     const files = [...e.target.files];
     for (const f of files) {
       try {
@@ -358,7 +357,7 @@ function renderItem(box, aud, secao, it) {
     }
     await salvarAgora(aud);
     renderItem(box, aud, secao, it);
-  };
+  }; });
   renderMiniaturas(box.querySelector('[data-fotos]'), aud, it, () => renderItem(box, aud, secao, it));
 }
 

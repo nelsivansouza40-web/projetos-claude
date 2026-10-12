@@ -6,21 +6,33 @@ fotos ficam gravadas no próprio aparelho.
 
 ## Conteúdo do checklist
 
-As perguntas são as do arquivo "1- Check list - RAC.xlsx" (Check Básico de
-Campo – Auditorias de RAC), com correção apenas de erros de digitação e de
-cópia. Os títulos de cada RAC seguem a PNR-000069 Rev. 11.
+RAC 01, 02, 03, 04, 05, 07, 08, 10 e as observações gerais: perguntas do
+arquivo "1- Check list - RAC.xlsx" (Check Básico de Campo – Auditorias de
+RAC), com correção apenas de erros de digitação e de cópia.
 
-| Seção | Itens |
-|---|---|
-| RAC 01 – Trabalhos em Altura | 8 |
-| RAC 02 – Veículos Automotores Leves | 7 |
-| RAC 03 – Operação de Equipamentos Móveis | 6 |
-| RAC 04 – Bloqueio, Identificação e Zero Energia | 6 |
-| RAC 05 – Içamento de Carga | 8 |
-| RAC 07 – Proteção de Máquinas | 4 |
-| RAC 08 – Atividades no Terreno | 2 |
-| RAC 10 – Trabalhos em Eletricidade | 5 |
-| Observações gerais (sempre avaliadas) | 6 |
+RAC 06, 09, 11, 12 e 13: montados a partir da PNR-000069 Rev. 11 no mesmo
+padrão do checklist original (itens curtos e verificáveis em campo:
+documento da atividade, controle físico do risco, equipamento inspecionado
+com checklist, capacitação), dando prioridade aos requisitos prioritários
+do Anexo VI. Em `js/checklist.js`, cada um desses itens indica o requisito
+de origem no campo `ref`. A lista do RAC 06 foi aprovada pelo gestor.
+
+| Seção | Itens | Origem |
+|---|---|---|
+| RAC 01 – Trabalhos em Altura | 8 | Checklist original |
+| RAC 02 – Veículos Automotores Leves | 7 | Checklist original |
+| RAC 03 – Operação de Equipamentos Móveis | 6 | Checklist original |
+| RAC 04 – Bloqueio, Identificação e Zero Energia | 6 | Checklist original |
+| RAC 05 – Içamento de Carga | 8 | Checklist original |
+| RAC 06 – Espaços Confinados | 11 | PNR-000069 Rev. 11 |
+| RAC 07 – Proteção de Máquinas | 4 | Checklist original |
+| RAC 08 – Atividades no Terreno | 2 | Checklist original |
+| RAC 09 – Explosivos | 8 | PNR-000069 Rev. 11 |
+| RAC 10 – Trabalhos em Eletricidade | 5 | Checklist original |
+| RAC 11 – Metal Líquido | 8 | PNR-000069 Rev. 11 |
+| RAC 12 – Trabalho a Quente | 9 | PNR-000069 Rev. 11 |
+| RAC 13 – Abertura de Linhas e Equipamentos | 8 | PNR-000069 Rev. 11 |
+| Observações gerais (sempre avaliadas) | 6 | Checklist original |
 
 Para alterar perguntas, edite somente `js/checklist.js`. Depois de haver
 auditorias registradas, não mude a ordem dos itens existentes (o
@@ -33,7 +45,7 @@ novos no fim da seção.
    atividade, auditor e acompanhante; marcação dos RAC aplicáveis à frente
    auditada. As observações gerais entram sempre.
 2. **Checklist**: cada item recebe Conforme, Não conforme ou N/A, com
-   observação e fotos. Item não conforme exige ação corretiva (com
+   observação e fotos (câmera ou galeria), sempre visíveis. Item não conforme exige ação corretiva (com
    responsável e prazo).
 3. **Fechamento**: resultado por seção, comentários do auditor e
    assinaturas na tela (opcionais).
