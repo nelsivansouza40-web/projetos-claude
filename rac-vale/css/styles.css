@@ -143,6 +143,7 @@ textarea { resize: vertical; }
 .resp.c.marcada { background: var(--verde); border-color: var(--verde); color: #fff; }
 .resp.nc.marcada { background: var(--vermelho); border-color: var(--vermelho); color: #fff; }
 .resp.na.marcada { background: #6b7280; border-color: #6b7280; color: #fff; }
+.foto-linha { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
 details { margin-top: 8px; }
 summary { cursor: pointer; font-size: 0.85rem; color: var(--azul); font-weight: 600; padding: 4px 0; }
 .nc-bloco { margin-top: 8px; background: #fdf0f0; border: 1px solid #f1c7c7; border-radius: 8px; padding: 10px; }
