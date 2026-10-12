@@ -38,6 +38,47 @@ function toast(msg) {
   toast._t = setTimeout(() => { el.hidden = true; }, 2600);
 }
 
+/* ---------------- iPhone / Android ---------------- */
+
+function ehIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+function estaInstalado() {
+  return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+}
+
+let eventoInstalacao = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  eventoInstalacao = e;
+  if (location.hash === '' || location.hash === '#/') renderInicio();
+});
+
+function cartaoInstalacao() {
+  if (estaInstalado()) return '';
+  if (ehIOS()) {
+    return `<section class="card instalar">
+      <h3>Instalar no iPhone</h3>
+      <p class="muted">Instale para usar sem internet e para o iPhone não apagar as auditorias guardadas.</p>
+      <ol>
+        <li>Abra este endereço no <strong>Safari</strong>.</li>
+        <li>Toque em <strong>Compartilhar</strong> (quadrado com seta para cima).</li>
+        <li>Escolha <strong>Adicionar à Tela de Início</strong> e confirme.</li>
+      </ol>
+    </section>`;
+  }
+  if (eventoInstalacao) {
+    return `<section class="card instalar">
+      <h3>Instalar no aparelho</h3>
+      <p class="muted">Instale para abrir como aplicativo e usar sem internet.</p>
+      <button class="btn grande" id="btn-instalar">Instalar aplicativo</button>
+    </section>`;
+  }
+  return '';
+}
+
 /* ---------------- Cálculos ---------------- */
 
 function estatisticas(aud, secao) {
@@ -62,17 +103,32 @@ function classeIndice(indice) {
 /* ---------------- Persistência ---------------- */
 
 let salvarTimer = null;
+let salvarPendente = null;
 function salvarDepois(aud) {
   aud.updatedAt = Date.now();
+  salvarPendente = aud;
   clearTimeout(salvarTimer);
-  salvarTimer = setTimeout(() => DB.put('auditorias', aud), 300);
+  salvarTimer = setTimeout(() => { salvarPendente = null; DB.put('auditorias', aud); }, 300);
 }
 
 async function salvarAgora(aud) {
   clearTimeout(salvarTimer);
+  salvarPendente = null;
   aud.updatedAt = Date.now();
   await DB.put('auditorias', aud);
 }
+
+// O iPhone e o Android podem suspender o app ao trocar de tela; grava na hora
+// o que ainda estiver aguardando.
+function gravarPendente() {
+  if (!salvarPendente) return;
+  const aud = salvarPendente;
+  clearTimeout(salvarTimer);
+  salvarPendente = null;
+  DB.put('auditorias', aud);
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') gravarPendente(); });
+window.addEventListener('pagehide', gravarPendente);
 
 function redimensionarImagem(file, maxLado = 1280, qualidade = 0.72) {
   return new Promise((resolve, reject) => {
@@ -199,6 +255,7 @@ async function renderInicio() {
       <p class="muted">Selecione os RAC aplicáveis à frente auditada. Cada item recebe Conforme, Não conforme ou N/A, com observação, foto e ação para as não conformidades. O índice considera apenas os itens Conforme e Não conforme.</p>
       <button class="btn grande" id="btn-nova">+ Nova auditoria</button>
     </section>
+    ${cartaoInstalacao()}
     <h3 class="titulo-lista">Auditorias registradas (${auds.length})</h3>
     ${cards || '<p class="muted vazio">Nenhuma auditoria registrada neste aparelho.</p>'}
     <section class="card">
@@ -211,6 +268,15 @@ async function renderInicio() {
     </section>`;
 
   document.getElementById('btn-nova').onclick = novaAuditoria;
+  const btnInstalar = document.getElementById('btn-instalar');
+  if (btnInstalar) {
+    btnInstalar.onclick = async () => {
+      eventoInstalacao.prompt();
+      await eventoInstalacao.userChoice;
+      eventoInstalacao = null;
+      renderInicio();
+    };
+  }
   document.getElementById('btn-backup').onclick = exportarBackup;
   document.getElementById('inp-restaurar').onchange = (e) => restaurarBackup(e.target.files[0]);
   view().querySelectorAll('[data-abrir]').forEach((b) => { b.onclick = () => irPara(`#/auditoria/${b.dataset.abrir}/identificacao`); });
@@ -727,8 +793,21 @@ function renderPontos(cont, aud) {
 
 /* ---------------- Exportação e cópia de segurança ---------------- */
 
-function baixarArquivo(nome, conteudo, tipo) {
+async function baixarArquivo(nome, conteudo, tipo) {
   const blob = conteudo instanceof Blob ? conteudo : new Blob([conteudo], { type: tipo });
+  // No iPhone o download direto é limitado; a folha de compartilhar permite
+  // salvar em Arquivos ou enviar por e-mail/WhatsApp.
+  if (ehIOS() && navigator.canShare) {
+    const arquivo = new File([blob], nome, { type: tipo });
+    if (navigator.canShare({ files: [arquivo] })) {
+      try {
+        await navigator.share({ files: [arquivo], title: nome });
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+      }
+    }
+  }
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = nome;
@@ -912,6 +991,7 @@ function init() {
   window.addEventListener('online', atualizarConexao);
   window.addEventListener('offline', atualizarConexao);
   atualizarConexao();
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   rotear();
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});

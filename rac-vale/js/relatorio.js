@@ -81,6 +81,7 @@ async function renderRelatorio(id) {
       <button class="btn sec" id="rel-csv">Exportar planilha</button>
       <button class="btn" id="rel-pdf">Salvar em PDF / imprimir</button>
     </div>
+    ${ehIOS() ? '<p class="dica-ios nao-imprimir">No iPhone: na tela de impressão, toque em Compartilhar (no alto) e escolha Salvar em Arquivos, ou envie por e-mail ou WhatsApp.</p>' : ''}
     ${aud.status !== 'concluida' ? '<p class="aviso nao-imprimir">Auditoria em rascunho: o relatório mostra o preenchimento atual.</p>' : ''}
     <article class="relatorio">
       <header class="rel-cab">

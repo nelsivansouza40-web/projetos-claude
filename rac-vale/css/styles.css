@@ -17,13 +17,17 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   background: var(--cinza-bg);
   color: var(--texto);
-  padding-bottom: 32px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  -webkit-text-size-adjust: 100%;
 }
 
 #topbar {
   background: var(--azul);
   color: #fff;
   padding: 10px 16px;
+  padding-top: calc(10px + env(safe-area-inset-top));
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -104,7 +108,7 @@ main { max-width: 860px; margin: 0 auto; padding: 12px; }
 .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
 .campo { display: flex; flex-direction: column; gap: 4px; font-size: 0.82rem; font-weight: 600; color: #3b4652; margin-bottom: 6px; }
 input, textarea {
-  font: inherit; font-weight: 400; font-size: 0.95rem; padding: 9px 10px;
+  font: inherit; font-weight: 400; font-size: 16px; padding: 9px 10px; /* 16px evita o zoom automático do iPhone ao tocar no campo */
   border: 1px solid var(--cinza-borda); border-radius: 8px; width: 100%; background: #fff; color: var(--texto);
 }
 textarea { resize: vertical; }
@@ -164,7 +168,7 @@ textarea { resize: vertical; }
 .tabela tfoot th { border-top: 2px solid var(--azul); }
 
 .assinaturas { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-canvas.assinatura { width: 100%; height: 140px; border: 1px dashed var(--cinza); border-radius: 8px; touch-action: none; background: #fff; display: block; margin: 6px 0; }
+canvas.assinatura { width: 100%; height: 140px; border: 1px dashed var(--cinza); border-radius: 8px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; background: #fff; display: block; margin: 6px 0; }
 
 .ponto { border: 1px solid var(--cinza-borda); border-left: 4px solid var(--azul); border-radius: 8px; padding: 10px; margin-bottom: 10px; }
 .ponto-cab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
@@ -173,6 +177,9 @@ canvas.assinatura { width: 100%; height: 140px; border: 1px dashed var(--cinza);
 .assin-status { font-size: 0.8rem; margin-top: 4px; color: var(--cinza); }
 .assin-status.ok { color: var(--verde); font-weight: 700; }
 .assin-status.pendente { color: var(--amarelo); font-weight: 700; }
+.instalar { border-color: var(--azul); background: #eef4fa; }
+.instalar ol { margin: 6px 0 0; padding-left: 20px; font-size: 0.88rem; }
+.dica-ios { font-size: 0.8rem; color: var(--cinza); margin: -4px 0 12px; }
 .alerta { border-color: #e5c07b; background: #fffaf0; }
 .alerta ul { margin: 0; padding-left: 18px; font-size: 0.88rem; }
 .aviso { background: #fff4dc; border: 1px solid #e5c07b; padding: 8px 10px; border-radius: 8px; font-size: 0.85rem; }
