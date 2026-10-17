@@ -735,3 +735,25 @@ main#view {
 .aviso-atualizacao p { margin: 0 0 8px; font-size: 0.9rem; color: #33475b; }
 .aviso-atualizacao .btn-primary { width: 100%; }
 @media print { .aviso-atualizacao { display: none !important; } }
+
+/* Análise de causa raiz da Investigação: 5 Porquês e Ishikawa */
+details.analise-causa { border: 1px solid var(--cinza-borda, #d5dccb); border-radius: 8px; padding: 6px 12px; margin: 10px 0; background: #fff; }
+details.analise-causa summary { cursor: pointer; font-weight: 600; padding: 6px 0; }
+.ishikawa { margin: 8px 0 12px; font-size: 0.78rem; }
+.ish-linha { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-right: 22%; }
+.ish-caixa { border: 1px solid #9aa58a; border-radius: 6px; padding: 6px 8px; background: #fbfcf8; break-inside: avoid; }
+.ish-rotulo { font-weight: 700; margin-bottom: 2px; }
+.ish-texto { white-space: pre-wrap; }
+.ish-espinha { display: flex; align-items: center; margin: 8px 0; }
+.ish-seta { flex: 1; height: 3px; background: #556b2f; position: relative; }
+.ish-seta::after { content: ''; position: absolute; right: -2px; top: -6px; border-left: 12px solid #556b2f; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+.ish-efeito { width: 22%; margin-left: 12px; border: 2px solid #556b2f; border-radius: 6px; padding: 8px; font-weight: 700; text-align: center; }
+@media (max-width: 560px) { .ish-linha { grid-template-columns: 1fr; padding-right: 0; } .ish-efeito { width: 40%; } }
+
+/* Placa de relato pelo QR Code (impressa e fixada na área) */
+.placa-qr { max-width: 520px; margin: 0 auto; border: 4px solid #556b2f; border-radius: 16px; padding: 24px; text-align: center; background: #fff; }
+.placa-qr-titulo { font-size: 1.8rem; font-weight: 800; color: #3f5122; margin-bottom: 12px; }
+.placa-qr-codigo svg { width: 70%; height: auto; max-width: 320px; }
+.placa-qr-passos { font-size: 1.05rem; margin: 12px 0; }
+.placa-qr-area { font-size: 1.2rem; font-weight: 700; border-top: 2px solid #d5dccb; padding-top: 12px; }
+@media print { .placa-qr { border-width: 6px; max-width: none; margin-top: 10mm; } .placa-qr-codigo svg { width: 60%; } }

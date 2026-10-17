@@ -38,6 +38,7 @@ jobs:
           cp -r gestao-sst _site/gestao-sst
           cp -r rac-vale _site/rac-vale
           rm -f _site/gestao-sst/gerar-arquivo-unico.py _site/gestao-sst/.gitignore
+          rm -rf _site/tests
 
       - name: Empacotar conteúdo do site
         uses: actions/upload-pages-artifact@v3

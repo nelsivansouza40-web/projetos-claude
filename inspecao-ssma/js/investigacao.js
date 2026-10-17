@@ -60,6 +60,7 @@ function novaInvestigacaoVazia() {
       perguntas: gerarPerguntasInvestigacao(),
       causasImediatas: '',
       causasBasicas: '',
+      ...analiseCausaVazia(),
       investigador: '',
       planoAcao: [],
       fotosIds: [],
@@ -399,6 +400,7 @@ function renderPerguntasInvestigacaoItems(container, inv) {
 
 /* ---- Passo 3: Causas e plano de ação ---- */
 function renderInvestigacaoStepCausas(content, inv) {
+  garantirAnaliseCausa(inv.data);
   content.innerHTML = `
     <label>Causas imediatas (atos inseguros e/ou condições inseguras identificadas)
       <textarea id="investigacao-causas-imediatas" rows="3">${escapeHtml(inv.data.causasImediatas)}</textarea>
@@ -406,6 +408,7 @@ function renderInvestigacaoStepCausas(content, inv) {
     <label>Causas básicas (fatores pessoais e/ou fatores do trabalho na origem do problema)
       <textarea id="investigacao-causas-basicas" rows="3">${escapeHtml(inv.data.causasBasicas)}</textarea>
     </label>
+    ${htmlFormAnaliseCausa(inv.data)}
     <label>Investigador responsável *
       <input type="text" id="investigacao-investigador" required value="${escapeHtml(inv.data.investigador)}">
     </label>
@@ -438,6 +441,7 @@ function renderInvestigacaoStepCausas(content, inv) {
   const causasBasicas = document.getElementById('investigacao-causas-basicas');
   const investigadorInput = document.getElementById('investigacao-investigador');
 
+  ligarFormAnaliseCausa(content, inv.data, () => salvarRascunhoInvestigacao(inv));
   causasImediatas.addEventListener('blur', async () => {
     inv.data.causasImediatas = causasImediatas.value;
     await salvarRascunhoInvestigacao(inv);
@@ -484,6 +488,7 @@ function renderInvestigacaoStepCausas(content, inv) {
   });
 
   document.getElementById('btn-investigacao-causas-back').addEventListener('click', async () => {
+    lerFormAnaliseCausa(content, inv.data);
     inv.data.causasImediatas = causasImediatas.value;
     inv.data.causasBasicas = causasBasicas.value;
     inv.data.investigador = investigadorInput.value.trim();
@@ -497,6 +502,7 @@ function renderInvestigacaoStepCausas(content, inv) {
       alert('Informe o investigador responsável antes de avançar.');
       return;
     }
+    lerFormAnaliseCausa(content, inv.data);
     inv.data.causasImediatas = causasImediatas.value;
     inv.data.causasBasicas = causasBasicas.value;
     inv.data.investigador = investigadorInput.value.trim();
@@ -678,6 +684,7 @@ async function renderInvestigacaoDetail(id) {
     ${perguntasHtml}
     ${inv.data.causasImediatas ? `<h3>Causas imediatas</h3><div class="detail-block"><p>${escapeHtml(inv.data.causasImediatas)}</p></div>` : ''}
     ${inv.data.causasBasicas ? `<h3>Causas básicas</h3><div class="detail-block"><p>${escapeHtml(inv.data.causasBasicas)}</p></div>` : ''}
+    ${htmlDetalheAnaliseCausa(garantirAnaliseCausa(inv.data))}
     ${fotosGerais(photos).length ? `<h3>Evidência fotográfica</h3><div class="thumbs">${fotosGerais(photos).map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
     <h3>Plano de ação (${inv.data.planoAcao.length})</h3>
     ${planoHtml}
@@ -898,6 +905,8 @@ async function renderInvestigacaoReport(id) {
         <h3>4. Análise de causas</h3>
         <p><strong>Causas imediatas:</strong> ${escapeHtml(inv.data.causasImediatas || '—')}</p>
         <p><strong>Causas básicas:</strong> ${escapeHtml(inv.data.causasBasicas || '—')}</p>
+        ${htmlRelatorioCincoPorques(garantirAnaliseCausa(inv.data))}
+        ${htmlRelatorioIshikawa(inv.data, inv.data.cincoPorques.problema || inv.data.acidente.tipo && ('Acidente ' + inv.data.acidente.tipo.toLowerCase()) || 'Acidente de trabalho')}
       </section>
 
       <section class="rep-secao rep-quebra">

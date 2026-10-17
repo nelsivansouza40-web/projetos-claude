@@ -1445,6 +1445,8 @@ function buildInvestigacaoMetaPayload(inv) {
     })),
     causasImediatas: inv.data.causasImediatas,
     causasBasicas: inv.data.causasBasicas,
+    cincoPorques: garantirAnaliseCausa(inv.data).cincoPorques,
+    ishikawa: inv.data.ishikawa,
     investigador: inv.data.investigador,
     planoAcao: inv.data.planoAcao.map((a) => ({
       id: a.id,

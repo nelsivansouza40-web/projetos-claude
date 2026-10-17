@@ -108,11 +108,15 @@ async function renderRelatosHome() {
       <button id="btn-new-relato" class="btn-primary">+ Novo relato</button>
     </div>
     <p class="hint">Quase acidentes, condições inseguras e comportamentos de risco registrados hoje evitam o acidente de amanhã. O relato pode ser anônimo.</p>
+    <div class="form-actions" style="justify-content:flex-start;margin:0 0 8px;">
+      <button id="btn-relatos-qr" class="btn-secondary">📥 Recebidos pelo QR Code${PERFIL_ATUAL === 'Gestor' ? ' e placas' : ''}</button>
+    </div>
     <div class="chips-filtro">${chips}</div>
     <ul class="insp-list">${itemsHtml}</ul>
   `;
 
   document.getElementById('btn-new-relato').addEventListener('click', startNewRelato);
+  document.getElementById('btn-relatos-qr').addEventListener('click', renderRelatosQRHome);
   view.querySelectorAll('.chip-filtro').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.filtroRelatos = btn.dataset.filtro;
@@ -350,9 +354,10 @@ async function renderRelatoDetail(id) {
       <p>Relator: ${d.anonimo ? '<strong>Anônimo</strong>' : escapeHtml([d.relator, d.funcaoRelator].filter(Boolean).join(' — ') || '—')}</p>
     </div>
     <h3>Descrição</h3>
-    <div class="detail-block"><p>${escapeHtml(d.descricao)}</p></div>
+    <div class="detail-block"><p style="white-space:pre-line">${escapeHtml(d.descricao)}</p></div>
     ${d.acaoImediata ? `<h3>Ação imediata</h3><div class="detail-block"><p>${escapeHtml(d.acaoImediata)}</p></div>` : ''}
     ${photos.length ? `<h3>Fotos</h3><div class="thumbs">${photos.map((p) => `<div class="thumb"><img src="${URL.createObjectURL(p.blob)}" alt="Foto do relato"><span class="thumb-sync ${p.synced ? 'ok' : ''}">${p.synced ? '✓' : '⏳'}</span></div>`).join('')}</div>` : ''}
+    ${(d.fotosQR || []).length ? `<h3>Fotos enviadas pelo QR Code</h3><div class="detail-block"><p>${d.fotosQR.map((l, i) => `<a href="${escapeHtml(l)}" target="_blank" rel="noopener">Foto ${i + 1}</a>`).join(' · ')}</p></div>` : ''}
 
     <h3>Tratamento (equipe de SST)</h3>
     <form id="form-tratamento" class="form-section">

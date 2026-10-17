@@ -104,7 +104,7 @@ let PERFIL_ATUAL = '';
 const ACOES_POR_PERFIL = {
   'Inspetor': ['ping', 'listarAcoes', 'atualizarAcao', 'uploadPhoto', 'upsertInspection', 'upsertDiagnostico',
     'upsertVeiculo', 'upsertPTAPR', 'upsertPET', 'upsertRelato', 'upsertObservacao', 'upsertAcao',
-    'upsertAcoesConsolidadas'],
+    'upsertAcoesConsolidadas', 'listarRelatosQR', 'marcarRelatoQRImportado'],
   'Responsável': ['ping', 'listarAcoes', 'atualizarAcao', 'uploadPhoto', 'upsertAcoesConsolidadas']
 };
 
@@ -126,6 +126,10 @@ function doPost(e) {
   } catch (err) {
     return jsonResponse({ ok: false, error: 'JSON inválido: ' + err.message });
   }
+
+  // Relato pelo QR Code: vem de qualquer celular, sem app, sem chave e sem
+  // login. Só grava na aba Relatos_QR, exige o código do QR e tem limite por hora.
+  if (body.action === 'relatoPublico') return jsonResponse(receberRelatoPublico_(body));
 
   // Chave de acesso: se a propriedade CHAVE_ACESSO estiver definida em
   // Configurações do projeto > Propriedades do script, só aceita requisições
@@ -161,7 +165,7 @@ function doPost(e) {
 
   // Leituras não precisam de trava; gravações são feitas uma de cada vez,
   // para dois celulares não escreverem a mesma linha ao mesmo tempo.
-  const somenteLeitura = ['ping', 'listarAcoes'].indexOf(body.action) >= 0;
+  const somenteLeitura = ['ping', 'listarAcoes', 'listarRelatosQR'].indexOf(body.action) >= 0;
   const trava = somenteLeitura ? null : LockService.getScriptLock();
   try {
     if (trava) trava.waitLock(30000);
@@ -208,6 +212,12 @@ function doPost(e) {
         return jsonResponse(upsertObservacao(body.observacao));
       case 'uploadPhoto':
         return jsonResponse(uploadPhoto(body.inspectionId, body.photo));
+      case 'codigoRelatoQR':
+        return jsonResponse(codigoRelatoQR_(body.novo === true));
+      case 'listarRelatosQR':
+        return jsonResponse(listarRelatosQR_());
+      case 'marcarRelatoQRImportado':
+        return jsonResponse(marcarRelatoQRImportado_(body.id));
       default:
         return jsonResponse({ ok: false, error: 'Ação desconhecida: ' + body.action });
     }
@@ -755,8 +765,15 @@ function upsertInvestigacao(inv) {
     'Gravidade', 'Dias de Afastamento', 'CAT Emitida', 'Nº CAT', 'Parte do Corpo Atingida',
     'Agente Causador', 'Natureza da Lesão', 'Nome do Acidentado', 'Função', 'Setor',
     'Tempo de Empresa', 'Tempo na Função', 'Descrição do Acidente', 'Testemunhas',
-    'Causas Imediatas', 'Causas Básicas', 'Investigador', 'Recebido em', 'Pasta Drive'
+    'Causas Imediatas', 'Causas Básicas', 'Investigador', 'Recebido em', 'Pasta Drive',
+    // Colunas novas sempre no fim, para não deslocar as existentes (Looker Studio).
+    'Problema (5 Porquês)', '1º Porquê', '2º Porquê', '3º Porquê', '4º Porquê', '5º Porquê', 'Causa Raiz',
+    'Ishikawa: Método', 'Ishikawa: Máquina', 'Ishikawa: Material', 'Ishikawa: Mão de obra',
+    'Ishikawa: Meio ambiente', 'Ishikawa: Medida'
   ]);
+  const cp = inv.cincoPorques || {};
+  const porques = cp.porques || [];
+  const ish = inv.ishikawa || {};
 
   const id = inv.id;
   const ac = inv.acidente;
@@ -788,7 +805,9 @@ function upsertInvestigacao(inv) {
     inv.causasBasicas,
     inv.investigador,
     new Date(),
-    invFolder.getUrl()
+    invFolder.getUrl(),
+    cp.problema || '', porques[0] || '', porques[1] || '', porques[2] || '', porques[3] || '', porques[4] || '', cp.causaRaiz || '',
+    ish.metodo || '', ish.maquina || '', ish.material || '', ish.maoDeObra || '', ish.meioAmbiente || '', ish.medida || ''
   ];
 
   const idCol = 1;
@@ -1091,8 +1110,10 @@ function normalizarPerfil_(p) {
  * Aba "Usuarios": Nome | PIN | Perfil (Inspetor, Responsável ou Gestor) | Ativo (Sim/Não).
  * Criada vazia na primeira requisição; o login só passa a valer quando houver usuário ativo.
  */
+const CABECALHO_USUARIOS = ['Nome', 'PIN', 'Perfil', 'Ativo', 'E-mail'];
+
 function lerUsuarios_() {
-  const sheet = getOrCreateSheet(SHEET_USUARIOS, ['Nome', 'PIN', 'Perfil', 'Ativo']);
+  const sheet = getOrCreateSheet(SHEET_USUARIOS, CABECALHO_USUARIOS);
   if (sheet.getLastRow() < 2) return [];
   const linhas = sheet.getRange(2, 1, sheet.getLastRow() - 1, 4).getValues();
   // PIN digitado pelo gestor é trocado na hora pela versão codificada, para
@@ -1189,6 +1210,291 @@ function fazerLogin_(usuarios, login, pin) {
   return { ok: true, loginAtivo: true, nome: r.usuario.nome, perfil: r.usuario.perfil };
 }
 
+/* ---------------- RELATO PELO QR CODE ---------------- */
+
+/*
+ * Qualquer trabalhador, inclusive terceirizado, lê a placa com QR Code na
+ * área e abre a página relato.html no próprio celular, sem instalar o app.
+ * O relato vai para a aba Relatos_QR. No app, o gestor ou inspetor vê os
+ * relatos recebidos em Relatos → "Recebidos pelo QR Code" e os importa: a
+ * partir daí, seguem o fluxo normal (tratamento, ação, Central de ações).
+ *
+ * Proteções: o QR leva um código secreto (CODIGO_RELATO_QR); sem ele, nada é
+ * gravado. Gerar um código novo invalida todas as placas antigas. Há limite
+ * de relatos por hora, de tamanho de texto e de fotos, e a página pública
+ * não consegue ler nada da planilha.
+ */
+const SHEET_RELATOS_QR = 'Relatos_QR';
+const CABECALHO_RELATOS_QR = ['ID', 'Recebido em', 'Tipo', 'Potencial', 'Empresa', 'Área', 'Local', 'Descrição',
+  'Ação imediata', 'Anônimo', 'Nome', 'Função', 'Fotos', 'Situação', 'Importado por', 'Importado em'];
+const TIPOS_RELATO_QR = ['Quase acidente', 'Condição insegura', 'Comportamento de risco', 'Sugestão de melhoria'];
+const POTENCIAIS_RELATO_QR = ['Baixo', 'Médio', 'Alto', 'Crítico'];
+const MAX_RELATOS_QR_POR_HORA = 60;
+const MAX_FOTOS_RELATO_QR = 2;
+const MAX_BASE64_FOTO_QR = 2 * 1024 * 1024; // cerca de 1,5 MB de imagem
+
+function codigoRelatoQR_(gerarNovo) {
+  const props = PropertiesService.getScriptProperties();
+  let codigo = props.getProperty('CODIGO_RELATO_QR');
+  if (!codigo || gerarNovo) {
+    codigo = Utilities.getUuid().replace(/-/g, '').slice(0, 20);
+    props.setProperty('CODIGO_RELATO_QR', codigo);
+  }
+  return { ok: true, codigo: codigo };
+}
+
+function cortarTexto_(v, max) {
+  return String(v === undefined || v === null ? '' : v).trim().slice(0, max);
+}
+
+function receberRelatoPublico_(body) {
+  const esperado = PropertiesService.getScriptProperties().getProperty('CODIGO_RELATO_QR');
+  if (!esperado || body.codigo !== esperado) {
+    return { ok: false, error: 'Este QR Code não está mais ativo. Avise a equipe de segurança do trabalho.' };
+  }
+  const r = body.relato || {};
+  const descricao = cortarTexto_(r.descricao, 2000);
+  if (descricao.length < 5) return { ok: false, error: 'Descreva o que aconteceu ou o que você viu.' };
+
+  const cache = CacheService.getScriptCache();
+  const chaveHora = 'relatos_qr_' + Utilities.formatDate(new Date(), 'UTC', 'yyyyMMddHH');
+  const naHora = Number(cache.get(chaveHora) || 0);
+  if (naHora >= MAX_RELATOS_QR_POR_HORA) {
+    return { ok: false, error: 'Muitos relatos recebidos agora. Tente de novo em alguns minutos.' };
+  }
+
+  const fotos = (Array.isArray(r.fotos) ? r.fotos : []).slice(0, MAX_FOTOS_RELATO_QR)
+    .filter((f) => f && typeof f.base64 === 'string' && f.base64.length <= MAX_BASE64_FOTO_QR);
+
+  const trava = LockService.getScriptLock();
+  trava.waitLock(30000);
+  try {
+    cache.put(chaveHora, String(naHora + 1), 3600);
+    const id = 'QR-' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd-HHmmss') + '-' +
+      Utilities.getUuid().slice(0, 4).toUpperCase();
+    const links = [];
+    if (fotos.length) {
+      const raiz = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
+      const pastaQR = getOrCreateDriveFolder('Relatos por QR Code', raiz);
+      const pasta = pastaQR.createFolder(id);
+      fotos.forEach((f, i) => {
+        const blob = Utilities.newBlob(Utilities.base64Decode(f.base64), 'image/jpeg', id + '_foto' + (i + 1) + '.jpg');
+        links.push(pasta.createFile(blob).getUrl());
+      });
+    }
+    const anonimo = r.anonimo !== false;
+    const linha = protegerContraFormulas_([
+      id, new Date(),
+      TIPOS_RELATO_QR.indexOf(r.tipo) >= 0 ? r.tipo : TIPOS_RELATO_QR[0],
+      POTENCIAIS_RELATO_QR.indexOf(r.potencial) >= 0 ? r.potencial : '',
+      cortarTexto_(r.empresa, 120), cortarTexto_(r.area, 120), cortarTexto_(r.local, 200), descricao,
+      cortarTexto_(r.acaoImediata, 1000), anonimo ? 'Sim' : 'Não',
+      anonimo ? '' : cortarTexto_(r.nome, 120), anonimo ? '' : cortarTexto_(r.funcao, 120),
+      links.join(' '), 'Novo', '', ''
+    ]);
+    getOrCreateSheet(SHEET_RELATOS_QR, CABECALHO_RELATOS_QR).appendRow(linha);
+    return { ok: true, protocolo: id };
+  } finally {
+    trava.releaseLock();
+  }
+}
+
+/** Relatos do QR ainda não importados por ninguém da equipe. */
+function listarRelatosQR_() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_RELATOS_QR);
+  if (!sheet || sheet.getLastRow() < 2) return { ok: true, relatos: [] };
+  const n = CABECALHO_RELATOS_QR.length;
+  const relatos = sheet.getRange(2, 1, sheet.getLastRow() - 1, n).getValues()
+    .filter((l) => l[0] && textoCelula_(l[13]) !== 'Importado')
+    .map((l) => ({
+      id: textoCelula_(l[0]),
+      recebidoEm: l[1] instanceof Date ? l[1].toISOString() : textoCelula_(l[1]),
+      tipo: textoCelula_(l[2]), potencial: textoCelula_(l[3]), empresa: textoCelula_(l[4]), area: textoCelula_(l[5]),
+      local: textoCelula_(l[6]), descricao: textoCelula_(l[7]), acaoImediata: textoCelula_(l[8]),
+      anonimo: textoCelula_(l[9]) !== 'Não', nome: textoCelula_(l[10]), funcao: textoCelula_(l[11]),
+      fotos: textoCelula_(l[12]).split(' ').filter(Boolean)
+    }));
+  return { ok: true, relatos: relatos };
+}
+
+function marcarRelatoQRImportado_(id) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_RELATOS_QR);
+  const row = sheet ? linhaDoId(sheet, id) : -1;
+  if (row < 0) return { ok: false, error: 'Relato do QR não encontrado.' };
+  sheet.getRange(row, 14, 1, 3).setValues([['Importado', USUARIO_ATUAL || '', new Date()]]);
+  return { ok: true };
+}
+
+/* ---------------- LEMBRETES SEMANAIS POR E-MAIL ---------------- */
+
+/**
+ * Toda segunda-feira, cada responsável recebe por e-mail as ações em seu nome
+ * que estão vencidas ou vencem nos próximos 7 dias. Os gestores recebem o
+ * resumo da equipe, as eficácias a verificar e quem está sem e-mail
+ * cadastrado. O e-mail de cada pessoa fica na coluna "E-mail" da aba
+ * Usuarios; quem não tem e-mail não recebe nada.
+ *
+ * Para ligar: no editor do Apps Script, escolha a função
+ * ativarLembretesSemanais e clique em Executar (uma vez só). O Google pede
+ * autorização para enviar e-mails em seu nome. Para testar na hora, execute
+ * enviarLembretesDeAcoes.
+ */
+const DIAS_AVISO_PRAZO = 7;
+const HORA_LEMBRETE = 7;
+
+function ativarLembretesSemanais() {
+  desativarLembretesSemanais();
+  ScriptApp.newTrigger('enviarLembretesDeAcoes').timeBased()
+    .onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(HORA_LEMBRETE).create();
+  return 'Lembretes ativados: toda segunda-feira, por volta das ' + HORA_LEMBRETE + 'h.';
+}
+
+function desativarLembretesSemanais() {
+  ScriptApp.getProjectTriggers()
+    .filter((t) => t.getHandlerFunction() === 'enviarLembretesDeAcoes')
+    .forEach((t) => ScriptApp.deleteTrigger(t));
+}
+
+/** Data da célula (Date ou "aaaa-mm-dd") como "aaaa-mm-dd"; vazio se não houver. */
+function dataIsoDaCelula_(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  const t = String(v || '').trim();
+  return /^\d{4}-\d{2}-\d{2}/.test(t) ? t.slice(0, 10) : '';
+}
+
+function diasEntre_(isoDe, isoAte) {
+  const [a1, m1, d1] = isoDe.split('-').map(Number);
+  const [a2, m2, d2] = isoAte.split('-').map(Number);
+  return Math.round((Date.UTC(a2, m2 - 1, d2) - Date.UTC(a1, m1 - 1, d1)) / 86400000);
+}
+
+function dataBR_(iso) {
+  return iso ? iso.split('-').reverse().join('/') : '';
+}
+
+/** Ações abertas vencidas ou a vencer, e eficácias a verificar, a partir da aba Acoes_Consolidadas. */
+function levantarAcoesParaLembrete_(hojeIso) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Acoes_Consolidadas');
+  const vazio = { prazos: [], eficacias: [] };
+  if (!sheet || sheet.getLastRow() < 2) return vazio;
+  const n = Math.min(CABECALHO_ACOES.length, sheet.getLastColumn());
+  const linhas = sheet.getRange(2, 1, sheet.getLastRow() - 1, n).getValues();
+  const prazos = [];
+  const eficacias = [];
+  linhas.forEach((l) => {
+    if (!l[0]) return;
+    const acao = {
+      descricao: textoCelula_(l[2]), contexto: textoCelula_(l[3]), area: textoCelula_(l[5]),
+      responsavel: textoCelula_(l[6]), prazo: dataIsoDaCelula_(l[7]), status: textoCelula_(l[8]) || 'Pendente'
+    };
+    if (acao.status !== 'Concluída') {
+      if (!acao.prazo) return;
+      acao.dias = diasEntre_(hojeIso, acao.prazo);
+      if (acao.dias <= DIAS_AVISO_PRAZO) prazos.push(acao);
+      return;
+    }
+    let acomp = {};
+    try { acomp = l[24] ? JSON.parse(l[24]) : {}; } catch (e) { acomp = {}; }
+    const verificarEm = dataIsoDaCelula_(acomp.verificarEm);
+    if (acomp.evidencia && acomp.eficacia !== 'Eficaz' && verificarEm && verificarEm <= hojeIso) {
+      eficacias.push(Object.assign(acao, { verificarEm: verificarEm }));
+    }
+  });
+  prazos.sort((a, b) => a.dias - b.dias);
+  return { prazos: prazos, eficacias: eficacias };
+}
+
+function lerEmailsUsuarios_() {
+  const sheet = getOrCreateSheet(SHEET_USUARIOS, CABECALHO_USUARIOS);
+  if (sheet.getLastRow() < 2) return [];
+  return sheet.getRange(2, 1, sheet.getLastRow() - 1, CABECALHO_USUARIOS.length).getValues()
+    .filter((l) => String(l[0]).trim() && normalizarNome_(l[3]) !== 'nao')
+    .map((l) => ({ nome: String(l[0]).trim(), perfil: normalizarPerfil_(l[2]), email: String(l[4] || '').trim() }));
+}
+
+function situacaoPrazo_(a) {
+  if (a.dias < 0) return 'Atrasada ' + (-a.dias) + ' dia(s)';
+  if (a.dias === 0) return 'Vence hoje';
+  return 'Vence em ' + a.dias + ' dia(s)';
+}
+
+function tabelaAcoesEmail_(acoes, comResponsavel) {
+  const esc = (t) => String(t || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const cab = '<tr><th align="left">Ação</th><th align="left">Área</th>' + (comResponsavel ? '<th align="left">Responsável</th>' : '') +
+    '<th align="left">Prazo</th><th align="left">Situação</th></tr>';
+  const linhas = acoes.map((a) => '<tr><td>' + esc(a.descricao) + '</td><td>' + esc(a.area) + '</td>' +
+    (comResponsavel ? '<td>' + esc(a.responsavel || 'sem responsável') + '</td>' : '') +
+    '<td>' + dataBR_(a.prazo) + '</td><td' + (a.dias < 0 ? ' style="color:#b3261e;font-weight:bold"' : '') + '>' + situacaoPrazo_(a) + '</td></tr>').join('');
+  return '<table cellpadding="6" cellspacing="0" border="1" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:13px">' + cab + linhas + '</table>';
+}
+
+/**
+ * Monta os e-mails da semana (sem enviar). Separado do envio para poder ser
+ * conferido nos testes e pelo gestor, se quiser, antes de ativar.
+ */
+function montarLembretesDeAcoes_(hojeIso) {
+  const { prazos, eficacias } = levantarAcoesParaLembrete_(hojeIso);
+  const usuarios = lerEmailsUsuarios_();
+  const porNome = {};
+  usuarios.forEach((u) => { porNome[normalizarNome_(u.nome)] = u; });
+
+  const emails = [];
+  const semEmail = {};
+  const porResponsavel = {};
+  prazos.forEach((a) => {
+    const chave = normalizarNome_(a.responsavel);
+    (porResponsavel[chave] = porResponsavel[chave] || []).push(a);
+  });
+  Object.keys(porResponsavel).forEach((chave) => {
+    const u = porNome[chave];
+    const lista = porResponsavel[chave];
+    if (!u || !u.email) { semEmail[lista[0].responsavel || 'sem responsável'] = lista.length; return; }
+    const atrasadas = lista.filter((a) => a.dias < 0).length;
+    emails.push({
+      para: u.email,
+      assunto: 'Ações de SSMA: ' + (atrasadas ? atrasadas + ' atrasada(s), ' : '') + (lista.length - atrasadas) + ' vencendo nesta semana',
+      html: '<p>Olá, ' + u.nome + '.</p><p>Estas são as ações de SSMA em seu nome que estão atrasadas ou vencem nos próximos ' +
+        DIAS_AVISO_PRAZO + ' dias:</p>' + tabelaAcoesEmail_(lista, false) +
+        '<p>Para concluir, abra o aplicativo Inspeções SSMA → Central de ações, registre o que foi feito e a evidência.</p>' +
+        '<p style="color:#666;font-size:12px">Mensagem automática semanal do aplicativo Inspeções SSMA.</p>'
+    });
+  });
+
+  const gestores = usuarios.filter((u) => u.perfil === 'Gestor' && u.email);
+  if (gestores.length && (prazos.length || eficacias.length)) {
+    const atrasadas = prazos.filter((a) => a.dias < 0);
+    let html = '<p>Resumo semanal das ações de SSMA da equipe.</p>' +
+      '<p><strong>' + atrasadas.length + '</strong> ação(ões) atrasada(s) e <strong>' + (prazos.length - atrasadas.length) +
+      '</strong> vencendo nos próximos ' + DIAS_AVISO_PRAZO + ' dias.</p>';
+    if (prazos.length) html += tabelaAcoesEmail_(prazos, true);
+    if (eficacias.length) {
+      html += '<p><strong>Eficácia a verificar (' + eficacias.length + '):</strong> ' +
+        eficacias.map((a) => a.descricao + ' (' + (a.responsavel || 'sem responsável') + ')').join('; ') + '.</p>';
+    }
+    const nomesSemEmail = Object.keys(semEmail);
+    if (nomesSemEmail.length) {
+      html += '<p><strong>Não receberam o lembrete</strong> (sem usuário ou sem e-mail na aba Usuarios): ' +
+        nomesSemEmail.map((n) => n + ' (' + semEmail[n] + ')').join('; ') + '.</p>';
+    }
+    html += '<p style="color:#666;font-size:12px">Mensagem automática semanal do aplicativo Inspeções SSMA.</p>';
+    gestores.forEach((g) => emails.push({ para: g.email, assunto: 'Resumo semanal das ações de SSMA', html: html }));
+  }
+  return { emails: emails, semEmail: semEmail, totalAcoes: prazos.length, eficacias: eficacias.length };
+}
+
+function enviarLembretesDeAcoes() {
+  const hojeIso = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  const r = montarLembretesDeAcoes_(hojeIso);
+  let enviados = 0;
+  r.emails.forEach((e) => {
+    if (MailApp.getRemainingDailyQuota() < 1) return;
+    MailApp.sendEmail({ to: e.para, subject: e.assunto, htmlBody: e.html, name: 'Inspeções SSMA' });
+    enviados++;
+  });
+  console.log('Lembretes enviados: ' + enviados + ' de ' + r.emails.length + '.');
+  return enviados;
+}
+
 /* ---------------- PROTEÇÃO CONTRA FÓRMULAS ---------------- */
 
 /**
@@ -1207,6 +1513,7 @@ function protegerContraFormulas_(valor, chave) {
     return /^[=+\-@]/.test(valor) && !/^[+-]?\d+([.,]\d+)?$/.test(valor) ? "'" + valor : valor;
   }
   if (Array.isArray(valor)) return valor.map((v) => protegerContraFormulas_(v));
+  if (valor instanceof Date) return valor;
   if (valor && typeof valor === 'object') {
     const novo = {};
     Object.keys(valor).forEach((k) => { novo[k] = protegerContraFormulas_(valor[k], k); });

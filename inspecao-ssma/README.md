@@ -101,6 +101,20 @@ técnico geral, definidos em `js/checklists.js`, e devem ser revisados pelo
 técnico responsável conforme o processo real de cada operação antes do uso
 definitivo em campo.
 
+## Relato por QR Code, 5 Porquês e lembretes por e-mail
+
+- **Relato por QR Code** (`relato.html` e `js/relatos-qr.js`): o gestor gera
+  placas por área em Relatos → "Recebidos pelo QR Code e placas". Qualquer
+  pessoa lê a placa e relata pelo celular, sem instalar o app e sem login.
+  Os relatos chegam à aba Relatos_QR e são importados no app para tratamento.
+- **5 Porquês e Ishikawa (6M)** na Investigação de Acidente, etapa "Causas e
+  Plano de Ação" (`js/analise-causas.js`). Entram no detalhe, no relatório
+  (com o diagrama de espinha de peixe) e em colunas novas da aba
+  Investigacoes_Acidente.
+- **Lembretes semanais por e-mail** das ações atrasadas e a vencer, para cada
+  responsável, e resumo da equipe para os gestores. Configuração no
+  `docs/GUIA_GESTOR.md`, item 5.
+
 ## Módulos retirados
 
 O módulo **Certificados** foi retirado do menu, por decisão da equipe. Os

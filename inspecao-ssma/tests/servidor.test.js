@@ -134,3 +134,145 @@ test('fórmula enviada pelo app chega à planilha como texto', () => {
   assert.strictEqual(r.ok, true);
   assert.strictEqual(s.abas.Acoes_Avulsas.rows[1][1], '\'=IMPORTXML("http://x";"//a")');
 });
+
+test('lembretes semanais: cada responsável recebe as suas; gestor recebe o resumo', () => {
+  const s = carregarServidor();
+  s.abas.Usuarios = criarAba('Usuarios', [
+    ['Nome', 'PIN', 'Perfil', 'Ativo', 'E-mail'],
+    ['Ana Gestora', '1', 'Gestor', 'Sim', 'ana@empresa.com'],
+    ['Carlos Lima', '2', 'Responsável', 'Sim', 'carlos@empresa.com'],
+    ['Joana', '3', 'Responsável', 'Sim', ''],
+    ['Pedro', '4', 'Responsável', 'Não', 'pedro@empresa.com']
+  ]);
+  const acao = (chave, resp, prazo, status = 'Pendente', acomp = {}) => {
+    const l = linhaAcao(chave, resp, 'Ana Gestora', acomp);
+    l[7] = prazo; l[8] = status; return l;
+  };
+  s.abas.Acoes_Consolidadas = criarAba('Acoes_Consolidadas', [CAB_ACOES,
+    acao('k1', 'Carlos Lima', '2026-10-10'), // atrasada
+    acao('k2', 'carlos lima', '2026-10-22'), // vence em 3 dias
+    acao('k3', 'Carlos Lima', '2026-12-01'), // longe: fora do lembrete
+    acao('k4', 'Carlos Lima', '2026-10-01', 'Concluída'), // concluída: fora
+    acao('k5', 'Joana', '2026-10-15'), // sem e-mail
+    acao('k6', 'Pedro', '2026-10-15'), // inativo: sem e-mail
+    acao('k7', 'Carlos Lima', '2026-10-01', 'Concluída', { evidencia: 'feito', verificarEm: '2026-10-18' }) // eficácia a verificar
+  ]);
+  const r = s.valor('montarLembretesDeAcoes_')('2026-10-19');
+  const paraCarlos = r.emails.filter((e) => e.para === 'carlos@empresa.com');
+  assert.strictEqual(paraCarlos.length, 1);
+  assert.match(paraCarlos[0].assunto, /1 atrasada\(s\), 1 vencendo/);
+  assert.match(paraCarlos[0].html, /Ação k1/);
+  assert.match(paraCarlos[0].html, /Atrasada 9 dia/);
+  assert.doesNotMatch(paraCarlos[0].html, /Ação k3|Ação k4/);
+  const resumo = r.emails.find((e) => e.para === 'ana@empresa.com');
+  assert.ok(resumo, 'gestor recebe o resumo');
+  assert.match(resumo.html, /Eficácia a verificar \(1\)/);
+  assert.match(resumo.html, /Joana \(1\)/);
+  assert.match(resumo.html, /Pedro \(1\)/);
+  assert.strictEqual(r.emails.length, 2);
+});
+
+test('lembretes: envio respeita a cota diária e o agendamento fica único', () => {
+  const s = carregarServidor();
+  s.abas.Usuarios = criarAba('Usuarios', [['Nome', 'PIN', 'Perfil', 'Ativo', 'E-mail'], ['Carlos', '2', 'Responsável', 'Sim', 'c@x.com']]);
+  const l = linhaAcao('k1', 'Carlos', 'Ana'); l[7] = '2000-01-01';
+  s.abas.Acoes_Consolidadas = criarAba('Acoes_Consolidadas', [CAB_ACOES, l]);
+  const enviados = [];
+  let cota = 0;
+  s.ctx.MailApp = { getRemainingDailyQuota: () => cota, sendEmail: (m) => enviados.push(m) };
+  assert.strictEqual(s.valor('enviarLembretesDeAcoes')(), 0);
+  cota = 100;
+  assert.strictEqual(s.valor('enviarLembretesDeAcoes')(), 1);
+  assert.strictEqual(enviados[0].to, 'c@x.com');
+
+  const gatilhos = [];
+  s.ctx.ScriptApp = {
+    WeekDay: { MONDAY: 'MONDAY' },
+    getProjectTriggers: () => gatilhos.slice(),
+    deleteTrigger: (t) => gatilhos.splice(gatilhos.indexOf(t), 1),
+    newTrigger: (fn) => ({ timeBased: () => ({ onWeekDay: () => ({ atHour: () => ({ create: () => gatilhos.push({ getHandlerFunction: () => fn }) }) }) }) })
+  };
+  s.valor('ativarLembretesSemanais')();
+  s.valor('ativarLembretesSemanais')();
+  assert.strictEqual(gatilhos.length, 1);
+});
+
+/* ---------------- Relato pelo QR Code ---------------- */
+
+function servidorComDrive() {
+  const s = servidorComUsuarios();
+  const arquivos = [];
+  const pasta = (nome) => ({
+    nome,
+    getFoldersByName: () => ({ hasNext: () => false }),
+    createFolder: (n) => pasta(nome + '/' + n),
+    createFile: (blob) => { arquivos.push({ pasta: nome, blob }); return { getUrl: () => 'https://drive/' + arquivos.length }; },
+    getUrl: () => 'https://drive/pasta', getId: () => nome
+  });
+  s.ctx.DriveApp = { getRootFolder: () => pasta('raiz') };
+  s.ctx.Utilities.newBlob = (bytes, tipo, nome) => ({ bytes, tipo, nome });
+  s.ctx.Utilities.base64Decode = (b) => Buffer.from(b, 'base64');
+  return { s, arquivos };
+}
+
+const gestor = { usuarioLogin: 'Ana Gestora', pin: '1234' };
+
+test('relato pelo QR: sem o código certo nada é gravado', () => {
+  const { s } = servidorComDrive();
+  let r = s.post({ action: 'relatoPublico', codigo: 'qualquer', relato: { descricao: 'Degrau solto na escada' } });
+  assert.strictEqual(r.ok, false);
+  const codigo = s.post({ action: 'codigoRelatoQR', ...gestor }).codigo;
+  assert.ok(codigo && codigo.length >= 16);
+  r = s.post({ action: 'relatoPublico', codigo: 'errado', relato: { descricao: 'Degrau solto na escada' } });
+  assert.match(r.error, /não está mais ativo/);
+  assert.strictEqual(s.abas.Relatos_QR, undefined);
+});
+
+test('relato pelo QR: grava como texto, respeita o anonimato e limita fotos', () => {
+  const { s, arquivos } = servidorComDrive();
+  const codigo = s.post({ action: 'codigoRelatoQR', ...gestor }).codigo;
+  const fotoPequena = Buffer.from('jpeg').toString('base64');
+  const fotoGrande = 'A'.repeat(3 * 1024 * 1024);
+  const r = s.post({ action: 'relatoPublico', codigo, relato: {
+    tipo: 'Condição insegura', potencial: 'Alto', area: 'Oficina', local: 'Bancada 2',
+    descricao: '=HYPERLINK("http://x")', anonimo: true, nome: 'Não deve aparecer',
+    fotos: [{ base64: fotoPequena }, { base64: fotoGrande }, { base64: fotoPequena }]
+  } });
+  assert.strictEqual(r.ok, true);
+  assert.match(r.protocolo, /^QR-/);
+  const linha = s.abas.Relatos_QR.rows[1];
+  assert.strictEqual(linha[2], 'Condição insegura');
+  assert.strictEqual(linha[7], '\'=HYPERLINK("http://x")');
+  assert.strictEqual(linha[9], 'Sim');
+  assert.strictEqual(linha[10], '');
+  assert.strictEqual(linha[13], 'Novo');
+  assert.strictEqual(Object.prototype.toString.call(linha[1]), '[object Date]', 'data de recebimento preservada');
+  assert.strictEqual(arquivos.length, 1, 'só a primeira das duas fotos permitidas cabe no limite de tamanho');
+  assert.match(s.post({ action: 'relatoPublico', codigo, relato: { descricao: 'oi' } }).error, /Descreva/);
+});
+
+test('relato pelo QR: limite de relatos por hora', () => {
+  const { s } = servidorComDrive();
+  const codigo = s.post({ action: 'codigoRelatoQR', ...gestor }).codigo;
+  for (let i = 0; i < 60; i++) assert.strictEqual(s.post({ action: 'relatoPublico', codigo, relato: { descricao: 'Relato número ' + i } }).ok, true);
+  assert.match(s.post({ action: 'relatoPublico', codigo, relato: { descricao: 'Relato a mais' } }).error, /Muitos relatos/);
+});
+
+test('relato pelo QR: equipe lista e importa; código novo invalida as placas', () => {
+  const { s } = servidorComDrive();
+  const codigo = s.post({ action: 'codigoRelatoQR', ...gestor }).codigo;
+  const { protocolo } = s.post({ action: 'relatoPublico', codigo, relato: { descricao: 'Fio desencapado no corredor', anonimo: false, nome: 'José', funcao: 'Eletricista' } });
+  assert.match(s.post({ action: 'codigoRelatoQR', usuarioLogin: 'Bia', pin: '9999' }).error, /perfil Inspetor/);
+  assert.match(s.post({ action: 'listarRelatosQR', usuarioLogin: 'Carlos Lima', pin: '420' }).error, /perfil Responsável/);
+  let lista = s.post({ action: 'listarRelatosQR', usuarioLogin: 'Bia', pin: '9999' });
+  assert.strictEqual(lista.relatos.length, 1);
+  assert.strictEqual(lista.relatos[0].nome, 'José');
+  assert.strictEqual(lista.relatos[0].anonimo, false);
+  assert.strictEqual(s.post({ action: 'marcarRelatoQRImportado', usuarioLogin: 'Bia', pin: '9999', id: protocolo }).ok, true);
+  assert.strictEqual(s.abas.Relatos_QR.rows[1][14], 'Bia');
+  lista = s.post({ action: 'listarRelatosQR', ...gestor });
+  assert.strictEqual(lista.relatos.length, 0);
+  const novo = s.post({ action: 'codigoRelatoQR', ...gestor, novo: true }).codigo;
+  assert.notStrictEqual(novo, codigo);
+  assert.strictEqual(s.post({ action: 'relatoPublico', codigo, relato: { descricao: 'Placa antiga' } }).ok, false);
+});

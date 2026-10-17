@@ -7,11 +7,19 @@ dados do app (hoje, **INSPEÇÕES SSMA_2026**):
 2. Montar o painel da equipe no Looker Studio.
 3. Migrar planilha e script para a conta corporativa.
 4. Cadastrar usuários, perfis e ações compartilhadas.
+5. Ligar os lembretes semanais por e-mail.
+6. Instalar as placas de relato por QR Code.
 
 Antes de tudo, a planilha precisa estar com o **Code.gs versão 2026-10-17 ou
 mais nova**. Para conferir, abra no navegador o endereço do app da Web (o que
 termina em `/exec`): a página deve mostrar *"Servidor do Inspeções SSMA
 funcionando. Versão 2026-10-17."*
+
+**Autorização nova do Google.** Esta versão envia e-mails (lembretes) e
+agenda uma tarefa semanal. Ao publicar a nova versão, ou ao executar
+`ativarLembretesSemanais` pela primeira vez, o Google mostra a tela
+"Este app precisa de autorização": entre com a conta dona da planilha,
+clique em **Avançado → Acessar o projeto** e em **Permitir**.
 
 Para atualizar: copie o `server/Code.gs` deste repositório, cole no Apps Script
 substituindo o conteúdo e use **Implantar → Gerenciar implantações → editar →
@@ -232,3 +240,66 @@ um banco de dados com login da empresa.
   status, evidência e eficácia, com data, hora e o nome de quem fez.
 - A tela **Inteligência** continua mostrando os dados do próprio aparelho.
   A visão da equipe inteira é a do Looker Studio (item 2).
+
+---
+
+## 5. Lembretes semanais por e-mail
+
+Toda segunda-feira, por volta das 7h, cada responsável recebe por e-mail as
+ações de SSMA em seu nome que estão **atrasadas** ou **vencem nos próximos 7
+dias**. Os gestores recebem o **resumo da equipe**: ações atrasadas e a vencer
+por responsável, eficácias que já deveriam ter sido verificadas e quem não
+recebeu o lembrete por falta de e-mail cadastrado.
+
+1. Na aba **Usuarios**, preencha a coluna **E-mail** (ela aparece sozinha na
+   primeira sincronização depois de atualizar o Code.gs). Quem estiver sem
+   e-mail ou com Ativo = "Não" não recebe nada.
+2. O nome na aba Usuarios precisa ser o mesmo do campo "Responsável" das ações
+   (maiúsculas e acentos não importam), como já acontece no login.
+3. Na planilha, abra **Extensões → Apps Script**. No topo, escolha a função
+   **ativarLembretesSemanais** e clique em **Executar**. Autorize quando o
+   Google pedir. Basta fazer uma vez.
+4. Para conferir na hora, escolha **enviarLembretesDeAcoes** e clique em
+   **Executar**. Os e-mails saem imediatamente.
+5. Para desligar, execute **desativarLembretesSemanais**.
+
+Os e-mails saem pela conta dona da planilha. Contas Gmail comuns têm limite de
+cerca de 100 destinatários por dia, suficiente para o piloto; na conta
+corporativa o limite é maior.
+
+---
+
+## 6. Placas de relato por QR Code
+
+Qualquer trabalhador, inclusive terceirizado, lê a placa com a câmera do
+celular e relata um quase acidente, condição insegura, comportamento de risco
+ou sugestão, **sem instalar o app e sem login**, de forma anônima se quiser.
+
+**Gerar as placas (perfil Gestor):**
+1. No app, abra **Gestão → Relatos → Recebidos pelo QR Code e placas**.
+2. Em "Gerar placa para uma área", informe empresa, área e local e toque em
+   **Gerar placa**.
+3. Toque em **Imprimir**. Use A4 ou A5, plastifique se a área for externa ou
+   úmida e fixe na altura dos olhos, em local de passagem.
+
+**Receber os relatos (Gestor e Inspetor):**
+- Os relatos chegam à aba **Relatos_QR** da planilha com a situação "Novo".
+- No app, em **Recebidos pelo QR Code**, toque em **Importar**. O relato entra
+  no módulo Relatos do aparelho e segue o fluxo normal: tratamento, ação
+  corretiva, responsável, prazo e Central de ações. Na planilha, a situação
+  passa a "Importado", com quem importou e quando.
+- Fotos enviadas pela placa ficam no Drive, na pasta
+  *Inspeções SSMA - Fotos / Relatos por QR Code*, com link no relato.
+- O potencial informado pelo trabalhador é a percepção dele: reavalie no
+  tratamento. Sem potencial informado, o relato entra como "Médio".
+
+**Segurança:**
+- Cada placa leva um código secreto (propriedade `CODIGO_RELATO_QR`, criada
+  sozinha). Sem ele, nada é gravado. A página pública só envia relatos: não
+  consegue ler nada da planilha.
+- Se uma placa for perdida ou o código vazar, toque em **Invalidar placas
+  antigas** e reimprima todas as placas.
+- Limites: 60 relatos por hora no total, 2 fotos por relato e textos de até
+  2.000 caracteres. Isso impede que alguém encha a planilha de propósito.
+- O relato anônimo não grava nome nem função. Trate os relatos identificados
+  com o mesmo cuidado de LGPD dos demais registros.
