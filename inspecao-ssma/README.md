@@ -43,6 +43,15 @@ configurado.
   próxima vez que houver sinal.
 - A tela inicial mostra o status de cada inspeção: Rascunho, Aguardando
   sincronização, Sincronizando, Sincronizado ou Erro na sincronização.
+- Cada envio espera no máximo 90 segundos (fotos: 180). Se a sincronização
+  falhar, o app tenta de novo sozinho a cada 5 minutos enquanto estiver
+  aberto. Se a planilha recusar o usuário ou PIN, o app para de enviar até a
+  pessoa entrar de novo, para não esgotar as tentativas e bloquear o usuário.
+- As fotos são guardadas já reduzidas (até 1600 px no lado maior), o que
+  economiza espaço no celular em inspeções feitas sem internet.
+- Quando sai uma versão nova do app, ele só recarrega sozinho nas telas de
+  consulta. No meio de um preenchimento, aparece o aviso "Versão nova do
+  aplicativo pronta" e a pessoa escolhe a hora de atualizar.
 
 ## Estrutura do formulário
 

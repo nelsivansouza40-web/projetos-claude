@@ -1422,18 +1422,7 @@ function upsertAcao(a) {
 
 function uploadPhoto(inspectionId, photo) {
   const rootFolder = getOrCreateDriveFolder(DRIVE_FOLDER_NAME);
-  let inspFolder;
-  if (photo.remoteRef) {
-    inspFolder = DriveApp.getFolderById(photo.remoteRef);
-  } else {
-    const it = rootFolder.getFolders();
-    inspFolder = null;
-    while (it.hasNext()) {
-      const f = it.next();
-      if (f.getName().indexOf(inspectionId) === 0) { inspFolder = f; break; }
-    }
-    if (!inspFolder) inspFolder = getOrCreateDriveFolder(inspectionId, rootFolder);
-  }
+  const inspFolder = photo.remoteRef ? DriveApp.getFolderById(photo.remoteRef) : pastaDoRegistro_(rootFolder, inspectionId);
 
   const bytes = Utilities.base64Decode(photo.base64);
   const blob = Utilities.newBlob(bytes, photo.mimeType || 'image/jpeg', photo.fileName || (photo.id + '.jpg'));
@@ -1441,6 +1430,34 @@ function uploadPhoto(inspectionId, photo) {
   file.setName((photo.questionRef || 'foto') + '_' + photo.id + '_' + file.getName());
 
   return { ok: true, fileUrl: file.getUrl() };
+}
+
+/**
+ * Pasta do registro no Drive (o nome começa pelo ID do registro). Antes, cada
+ * foto percorria todas as pastas de fotos, o que ficava mais lento a cada
+ * inspeção nova. Agora: 1) a pasta já usada fica guardada por 6 horas;
+ * 2) a busca do Drive pelo ID; 3) só se ela não achar, a varredura antiga,
+ * para nunca criar uma pasta duplicada.
+ */
+function pastaDoRegistro_(rootFolder, inspectionId) {
+  const cache = CacheService.getScriptCache();
+  const chave = 'pasta_' + inspectionId;
+  const guardada = cache.get(chave);
+  if (guardada) {
+    try { return DriveApp.getFolderById(guardada); } catch (e) { cache.remove(chave); }
+  }
+  const id = String(inspectionId);
+  const ehDoRegistro = (f) => f.getName().indexOf(id) === 0;
+  let pasta = null;
+  const busca = rootFolder.searchFolders('title contains "' + id.replace(/["\\]/g, '') + '"');
+  while (!pasta && busca.hasNext()) { const f = busca.next(); if (ehDoRegistro(f)) pasta = f; }
+  if (!pasta) {
+    const todas = rootFolder.getFolders();
+    while (!pasta && todas.hasNext()) { const f = todas.next(); if (ehDoRegistro(f)) pasta = f; }
+  }
+  if (!pasta) pasta = getOrCreateDriveFolder(id, rootFolder);
+  cache.put(chave, pasta.getId(), 21600);
+  return pasta;
 }
 
 /**

@@ -8,6 +8,7 @@
 
 const Sync = {
   running: false,
+  ultimaComFalha: false,
   listeners: [],
 
   onChange(fn) {
@@ -51,6 +52,13 @@ const Sync = {
     if (!this.isOnline()) return;
     const endpoint = await this.getEndpoint();
     if (!endpoint) return;
+    // PIN recusado pela planilha: não envia nada até a pessoa entrar de novo.
+    // Cada envio com PIN errado conta para o bloqueio de 15 minutos.
+    if (await DB.getSetting('loginRecusado')) {
+      loginRecusado = true;
+      this.ultimaComFalha = false;
+      throw new Error(MSG_LOGIN_RECUSADO);
+    }
 
     this.running = true;
     this.notify();
@@ -58,7 +66,6 @@ const Sync = {
     // Um registro com erro não pode travar a fila: cada um é tentado
     // separadamente, e o erro fica gravado no próprio registro.
     let falhas = 0;
-    loginRecusado = false;
     try {
       const inspections = await DB.getAllInspections();
       for (const insp of inspections) {
@@ -141,7 +148,9 @@ const Sync = {
       this.running = false;
       this.notify();
     }
-    if (falhas && loginRecusado) throw new Error('A planilha exige login: entre com seu usuário e PIN em Configurações → Acesso do usuário.');
+    // Com falha (sinal fraco, servidor ocupado), tenta de novo sozinho em alguns minutos.
+    this.ultimaComFalha = falhas > 0 && !loginRecusado;
+    if (falhas && loginRecusado) throw new Error(MSG_LOGIN_RECUSADO);
     if (falhas) throw new Error(`${falhas} registro(s) não sincronizaram. Abra cada um para ver o motivo.`);
   },
 
@@ -1638,8 +1647,9 @@ function buildInspectionMetaPayload(insp, reincidencia = new Map()) {
 
 /**
  * Fotos de celular costumam ter 3 a 6 MB, o que torna o envio lento e sujeito
- * a queda em rede móvel. Antes de enviar, fotos JPEG grandes são reduzidas
- * para no máximo 1600 px no lado maior (qualidade suficiente para relatório).
+ * a queda em rede móvel. Fotos JPEG grandes são reduzidas para no máximo
+ * 1600 px no lado maior (qualidade suficiente para relatório): já na captura
+ * (adicionarFotos) e de novo antes do envio, para fotos guardadas antes disso.
  */
 async function reduzirFotoParaEnvio(blob) {
   try {
@@ -1690,6 +1700,13 @@ function camposPlanilhaAcao(a, links = []) {
 }
 
 let loginRecusado = false;
+const MSG_LOGIN_RECUSADO = 'A planilha recusou o usuário ou PIN: entre de novo em Configurações → Acesso do usuário. Até lá, nada é enviado.';
+
+/** Tempo máximo de espera pela resposta do servidor (fotos levam mais). */
+const TEMPO_LIMITE_ENVIO_MS = 90 * 1000;
+const TEMPO_LIMITE_FOTO_MS = 180 * 1000;
+/** Intervalo entre novas tentativas automáticas depois de uma sincronização com falha. */
+const INTERVALO_NOVA_TENTATIVA_MS = 5 * 60 * 1000;
 
 /** Aviso para o gestor quando a planilha aceita dados de qualquer pessoa com o endereço. */
 async function htmlAvisoServidorDesprotegido() {
@@ -1707,19 +1724,50 @@ async function postJson(url, payload) {
     const usuarioLogin = await DB.getSetting('usuarioLogin');
     if (usuarioLogin) payload = { ...payload, usuarioLogin, pin: (await DB.getSetting('pinUsuario')) || '' };
   }
-  const resp = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload)
-  });
-  if (!resp.ok) {
-    throw new Error('Erro HTTP ' + resp.status + ' ao contatar o servidor.');
+  // Depois de uma recusa de PIN, o resto da sincronização não insiste.
+  if (loginRecusado && payload.action !== 'login' && payload.action !== 'ping') throw new Error(MSG_LOGIN_RECUSADO);
+  // Sem tempo limite, um envio em sinal fraco podia ficar pendurado e travar
+  // a sincronização em "Sincronizando" até o app ser fechado.
+  const limite = payload.action === 'uploadPhoto' ? TEMPO_LIMITE_FOTO_MS : TEMPO_LIMITE_ENVIO_MS;
+  const controle = new AbortController();
+  const relogio = setTimeout(() => controle.abort(), limite);
+  let dados;
+  try {
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      signal: controle.signal
+    });
+    if (!resp.ok) {
+      throw new Error('Erro HTTP ' + resp.status + ' ao contatar o servidor.');
+    }
+    dados = await resp.json();
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      throw new Error(`O servidor não respondeu em ${limite / 1000} segundos (sinal fraco?). O envio será tentado de novo.`);
+    }
+    throw e;
+  } finally {
+    clearTimeout(relogio);
   }
-  const dados = await resp.json();
-  if (dados && dados.loginInvalido) loginRecusado = true;
+  if (dados && dados.loginInvalido) {
+    loginRecusado = true;
+    await DB.setSetting('loginRecusado', true);
+  }
   return dados;
 }
 
 window.addEventListener('online', () => {
   Sync.syncAll().catch((e) => console.warn('Falha na sincronização automática:', e));
 });
+
+// Nova tentativa automática: se a última sincronização teve falha, tenta de
+// novo a cada 5 minutos com o app aberto e quando ele volta para a tela.
+// Sem falha pendente, não faz nada (não gasta dados nem bateria).
+function tentarDeNovoSeFalhou() {
+  if (!Sync.ultimaComFalha || document.visibilityState !== 'visible') return;
+  Sync.syncAll().catch((e) => console.warn('Nova tentativa de sincronização falhou:', e));
+}
+setInterval(tentarDeNovoSeFalhou, INTERVALO_NOVA_TENTATIVA_MS);
+document.addEventListener('visibilitychange', tentarDeNovoSeFalhou);

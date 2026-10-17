@@ -756,13 +756,17 @@ function renderChecklistItem(item, idx) {
 
 async function adicionarFotos(insp, photoIdsArray, fileList, questionRef) {
   for (const file of Array.from(fileList)) {
+    // A foto já é guardada reduzida (até 1600 px, a mesma redução feita antes
+    // do envio). Guardar o original de 3 a 6 MB enchia o celular em inspeções
+    // sem internet, e no iPhone o sistema pode apagar dados de app cheio.
+    const blob = await reduzirFotoParaEnvio(file);
     const photo = {
       id: uuid(),
       inspectionId: insp.id,
       questionRef,
-      mimeType: file.type || 'image/jpeg',
+      mimeType: blob.type || file.type || 'image/jpeg',
       fileName: file.name || `foto_${Date.now()}.jpg`,
-      blob: file,
+      blob,
       synced: false,
       remoteUrl: null,
       createdAt: Date.now()
@@ -1415,12 +1419,16 @@ async function renderSettings() {
       const resp = await postJson(url, { action: 'login', usuarioLogin: login, pin });
       if (!resp || !resp.ok) { resAcesso.textContent = (resp && resp.error) || 'Não foi possível entrar.'; btnEntrar.disabled = false; return; }
       if (!resp.loginAtivo) {
+        await DB.setSetting('loginRecusado', false);
+        loginRecusado = false;
         resAcesso.textContent = 'A planilha ainda não tem usuários cadastrados: o login não é necessário. Escolha o perfil abaixo.';
         btnEntrar.disabled = false;
         return;
       }
       await DB.setSetting('usuarioLogin', resp.nome);
       await DB.setSetting('pinUsuario', pin);
+      await DB.setSetting('loginRecusado', false);
+      loginRecusado = false;
       await DB.setSetting('nomeUsuario', resp.nome);
       await DB.setSetting('perfilUso', resp.perfil);
       state.filtroAcoes = null;
@@ -1515,6 +1523,11 @@ async function renderSettings() {
     try {
       await DB.setSetting('chaveAcesso', document.getElementById('input-chave').value.trim());
       const resp = await postJson(url, { action: 'ping' });
+      // Planilha sem usuários: não há login a exigir, a sincronização pode voltar.
+      if (resp && resp.ok && resp.loginAtivo === false) {
+        await DB.setSetting('loginRecusado', false);
+        loginRecusado = false;
+      }
       if (resp && resp.ok && 'protegido' in resp) {
         await DB.setSetting('servidorProtegido', resp.protegido);
         await DB.setSetting('protecaoVerificadaEm', Date.now());
@@ -1563,11 +1576,17 @@ async function init() {
       // Assim que uma versão nova terminar de instalar e assumir o controle,
       // recarrega a página automaticamente — sem isso, a aba continuava
       // rodando o JavaScript antigo até o usuário fechar e abrir de novo.
+      // Se a pessoa estiver preenchendo algo, não recarrega no meio: mostra o
+      // aviso e ela escolhe a hora de atualizar.
       let recarregandoPorAtualizacao = false;
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (recarregandoPorAtualizacao) return;
-        recarregandoPorAtualizacao = true;
-        location.reload();
+        if (podeRecarregarAgora()) {
+          recarregandoPorAtualizacao = true;
+          location.reload();
+        } else {
+          mostrarAvisoAtualizacao();
+        }
       });
 
       // Força checar por uma versão mais nova a cada abertura do app e sempre
@@ -1593,6 +1612,31 @@ async function init() {
   await carregarPerfilUso();
   if (state.screen === 'home') await irParaInicio();
   Sync.syncAll().catch(() => {});
+}
+
+/* ---------------- ATUALIZAÇÃO DO APLICATIVO ---------------- */
+
+/** Telas só de consulta: recarregar nelas não perde nada do que está sendo digitado. */
+const TELAS_DE_CONSULTA = /(^|-)(home|detail|report)$|^(painel|inteligencia|erros-sync|etiquetas|escolha-disciplina|investigacao-tftg)$/;
+
+function podeRecarregarAgora() {
+  if (document.querySelector('.dialogo-fundo')) return false;
+  return TELAS_DE_CONSULTA.test(state.screen || 'home');
+}
+
+function mostrarAvisoAtualizacao() {
+  if (document.getElementById('aviso-atualizacao')) return;
+  const aviso = document.createElement('div');
+  aviso.id = 'aviso-atualizacao';
+  aviso.className = 'aviso-atualizacao no-print';
+  aviso.innerHTML = `
+    <p><strong>Versão nova do aplicativo pronta.</strong> Termine ou salve o que está preenchendo e toque em Atualizar.</p>
+    <button type="button" class="btn-primary">Atualizar agora</button>`;
+  aviso.querySelector('button').addEventListener('click', () => {
+    if (!podeRecarregarAgora() && !confirm('Você está no meio de um preenchimento. O que já foi salvo continua no aparelho, mas o que foi digitado nesta etapa e ainda não foi salvo pode se perder. Atualizar mesmo assim?')) return;
+    location.reload();
+  });
+  document.body.appendChild(aviso);
 }
 
 /** Tela inicial conforme o perfil: quem não usa inspeções abre direto na Central de ações. */

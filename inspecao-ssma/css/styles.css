@@ -729,3 +729,9 @@ main#view {
 .check-inline { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; }
 .check-inline input { width: auto; margin: 0; }
 .acao-card input:disabled { background: #f1f2ee; color: #555; }
+
+/* Aviso de versão nova (não recarrega no meio de um preenchimento) */
+.aviso-atualizacao { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 70; max-width: 520px; margin: 0 auto; background: #fff; border: 1px solid var(--azul); border-radius: 12px; padding: 10px 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+.aviso-atualizacao p { margin: 0 0 8px; font-size: 0.9rem; color: #33475b; }
+.aviso-atualizacao .btn-primary { width: 100%; }
+@media print { .aviso-atualizacao { display: none !important; } }
