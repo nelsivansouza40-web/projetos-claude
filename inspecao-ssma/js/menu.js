@@ -14,7 +14,14 @@ const PERFIS_USO = {
 };
 let PERFIL_ATUAL = 'Gestor';
 
+/* Módulos retirados do menu para todos os perfis, por decisão da equipe.
+ * O código e os registros já feitos continuam no aparelho: os pendentes ainda
+ * sincronizam e os antigos aparecem na busca. Para trazer um módulo de volta,
+ * basta tirá-lo desta lista. */
+const MODULOS_RETIRADOS = ['certificados'];
+
 function abaPermitida(aba) {
+  if (MODULOS_RETIRADOS.includes(aba)) return false;
   const lista = PERFIS_USO[PERFIL_ATUAL];
   return !lista || lista.includes(aba);
 }

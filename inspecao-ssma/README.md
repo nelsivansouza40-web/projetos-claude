@@ -101,6 +101,30 @@ técnico geral, definidos em `js/checklists.js`, e devem ser revisados pelo
 técnico responsável conforme o processo real de cada operação antes do uso
 definitivo em campo.
 
+## Módulos retirados
+
+O módulo **Certificados** foi retirado do menu, por decisão da equipe. Os
+certificados já registrados continuam no aparelho, aparecem na busca e os
+pendentes ainda são enviados à planilha. Para trazer o módulo de volta, tire
+`'certificados'` da lista `MODULOS_RETIRADOS` em `js/menu.js`.
+
+## Testes automáticos
+
+Os testes ficam em `tests/` e rodam sem navegador e sem planilha de verdade
+(ambos são simulados). Conferem as regras de segurança do servidor (PIN,
+bloqueio, perfis, fórmulas, proteção), os cálculos do app (índice de
+conformidade, reincidência, IMP, prazos e eficácia das ações, menu por
+perfil) e o comportamento da sincronização (tempo limite, nova tentativa,
+PIN recusado).
+
+Para rodar, com Node.js 22 ou mais novo, na pasta raiz do repositório:
+
+    node --test "inspecao-ssma/tests/*.test.js"
+
+O GitHub roda os mesmos testes sozinho a cada envio de código
+(`.github/workflows/testes.yml`). Toda mudança nova no app deve vir com o
+teste correspondente.
+
 ## Limitações conhecidas
 
 - O upload de arquivos usado pelo Google Forms original exige conta

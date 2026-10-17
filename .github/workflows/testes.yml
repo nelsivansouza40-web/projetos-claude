@@ -1,0 +1,25 @@
+name: Testes do Inspeções SSMA
+
+# Roda os testes automáticos a cada envio de código e em cada pull request
+# que mexa no app. Se algum teste falhar, o GitHub marca a mudança em vermelho.
+on:
+  push:
+    paths: [ 'inspecao-ssma/**', '.github/workflows/testes.yml' ]
+  pull_request:
+    paths: [ 'inspecao-ssma/**', '.github/workflows/testes.yml' ]
+
+permissions:
+  contents: read
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Conferir a sintaxe dos arquivos do app
+        run: for f in inspecao-ssma/js/*.js inspecao-ssma/sw.js; do node --check "$f"; done
+      - name: Rodar os testes
+        run: node --test "inspecao-ssma/tests/*.test.js"
