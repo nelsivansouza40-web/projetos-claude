@@ -32,6 +32,20 @@ const Sync = {
     return navigator.onLine;
   },
 
+  /**
+   * Uma vez por dia, pergunta ao servidor se ele está protegido (chave de
+   * acesso ou usuários cadastrados). Sem proteção, qualquer pessoa com o
+   * endereço consegue gravar na planilha: o app avisa o gestor.
+   */
+  async verificarProtecaoServidor(endpoint) {
+    const ultima = await DB.getSetting('protecaoVerificadaEm');
+    if (ultima && Date.now() - ultima < 24 * 60 * 60 * 1000) return;
+    const resp = await postJson(endpoint, { action: 'ping' });
+    if (!resp || !resp.ok) return;
+    if ('protegido' in resp) await DB.setSetting('servidorProtegido', resp.protegido);
+    await DB.setSetting('protecaoVerificadaEm', Date.now());
+  },
+
   async syncAll() {
     if (this.running) return;
     if (!this.isOnline()) return;
@@ -40,6 +54,7 @@ const Sync = {
 
     this.running = true;
     this.notify();
+    try { await this.verificarProtecaoServidor(endpoint); } catch (e) { /* sem resposta: tenta de novo na próxima */ }
     // Um registro com erro não pode travar a fila: cada um é tentado
     // separadamente, e o erro fica gravado no próprio registro.
     let falhas = 0;
@@ -1675,6 +1690,14 @@ function camposPlanilhaAcao(a, links = []) {
 }
 
 let loginRecusado = false;
+
+/** Aviso para o gestor quando a planilha aceita dados de qualquer pessoa com o endereço. */
+async function htmlAvisoServidorDesprotegido() {
+  if ((await DB.getSetting('servidorProtegido')) !== false) return '';
+  return `<p class="aviso-backup"><strong>Planilha sem proteção:</strong> qualquer pessoa que tenha o endereço de sincronização
+    consegue gravar dados nela. Defina a CHAVE_ACESSO no Apps Script (e a mesma chave em Configurações) ou cadastre os
+    usuários na aba Usuarios. Passo a passo no guia do gestor, item 1.</p>`;
+}
 
 async function postJson(url, payload) {
   const chave = await DB.getSetting('chaveAcesso');

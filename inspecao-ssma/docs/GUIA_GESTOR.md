@@ -8,10 +8,10 @@ dados do app (hoje, **INSPEÇÕES SSMA_2026**):
 3. Migrar planilha e script para a conta corporativa.
 4. Cadastrar usuários, perfis e ações compartilhadas.
 
-Antes de tudo, a planilha precisa estar com o **Code.gs versão 2026-10-13 ou
+Antes de tudo, a planilha precisa estar com o **Code.gs versão 2026-10-17 ou
 mais nova**. Para conferir, abra no navegador o endereço do app da Web (o que
 termina em `/exec`): a página deve mostrar *"Servidor do Inspeções SSMA
-funcionando. Versão 2026-10-13."*
+funcionando. Versão 2026-10-17."*
 
 Para atualizar: copie o `server/Code.gs` deste repositório, cole no Apps Script
 substituindo o conteúdo e use **Implantar → Gerenciar implantações → editar →
@@ -42,6 +42,11 @@ conseguem.
 A partir desse momento, celulares sem a chave recebem "Chave de acesso
 inválida" e nada é gravado. Para trocar a chave, altere a propriedade e
 atualize os celulares. A chave não vai para os arquivos de cópia de segurança.
+
+Enquanto a planilha estiver sem chave e sem usuários cadastrados, o app mostra
+o aviso **"Planilha sem proteção"** em Configurações e no Painel de
+indicadores. O aviso some sozinho em até um dia depois que a chave for
+definida, ou na hora, ao tocar em **Testar conexão**.
 
 ---
 
@@ -132,7 +137,10 @@ como pede a LGPD.
      Workspace da empresa precisa liberá-la para apps da Web do Apps Script.
      A opção "Qualquer pessoa da organização" **não funciona** com o app,
      porque o celular não envia o login do Google junto com os dados.
-4. Defina a `CHAVE_ACESSO` na cópia (item 1 deste guia).
+4. Defina a `CHAVE_ACESSO` na cópia (item 1 deste guia). As propriedades do
+   script não vão junto com a cópia: copie também a `SEGREDO_PIN` da planilha
+   antiga, senão os PINs codificados na aba Usuarios param de funcionar e
+   precisam ser digitados de novo (item 4.1).
 5. Em cada celular: Configurações → novo endereço `/exec` + chave → **Salvar**
    → **Testar conexão**.
 6. A pasta de fotos (`Inspeções SSMA - Fotos`) é criada sozinha no Drive da
@@ -186,10 +194,31 @@ Enquanto ela estiver vazia, o app funciona como antes, sem login.
 obrigatório. Cada celular precisa entrar em **Configurações → Acesso do
 usuário** com nome e PIN, senão a sincronização para. Cadastre todos antes e
 avise a equipe. Cinco PINs errados seguidos bloqueiam o usuário por 15 minutos.
+O bloqueio vale para qualquer comunicação do celular com a planilha, não só
+para a tela de login: um celular com PIN antigo salvo também é bloqueado
+depois de cinco tentativas. Nesse caso, espere os 15 minutos e entre de novo
+com o PIN atual.
 
-O PIN fica visível na aba Usuarios: compartilhe a planilha só com a gestão de
-SSMA. É uma proteção adequada para o piloto; para uso corporativo amplo, o
-caminho é um banco de dados com login da empresa.
+**PIN codificado.** Na primeira sincronização depois de cadastrado, o PIN
+digitado na aba Usuarios é trocado por um código (começa com `pin1:`). Quem
+abre a planilha não consegue mais ler os PINs.
+- Para **trocar o PIN** de alguém (inclusive quando a pessoa esquecer), digite
+  o novo PIN por cima do código. Ele é codificado na próxima sincronização.
+- O código depende da propriedade **SEGREDO_PIN**, criada sozinha em
+  Propriedades do script. **Não apague nem altere essa propriedade**: se isso
+  acontecer, todos os PINs deixam de funcionar e precisam ser digitados de novo.
+- Ao migrar para outra conta (item 3), copie também a propriedade SEGREDO_PIN,
+  ou digite de novo os PINs de todos na planilha nova.
+
+**Perfis conferidos na planilha.** O servidor recusa o que o perfil não pode
+enviar. Exemplos: um Inspetor não grava DDS, CIPA, certificados, investigações,
+fichas de EPI nem PGR; um Responsável só altera as ações em seu nome e não muda
+responsável, prazo nem o resultado da verificação de eficácia. Se um celular
+mostrar "O perfil ... não pode enviar este tipo de registro", ajuste o perfil
+da pessoa na aba Usuarios ou envie o registro pelo celular de um gestor.
+
+É uma proteção adequada para o piloto; para uso corporativo amplo, o caminho é
+um banco de dados com login da empresa.
 
 ### 4.2 Como as ações passam a funcionar
 

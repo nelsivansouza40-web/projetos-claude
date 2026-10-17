@@ -387,7 +387,7 @@ async function renderAcoesHome() {
     const mostradas = visiveis.slice(0, LIMITE_ACOES_TELA);
     listaEl.innerHTML = visiveis.length
       ? `<p class="hint">${visiveis.length} ação(ões) encontrada(s)${visiveis.length > LIMITE_ACOES_TELA ? ` — mostrando as ${LIMITE_ACOES_TELA} primeiras; use a busca para refinar` : ''}.</p>
-         <ul class="insp-list">${mostradas.map((a, idx) => cardAcao(a, idx)).join('')}</ul>`
+         <ul class="insp-list">${mostradas.map((a, idx) => cardAcao(a, idx, responsavel && !!filtro.nome && !ehMinhaAcao(a, filtro.nome))).join('')}</ul>`
       : '<p class="empty-state">Nenhuma ação encontrada com estes filtros.</p>';
 
     mostradas.forEach((a, idx) => {
@@ -446,7 +446,8 @@ async function renderAcoesHome() {
   });
 }
 
-function cardAcao(a, idx) {
+/** somenteLeitura: perfil Responsável vendo ação de outra pessoa (o servidor também recusa a alteração). */
+function cardAcao(a, idx, somenteLeitura) {
   const sit = situacaoAcao(a);
   const etapa = etapaEficacia(a);
   const ac = a.acomp || {};
@@ -460,7 +461,7 @@ function cardAcao(a, idx) {
     // A verificação de eficácia é feita por SSMA, não por quem executou a ação.
     if (ac.eficacia !== 'Eficaz' && !responsavel) acompanhamento += '<button type="button" class="btn-secondary btn-verificar-eficacia">Verificar eficácia</button>';
     else if (ac.eficaciaObs) acompanhamento += `<p class="acao-evidencia"><strong>Verificação:</strong> ${escapeHtml(ac.eficaciaObs)}</p>`;
-  } else if (a.status === 'Concluída') {
+  } else if (a.status === 'Concluída' && !somenteLeitura) {
     acompanhamento = '<button type="button" class="btn-secondary btn-registrar-evidencia">Registrar evidência</button>';
   } else if (ultimaFalha) {
     acompanhamento = `<p class="acao-evidencia acao-falha"><strong>Não eficaz em ${formatarDataBR(ultimaFalha.verificadaEm)}:</strong> ${escapeHtml(ultimaFalha.observacao)}</p>`;
@@ -485,9 +486,10 @@ function cardAcao(a, idx) {
           <input type="date" class="in-acao-prazo" value="${escapeHtml(a.prazo || '')}" ${responsavel ? 'disabled' : ''}>
         </label>
         <label class="campo-leitura">Status
-          <select class="in-acao-status">${STATUS_ACAO.map((s) => `<option ${a.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+          <select class="in-acao-status" ${somenteLeitura ? 'disabled' : ''}>${STATUS_ACAO.map((s) => `<option ${a.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
         </label>
       </div>
+      ${somenteLeitura ? '<p class="hint">Ação em nome de outra pessoa: só o responsável por ela ou a equipe de SSMA podem alterá-la.</p>' : ''}
       ${acompanhamento}
       ${a.remoto
         ? '<p class="hint">Registro de outro aparelho: as alterações seguem para a planilha da equipe na próxima sincronização.</p>'

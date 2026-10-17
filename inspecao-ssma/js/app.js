@@ -3,7 +3,7 @@
 // Sobe este número a cada publicação, para conseguir identificar pelo próprio
 // app (tela de Configurações) se um aparelho já recebeu a versão mais nova ou
 // ainda está com uma cópia antiga presa no cache do navegador.
-const APP_VERSION = 'v43';
+const APP_VERSION = 'v44';
 
 const state = {
   screen: 'home',
@@ -1369,6 +1369,7 @@ async function renderSettings() {
       <label>Seu nome (identifica seus registros na planilha da equipe)
         <input type="text" id="input-usuario" value="${escapeHtml((await DB.getSetting('nomeUsuario')) || '')}">
       </label>
+      ${await htmlAvisoServidorDesprotegido()}
       <label>Chave de acesso (opcional)
         <input type="text" id="input-chave" autocomplete="off" placeholder="Igual à CHAVE_ACESSO definida no Apps Script" value="${escapeHtml(chaveAcesso)}">
       </label>
@@ -1514,8 +1515,13 @@ async function renderSettings() {
     try {
       await DB.setSetting('chaveAcesso', document.getElementById('input-chave').value.trim());
       const resp = await postJson(url, { action: 'ping' });
+      if (resp && resp.ok && 'protegido' in resp) {
+        await DB.setSetting('servidorProtegido', resp.protegido);
+        await DB.setSetting('protecaoVerificadaEm', Date.now());
+      }
       resEl.textContent = resp && resp.ok
         ? `Conexão bem-sucedida${resp.versao ? ' (servidor versão ' + resp.versao + ')' : ' — atenção: o servidor está com uma versão antiga do Code.gs'}.`
+          + (resp.protegido === false ? ' Atenção: a planilha está sem proteção (sem chave de acesso e sem usuários cadastrados).' : '')
         : 'O servidor respondeu, mas com erro: ' + (resp && resp.error);
     } catch (e) {
       resEl.textContent = 'Falha ao conectar: ' + e.message;

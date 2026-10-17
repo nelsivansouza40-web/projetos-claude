@@ -179,6 +179,7 @@ async function renderPainel() {
       <h1>Painel de indicadores</h1>
       <button type="button" id="btn-ir-inteligencia" class="btn-secondary">Inteligência por área →</button>
     </div>
+    ${await htmlAvisoServidorDesprotegido()}
     <div class="filtros-acoes">
       <select id="painel-periodo">${PERIODOS_PAINEL.map((p) => `<option value="${p.id}" ${filtro.periodo === p.id ? 'selected' : ''}>${p.rotulo}</option>`).join('')}</select>
       <select id="painel-disciplina">

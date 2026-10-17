@@ -88,10 +88,29 @@ const SHEET_OBSERVACOES = 'Observacoes_Comportamentais';
 const SHEET_USUARIOS = 'Usuarios';
 const SHEET_HISTORICO_ACOES = 'Historico_Acoes';
 
-const VERSAO_SERVIDOR = '2026-10-13';
+const VERSAO_SERVIDOR = '2026-10-17';
 
 /** Nome do usuário autenticado na requisição atual (vazio quando o login não está ativo). */
 let USUARIO_ATUAL = '';
+/** Perfil do usuário autenticado (Gestor, Inspetor ou Responsável); vazio sem login. */
+let PERFIL_ATUAL = '';
+
+/**
+ * O que cada perfil pode enviar ao servidor. Espelha os módulos de cada
+ * perfil no app (PERFIS_USO em js/menu.js): sem isso, o perfil só existia na
+ * tela do celular e qualquer usuário conseguia gravar qualquer registro.
+ * O Gestor pode tudo.
+ */
+const ACOES_POR_PERFIL = {
+  'Inspetor': ['ping', 'listarAcoes', 'atualizarAcao', 'uploadPhoto', 'upsertInspection', 'upsertDiagnostico',
+    'upsertVeiculo', 'upsertPTAPR', 'upsertPET', 'upsertRelato', 'upsertObservacao', 'upsertAcao',
+    'upsertAcoesConsolidadas'],
+  'Responsável': ['ping', 'listarAcoes', 'atualizarAcao', 'uploadPhoto', 'upsertAcoesConsolidadas']
+};
+
+/** Limite de PINs errados por usuário antes do bloqueio, e duração do bloqueio (segundos). */
+const MAX_FALHAS_PIN = 5;
+const BLOQUEIO_PIN_SEGUNDOS = 900;
 
 /** Abrir o endereço do app da Web no navegador mostra se o servidor está no ar. */
 function doGet() {
@@ -121,12 +140,24 @@ function doPost(e) {
   const usuarios = lerUsuarios_();
   if (body.action === 'login') return jsonResponse(fazerLogin_(usuarios, body.usuarioLogin, body.pin));
   if (usuarios.length && body.action !== 'ping') {
-    const autenticado = autenticar_(usuarios, body.usuarioLogin, body.pin);
-    if (!autenticado) {
-      return jsonResponse({ ok: false, loginInvalido: true, error: 'Usuário ou PIN inválido. Entre novamente em Configurações → Acesso do usuário.' });
+    // O limite de tentativas vale para toda requisição, não só para a tela de
+    // login: antes, o PIN podia ser testado sem limite por qualquer outra ação.
+    const conferido = conferirPin_(usuarios, body.usuarioLogin, body.pin);
+    if (!conferido.ok) {
+      return jsonResponse({ ok: false, loginInvalido: true, error: conferido.bloqueado
+        ? conferido.error
+        : 'Usuário ou PIN inválido. Entre novamente em Configurações → Acesso do usuário.' });
     }
-    USUARIO_ATUAL = autenticado.nome;
+    USUARIO_ATUAL = conferido.usuario.nome;
+    PERFIL_ATUAL = conferido.usuario.perfil;
+    const permitidas = ACOES_POR_PERFIL[PERFIL_ATUAL];
+    if (permitidas && permitidas.indexOf(body.action) < 0) {
+      return jsonResponse({ ok: false, error: 'O perfil ' + PERFIL_ATUAL + ' não pode enviar este tipo de registro. Peça ao gestor para ajustar seu perfil na aba Usuarios.' });
+    }
   }
+
+  // Texto começando com =, +, - ou @ seria lido pela planilha como fórmula.
+  body = protegerContraFormulas_(body);
 
   // Leituras não precisam de trava; gravações são feitas uma de cada vez,
   // para dois celulares não escreverem a mesma linha ao mesmo tempo.
@@ -136,7 +167,9 @@ function doPost(e) {
     if (trava) trava.waitLock(30000);
     switch (body.action) {
       case 'ping':
-        return jsonResponse({ ok: true, versao: VERSAO_SERVIDOR, loginAtivo: usuarios.length > 0 });
+        // "protegido" avisa o app quando o servidor aceita dados de qualquer
+        // pessoa que tenha o endereço (sem chave de acesso e sem usuários).
+        return jsonResponse({ ok: true, versao: VERSAO_SERVIDOR, loginAtivo: usuarios.length > 0, protegido: !!chaveEsperada || usuarios.length > 0 });
       case 'listarAcoes':
         return jsonResponse(listarAcoes());
       case 'atualizarAcao':
@@ -1061,18 +1094,67 @@ function normalizarPerfil_(p) {
 function lerUsuarios_() {
   const sheet = getOrCreateSheet(SHEET_USUARIOS, ['Nome', 'PIN', 'Perfil', 'Ativo']);
   if (sheet.getLastRow() < 2) return [];
-  return sheet.getRange(2, 1, sheet.getLastRow() - 1, 4).getValues()
+  const linhas = sheet.getRange(2, 1, sheet.getLastRow() - 1, 4).getValues();
+  // PIN digitado pelo gestor é trocado na hora pela versão codificada, para
+  // não ficar legível para quem abre a planilha. Para trocar um PIN, basta
+  // digitar o novo por cima: ele é codificado na próxima sincronização.
+  linhas.forEach((l, i) => {
+    const pin = String(l[1]).trim();
+    if (pin && !pinCodificado_(pin)) {
+      l[1] = codificarPin_(pin);
+      sheet.getRange(i + 2, 2).setNumberFormat('@').setValue(l[1]);
+    }
+  });
+  return linhas
     .filter((l) => String(l[0]).trim() && String(l[1]).trim() && normalizarNome_(l[3]) !== 'nao')
     .map((l) => ({ nome: String(l[0]).trim(), pin: String(l[1]).trim(), perfil: normalizarPerfil_(l[2]) }));
+}
+
+const PREFIXO_PIN = 'pin1:';
+
+function pinCodificado_(valor) {
+  return String(valor).indexOf(PREFIXO_PIN) === 0;
+}
+
+/**
+ * Codifica o PIN com uma chave secreta guardada nas Propriedades do script
+ * (criada sozinha na primeira vez). Sem essa chave, quem vê a planilha não
+ * consegue descobrir os PINs testando combinações.
+ */
+let SEGREDO_PIN_ = '';
+
+function codificarPin_(pin) {
+  if (!SEGREDO_PIN_) {
+    const props = PropertiesService.getScriptProperties();
+    SEGREDO_PIN_ = props.getProperty('SEGREDO_PIN');
+    if (!SEGREDO_PIN_) {
+      // Trava para dois celulares não criarem chaves diferentes ao mesmo tempo.
+      const trava = LockService.getScriptLock();
+      trava.waitLock(30000);
+      try {
+        SEGREDO_PIN_ = props.getProperty('SEGREDO_PIN');
+        if (!SEGREDO_PIN_) {
+          SEGREDO_PIN_ = Utilities.getUuid() + Utilities.getUuid();
+          props.setProperty('SEGREDO_PIN', SEGREDO_PIN_);
+        }
+      } finally {
+        trava.releaseLock();
+      }
+    }
+  }
+  const segredo = SEGREDO_PIN_;
+  // A planilha pode guardar "0123" como o número 123: zeros à esquerda não contam.
+  let p = String(pin || '').trim();
+  if (/^\d+$/.test(p)) p = p.replace(/^0+(?=\d)/, '');
+  const assinatura = Utilities.computeHmacSha256Signature(p, segredo);
+  return PREFIXO_PIN + Utilities.base64EncodeWebSafe(assinatura);
 }
 
 function pinConfere_(esperado, informado) {
   const a = String(esperado).trim();
   const b = String(informado || '').trim();
   if (!b) return false;
-  if (a === b) return true;
-  // A planilha pode guardar "0123" como o número 123.
-  return /^\d+$/.test(a) && /^\d+$/.test(b) && Number(a) === Number(b);
+  return codificarPin_(b) === (pinCodificado_(a) ? a : codificarPin_(a));
 }
 
 function autenticar_(usuarios, login, pin) {
@@ -1080,20 +1162,57 @@ function autenticar_(usuarios, login, pin) {
   return usuarios.find((u) => normalizarNome_(u.nome) === nome && pinConfere_(u.pin, pin)) || null;
 }
 
-/** Login com limite de tentativas: 5 erros seguidos bloqueiam o usuário por 15 minutos. */
-function fazerLogin_(usuarios, login, pin) {
-  if (!usuarios.length) return { ok: true, loginAtivo: false };
+/**
+ * Confere usuário e PIN com limite de tentativas: 5 erros seguidos bloqueiam
+ * o usuário por 15 minutos. Vale para o login e para todas as outras ações.
+ */
+function conferirPin_(usuarios, login, pin) {
   const cache = CacheService.getScriptCache();
   const chaveFalhas = 'falhas_' + normalizarNome_(login);
   const falhas = Number(cache.get(chaveFalhas) || 0);
-  if (falhas >= 5) return { ok: false, error: 'Muitas tentativas erradas. Aguarde 15 minutos e tente de novo.' };
+  if (falhas >= MAX_FALHAS_PIN) {
+    return { ok: false, bloqueado: true, error: 'Muitas tentativas erradas. Aguarde 15 minutos e tente de novo.' };
+  }
   const u = autenticar_(usuarios, login, pin);
   if (!u) {
-    cache.put(chaveFalhas, String(falhas + 1), 900);
+    cache.put(chaveFalhas, String(falhas + 1), BLOQUEIO_PIN_SEGUNDOS);
     return { ok: false, error: 'Usuário ou PIN inválido.' };
   }
-  cache.remove(chaveFalhas);
-  return { ok: true, loginAtivo: true, nome: u.nome, perfil: u.perfil };
+  if (falhas) cache.remove(chaveFalhas);
+  return { ok: true, usuario: u };
+}
+
+function fazerLogin_(usuarios, login, pin) {
+  if (!usuarios.length) return { ok: true, loginAtivo: false };
+  const r = conferirPin_(usuarios, login, pin);
+  if (!r.ok) return { ok: false, error: r.error };
+  return { ok: true, loginAtivo: true, nome: r.usuario.nome, perfil: r.usuario.perfil };
+}
+
+/* ---------------- PROTEÇÃO CONTRA FÓRMULAS ---------------- */
+
+/**
+ * A planilha trata como fórmula qualquer texto que comece com =, +, - ou @.
+ * Um texto assim vindo do app (por exemplo, uma observação) poderia quebrar
+ * a aba ou executar uma fórmula. O apóstrofo na frente faz a planilha gravar
+ * o texto como texto, e ele não aparece na célula. Números ("-3") ficam como
+ * estão. Fotos e o acompanhamento das ações (gravado como JSON) não passam
+ * por aqui.
+ */
+const CAMPOS_SEM_PROTECAO = ['photo', 'acomp'];
+
+function protegerContraFormulas_(valor, chave) {
+  if (CAMPOS_SEM_PROTECAO.indexOf(chave) >= 0) return valor;
+  if (typeof valor === 'string') {
+    return /^[=+\-@]/.test(valor) && !/^[+-]?\d+([.,]\d+)?$/.test(valor) ? "'" + valor : valor;
+  }
+  if (Array.isArray(valor)) return valor.map((v) => protegerContraFormulas_(v));
+  if (valor && typeof valor === 'object') {
+    const novo = {};
+    Object.keys(valor).forEach((k) => { novo[k] = protegerContraFormulas_(valor[k], k); });
+    return novo;
+  }
+  return valor;
 }
 
 /* ---------------- AÇÕES COMPARTILHADAS ---------------- */
@@ -1154,7 +1273,11 @@ function upsertAcoesConsolidadas(acoes, usuario) {
   (acoes || []).forEach((a) => {
     const idx = linhaPorChave[a.chave];
     const existente = idx === undefined ? null : dados[idx];
+    // O perfil Responsável não sobrescreve ações registradas por outra pessoa;
+    // as alterações dele nessas ações passam por atualizarAcao.
+    if (existente && PERFIL_ATUAL === 'Responsável' && normalizarNome_(existente[12]) !== normalizarNome_(USUARIO_ATUAL)) return;
     let linha = linhaAcao_(a, usuario, existente);
+    if (existente && PERFIL_ATUAL === 'Responsável') manterCamposDoGestor_(existente, linha);
     if (existente) {
       // Alteração mais nova feita em outro aparelho: mantém o acompanhamento da planilha.
       if ((Number(existente[23]) || 0) > (Number(a.atualizadoEm) || 0)) {
@@ -1179,17 +1302,43 @@ function atualizarAcao(a) {
   const row = linhaDoId(sheet, a.chave);
   if (row < 0) return { ok: false, error: 'Ação não encontrada na planilha. Ela ainda não foi enviada pelo aparelho que a criou.' };
   const existente = sheet.getRange(row, 1, 1, n).getValues()[0];
+  if (PERFIL_ATUAL === 'Responsável' && normalizarNome_(existente[6]) !== normalizarNome_(USUARIO_ATUAL)) {
+    return { ok: false, error: 'Esta ação está em nome de ' + (textoCelula_(existente[6]) || 'outra pessoa') + ': o perfil Responsável só altera as próprias ações.' };
+  }
   if ((Number(existente[23]) || 0) >= (Number(a.atualizadoEm) || 0)) return { ok: true, ignorada: true };
   const linha = existente.slice();
   const nova = linhaAcao_(Object.assign({
     chave: existente[0], origem: existente[1], descricao: existente[2], contexto: existente[3],
     empresa: existente[4], area: existente[5], criticidade: existente[14], reincidente: existente[15]
   }, a), USUARIO_ATUAL || a.usuario || '', existente);
+  if (PERFIL_ATUAL === 'Responsável') manterCamposDoGestor_(existente, nova);
   COLS_ACOMPANHAMENTO.forEach((c) => { linha[c] = nova[c]; });
   linha[13] = new Date();
   registrarHistorico_(USUARIO_ATUAL || a.usuario || '', existente, linha);
   sheet.getRange(row, 1, 1, n).setValues([linha]);
   return { ok: true };
+}
+
+/**
+ * Campos que o perfil Responsável não altera (como no app): responsável,
+ * prazo, o veredito da verificação de eficácia e o histórico de reaberturas.
+ * Ele pode limpar a verificação ao concluir de novo uma ação reaberta, mas
+ * não pode marcá-la como "Eficaz" ou "Não eficaz". Altera `nova` no lugar.
+ */
+function manterCamposDoGestor_(existente, nova) {
+  nova[6] = existente[6];
+  nova[7] = existente[7];
+  let antes = {};
+  let depois = {};
+  try { antes = existente[24] ? JSON.parse(existente[24]) : {}; } catch (e) { antes = {}; }
+  try { depois = nova[24] ? JSON.parse(nova[24]) : {}; } catch (e) { depois = {}; }
+  if (depois.eficacia && depois.eficacia !== antes.eficacia) {
+    ['eficacia', 'eficaciaEm', 'eficaciaPor', 'eficaciaObs'].forEach((k) => { depois[k] = antes[k] || ''; });
+    [19, 20, 21].forEach((c) => { nova[c] = existente[c]; });
+  }
+  depois.historico = antes.historico || [];
+  nova[22] = existente[22];
+  nova[24] = JSON.stringify(depois);
 }
 
 /** Todas as ações da planilha, para a Central de ações de cada aparelho. */

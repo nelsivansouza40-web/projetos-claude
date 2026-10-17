@@ -65,6 +65,11 @@ configurado.
 - A Central de ações mostra as ações de toda a equipe. O responsável conclui
   no próprio celular; vale a alteração mais recente; a aba Historico_Acoes
   registra quem alterou o quê. Detalhes no `docs/GUIA_GESTOR.md`.
+- Segurança no servidor: o perfil é conferido pela planilha (não só na tela do
+  celular), cinco PINs errados em qualquer comunicação bloqueiam o usuário por
+  15 minutos, os PINs ficam codificados na aba Usuarios e textos começando com
+  `=`, `+`, `-` ou `@` são gravados como texto, nunca como fórmula. Sem chave de
+  acesso e sem usuários, o app avisa que a planilha está sem proteção.
 
 ## Inteligência SSMA (Gestão → Inteligência)
 
