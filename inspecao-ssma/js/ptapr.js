@@ -795,7 +795,7 @@ async function renderPTAPRReport(id) {
     <article class="rep-doc">
       <header class="rep-cabecalho">
         <div class="rep-titulo">
-          <img src="icons/icon-192.png" alt="" class="rep-logo">
+          ${htmlLogoRelatorio()}
           <div>
             <h2>PERMISSÃO DE TRABALHO / APR</h2>
             <p>${escapeHtml(ident.atividade)}</p>

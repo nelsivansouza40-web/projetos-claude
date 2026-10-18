@@ -294,7 +294,7 @@ async function renderObservacaoDetail(id) {
     <article class="rep-doc">
       <header class="rep-cabecalho">
         <div class="rep-titulo">
-          <img src="icons/icon-192.png" alt="" class="rep-logo">
+          ${htmlLogoRelatorio()}
           <div>
             <h2>OBSERVAÇÃO COMPORTAMENTAL</h2>
             <p>${escapeHtml(d.atividade)} — ${k.pct === null ? 'sem itens avaliados' : k.pct + '% de comportamento seguro'}</p>

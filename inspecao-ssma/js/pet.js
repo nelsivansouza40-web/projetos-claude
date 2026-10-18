@@ -960,7 +960,7 @@ async function renderPETReport(id) {
     <article class="rep-doc">
       <header class="rep-cabecalho">
         <div class="rep-titulo">
-          <img src="icons/icon-192.png" alt="" class="rep-logo">
+          ${htmlLogoRelatorio()}
           <div>
             <h2>PET — ENTRADA EM ESPAÇO CONFINADO</h2>
             <p>${escapeHtml(ident.localEspaco)}</p>

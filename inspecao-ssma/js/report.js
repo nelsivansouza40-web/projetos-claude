@@ -8,6 +8,42 @@
  * assinaturas para encerramento.
  */
 
+/* Logomarca da empresa no cabeçalho dos relatórios (Configurações →
+ * Logomarca da empresa nos relatórios). Sem logomarca cadastrada, o cabeçalho
+ * fica só com o título: o nome do aplicativo aparece apenas no rodapé. */
+let LOGO_EMPRESA_RELATORIO = '';
+
+async function carregarLogoEmpresa() {
+  LOGO_EMPRESA_RELATORIO = (await DB.getSetting('logoEmpresa')) || '';
+}
+
+function htmlLogoRelatorio() {
+  return LOGO_EMPRESA_RELATORIO
+    ? `<img src="${LOGO_EMPRESA_RELATORIO}" alt="Logomarca da empresa" class="rep-logo rep-logo-empresa">`
+    : '';
+}
+
+/**
+ * Prepara a logomarca enviada: até 600 px no lado maior. PNG continua PNG
+ * (mantém o fundo transparente); as demais imagens viram JPEG.
+ */
+function prepararLogoEmpresa(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 600 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * k) || img.width;
+      c.height = Math.round(img.height * k) || img.height;
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      resolve(/png|svg|gif|webp/i.test(file.type) ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', 0.9));
+    };
+    img.onerror = () => reject(new Error('arquivo de imagem inválido.'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 function gerarCodigoDocumento(insp) {
   const tipo = (insp.data.tipoInspecao || 'GERAL')
     .normalize('NFD').replace(/[̀-ͯ]/g, '')
@@ -336,7 +372,7 @@ async function renderReport(id) {
     <article class="rep-doc">
       <header class="rep-cabecalho">
         <div class="rep-titulo">
-          <img src="icons/icon-192.png" alt="" class="rep-logo">
+          ${htmlLogoRelatorio()}
           <div>
             <h2>RELATÓRIO DE INSPEÇÃO — ${escapeHtml(disciplinaDaInspecao(insp).toUpperCase())}</h2>
             <p>${escapeHtml(dadosDisciplina(disciplinaDaInspecao(insp)).subtitulo)} — ${escapeHtml(insp.data.tipoInspecao)}</p>

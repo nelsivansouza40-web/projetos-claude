@@ -501,7 +501,7 @@ async function renderDDSReport(id) {
     <article class="rep-doc">
       <header class="rep-cabecalho">
         <div class="rep-titulo">
-          <img src="icons/icon-192.png" alt="" class="rep-logo">
+          ${htmlLogoRelatorio()}
           <div>
             <h2>REGISTRO DE DDS</h2>
             <p>Diálogo Diário de Segurança — ${escapeHtml(dds.data.tema)}</p>

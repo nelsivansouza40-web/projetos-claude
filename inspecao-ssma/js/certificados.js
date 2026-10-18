@@ -487,7 +487,7 @@ async function renderCertificadoReport(id) {
     <article class="rep-doc">
       <header class="rep-cabecalho">
         <div class="rep-titulo">
-          <img src="icons/icon-192.png" alt="" class="rep-logo">
+          ${htmlLogoRelatorio()}
           <div>
             <h2>FICHA DE CERTIFICADO / TREINAMENTO</h2>
             <p>${escapeHtml(descricaoTipoCertificado(cert))}</p>

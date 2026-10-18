@@ -718,7 +718,7 @@ async function renderDiagReport(id) {
     <article class="rep-doc">
       <header class="rep-cabecalho">
         <div class="rep-titulo">
-          <img src="icons/icon-192.png" alt="" class="rep-logo">
+          ${htmlLogoRelatorio()}
           <div>
             <h2>DIAGNÓSTICO DE GESTÃO SSMA</h2>
             <p>${escapeHtml(ident.escopo)}</p>

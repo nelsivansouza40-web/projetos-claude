@@ -140,6 +140,14 @@ planilha `modelos/Modelo_Matriz_Riscos_Psicossociais_SGG.xlsx`:
   `js/vendor/`), carregada só na hora de importar ou exportar e guardada para
   uso sem internet.
 
+## Logomarca nos relatórios
+
+Os relatórios não usam mais o ícone do aplicativo no cabeçalho. Em
+**Configurações → Logomarca da empresa nos relatórios**, é possível inserir,
+trocar ou remover a logomarca da empresa, que passa a sair no cabeçalho de
+todos os relatórios e PDFs. Sem logomarca cadastrada, o cabeçalho traz só o
+título. O nome do aplicativo aparece apenas no rodapé.
+
 ## Módulos retirados
 
 O módulo **Certificados** foi retirado do menu, por decisão da equipe. Os

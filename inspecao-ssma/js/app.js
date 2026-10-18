@@ -1318,6 +1318,7 @@ async function renderSettings() {
   const endpoint = (await Sync.getEndpoint()) || '';
   const chaveAcesso = (await DB.getSetting('chaveAcesso')) || '';
   const topbarBgImage = await DB.getSetting('topbarBgImage');
+  const logoEmpresa = await DB.getSetting('logoEmpresa');
   const secaoBackup = await htmlSecaoBackup();
   const usuarioLogin = (await DB.getSetting('usuarioLogin')) || '';
   const loginAtivo = !!usuarioLogin;
@@ -1336,6 +1337,16 @@ async function renderSettings() {
       </label>
       ${topbarBgImage ? '<button id="btn-remover-topbar-bg" class="btn-link">Remover imagem de fundo</button>' : ''}
       <p id="topbar-bg-resultado" class="hint"></p>
+    </div>
+    <div class="form-section">
+      <h3>Logomarca da empresa nos relatórios</h3>
+      <p class="hint">Aparece no cabeçalho de todos os relatórios e PDFs, no lugar do ícone do aplicativo. O nome do aplicativo fica só no rodapé. Prefira PNG com fundo transparente.</p>
+      ${logoEmpresa ? `<img src="${logoEmpresa}" alt="Logomarca atual" style="max-width:220px;max-height:90px;object-fit:contain;display:block;margin-bottom:8px;background:#fff;padding:6px;border:1px solid #ddd;border-radius:8px;">` : ''}
+      <label class="file-label">🏢 ${logoEmpresa ? 'Trocar logomarca' : 'Escolher logomarca'}
+        <input type="file" accept="image/*" id="input-logo-empresa">
+      </label>
+      ${logoEmpresa ? '<button id="btn-remover-logo-empresa" class="btn-link">Remover logomarca</button>' : ''}
+      <p id="logo-empresa-resultado" class="hint"></p>
     </div>
     <div class="form-section" id="secao-acesso">
       <h3>Acesso do usuário e perfil</h3>
@@ -1468,6 +1479,26 @@ async function renderSettings() {
     } catch (err) {
       resEl.textContent = 'Não foi possível usar essa imagem: ' + err.message;
     }
+  });
+
+  document.getElementById('input-logo-empresa').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const resEl = document.getElementById('logo-empresa-resultado');
+    resEl.textContent = 'Processando imagem…';
+    try {
+      await DB.setSetting('logoEmpresa', await prepararLogoEmpresa(file));
+      await carregarLogoEmpresa();
+      renderSettings();
+    } catch (err) {
+      resEl.textContent = 'Não foi possível usar essa imagem: ' + err.message;
+    }
+  });
+  const btnRemoverLogo = document.getElementById('btn-remover-logo-empresa');
+  if (btnRemoverLogo) btnRemoverLogo.addEventListener('click', async () => {
+    await DB.setSetting('logoEmpresa', '');
+    await carregarLogoEmpresa();
+    renderSettings();
   });
 
   const btnRemoverTopbarBg = document.getElementById('btn-remover-topbar-bg');
@@ -1603,6 +1634,7 @@ async function init() {
   updateConnBadge();
   pedirArmazenamentoPermanente();
   await aplicarImagemFundoTopbar();
+  await carregarLogoEmpresa();
   await updateSyncBar();
   // Só renderiza a tela inicial se o usuário ainda não tiver navegado para
   // outro lugar enquanto essas leituras assíncronas rodavam — sem essa
