@@ -361,6 +361,8 @@ async function renderPGRDetail(id) {
       <button type="button" id="btn-add-perigo-pgr" class="btn-secondary">+ Adicionar perigo</button>
     </div>
 
+    ${htmlSecaoPsicossocialPGR(p, p.data.ghes)}
+
     <div class="lista-participantes">
       <h3>Cronograma de Treinamento</h3>
       <p class="hint">Treinamentos previstos ou já realizados para cada GHE, conforme as medidas de controle definidas.</p>
@@ -460,6 +462,14 @@ async function renderPGRDetail(id) {
     p.data.perigos.push(novoPerigoPGR());
     await salvarPGR(p);
     renderPerigosPGR(perigosContainer, p);
+  });
+
+  ligarSecaoPsicossocialPGR(p, () => salvarPGR(p), async (mensagem) => {
+    await renderPGRDetail(id);
+    const msg = document.getElementById('psico-arquivo-msg');
+    if (msg) msg.textContent = mensagem;
+    const secao = document.getElementById('secao-psicossocial');
+    if (secao) secao.scrollIntoView({ block: 'start' });
   });
 
   document.getElementById('btn-add-treinamento-pgr').addEventListener('click', async () => {
@@ -1083,6 +1093,7 @@ function montarCriteriosPGR() {
       <tbody>${CRITERIOS_DECISAO_PGR.map((c) => `<tr><td style="background:${CORES_NIVEL_PGR[c.nivel]};font-weight:700">${c.nivel}</td><td>${c.faixa}</td><td>${escapeHtml(c.acao)}</td><td>${escapeHtml(c.prazo)}</td></tr>`).join('')}</tbody>
     </table>
     <p class="rep-hint">Hierarquia das medidas de prevenção (NR-01): eliminação do fator de risco; proteção coletiva; medidas administrativas ou de organização do trabalho; EPI.</p>
+    <p class="rep-hint">Os riscos psicossociais seguem critérios próprios (escalas de severidade e probabilidade e faixas de classificação), documentados na seção 7.</p>
   `;
 }
 
@@ -1326,27 +1337,32 @@ async function renderPGRReport(id) {
       </section>
 
       <section class="rep-secao rep-quebra rep-paisagem">
-        <h3>7. Plano de ação</h3>
+        <h3>7. Avaliação de riscos psicossociais</h3>
+        ${htmlRelatorioPsicoPGR(p)}
+      </section>
+
+      <section class="rep-secao rep-quebra rep-paisagem">
+        <h3>8. Plano de ação</h3>
         ${planoAcaoHtml}
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>8. Cronograma de capacitação</h3>
+        <h3>9. Cronograma de capacitação</h3>
         ${cronogramaHtml}
       </section>
 
       <section class="rep-secao rep-quebra">
-        <h3>9. Preparação e resposta a emergências</h3>
+        <h3>10. Preparação e resposta a emergências</h3>
         ${emergenciaHtml}
       </section>
 
       <section class="rep-secao">
-        <h3>10. Acompanhamento e revisão</h3>
+        <h3>11. Acompanhamento e revisão</h3>
         <p>O plano de ação deve ser acompanhado mensalmente. A avaliação de riscos deve ser revista a cada 2 anos (3 anos com certificação em sistema de gestão de SST) e sempre que houver mudanças nos processos, acidentes ou doenças relacionadas ao trabalho, medidas ineficazes ou solicitação dos trabalhadores ou da CIPA. O histórico das atualizações do inventário deve ser mantido por, no mínimo, 20 anos.</p>
       </section>
 
       <section class="rep-secao rep-assinaturas">
-        <h3>11. Responsável técnico</h3>
+        <h3>12. Responsável técnico</h3>
         <div class="rep-assinatura-grid">
           ${blocoAssinatura(p, 'responsavelPGR', 'Responsável técnico pelo PGR', p.data.responsavelPGR)}
         </div>

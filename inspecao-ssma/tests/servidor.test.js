@@ -276,3 +276,20 @@ test('relato pelo QR: equipe lista e importa; código novo invalida as placas', 
   assert.notStrictEqual(novo, codigo);
   assert.strictEqual(s.post({ action: 'relatoPublico', codigo, relato: { descricao: 'Placa antiga' } }).ok, false);
 });
+
+test('PGR: avaliação psicossocial vai para as abas PGR_Psicossocial e de critérios, em espelho', () => {
+  const s = carregarServidor();
+  s.ctx.DriveApp = { getRootFolder: () => ({ getFoldersByName: () => ({ hasNext: () => false }), createFolder: () => ({ getUrl: () => 'u', getId: () => 'f', getFoldersByName: () => ({ hasNext: () => false }), createFolder: () => ({ getUrl: () => 'u', getId: () => 'f' }) }) }) };
+  const pgr = (itens) => ({ id: 'pgr1', empresa: 'Empresa X', ghes: [], perigos: [], treinamentos: [], exerciciosSimulados: [], emergencia: {},
+    psicossocial: { criterios: { metodologia: '=Matriz P×S' }, itens } });
+  const item = (n) => ({ id: 'i' + n, setor: 'Atendimento', perigo: 'Sobrecarga ' + n, severidade: 4, probabilidade: 4, nivel: 16, classificacao: 'Alto', prioridade: 'Ação estruturada (curto prazo)' });
+  assert.strictEqual(s.post({ action: 'upsertPGR', pgr: pgr([item(1), item(2)]) }).ok, true);
+  assert.strictEqual(s.post({ action: 'upsertPGR', pgr: pgr([item(3)]) }).ok, true);
+  const linhas = s.abas.PGR_Psicossocial.rows.slice(1);
+  assert.strictEqual(linhas.length, 1, 'reenvio substitui, não duplica');
+  assert.strictEqual(linhas[0][4], 'Sobrecarga 3');
+  assert.strictEqual(linhas[0][11], 'Alto');
+  const crit = s.abas.PGR_Psicossocial_Criterios.rows;
+  assert.strictEqual(crit.length, 2);
+  assert.strictEqual(crit[1][2], "'=Matriz P×S", 'critério também protegido contra fórmula');
+});

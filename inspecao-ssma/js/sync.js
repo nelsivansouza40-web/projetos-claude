@@ -1330,6 +1330,13 @@ function buildPGRMetaPayload(p) {
     consultaTrabalhadores: p.data.consultaTrabalhadores || '',
     requisitosEspecificos: p.data.requisitosEspecificos || '',
     revisoes: (p.data.revisoes || []).map((r) => `Rev. ${r.revisao} (${r.data || 's/ data'}): ${r.motivo || ''}`).join(' | '),
+    psicossocial: (() => {
+      const av = garantirAvaliacaoPsico(p.data);
+      return {
+        criterios: av.criterios,
+        itens: av.itens.map((i) => ({ ...i, ...calcularRiscoPsico(i.severidade, i.probabilidade), faixa: undefined }))
+      };
+    })(),
     ghes: ghes.map((g) => ({
       id: g.id,
       nome: g.nome,

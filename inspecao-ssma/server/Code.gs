@@ -81,6 +81,8 @@ const SHEET_PGR_GHES = 'PGR_GHEs';
 const SHEET_PGR_PERIGOS = 'PGR_Perigos';
 const SHEET_PGR_TREINAMENTOS = 'PGR_Treinamentos';
 const SHEET_PGR_EXERCICIOS = 'PGR_Exercicios_Simulados';
+const SHEET_PGR_PSICOSSOCIAL = 'PGR_Psicossocial';
+const SHEET_PGR_PSICOSSOCIAL_CRITERIOS = 'PGR_Psicossocial_Criterios';
 const SHEET_RELATOS = 'Relatos';
 const SHEET_ACOES = 'Acoes_Avulsas';
 const SHEET_OBSERVACOES = 'Observacoes_Comportamentais';
@@ -1064,6 +1066,34 @@ function upsertPGR(p) {
       id, item.id, item.data, item.descricao, item.participantes, item.qtdFotos, new Date()
     ]);
   });
+
+  // Avaliação de riscos psicossociais (mesmas colunas da planilha modelo SGG).
+  const psico = p.psicossocial || { itens: [], criterios: {} };
+  const sheetPsico = getOrCreateSheet(SHEET_PGR_PSICOSSOCIAL, [
+    'PGR ID', 'Item ID', '#', 'Setor / Cargo / GHE', 'Perigo psicossocial (fator de risco)', 'Possível consequência',
+    'Caracterização da exposição (atividade real)', 'Medidas de prevenção já existentes', 'Severidade (1-5)',
+    'Probabilidade (1-5)', 'Nível de Risco', 'Classificação', 'Prioridade de ação', 'Responsável', 'Prazo', 'Recebido em'
+  ]);
+  const dataPsico = sheetPsico.getDataRange().getValues();
+  for (let i = dataPsico.length - 1; i >= 1; i--) {
+    if (dataPsico[i][0] === id) sheetPsico.deleteRow(i + 1);
+  }
+  (psico.itens || []).forEach((item, idx) => {
+    sheetPsico.appendRow([
+      id, item.id, idx + 1, item.setor, item.perigo, item.consequencia, item.caracterizacao, item.medidasExistentes,
+      item.severidade, item.probabilidade, item.nivel, item.classificacao, item.prioridade, item.responsavel, item.prazo, new Date()
+    ]);
+  });
+  const crit = psico.criterios || {};
+  const sheetCriterios = getOrCreateSheet(SHEET_PGR_PSICOSSOCIAL_CRITERIOS, [
+    'PGR ID', 'Empresa', 'Metodologia de avaliação adotada', 'Método de identificação utilizado',
+    'Instrumento/questionário (se houver)', 'Unidade de análise', 'Responsável técnico pela avaliação',
+    'Data da avaliação / próxima revisão', 'Recebido em'
+  ]);
+  gravarLinhaPorId(sheetCriterios, [
+    id, p.empresa, crit.metodologia || '', crit.metodoIdentificacao || '', crit.instrumento || '',
+    crit.unidadeAnalise || '', crit.responsavelTecnico || '', crit.dataRevisao || '', new Date()
+  ]);
 
   return { ok: true, remoteRef: id };
 }

@@ -757,3 +757,25 @@ details.analise-causa summary { cursor: pointer; font-weight: 600; padding: 6px 
 .placa-qr-passos { font-size: 1.05rem; margin: 12px 0; }
 .placa-qr-area { font-size: 1.2rem; font-weight: 700; border-top: 2px solid #d5dccb; padding-top: 12px; }
 @media print { .placa-qr { border-width: 6px; max-width: none; margin-top: 10mm; } .placa-qr-codigo svg { width: 60%; } }
+
+/* Avaliação de riscos psicossociais do PGR (modelo SGG) */
+.psico-item-topo { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.psico-item-topo .psico-remover { margin-left: auto; }
+.psico-selo { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; }
+.psico-acoes-arquivo { justify-content: flex-start; flex-wrap: wrap; }
+.psico-matriz th, .psico-matriz td { text-align: center; }
+.psico-tabela { font-size: 0.68rem; }
+.rep-inventario-pgr.psico-tabela th:nth-child(1) { width: 3%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(2) { width: 9%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(3) { width: 11%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(4) { width: 8%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(5) { width: 12%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(6) { width: 10%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(7) { width: 5%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(8) { width: 6%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(9) { width: 5%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(10) { width: 7%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(11) { width: 9%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(12) { width: 8%; }
+.rep-inventario-pgr.psico-tabela th:nth-child(13) { width: 7%; }
+#secao-psicossocial .file-label { flex-direction: row; }

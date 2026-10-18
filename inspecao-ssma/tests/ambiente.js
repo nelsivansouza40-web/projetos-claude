@@ -67,6 +67,8 @@ function criarAba(nome, linhas = []) {
     setFrozenRows() {},
     getLastRow() { return this.rows.length; },
     getLastColumn() { return Math.max(1, ...this.rows.map((r) => r.length)); },
+    getDataRange() { return this.getRange(1, 1, Math.max(1, this.rows.length), this.getLastColumn()); },
+    deleteRow(n) { this.rows.splice(n - 1, 1); },
     getRange(r, c, nr = 1, nc = 1) {
       const aba = this;
       return {

@@ -115,6 +115,31 @@ definitivo em campo.
   responsável, e resumo da equipe para os gestores. Configuração no
   `docs/GUIA_GESTOR.md`, item 5.
 
+## Avaliação de riscos psicossociais no PGR (modelo SGG)
+
+Cada PGR tem a seção **Avaliação de riscos psicossociais (NR-1)**, igual à
+planilha `modelos/Modelo_Matriz_Riscos_Psicossociais_SGG.xlsx`:
+
+- Mesmas colunas: setor/cargo/GHE, perigo psicossocial, possível consequência,
+  caracterização da exposição, medidas existentes, severidade (1-5),
+  probabilidade (1-5), nível de risco, classificação, prioridade de ação,
+  responsável e prazo.
+- Mesmos cálculos: nível = severidade × probabilidade; Crítico (20-25),
+  Alto (12-16), Médio (6-10) e Baixo (1-5), com a prioridade correspondente.
+- Mesmas escalas de severidade e probabilidade, matriz 5×5 e critérios
+  documentados exigidos pela NR-1 (subitem 1.5.4.4.2.2). Esses critérios valem
+  só para os riscos psicossociais; os demais riscos seguem os critérios gerais.
+- **Importar planilha (.xlsx)**: traz para o PGR uma planilha preenchida no
+  modelo (substitui ou acrescenta aos fatores atuais).
+- **Exportar planilha (.xlsx)**: gera o mesmo modelo preenchido, com as três
+  abas, fórmulas, cores e validação de 1 a 5. Com mais de 20 fatores, as
+  linhas são acrescentadas no mesmo formato.
+- No relatório do PGR, a avaliação é a seção 7. Na planilha da equipe, vai
+  para as abas `PGR_Psicossocial` e `PGR_Psicossocial_Criterios`.
+- A leitura e gravação do Excel usam a biblioteca ExcelJS (licença MIT, em
+  `js/vendor/`), carregada só na hora de importar ou exportar e guardada para
+  uso sem internet.
+
 ## Módulos retirados
 
 O módulo **Certificados** foi retirado do menu, por decisão da equipe. Os
