@@ -1,5 +1,9 @@
 # Gestão Ergonômica — PGR
 
+> Projeto independente do app de Inspeções SSMA: pasta, instalação, dados e
+> servidor de sincronização próprios. Endereço publicado:
+> https://nelsivansouza40-web.github.io/projetos-claude/ergonomia/
+
 Aplicativo (PWA) de gestão ergonômica integrada ao PGR, com base na NR-1
 vigente (item 1.5.7.3, fatores ergonômicos e psicossociais no GRO/PGR) e na
 NR-17 (AEP, AET e participação dos trabalhadores). Funciona offline e

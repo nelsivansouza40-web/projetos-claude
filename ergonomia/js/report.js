@@ -103,7 +103,7 @@ async function renderRelatorioAEP(aepId, orgId) {
     <div class="form-actions no-print"><button id="btn-imprimir" class="btn-primary">Imprimir / Salvar PDF</button></div>
     <article class="rep-doc">
       <header class="rep-cabecalho">
-        <div class="rep-titulo"><img src="../icons/icon-192.png" class="rep-logo"><div><h2>REGISTRO DE AVALIAÇÃO ERGONÔMICA PRELIMINAR (AEP)</h2><p>${escapeHtml(org.razaoSocial)}</p></div></div>
+        <div class="rep-titulo"><div><h2>REGISTRO DE AVALIAÇÃO ERGONÔMICA PRELIMINAR (AEP)</h2><p>${escapeHtml(org.razaoSocial)}</p></div></div>
         <table class="rep-controle"><tr><th>Situação</th><td>${escapeHtml(situacao.cargo)}</td></tr><tr><th>Data</th><td>${fmtData(aep.data)}</td></tr><tr><th>Avaliador</th><td>${escapeHtml(aep.avaliador || '—')}</td></tr></table>
       </header>
       <section class="rep-secao"><h3>Fatores identificados</h3>${fotosFatoresHtml || '<p class="rep-hint">Nenhum fator identificado.</p>'}</section>
@@ -125,7 +125,7 @@ async function renderRelatorioAET(aetId, orgId) {
     <div class="form-actions no-print"><button id="btn-imprimir" class="btn-primary">Imprimir / Salvar PDF</button></div>
     <article class="rep-doc">
       <header class="rep-cabecalho">
-        <div class="rep-titulo"><img src="../icons/icon-192.png" class="rep-logo"><div><h2>ANÁLISE ERGONÔMICA DO TRABALHO (AET)</h2><p>${escapeHtml(org.razaoSocial)} — ${escapeHtml(situacao.cargo)}</p></div></div>
+        <div class="rep-titulo"><div><h2>ANÁLISE ERGONÔMICA DO TRABALHO (AET)</h2><p>${escapeHtml(org.razaoSocial)} — ${escapeHtml(situacao.cargo)}</p></div></div>
         <table class="rep-controle"><tr><th>Responsável técnico</th><td>${escapeHtml(aet.responsavelTecnico || '—')}</td></tr><tr><th>Status</th><td>${escapeHtml(aet.status)}</td></tr><tr><th>Retenção</th><td>20 anos (NR-17)</td></tr></table>
       </header>
       <section class="rep-secao"><h3>1. Análise da demanda</h3>${objetoParaParagrafos(aet.analiseDemanda)}</section>
