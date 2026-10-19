@@ -11,7 +11,7 @@ const Calc = {
   /** Índices refeitos sempre que os dados mudam. */
   indices() {
     if (this._ver === App.versao && this.idx) return this.idx;
-    const ix = { colab: new Map(), epi: new Map(), equip: new Map(), mov: new Map(), ultimaManut: new Map() };
+    const ix = { colab: new Map(), epi: new Map(), equip: new Map(), mov: new Map(), ultimaEntrega: new Map(), ultimaManut: new Map() };
     (App.data.colaboradores || []).forEach((c) => ix.colab.set(c.id, c));
     (App.data.epis || []).forEach((e) => ix.epi.set(e.id, e));
     (App.data.equipamentos || []).forEach((e) => ix.equip.set(e.id, e));
@@ -20,6 +20,10 @@ const Calc = {
       const q = Number(m.qtd) || 0;
       if (m.tipo === 'ENTRADA') a.ent += q; else a.sai += q;
       ix.mov.set(m.epi, a);
+      if (this.entregaColab(m) && m.data) {
+        const k = m.colab + '|' + m.epi, u = ix.ultimaEntrega.get(k);
+        if (!u || m.data > u) ix.ultimaEntrega.set(k, m.data);
+      }
     });
     (App.data.manutencoes || []).forEach((m) => {
       const u = ix.ultimaManut.get(m.equip);
@@ -51,6 +55,15 @@ const Calc = {
     let dias = toNum(r.validadeDias);
     if (dias == null) dias = toNum((Config.params.asoValidade || {})[r.tipo]);
     return dias ? D.addDays(r.data, dias) : '';
+  },
+  /** Saída de EPI entregue a um colaborador (as que têm prazo de troca). */
+  entregaColab(m) { return m.tipo !== 'ENTRADA' && m.destino !== 'Fornecedor' && !!m.colab; },
+  /** Data prevista para troca do EPI entregue: data da entrega + validade de uso. */
+  vencEntrega(m) {
+    if (!m.data || !this.entregaColab(m)) return '';
+    let dias = toNum(m.validadeDias);
+    if (dias == null) dias = toNum((this.epi(m.epi) || {}).validadeUso);
+    return dias ? D.addDays(m.data, dias) : '';
   },
   vencTreino(r) {
     const base = r.dataFinal || r.dataInicial;
@@ -124,6 +137,14 @@ const Calc = {
         const p = toNum(r.preco) != null ? toNum(r.preco) : (e ? toNum(e.preco) : null);
         o._preco = p;
         o._total = p != null ? p * (Number(r.qtd) || 0) : null;
+        o._troca = this.vencEntrega(r);
+        if (o._troca) {
+          // entrega encerrada: devolvida ou já substituída por entrega mais nova do mesmo EPI
+          const u = this.indices().ultimaEntrega.get(r.colab + '|' + r.epi);
+          if (r.devolucao) o._statusTroca = 'DEVOLVIDO';
+          else if (u && u > r.data) o._statusTroca = 'SUBSTITUÍDO';
+          else { const s = this.situacao(o._troca); o._statusTroca = s.s; o._diasTroca = s.dias; }
+        }
         break;
       }
       case 'auditorias': {
@@ -202,7 +223,7 @@ const Calc = {
     const v = this.get(mod, r, k);
     if (v == null || v === '') return '';
     const c = k.startsWith('_') ? null : campoDe(mod, k);
-    const tipo = c ? c.t : (['_venc', '_proxRecarga', '_proxTH', '_prox', '_fimMandato', '_fimEstab', '_ultimaManut'].includes(k) ? 'date' : '');
+    const tipo = c ? c.t : (['_venc', '_troca', '_proxRecarga', '_proxTH', '_prox', '_fimMandato', '_fimEstab', '_ultimaManut'].includes(k) ? 'date' : '');
     if (tipo === 'date') return D.br(v);
     if ((c && c.t === 'money') || ['_valor', '_total'].includes(k)) return fmtMoney(v);
     if (k === '_perc') return v + '%';
@@ -218,7 +239,7 @@ const Calc = {
   classe(v) {
     const s = norm(v);
     const mapa = {
-      'vencido': 'critical', 'a vencer': 'warning', 'valido': 'good', 'substituido': 'neutral',
+      'vencido': 'critical', 'a vencer': 'warning', 'valido': 'good', 'substituido': 'neutral', 'devolvido': 'neutral',
       'sem estoque': 'critical', 'abaixo': 'warning', 'otimo': 'good', 'acima': 'neutral',
       'atrasado': 'critical', 'em aberto': 'warning', 'concluido': 'good', 'proximo': 'warning', 'no prazo': 'good',
       'sem prazo': 'neutral', 'cancelado': 'neutral', 'realizado': 'good', 'agendado': 'neutral', 'em andamento': 'warning',
@@ -235,8 +256,8 @@ const Calc = {
     const cls = (k.startsWith('_') || ['status', 'resultado', 'prioridade'].includes(k)) ? this.classe(t) : '';
     if (cls) {
       let extra = '';
-      const dias = r.__d && r.__d._diasVenc;
-      if (k === '_statusVenc' && dias != null && (t === 'A VENCER' || t === 'VENCIDO')) {
+      const dias = r.__d && (k === '_statusTroca' ? r.__d._diasTroca : r.__d._diasVenc);
+      if ((k === '_statusVenc' || k === '_statusTroca') && dias != null && (t === 'A VENCER' || t === 'VENCIDO')) {
         extra = t === 'VENCIDO' ? ' há ' + Math.abs(dias) + ' d' : ' em ' + dias + ' d';
       }
       return '<span class="badge b-' + cls + '">' + esc(t + extra) + '</span>';
@@ -296,6 +317,15 @@ const Calc = {
       if (d._statusVenc === 'VENCIDO' || d._statusVenc === 'A VENCER') add('CA de EPI', 'CA ' + (e.ca || '') + ' — ' + e.descricao, e.fabricante || '', d._venc, this.situacao(d._venc), 'epis', e.id);
       if ((d._statusEstoque === 'SEM ESTOQUE' || d._statusEstoque === 'ABAIXO') && (toNum(e.minimo) != null)) {
         add('Estoque de EPI', e.descricao + ' — estoque ' + d._estoque + ' (mínimo ' + e.minimo + ')', e.fabricante || '', '', { s: d._statusEstoque, dias: null }, 'epis', e.id);
+      }
+    });
+    // Validade de uso do EPI entregue: só a entrega em uso (não devolvida nem substituída)
+    (App.data.movepi || []).forEach((m) => {
+      if (!this.entregaColab(m) || !ativo(m.colab)) return;
+      const d = this.derivar('movepi', m);
+      if (d._statusTroca === 'VENCIDO' || d._statusTroca === 'A VENCER') {
+        const e = this.epi(m.epi) || {};
+        add('Troca de EPI', 'Troca do EPI: ' + (e.descricao || '') + (e.ca ? ' (CA ' + e.ca + ')' : ''), this.nomeColab(m.colab), d._troca, this.situacao(d._troca), 'movepi', m.id);
       }
     });
     (App.data.documentos || []).forEach((r) => {

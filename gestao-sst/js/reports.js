@@ -76,11 +76,11 @@ const Reports = {
       '<tr><th>CPF</th><td>' + esc(c.cpf) + '</td><th>Função</th><td>' + esc(c.funcao) + '</td><th>Setor</th><td>' + esc(c.setor) + '</td></tr>' +
       '<tr><th>Admissão</th><td>' + D.br(c.admissao) + '</td><th>RG</th><td>' + esc(c.rg) + '</td><th>Situação</th><td>' + esc(c.status) + '</td></tr></table>' +
       '<p class="decl">' + esc(Config.params.declaracaoEPI) + '</p>' +
-      '<table><thead><tr><th>Data</th><th>Qtd</th><th>EPI</th><th>CA</th><th>MED</th><th>Devolução</th><th style="width:22%">Assinatura</th></tr></thead><tbody>' +
+      '<table><thead><tr><th>Data</th><th>Qtd</th><th>EPI</th><th>CA</th><th>MED</th><th>Troca prevista</th><th>Devolução</th><th style="width:20%">Assinatura</th></tr></thead><tbody>' +
       (movs.length ? movs.map((m) => {
         const e = Calc.epi(m.epi) || {};
-        return '<tr><td>' + D.br(m.data) + '</td><td>' + esc(m.qtd) + '</td><td>' + esc((e.descricao || '') + (e.fabricante ? ' — ' + e.fabricante : '')) + '</td><td>' + esc(e.ca) + '</td><td>' + esc(this.codMED(m.med)) + '</td><td>' + D.br(m.devolucao) + '</td><td></td></tr>';
-      }).join('') : '<tr><td colspan="7">Nenhuma entrega registrada.</td></tr>') +
+        return '<tr><td>' + D.br(m.data) + '</td><td>' + esc(m.qtd) + '</td><td>' + esc((e.descricao || '') + (e.fabricante ? ' — ' + e.fabricante : '')) + '</td><td>' + esc(e.ca) + '</td><td>' + esc(this.codMED(m.med)) + '</td><td>' + D.br(Calc.vencEntrega(m)) + '</td><td>' + D.br(m.devolucao) + '</td><td></td></tr>';
+      }).join('') : '<tr><td colspan="8">Nenhuma entrega registrada.</td></tr>') +
       '</tbody></table><p style="font-size:8.5pt"><b>MED — Motivo da entrega ou devolução:</b> ' + Config.lista('med').map((t, i) => (i + 1) + ' - ' + esc(t)).join('; ') + '.</p>' +
       '<div class="sign"><div>' + esc(c.nome) + '</div><div>' + esc(App.emp.responsavel || 'Responsável pela entrega') + '</div></div>';
   },
@@ -168,7 +168,7 @@ const Reports = {
       '<tr><th>Nascimento</th><td>' + D.br(c.nascimento) + (d._idade != null ? ' (' + d._idade + ' anos)' : '') + '</td><th>Admissão</th><td>' + D.br(c.admissao) + '</td><th>Tempo de empresa</th><td>' + esc(d._tempo || '') + '</td></tr></table>' +
       tab('Treinamentos', ['Treinamento', 'Norma', 'Conclusão', 'Vencimento', 'Situação'], ts.map((t) => { const v = Calc.vencTreino(t); return [t.treinamento, t.norma || '', D.br(t.dataFinal || t.dataInicial), D.br(v), v ? Calc.situacao(v).s : (t.status || '')]; })) +
       tab('ASO', ['Tipo', 'Emissão', 'Resultado', 'Vencimento', 'Situação'], asos.map((a) => { const v = Calc.vencASO(a); return [a.tipo || '', D.br(a.data), a.resultado || '', D.br(v), a.atualizado === 'Sim' ? 'SUBSTITUÍDO' : (v ? Calc.situacao(v).s : '')]; })) +
-      tab('Entregas de EPI', ['Data', 'Qtd', 'EPI', 'CA', 'MED'], movs.map((m) => { const e = Calc.epi(m.epi) || {}; return [D.br(m.data), m.qtd, e.descricao || '', e.ca || '', m.med || '']; })) +
+      tab('Entregas de EPI', ['Data', 'Qtd', 'EPI', 'CA', 'MED', 'Troca prevista', 'Situação'], movs.map((m) => { const e = Calc.epi(m.epi) || {}; const q = Calc.derivar('movepi', m); return [D.br(m.data), m.qtd, e.descricao || '', e.ca || '', m.med || '', D.br(q._troca), q._statusTroca || '']; })) +
       tab('Acidentes', ['Data', 'Tipo', 'Lesão', 'Parte do corpo', 'Dias perdidos'], ac.map((a) => [D.br(a.data), a.tipo || '', a.dano || '', a.parte || '', String(Calc.derivar('acidentes', a)._diasPerdidos || 0)])) +
       tab('Advertências', ['Data', 'Medida', 'Ato faltoso'], adv.map((a) => [D.br(a.data), a.medida || '', a.ato || ''])) +
       tab('CIPA', ['Gestão', 'Representação', 'Posse', 'Fim do mandato', 'Fim da estabilidade'], cipa.map((x) => { const q = Calc.derivar('cipa', x); return [x.gestao || '', x.representa || '', D.br(x.posse), D.br(q._fimMandato), D.br(q._fimEstab)]; })) +

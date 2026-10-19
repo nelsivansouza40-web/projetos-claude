@@ -62,19 +62,19 @@ const Demo = {
 
     /* ---------- EPI ---------- */
     const episBase = [
-      ['Capacete de segurança classe B', 'Protege Equipamentos', 18.5, 30, 60, 400],
-      ['Óculos de proteção incolor', 'Visão Segura', 7.9, 40, 100, 900],
-      ['Protetor auricular tipo plug', 'Audição Total', 1.2, 200, 600, 120],
-      ['Luva de vaqueta', 'Mãos Firmes', 14.0, 40, 120, 200],
-      ['Botina de segurança com biqueira', 'Passo Forte', 89.0, 10, 40, -15],
-      ['Máscara de solda com escurecimento automático', 'Arco Protege', 240.0, 4, 12, 20],
-      ['Avental de raspa', 'Arco Protege', 46.0, 6, 20, 300],
-      ['Cinturão tipo paraquedista', 'Altura Segura', 310.0, 3, 8, 500],
-      ['Respirador PFF2', 'Ar Puro', 4.5, 60, 200, 45],
-      ['Luva isolante classe 0', 'Volt Seguro', 180.0, 2, 6, 700]
+      ['Capacete de segurança classe B', 'Protege Equipamentos', 18.5, 30, 60, 400, 730],
+      ['Óculos de proteção incolor', 'Visão Segura', 7.9, 40, 100, 900, 180],
+      ['Protetor auricular tipo plug', 'Audição Total', 1.2, 200, 600, 120, ''],
+      ['Luva de vaqueta', 'Mãos Firmes', 14.0, 40, 120, 200, ''],
+      ['Botina de segurança com biqueira', 'Passo Forte', 89.0, 10, 40, -15, 180],
+      ['Máscara de solda com escurecimento automático', 'Arco Protege', 240.0, 4, 12, 20, 730],
+      ['Avental de raspa', 'Arco Protege', 46.0, 6, 20, 300, 180],
+      ['Cinturão tipo paraquedista', 'Altura Segura', 310.0, 3, 8, 500, 1825],
+      ['Respirador PFF2', 'Ar Puro', 4.5, 60, 200, 45, ''],
+      ['Luva isolante classe 0', 'Volt Seguro', 180.0, 2, 6, 700, 180]
     ];
-    const epis = episBase.map(([descricao, fabricante, preco, minimo, maximo, vencDias], i) => novo('epis', {
-      codigo: i + 1, descricao, fabricante, ca: String(10000 + i * 731), vencCA: dia(vencDias), controlar: 'Sim',
+    const epis = episBase.map(([descricao, fabricante, preco, minimo, maximo, vencDias, validadeUso], i) => novo('epis', {
+      codigo: i + 1, descricao, fabricante, ca: String(10000 + i * 731), vencCA: dia(vencDias), controlar: 'Sim', validadeUso,
       saldoInicial: Math.round(maximo * 0.5), minimo, maximo, preco
     }));
     // entradas de compra

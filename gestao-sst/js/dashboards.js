@@ -282,11 +282,14 @@ const Paineis = {
     const custoSaidas = saidas.reduce((s, r) => s + (Calc.derivar('movepi', r)._total || 0), 0);
     const valorEstoque = epis.reduce((s, d) => s + (d._valor || 0), 0);
     const negativos = epis.filter((d) => d._estoque < 0).length;
+    // validade de uso: entregas ainda em poder do colaborador (não devolvidas nem substituídas)
+    const emUso = (App.data.movepi || []).map((r) => Calc.derivar('movepi', r)).filter((d) => ['VÁLIDO', 'A VENCER', 'VENCIDO'].includes(d._statusTroca));
     const g = this.grade(area,
       this.tile('EPIs cadastrados', fmtInt(epis.length)) +
       this.tile('Valor em estoque', fmtMoney(valorEstoque) || 'R$ 0,00') +
       this.tile('Sem estoque / abaixo do mínimo', fmtInt(epis.filter((d) => d._statusEstoque === 'SEM ESTOQUE').length) + ' / ' + fmtInt(epis.filter((d) => d._statusEstoque === 'ABAIXO').length)) +
       this.tile('CA vencido', fmtInt(epis.filter((d) => d._statusVenc === 'VENCIDO').length), fmtInt(epis.filter((d) => d._statusVenc === 'A VENCER').length) + ' a vencer') +
+      this.tile('EPI entregue com troca vencida', fmtInt(emUso.filter((d) => d._statusTroca === 'VENCIDO').length), fmtInt(emUso.filter((d) => d._statusTroca === 'A VENCER').length) + ' a vencer') +
       this.tile('Unidades entregues no período', fmtInt(saidas.reduce((s, r) => s + (Number(r.qtd) || 0), 0)), fmtInt(new Set(saidas.map((r) => r.colab).filter(Boolean)).size) + ' colaboradores') +
       this.tile('Custo das entregas', fmtMoney(custoSaidas) || 'R$ 0,00') +
       (negativos ? this.tile('Estoque negativo', fmtInt(negativos), 'Lance o saldo inicial ou as entradas') : ''));
@@ -298,6 +301,8 @@ const Paineis = {
     g.appendChild(Charts.card('Situação do estoque', (b) => Charts.rosca(b, { itens: st }), this.tab(st)));
     const ca = this.coresStatus(this.contar(epis.filter((d) => d._statusVenc), (d) => d._statusVenc));
     g.appendChild(Charts.card('Validade dos CAs', (b) => Charts.rosca(b, { itens: ca }), this.tab(ca)));
+    const uso = this.coresStatus(this.contar(emUso, (d) => d._statusTroca));
+    g.appendChild(Charts.card('Validade dos EPIs em uso', (b) => Charts.rosca(b, { itens: uso }), this.tab(uso)));
     const top = this.somar(saidas, (r) => (Calc.epi(r.epi) || {}).descricao, (r) => r.qtd);
     g.appendChild(Charts.card('EPIs mais entregues', (b) => Charts.ranking(b, { itens: top }), this.tab(top)));
     const quem = this.somar(saidas.filter((r) => r.colab), (r) => Calc.nomeColab(r.colab), (r) => r.qtd);

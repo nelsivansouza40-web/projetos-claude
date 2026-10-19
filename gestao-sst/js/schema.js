@@ -120,13 +120,14 @@ const MODULOS = [
       { k: 'fabricante', l: 'Fabricante', t: 'text', x: 'FABRICANTE' },
       { k: 'ca', l: 'Número do CA', t: 'text', x: 'NÚMERO DO CA' },
       { k: 'vencCA', l: 'Vencimento do CA', t: 'date', x: 'DATA DE VENCIMENTO' },
-      { k: 'controlar', l: 'Controlar validade?', t: 'sn', x: 'CONTROLAR VALIDADE?', padrao: 'Sim' },
+      { k: 'controlar', l: 'Controlar validade do CA?', t: 'sn', x: 'CONTROLAR VALIDADE?', padrao: 'Sim' },
+      { k: 'validadeUso', l: 'Validade de uso (dias)', t: 'num', x: 'VALIDADE DE USO (DIAS)', hint: 'Prazo de troca contado da entrega ao colaborador. Em branco: não controla' },
       { k: 'saldoInicial', l: 'Saldo inicial', t: 'num', hint: 'Estoque existente antes das movimentações lançadas' },
       { k: 'minimo', l: 'Estoque mínimo', t: 'num', x: 'MÍNIMO' },
       { k: 'maximo', l: 'Estoque máximo', t: 'num', x: 'MÁXIMO' },
       { k: 'preco', l: 'Preço unitário', t: 'money', x: 'PREÇO UNITÁRIO' }
     ],
-    colunas: ['codigo', 'descricao', 'fabricante', 'ca', 'vencCA', '_statusVenc', '_entradas', '_saidas', '_estoque', '_statusEstoque', '_valor'],
+    colunas: ['codigo', 'descricao', 'fabricante', 'ca', 'vencCA', '_statusVenc', 'validadeUso', '_entradas', '_saidas', '_estoque', '_statusEstoque', '_valor'],
     filtros: ['_statusEstoque', '_statusVenc']
   },
   {
@@ -142,10 +143,11 @@ const MODULOS = [
       { k: 'preco', l: 'Preço unitário', t: 'money', x: 'PREÇO UNITÁRIO', hint: 'Em branco: usa o preço do cadastro' },
       { k: 'med', l: 'MED (motivo)', t: 'sel', lista: 'med', w: 2, x: 'MED (MOTIVO DA ENTREGA OU DEVOLUÇÃO)' },
       { k: 'devolucao', l: 'Data de devolução', t: 'date', x: 'DATA DE DEVOLUÇÃO' },
+      { k: 'validadeDias', l: 'Validade de uso (dias)', t: 'num', x: 'VALIDADE DE USO (DIAS)', hint: 'Em branco: usa o prazo do cadastro do EPI', se: (r) => r.tipo !== 'ENTRADA' && r.destino !== 'Fornecedor' },
       { k: 'obs', l: 'Observação', t: 'text', w: 4 }
     ],
-    colunas: ['data', 'tipo', 'epi', 'qtd', '_quem', 'med', '_total', 'devolucao'],
-    filtros: ['tipo', '_ano', '_mes']
+    colunas: ['data', 'tipo', 'epi', 'qtd', '_quem', 'med', '_total', 'devolucao', '_troca', '_statusTroca'],
+    filtros: ['tipo', '_statusTroca', '_ano', '_mes']
   },
   {
     id: 'documentos', nome: 'Documentos', grupo: 'Gestão', singular: 'documento', aba: 'DOCUMENTOS', chave: 'nome',
@@ -427,7 +429,7 @@ const ROTULOS_CALC = {
   _proxRecarga: 'Próxima recarga', _statusRecarga: 'Recarga', _proxTH: 'Próximo teste hidrostático',
   _statusTH: 'Teste hidrostático', _prox: 'Próximo teste', _status: 'Situação', _naoConf: 'Itens não conformes',
   _ultimaManut: 'Última manutenção', _fimMandato: 'Fim do mandato', _statusMandato: 'Mandato',
-  _fimEstab: 'Fim da estabilidade', _statusEstab: 'Estabilidade', _ano: 'Ano', _mes: 'Mês'
+  _fimEstab: 'Fim da estabilidade', _troca: 'Troca prevista', _statusTroca: 'Validade do EPI entregue', _statusEstab: 'Estabilidade', _ano: 'Ano', _mes: 'Mês'
 };
 
 function novoRotulo(m) { return (m.fem ? 'Nova ' : 'Novo ') + m.singular; }
