@@ -104,6 +104,8 @@ const Forms = {
       }
       r[c.k] = v;
     });
+    // lista que só vale em certa condição (ex.: classificação da doença ocupacional): oculta, não grava
+    MOD[mod].campos.forEach((c) => { if (c.se && c.t === 'sel' && !c.se(r)) r[c.k] = ''; });
     return { r, erros, novos };
   },
 

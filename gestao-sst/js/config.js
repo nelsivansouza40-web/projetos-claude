@@ -8,7 +8,8 @@ const LISTAS_PADRAO = {
   setores: { l: 'Setores', v: ['Administração', 'Manutenção', 'Produção', 'Logística'] },
   funcoes: { l: 'Funções', v: [] },
   statusAcidente: { l: 'Situação da investigação do acidente', v: ['Concluído', 'Aguardando ação', 'Investigação'] },
-  tiposAcidente: { l: 'Tipos de acidente', v: ['Típico', 'Trajeto', 'Doença ocupacional', 'Doença profissional', 'Doença do trabalho'] },
+  tiposAcidente: { l: 'Tipos de acidente', v: ['Típico', 'Trajeto', 'Doença ocupacional'] },
+  classeDoenca: { l: 'Classificação da doença ocupacional', v: ['Doença profissional', 'Doença do trabalho'] },
   danos: { l: 'Dano / lesão', v: ['Queimadura', 'Fratura', 'Contusão', 'Objeto estranho', 'Corte', 'Escoriação', 'Torção', 'Luxação', 'Amputação', 'Choque elétrico', 'Intoxicação'] },
   partesCorpo: { l: 'Partes do corpo', v: ['Cabeça', 'Olhos', 'Nariz', 'Pescoço', 'Face', 'Ombro', 'Braço', 'Mão', 'Dedo', 'Tronco', 'Abdômen', 'Coluna', 'Perna', 'Joelho', 'Pé', 'Múltiplas partes'] },
   agentes: { l: 'Agente causador', v: ['Piso', 'Andaime', 'Escada', 'Rampa', 'Serra', 'Máquina', 'Ferramenta manual', 'Veículo', 'Eletricidade', 'Produto químico', 'Queda de material'] },
@@ -96,13 +97,6 @@ const Config = {
       this.listas[k] = (l && l.value && Array.isArray(l.value[k])) ? l.value[k] : LISTAS_PADRAO[k].v.slice();
     });
     this.params = Object.assign(JSON.parse(JSON.stringify(PARAMS_PADRAO)), (p && p.value) || {});
-    // empresas já existentes: inclui uma única vez os tipos de doença (Lei 8.213, art. 20)
-    if (l && !this.params.migTiposDoenca) {
-      ['Doença profissional', 'Doença do trabalho'].forEach((v) => this.absorver('tiposAcidente', v));
-      this.params.migTiposDoenca = true;
-      await DB.put('cfg', { key: emp + ':listas', value: this.listas });
-      await DB.put('cfg', { key: emp + ':params', value: this.params });
-    }
   },
   async salvar() {
     const emp = App.emp.id;

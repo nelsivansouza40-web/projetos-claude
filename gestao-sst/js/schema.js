@@ -47,6 +47,7 @@ const MODULOS = [
       { k: 'hora', l: 'Horário', t: 'time', x: 'HORÁRIO' },
       { k: 'status', l: 'Situação da investigação', t: 'sel', lista: 'statusAcidente', x: 'STATUS' },
       { k: 'tipo', l: 'Tipo', t: 'sel', lista: 'tiposAcidente', x: 'TIPO' },
+      { k: 'classeDoenca', l: 'Classificação da doença ocupacional', t: 'sel', lista: 'classeDoenca', x: 'CLASSIFICAÇÃO DA DOENÇA OCUPACIONAL', se: (r) => norm(r.tipo) === 'doenca ocupacional' },
       { k: 'dano', l: 'Dano / lesão', t: 'sel', lista: 'danos', x: 'DANO/LESÃO' },
       { k: 'parte', l: 'Parte do corpo atingida', t: 'sel', lista: 'partesCorpo', x: 'PARTE DO CORPO ATINGIDA' },
       { k: 'agente', l: 'Agente causador', t: 'sel', lista: 'agentes', x: 'AGENTE CAUSADOR' },
@@ -60,7 +61,7 @@ const MODULOS = [
       { k: 'detalhes', l: 'Descrição do acidente', t: 'textarea', w: 4, x: 'DETALHES' }
     ],
     colunas: ['data', 'colab', 'tipo', 'dano', 'parte', 'gravidade', 'afastamento', '_diasPerdidos', 'status'],
-    filtros: ['tipo', 'gravidade', 'status', '_ano']
+    filtros: ['tipo', 'classeDoenca', 'gravidade', 'status', '_ano']
   },
   {
     id: 'treinamentos', nome: 'Treinamentos', grupo: 'Pessoas', singular: 'treinamento', aba: 'TREINAMENTOS', chave: 'treinamento',

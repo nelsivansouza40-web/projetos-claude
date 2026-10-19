@@ -61,6 +61,7 @@ const App = {
     try { localStorage.setItem('gsst_emp', this.emp.id); } catch (e) { /* ignora */ }
     await Config.carregar(this.emp.id);
     await this.recarregarDados();
+    await this.migrarClasseDoenca();
     await Backup.carregarVinculo();
     await Sync.carregar(this.emp.id);
     Object.keys(Lista.estado).forEach((k) => delete Lista.estado[k]);
@@ -76,6 +77,22 @@ const App = {
     recs.forEach((r) => { (d[r.mod] || (d[r.mod] = [])).push(r); });
     this.data = d;
     this.versao++;
+  },
+
+  /**
+   * Uma única vez por empresa: "Doença profissional" e "Doença do trabalho" deixam de ser
+   * tipos de acidente e passam a ser a classificação da doença ocupacional.
+   */
+  async migrarClasseDoenca() {
+    if (Config.params.migClasseDoenca) return;
+    const classes = ['Doença profissional', 'Doença do trabalho'];
+    const daLista = (v) => classes.find((c) => norm(c) === norm(v));
+    Config.listas.tiposAcidente = Config.lista('tiposAcidente').filter((v) => !daLista(v));
+    for (const r of (this.data.acidentes || []).filter((a) => daLista(a.tipo))) {
+      await this.salvar('acidentes', Object.assign({}, r, { tipo: 'Doença ocupacional', classeDoenca: r.classeDoenca || daLista(r.tipo) }));
+    }
+    Config.params.migClasseDoenca = true;
+    await Config.salvar();
   },
 
   marca() {
