@@ -133,17 +133,17 @@ const Demo = {
 
     /* ---------- Acidentes ---------- */
     const acid = [
-      [-400, 'Típico', 'Corte', 'Mão', 'Ferramenta manual', 'Leve', 'Acidente com lesão leve', 'Não', '', 'Corte superficial ao manusear chapa sem luva.'],
-      [-300, 'Típico', 'Queimadura', 'Braço', 'Máquina', 'Moderada', 'Acidente com lesão leve', 'Sim', -296, 'Respingo de solda no antebraço por avental mal posicionado.'],
-      [-210, 'Trajeto', 'Contusão', 'Joelho', 'Veículo', 'Moderada', 'Acidente com lesão leve', 'Sim', -199, 'Queda de motocicleta no trajeto para o trabalho.'],
-      [-150, 'Típico', 'Objeto estranho', 'Olhos', 'Ferramenta manual', 'Leve', 'Acidente com lesão leve', 'Não', '', 'Partícula no olho durante esmerilhamento.'],
-      [-80, 'Típico', 'Torção', 'Pé', 'Piso', 'Leve', 'Acidente com lesão leve', 'Sim', -77, 'Torção ao descer da plataforma da prensa.'],
-      [-45, 'Típico', 'Fratura', 'Dedo', 'Máquina', 'Grave', 'Acidente com lesão grave', 'Sim', '', 'Prensamento do dedo em dobradeira com proteção removida.'],
-      [-12, 'Típico', 'Contusão', 'Ombro', 'Queda de material', 'Leve', 'Acidente com danos materiais', 'Não', '', 'Queda de perfil metálico da estante; danos ao material e contusão leve.']
+      [-400, '1 - Típico', 'Corte', 'Mão', 'Ferramenta manual', 'Leve', 'Acidente com lesão leve', 'Não', '', 'Corte superficial ao manusear chapa sem luva.'],
+      [-300, '1 - Típico', 'Queimadura', 'Braço', 'Máquina', 'Moderada', 'Acidente com lesão leve', 'Sim', -296, 'Respingo de solda no antebraço por avental mal posicionado.'],
+      [-210, '3 - Trajeto', 'Contusão', 'Joelho', 'Veículo', 'Moderada', 'Acidente com lesão leve', 'Sim', -199, 'Queda de motocicleta no trajeto para o trabalho.'],
+      [-150, '1 - Típico', 'Objeto estranho', 'Olhos', 'Ferramenta manual', 'Leve', 'Acidente com lesão leve', 'Não', '', 'Partícula no olho durante esmerilhamento.'],
+      [-80, '1 - Típico', 'Torção', 'Pé', 'Piso', 'Leve', 'Acidente com lesão leve', 'Sim', -77, 'Torção ao descer da plataforma da prensa.'],
+      [-45, '1 - Típico', 'Fratura', 'Dedo', 'Máquina', 'Grave', 'Acidente com lesão grave', 'Sim', '', 'Prensamento do dedo em dobradeira com proteção removida.'],
+      [-12, '1 - Típico', 'Contusão', 'Ombro', 'Queda de material', 'Leve', 'Acidente com danos materiais', 'Não', '', 'Queda de perfil metálico da estante; danos ao material e contusão leve.']
     ];
     acid.forEach(([d, tipo, dano, parte, agente, gravidade, bird, afast, ret, det], i) => {
       const c = ativos[(i * 5 + 2) % ativos.length];
-      novo('acidentes', { colab: c.id, data: dia(d), hora: pick(['08:20', '10:45', '14:10', '16:30']), status: i >= 5 ? 'Investigação' : 'Concluído', tipo, dano, parte, agente, local: c.setor, cat: tipo === 'Trajeto' || afast === 'Sim' || gravidade === 'Grave' ? 'Sim' : 'Não', gravidade, bird, afastamento: afast, retorno: ret === '' ? '' : dia(ret), diasDebitados: '', detalhes: det });
+      novo('acidentes', { colab: c.id, data: dia(d), hora: pick(['08:20', '10:45', '14:10', '16:30']), status: i >= 5 ? 'Investigação' : 'Concluído', tipo, dano, parte, agente, local: c.setor, cat: tipo === '3 - Trajeto' || afast === 'Sim' || gravidade === 'Grave' ? 'Sim' : 'Não', gravidade, bird, afastamento: afast, retorno: ret === '' ? '' : dia(ret), diasDebitados: '', detalhes: det });
     });
 
     /* ---------- Advertências ---------- */

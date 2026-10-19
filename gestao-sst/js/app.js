@@ -61,7 +61,7 @@ const App = {
     try { localStorage.setItem('gsst_emp', this.emp.id); } catch (e) { /* ignora */ }
     await Config.carregar(this.emp.id);
     await this.recarregarDados();
-    await this.migrarClasseDoenca();
+    await this.migrarTiposCAT();
     await Backup.carregarVinculo();
     await Sync.carregar(this.emp.id);
     Object.keys(Lista.estado).forEach((k) => delete Lista.estado[k]);
@@ -80,18 +80,22 @@ const App = {
   },
 
   /**
-   * Uma única vez por empresa: "Doença profissional" e "Doença do trabalho" deixam de ser
-   * tipos de acidente e passam a ser a classificação da doença ocupacional.
+   * Uma única vez por empresa: tipos de acidente numerados como na CAT (1 - Típico,
+   * 2 - Doença ocupacional, 3 - Trajeto). "Doença profissional" e "Doença do trabalho"
+   * passam a ser a classificação da doença ocupacional.
    */
-  async migrarClasseDoenca() {
-    if (Config.params.migClasseDoenca) return;
-    const classes = ['Doença profissional', 'Doença do trabalho'];
-    const daLista = (v) => classes.find((c) => norm(c) === norm(v));
-    Config.listas.tiposAcidente = Config.lista('tiposAcidente').filter((v) => !daLista(v));
-    for (const r of (this.data.acidentes || []).filter((a) => daLista(a.tipo))) {
-      await this.salvar('acidentes', Object.assign({}, r, { tipo: 'Doença ocupacional', classeDoenca: r.classeDoenca || daLista(r.tipo) }));
+  async migrarTiposCAT() {
+    if (Config.params.migTiposCAT) return;
+    const padrao = LISTAS_PADRAO.tiposAcidente.v;
+    const novoTipo = { 'tipico': padrao[0], 'doenca ocupacional': padrao[1], 'trajeto': padrao[2], 'doenca profissional': padrao[1], 'doenca do trabalho': padrao[1] };
+    const classe = { 'doenca profissional': 'Doença profissional', 'doenca do trabalho': 'Doença do trabalho' };
+    const extras = Config.lista('tiposAcidente').filter((v) => !novoTipo[norm(v)] && !padrao.includes(v));
+    Config.listas.tiposAcidente = padrao.concat(extras);
+    for (const r of (this.data.acidentes || []).filter((a) => novoTipo[norm(a.tipo)])) {
+      const k = norm(r.tipo);
+      await this.salvar('acidentes', Object.assign({}, r, { tipo: novoTipo[k], classeDoenca: r.classeDoenca || classe[k] || '' }));
     }
-    Config.params.migClasseDoenca = true;
+    Config.params.migTiposCAT = true;
     await Config.salvar();
   },
 
