@@ -38,6 +38,33 @@ const Reports = {
   imprimirRegistro(mod, r) {
     if (mod === 'oss') return this.imprimir(this.htmlOSS(r));
     if (mod === 'planos') return this.imprimir(this.html5W2H(r));
+    if (mod === 'dds') return this.imprimir(this.htmlDDS(r));
+  },
+
+  /* ---------------- Registro de DDS com lista de presença (mesmo modelo do app Inspeções SSMA) ---------------- */
+  htmlDDS(r) {
+    const e = App.emp || {};
+    const codigo = 'DDS-' + (String(r.data || '').replace(/-/g, '') || 'SDATA') + '-' + String(r.id || '').split('-')[0].toUpperCase();
+    const agora = new Date().toLocaleString('pt-BR');
+    const v = (x) => esc(x || '—');
+    const pessoas = (r.participantes || []).map((id) => Calc.colab(id)).filter(Boolean).sort((a, b) => a.nome.localeCompare(b.nome));
+    const linhas = pessoas.map((c, i) => '<tr><td>' + (i + 1) + '</td><td>' + esc(c.nome) + '</td><td>' + v(c.funcao) + '</td><td class="rds-ass"><div class="rds-linha"></div></td></tr>');
+    // DDS agendado ou lista curta: linhas em branco para quem assinar no papel
+    for (let i = linhas.length; i < Math.max(10, pessoas.length + 3); i++) linhas.push('<tr><td>' + (i + 1) + '</td><td></td><td></td><td class="rds-ass"><div class="rds-linha"></div></td></tr>');
+    let n = 2;
+    return '<div class="rds">' +
+      '<header class="rds-cab"><div class="rds-tit">' + (e.logo ? '<img src="' + e.logo + '" alt="">' : '') +
+      '<div><h2>REGISTRO DE DDS</h2><p>Diálogo Diário de Segurança — ' + esc(r.tema) + '</p></div></div>' +
+      '<table class="rds-ctrl"><tr><th>Código</th><td>' + esc(codigo) + '</td></tr><tr><th>Revisão</th><td>00</td></tr><tr><th>Emitido em</th><td>' + esc(agora) + '</td></tr></table></header>' +
+      '<section><h3>1. Identificação</h3><table class="rds-ident">' +
+      '<tr><th>Empresa</th><td>' + v(e.nome) + '</td><th>CNPJ</th><td>' + v(e.cnpj) + '</td></tr>' +
+      '<tr><th>Área / Setor</th><td>' + v(r.departamento) + '</td><th>Ministrante</th><td>' + v(r.instrutor) + '</td></tr>' +
+      '<tr><th>Data</th><td>' + (r.data ? D.br(r.data) : '—') + '</td><th>Hora</th><td>' + v(r.hora) + '</td></tr>' +
+      '<tr><th>Duração</th><td>' + (r.duracao ? esc(r.duracao) + ' minuto(s)' : '—') + '</td><th>Local</th><td>' + v(r.local) + '</td></tr></table></section>' +
+      '<section><h3>' + (n++) + '. Conteúdo abordado</h3><p class="rds-txt">' + (r.conteudo ? esc(r.conteudo) : esc(r.tema)) + '</p></section>' +
+      (r.obs ? '<section><h3>' + (n++) + '. Observações finais</h3><p class="rds-txt">' + esc(r.obs) + '</p></section>' : '') +
+      '<section><h3>' + (n++) + '. Lista de presença</h3><table class="rds-pres"><thead><tr><th>Nº</th><th>Nome</th><th>Função</th><th>Assinatura</th></tr></thead><tbody>' + linhas.join('') + '</tbody></table></section>' +
+      '<footer class="rds-rod">Documento ' + esc(codigo) + ' — gerado automaticamente pelo sistema Gestão SST em ' + esc(agora) + '.</footer></div>';
   },
 
   bloco(titulo, txt) { return '<h2>' + esc(titulo) + '</h2><div class="txt">' + esc(txt || '') + '</div>'; },

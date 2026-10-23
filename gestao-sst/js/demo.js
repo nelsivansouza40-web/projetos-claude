@@ -132,7 +132,7 @@ const Demo = {
     const temas = ['Uso correto do protetor auricular', 'Ordem e limpeza no posto de trabalho', 'Riscos da solda e proteção dos olhos', 'Bloqueio e etiquetagem (LOTO)', 'Prevenção de quedas em escadas', 'Hidratação e calor', 'Transporte manual de cargas', 'Empilhadeira: circulação de pedestres', 'Uso do cinto paraquedista', 'Produtos químicos e FDS', 'Proteção das mãos', 'Comunicação de quase acidentes', 'Extintores: qual usar em cada fogo', 'Ergonomia na bancada', 'Direção defensiva'];
     temas.forEach((tema, i) => {
       const setor = pick(['Produção', 'Manutenção', 'Logística']);
-      novo('dds', { tema, status: 'Realizado', data: dia(-7 * (i + 1) + int(0, 3)), departamento: setor, instrutor: 'SESMT', duracao: 10, participantes: ids(doSetor(setor).filter(() => rnd() < 0.85)) });
+      novo('dds', { tema, status: 'Realizado', data: dia(-7 * (i + 1) + int(0, 3)), departamento: setor, instrutor: 'SESMT', duracao: 10, hora: '07:30', local: 'Área de vivência — ' + setor, conteudo: 'Apresentação do tema "' + tema + '": riscos envolvidos, medidas de controle e responsabilidades de cada um. Abertura para dúvidas e relatos da equipe.', participantes: ids(doSetor(setor).filter(() => rnd() < 0.85)) });
     });
     novo('dds', { tema: 'Riscos do trabalho a quente', status: 'Agendado', data: dia(3), departamento: 'Produção', instrutor: 'SESMT', duracao: 10, participantes: [] });
 

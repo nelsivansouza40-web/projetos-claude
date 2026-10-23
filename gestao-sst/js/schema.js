@@ -406,15 +406,19 @@ const MODULOS = [
     filtros: ['perigo', 'classe', 'fispq']
   },
   {
-    id: 'dds', nome: 'DDS', grupo: 'Pessoas', singular: 'DDS', aba: 'EXTRAS', chave: 'tema',
+    id: 'dds', nome: 'DDS', grupo: 'Pessoas', singular: 'DDS', aba: 'EXTRAS', chave: 'tema', imprimir: 'dds',
     campos: [
       { k: 'tema', l: 'Tema / descrição do DDS', t: 'text', req: 1, w: 2, x: 'DESCRIÇÃO DO DDS' },
       { k: 'status', l: 'Situação', t: 'opt', opts: ['Realizado', 'Agendado', 'Cancelado'], x: 'STATUS DDS', padrao: 'Realizado' },
       { k: 'data', l: 'Data', t: 'date', req: 1, x: 'DATA' },
+      { k: 'hora', l: 'Hora', t: 'time' },
       { k: 'departamento', l: 'Departamento', t: 'sel', lista: 'departamentos', x: 'DEPARTAMENTO' },
       { k: 'instrutor', l: 'Instrutor', t: 'sel', lista: 'instrutores', x: 'INSTRUTOR' },
       { k: 'duracao', l: 'Duração (min)', t: 'num' },
-      { k: 'participantes', l: 'Participantes', t: 'multicolab', w: 4 }
+      { k: 'local', l: 'Local', t: 'text', w: 2 },
+      { k: 'conteudo', l: 'Conteúdo abordado', t: 'textarea', w: 4 },
+      { k: 'participantes', l: 'Participantes', t: 'multicolab', w: 4 },
+      { k: 'obs', l: 'Observações finais', t: 'textarea', w: 4 }
     ],
     colunas: ['data', 'tema', 'departamento', 'instrutor', 'status', '_qtd'],
     filtros: ['status', 'departamento', '_ano']
