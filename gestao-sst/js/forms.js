@@ -11,7 +11,7 @@ const Forms = {
       return (App.data.colaboradores || []).slice().sort((a, b) => a.nome.localeCompare(b.nome))
         .map((c) => ({ id: c.id, label: this.rotuloColab(c), alt: c.nome, inativo: norm(c.status) === 'demitido' }));
     }
-    if (t === 'epi') return (App.data.epis || []).map((e) => ({ id: e.id, label: Calc.nomeEpi(e.id), alt: e.descricao })).sort((a, b) => a.label.localeCompare(b.label));
+    if (t === 'epi') return (App.data.epis || []).map((e) => ({ id: e.id, label: Calc.nomeEpi(e.id), alt: e.descricao, cat: e.categoria === 'Uniforme' ? 'Uniforme' : 'EPI' })).sort((a, b) => a.label.localeCompare(b.label));
     if (t === 'equip') return (App.data.equipamentos || []).map((e) => ({ id: e.id, label: Calc.nomeEquip(e.id), alt: e.nome })).sort((a, b) => a.label.localeCompare(b.label));
     return [];
   },
@@ -56,7 +56,8 @@ const Forms = {
       }
       case 'colab': case 'epi': case 'equip': {
         const dl = 'dl_' + c.k;
-        const ops = this.opcoesRef(c.t);
+        // aberto pela Ficha de uniforme (ou de EPI): só oferece os itens daquela categoria
+        const ops = this.opcoesRef(c.t).filter((o) => c.t !== 'epi' || !r._catEpi || o.cat === r._catEpi || o.id === v);
         const atual = ops.find((o) => o.id === v);
         inp = '<input type="text" id="' + id + '" name="' + c.k + '" data-ref="' + c.t + '" list="' + dl + '" autocomplete="off" placeholder="Digite para buscar" value="' + esc(atual ? atual.label : '') + '"' + req + '>' +
           '<datalist id="' + dl + '">' + ops.filter((o) => !o.inativo || o.id === v).map((o) => '<option value="' + esc(o.label) + '">').join('') + '</datalist>';

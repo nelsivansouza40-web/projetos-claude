@@ -4,7 +4,7 @@
 const NAV = [
   ['Início', [['painel', 'Painéis'], ['pendencias', 'Pendências e vencimentos']]],
   ['Pessoas', [['m:colaboradores', 'Colaboradores'], ['prontuario', 'Pesquisa do colaborador'], ['m:treinamentos', 'Treinamentos'], ['m:aso', 'ASO'], ['m:dds', 'DDS'], ['m:advertencias', 'Advertências']]],
-  ['EPI', [['m:epis', 'Cadastro de EPI'], ['m:movepi', 'Movimentação de EPI'], ['fichaepi', 'Ficha de EPI']]],
+  ['EPI', [['m:epis', 'Cadastro de EPI'], ['m:movepi', 'Movimentação de EPI'], ['fichaepi', 'Ficha de EPI / uniforme']]],
   ['Ocorrências', [['m:acidentes', 'Acidentes'], ['m:desvios', 'Desvios e incidentes'], ['m:auditorias', 'Auditorias']]],
   ['Gestão', [['m:planos', 'Plano de ação 5W2H'], ['m:riscos', 'Riscos ambientais'], ['m:documentos', 'Documentos'], ['m:oss', 'Ordem de Serviço (OSS)'], ['m:atividades', 'Atividades por função'], ['m:quimicos', 'Produtos químicos']]],
   ['Emergência', [['m:extintores', 'Extintores'], ['m:hidrantes', 'Hidrantes']]],

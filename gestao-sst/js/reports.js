@@ -122,16 +122,18 @@ const Reports = {
     const main = $('#main');
     main.innerHTML = '';
     const ops = Forms.opcoesRef('colab');
-    const head = h('<div class="page-head"><div><h1>Ficha de EPI e de uniforme</h1><p>Ficha de controle individual conforme NR-06, gerada a partir das movimentações de saída.</p></div><div class="toolbar"></div></div>');
+    const head = h('<div class="page-head"><div><h1>Ficha de EPI / uniforme</h1><p>Escolha qual ficha preencher. As duas seguem o modelo de controle individual e são geradas a partir das entregas registradas.</p></div><div class="toolbar"></div></div>');
     main.appendChild(head);
+    const tipos = [['EPI', 'Ficha de EPI'], ['Uniforme', 'Ficha de uniforme']];
+    const abas = h('<div class="tabs" role="tablist" aria-label="Qual ficha preencher">' + tipos.map(([k, l]) => '<button type="button" role="tab" data-cat="' + k + '">' + l + '</button>').join('') + '</div>');
+    main.appendChild(abas);
     const anos = [...new Set((App.data.movepi || []).map((m) => D.year(m.data)).filter(Boolean).concat([D.year(D.today())]))].sort().reverse();
     if (!this.fichaAno && this.fichaAno !== 'todos') this.fichaAno = String(D.year(D.today()));
     const box = h('<div class="card"><div class="row"><label class="field">Colaborador<input type="text" list="dl_ficha" placeholder="Digite o nome" autocomplete="off"><datalist id="dl_ficha">' +
       ops.map((o) => '<option value="' + esc(o.label) + '">').join('') + '</datalist></label>' +
-      '<label class="field">Ficha<select id="fc-cat"><option value="EPI">Ficha de EPI</option><option value="Uniforme">Ficha de uniforme</option></select></label>' +
       '<label class="field">Ano<select id="fc-ano">' + anos.map((a) => '<option value="' + a + '">' + a + '</option>').join('') + '<option value="todos">Todos os anos</option></select></label></div></div>');
-    const selCat = $('#fc-cat', box), selAno = $('#fc-ano', box);
-    selCat.value = this.fichaCat; selAno.value = this.fichaAno;
+    const selAno = $('#fc-ano', box);
+    selAno.value = this.fichaAno;
     main.appendChild(box);
     const prev = h('<div class="doc-preview" style="margin-top:14px"><div class="muted">Escolha um colaborador para ver a ficha.</div></div>');
     main.appendChild(prev);
@@ -139,7 +141,7 @@ const Reports = {
     const tb = $('.toolbar', head);
     const html = () => this.fichaHTML(this.fichaColab, this.fichaCat, this.fichaAno === 'todos' ? '' : this.fichaAno);
     const bImp = button('Imprimir ficha', 'btn-primary', () => { if (this.fichaColab) this.imprimir(html()); });
-    const bNova = button('+ Registrar entrega', '', () => Forms.abrir('movepi', null, { tipo: 'SAÍDA', destino: 'Funcionário', colab: this.fichaColab || '' }));
+    const bNova = button('+ Registrar entrega', '', () => Forms.abrir('movepi', null, { tipo: 'SAÍDA', destino: 'Funcionário', colab: this.fichaColab || '', _catEpi: this.fichaCat }));
     tb.append(bNova, bImp);
     const mostrar = () => {
       const id = Forms.resolverRef('colab', inp.value);
@@ -147,7 +149,12 @@ const Reports = {
       prev.innerHTML = id ? '<div class="doc">' + html() + '</div>' : '<div class="muted">Escolha um colaborador para ver a ficha.</div>';
     };
     inp.addEventListener('change', mostrar);
-    selCat.addEventListener('change', () => { this.fichaCat = selCat.value; mostrar(); });
+    const marcar = () => {
+      $$('button', abas).forEach((b) => { const on = b.dataset.cat === this.fichaCat; b.classList.toggle('active', on); b.setAttribute('aria-selected', on); });
+      bNova.textContent = this.fichaCat === 'Uniforme' ? '+ Registrar entrega de uniforme' : '+ Registrar entrega de EPI';
+    };
+    $$('button', abas).forEach((b) => b.addEventListener('click', () => { this.fichaCat = b.dataset.cat; marcar(); mostrar(); }));
+    marcar();
     selAno.addEventListener('change', () => { this.fichaAno = selAno.value; mostrar(); });
     if (this.fichaColab) { const c = Calc.colab(this.fichaColab); if (c) { inp.value = Forms.rotuloColab(c); mostrar(); } }
   },
