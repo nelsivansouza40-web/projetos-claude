@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cronograma de DDS</title>
+<meta name="description" content="Temas de DDS de 23 a 31 de outubro de 2026: montagem eletromecânica, meio ambiente, ataque de felinos e uso do kit felino.">
+<style>
+:root {
+  --bg: #f4f2ec; --surface: #ffffff; --surface-2: #faf8f3; --ink: #1d2124; --ink-2: #4a5157; --line: #e2ded3;
+  --head: #1f2a33; --head-2: #2c3b47; --head-ink: #ffffff;
+  --mont: #e9731c; --mont-soft: #fdeede; --amb: #2f8f55; --amb-soft: #e3f3e9; --fel: #b8860b; --fel-soft: #fbf1d6;
+  --alerta: #f6c000; --proib: #d22f27; --obrig: #1f5fbf;
+  --shadow: 0 1px 2px rgba(20,24,28,.06), 0 6px 20px rgba(20,24,28,.07);
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14181b; --surface: #1d2226; --surface-2: #232a2f; --ink: #eef0f1; --ink-2: #b4bcc2; --line: #313a40;
+    --head: #0f1417; --head-2: #1a2329; --mont-soft: #3a2614; --amb-soft: #16301f; --fel-soft: #352c12;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14181b; --surface: #1d2226; --surface-2: #232a2f; --ink: #eef0f1; --ink-2: #b4bcc2; --line: #313a40;
+  --head: #0f1417; --head-2: #1a2329; --mont-soft: #3a2614; --amb-soft: #16301f; --fel-soft: #352c12;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+svg { display: block; }
+
+/* ---------- Cabeçalho ---------- */
+header.hero { background: linear-gradient(135deg, var(--head), var(--head-2)); color: var(--head-ink); position: relative; overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: center; padding: 34px 16px 30px; }
+.selo { display: inline-flex; align-items: center; gap: 8px; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); padding: 5px 12px; border-radius: 999px; }
+.hero h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); line-height: 1.15; margin: 14px 0 10px; }
+.hero h1 span { color: var(--alerta); }
+.hero p { color: #d3dbe1; margin: 0 0 18px; max-width: 560px; }
+.resumo { display: flex; flex-wrap: wrap; gap: 10px; }
+.resumo div { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: 8px 14px; min-width: 120px; }
+.resumo b { display: block; font-size: 1.5rem; line-height: 1.1; }
+.resumo small { color: #c3ccd3; }
+.hero-art { width: 100%; max-width: 460px; justify-self: end; filter: drop-shadow(0 10px 24px rgba(0,0,0,.35)); }
+.faixa { height: 10px; background: repeating-linear-gradient(-45deg, var(--alerta) 0 18px, #1d2124 18px 36px); }
+
+/* ---------- Abas ---------- */
+nav.abas { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.abas-lista { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; position: relative; padding: 10px 0 12px; }
+.abas-lista::-webkit-scrollbar { display: none; }
+.aba { flex: none; display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: .92rem; font-weight: 600; color: var(--ink-2); background: transparent; border: 0; border-radius: 10px; padding: 9px 14px; cursor: pointer; transition: color .2s, background .2s, transform .2s; }
+.aba svg { width: 22px; height: 22px; transition: transform .35s cubic-bezier(.3,1.6,.5,1); }
+.aba:hover { background: var(--surface-2); color: var(--ink); }
+.aba:hover svg { transform: rotate(-8deg) scale(1.12); }
+.aba[aria-selected="true"] { color: var(--ink); }
+.aba[aria-selected="true"] svg { transform: scale(1.15); }
+.aba:focus-visible { outline: 3px solid var(--obrig); outline-offset: 2px; }
+.indicador { position: absolute; bottom: 4px; height: 4px; border-radius: 4px; background: var(--cor, var(--mont)); transition: left .35s cubic-bezier(.4,1.3,.5,1), width .35s cubic-bezier(.4,1.3,.5,1), background .35s; }
+
+/* ---------- Painéis ---------- */
+main { padding: 26px 0 50px; }
+.painel { display: none; }
+.painel.ativo { display: block; animation: entrar .45s cubic-bezier(.2,.8,.2,1); }
+@keyframes entrar { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.painel-topo { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.painel-topo h2 { margin: 0; font-size: 1.45rem; }
+.painel-topo p { margin: 4px 0 0; color: var(--ink-2); max-width: 720px; }
+.legenda { display: flex; gap: 14px; flex-wrap: wrap; font-size: .85rem; color: var(--ink-2); }
+.legenda span { display: inline-flex; align-items: center; gap: 6px; }
+.legenda i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+/* ---------- Cartões de DDS ---------- */
+.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
+.dds { --cor: var(--mont); --soft: var(--mont-soft); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s; opacity: 0; animation: surgir .5s forwards; animation-delay: calc(var(--i, 0) * 70ms); }
+.dds:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 16px 34px rgba(0,0,0,.12); }
+@keyframes surgir { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+.dds.amb { --cor: var(--amb); --soft: var(--amb-soft); }
+.dds.fel { --cor: var(--fel); --soft: var(--fel-soft); }
+.dds-topo { display: flex; gap: 14px; align-items: center; padding: 16px 16px 12px; background: var(--soft); border-bottom: 3px solid var(--cor); position: relative; }
+.dds.fel .dds-topo { background-image: radial-gradient(circle at 98% 12%, rgba(0,0,0,.07) 0 6px, transparent 7px), radial-gradient(circle at 99% 88%, rgba(0,0,0,.06) 0 5px, transparent 6px), radial-gradient(circle at 2% 92%, rgba(0,0,0,.05) 0 5px, transparent 6px); }
+.data { flex: none; width: 62px; text-align: center; background: var(--surface); border-radius: 10px; border: 1px solid var(--line); overflow: hidden; }
+.data b { display: block; font-size: 1.6rem; line-height: 1.2; padding-top: 4px; }
+.data small { display: block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; background: var(--cor); color: #fff; padding: 2px 0; }
+.dds-titulo { flex: 1; min-width: 0; }
+.categoria { font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--cor); }
+.dds-titulo h3 { margin: 2px 0 0; font-size: 1.06rem; line-height: 1.3; }
+.picto { flex: none; width: 54px; height: 54px; transition: transform .4s cubic-bezier(.3,1.6,.5,1); }
+.dds:hover .picto { transform: rotate(-6deg) scale(1.08); }
+.hoje { display: inline-block; vertical-align: 1px; margin-left: 6px; font-size: .64rem; font-weight: 800; letter-spacing: .06em; color: #fff; background: var(--proib); padding: 3px 8px; border-radius: 999px; animation: pulsar 1.8s infinite; }
+@keyframes pulsar { 0%,100% { box-shadow: 0 0 0 0 rgba(210,47,39,.5); } 50% { box-shadow: 0 0 0 7px rgba(210,47,39,0); } }
+.dds-corpo { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.objetivo { margin: 0; color: var(--ink-2); font-size: .93rem; }
+.pontos { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+.pontos li { position: relative; padding-left: 26px; font-size: .92rem; }
+.pontos li::before { content: ""; position: absolute; left: 0; top: 3px; width: 17px; height: 17px; border-radius: 50%; background: var(--cor); }
+.pontos li::after { content: ""; position: absolute; left: 6px; top: 7px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.pergunta { margin-top: auto; background: var(--surface-2); border-left: 4px solid var(--cor); border-radius: 8px; padding: 9px 12px; font-size: .9rem; }
+.pergunta b { color: var(--cor); }
+.ref { font-size: .78rem; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 6px; }
+.ref span { background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; }
+.dds.escondido { display: none; }
+
+/* ---------- Kit felino ---------- */
+.kit-hero { display: grid; grid-template-columns: 300px 1fr; gap: 22px; align-items: center; background: var(--fel-soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 22px; }
+.kit-hero svg { width: 100%; max-width: 300px; }
+.kit-hero h3 { margin: 0 0 6px; font-size: 1.3rem; }
+.kit-hero p { margin: 0 0 8px; color: var(--ink-2); }
+.aviso { display: flex; gap: 10px; align-items: flex-start; background: var(--surface); border: 1px dashed var(--fel); border-radius: 10px; padding: 10px 12px; font-size: .88rem; }
+.aviso svg { width: 26px; height: 26px; flex: none; }
+.itens { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; margin-bottom: 26px; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; text-align: center; box-shadow: var(--shadow); transition: transform .25s, border-color .25s; opacity: 0; animation: surgir .5s forwards; animation-delay: calc(var(--i, 0) * 70ms); }
+.item:hover { transform: translateY(-4px) rotate(-.5deg); border-color: var(--fel); }
+.item svg { width: 64px; height: 64px; margin: 0 auto 8px; }
+.item h4 { margin: 0 0 4px; font-size: 1rem; }
+.item p { margin: 0; font-size: .86rem; color: var(--ink-2); }
+h3.secao { font-size: 1.15rem; margin: 6px 0 12px; display: flex; align-items: center; gap: 8px; }
+h3.secao svg { width: 28px; height: 28px; }
+.passos { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; counter-reset: passo; margin-bottom: 26px; }
+.passo { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 14px 14px 16px; display: flex; gap: 12px; align-items: flex-start; box-shadow: var(--shadow); }
+.passo svg { width: 52px; height: 52px; flex: none; }
+.passo h4 { margin: 0 0 3px; font-size: .98rem; }
+.passo h4::before { counter-increment: passo; content: counter(passo) ". "; color: var(--fel); }
+.passo p { margin: 0; font-size: .87rem; color: var(--ink-2); }
+.checklist { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 6px 16px; box-shadow: var(--shadow); }
+.checklist label { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); cursor: pointer; font-size: .93rem; }
+.checklist label:last-child { border-bottom: 0; }
+.checklist input { width: 20px; height: 20px; accent-color: var(--amb); flex: none; }
+.checklist input:checked + span { text-decoration: line-through; color: var(--ink-2); }
+
+/* ---------- Como conduzir ---------- */
+.roteiro { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 26px; }
+.etapa { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--obrig); border-radius: 12px; padding: 14px; box-shadow: var(--shadow); }
+.etapa .tempo { font-size: .75rem; font-weight: 700; color: var(--obrig); text-transform: uppercase; letter-spacing: .06em; }
+.etapa h4 { margin: 4px 0 4px; }
+.etapa p { margin: 0; font-size: .88rem; color: var(--ink-2); }
+.pictos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.pictos figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align: center; }
+.pictos svg { width: 58px; height: 58px; margin: 0 auto 6px; }
+.pictos figcaption { font-size: .82rem; color: var(--ink-2); }
+
+footer { border-top: 1px solid var(--line); padding: 18px 0 30px; color: var(--ink-2); font-size: .82rem; }
+.botoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { font: inherit; font-size: .85rem; font-weight: 600; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 8px 14px; cursor: pointer; transition: transform .15s, background .2s; }
+.btn:hover { transform: translateY(-1px); background: var(--surface-2); }
+
+@media (max-width: 820px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-art { justify-self: center; max-width: 360px; }
+  .kit-hero { grid-template-columns: 1fr; }
+  .kit-hero svg { margin: 0 auto; max-width: 240px; }
+  .grade { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .dds, .item { opacity: 1; }
+}
+@media print {
+  nav.abas, .botoes, .hoje { display: none !important; }
+  .painel { display: block !important; animation: none; }
+  .dds, .item { opacity: 1; animation: none; box-shadow: none; break-inside: avoid; }
+  .dds.escondido { display: flex; }
+  #p-mont, #p-amb, #p-fel { display: none !important; }
+  header.hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== Pictogramas (desenhados uma vez, usados em todo o documento) ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Atenção: felinos (triângulo de alerta com pegada) -->
+    <symbol id="pg-felino" viewBox="0 0 64 64">
+      <path d="M32 4 L61 56 H3 Z" fill="#f6c000" stroke="#1d2124" stroke-width="4" stroke-linejoin="round"/>
+      <ellipse cx="32" cy="42" rx="8" ry="6.5" fill="#1d2124"/>
+      <ellipse cx="22.5" cy="33" rx="3.2" ry="4" fill="#1d2124"/><ellipse cx="28.5" cy="27.5" rx="3.2" ry="4" fill="#1d2124"/>
+      <ellipse cx="35.5" cy="27.5" rx="3.2" ry="4" fill="#1d2124"/><ellipse cx="41.5" cy="33" rx="3.2" ry="4" fill="#1d2124"/>
+    </symbol>
+    <!-- Pegada simples -->
+    <symbol id="pg-pegada" viewBox="0 0 64 64">
+      <ellipse cx="32" cy="42" rx="12" ry="10" fill="currentColor"/>
+      <ellipse cx="17" cy="28" rx="5" ry="6.5" fill="currentColor"/><ellipse cx="26" cy="18" rx="5" ry="6.5" fill="currentColor"/>
+      <ellipse cx="38" cy="18" rx="5" ry="6.5" fill="currentColor"/><ellipse cx="47" cy="28" rx="5" ry="6.5" fill="currentColor"/>
+    </symbol>
+    <!-- Obrigatório: cinto paraquedista (círculo azul) -->
+    <symbol id="pg-altura" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="30" fill="#1f5fbf"/>
+      <circle cx="32" cy="14" r="5" fill="#fff"/>
+      <path d="M32 20 V38 M24 26 H40 M32 38 L25 50 M32 38 L39 50" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M26 22 L32 30 L38 22 M27 36 H37" stroke="#f6c000" stroke-width="2.5" fill="none"/>
+      <path d="M32 9 V4" stroke="#fff" stroke-width="2.5"/><circle cx="32" cy="4.5" r="2" fill="none" stroke="#fff" stroke-width="1.5"/>
+    </symbol>
+    <!-- Obrigatório: capacete -->
+    <symbol id="pg-capacete" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="30" fill="#1f5fbf"/>
+      <path d="M14 40 C14 26 22 18 32 18 C42 18 50 26 50 40 Z" fill="#fff"/>
+      <rect x="10" y="39" width="44" height="6" rx="3" fill="#fff"/><path d="M32 18 V39" stroke="#1f5fbf" stroke-width="3"/>
+    </symbol>
+    <!-- Bloqueio e etiquetagem -->
+    <symbol id="pg-loto" viewBox="0 0 64 64">
+      <path d="M32 4 L61 56 H3 Z" fill="#f6c000" stroke="#1d2124" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M26 34 V29 a6 6 0 0 1 12 0 V34" fill="none" stroke="#1d2124" stroke-width="3.5"/>
+      <rect x="22" y="34" width="20" height="15" rx="3" fill="#d22f27"/><circle cx="32" cy="41" r="2.3" fill="#fff"/>
+    </symbol>
+    <!-- Risco elétrico -->
+    <symbol id="pg-eletrico" viewBox="0 0 64 64">
+      <path d="M32 4 L61 56 H3 Z" fill="#f6c000" stroke="#1d2124" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M35 18 L23 38 H31 L27 51 L41 30 H33 Z" fill="#1d2124"/>
+    </symbol>
+    <!-- Carga suspensa -->
+    <symbol id="pg-carga" viewBox="0 0 64 64">
+      <path d="M32 4 L61 56 H3 Z" fill="#f6c000" stroke="#1d2124" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M32 16 V26" stroke="#1d2124" stroke-width="3"/><path d="M32 26 q-5 0 -5 4 q0 4 5 4" fill="none" stroke="#1d2124" stroke-width="3"/>
+      <path d="M24 37 L32 31 L40 37" fill="none" stroke="#1d2124" stroke-width="2.5"/><rect x="21" y="37" width="22" height="13" fill="#1d2124"/>
+    </symbol>
+    <!-- Trabalho a quente -->
+    <symbol id="pg-quente" viewBox="0 0 64 64">
+      <path d="M32 4 L61 56 H3 Z" fill="#f6c000" stroke="#1d2124" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M32 19 C38 27 42 31 42 39 a10 10 0 0 1 -20 0 C22 33 26 31 27 25 C29 29 30 30 32 30 C31 26 31 23 32 19 Z" fill="#1d2124"/>
+    </symbol>
+    <!-- Resíduos / reciclagem (verde) -->
+    <symbol id="pg-residuo" viewBox="0 0 64 64">
+      <rect x="2" y="2" width="60" height="60" rx="12" fill="#2f8f55"/>
+      <path d="M20 22 H44 M27 22 V18 H37 V22" stroke="#fff" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <path d="M22 26 L25 50 H39 L42 26 Z" fill="#fff"/>
+      <path d="M29 31 V45 M35 31 V45" stroke="#2f8f55" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+    <!-- Óleo / derramamento -->
+    <symbol id="pg-oleo" viewBox="0 0 64 64">
+      <rect x="2" y="2" width="60" height="60" rx="12" fill="#2f8f55"/>
+      <path d="M32 10 C40 22 46 29 46 37 a14 14 0 0 1 -28 0 C18 29 24 22 32 10 Z" fill="#1d2124"/>
+      <path d="M26 38 a6 6 0 0 0 6 6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M12 54 H52" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <!-- Árvore / fauna e flora -->
+    <symbol id="pg-arvore" viewBox="0 0 64 64">
+      <rect x="2" y="2" width="60" height="60" rx="12" fill="#2f8f55"/>
+      <circle cx="32" cy="24" r="13" fill="#fff"/><circle cx="22" cy="31" r="9" fill="#fff"/><circle cx="42" cy="31" r="9" fill="#fff"/>
+      <rect x="29" y="34" width="6" height="18" fill="#fff"/><path d="M14 53 H50" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <!-- Proibido correr -->
+    <symbol id="pg-naocorrer" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="28" fill="#fff" stroke="#d22f27" stroke-width="6"/>
+      <circle cx="35" cy="15" r="4.5" fill="#1d2124"/>
+      <path d="M33 21 L28 33 L34 39 L31 50 M28 33 L20 37 M32 23 L41 27 L44 22 M34 39 L42 44" stroke="#1d2124" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M12 12 L52 52" stroke="#d22f27" stroke-width="6"/>
+    </symbol>
+    <!-- Proibido alimentar animais -->
+    <symbol id="pg-naoalimentar" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="28" fill="#fff" stroke="#d22f27" stroke-width="6"/>
+      <path d="M18 36 C18 28 24 24 32 24 C40 24 46 28 46 36 Z" fill="#1d2124"/><rect x="16" y="36" width="32" height="4" rx="2" fill="#1d2124"/>
+      <path d="M26 20 q2 -4 0 -7 M32 20 q2 -4 0 -7 M38 20 q2 -4 0 -7" stroke="#1d2124" stroke-width="2" fill="none"/>
+      <path d="M12 12 L52 52" stroke="#d22f27" stroke-width="6"/>
+    </symbol>
+    <!-- Andar em grupo -->
+    <symbol id="pg-grupo" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="30" fill="#1f5fbf"/>
+      <circle cx="21" cy="21" r="5" fill="#fff"/><circle cx="32" cy="17" r="5.5" fill="#fff"/><circle cx="43" cy="21" r="5" fill="#fff"/>
+      <path d="M13 44 a8 9 0 0 1 16 0 Z M23 44 a9 11 0 0 1 18 0 Z M35 44 a8 9 0 0 1 16 0 Z" fill="#fff"/>
+      <rect x="12" y="44" width="40" height="5" rx="2" fill="#fff"/>
+    </symbol>
+    <!-- Comunicar / rádio -->
+    <symbol id="pg-radio" viewBox="0 0 64 64">
+      <rect x="22" y="16" width="20" height="40" rx="4" fill="currentColor"/>
+      <path d="M26 16 V5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <rect x="26" y="22" width="12" height="9" rx="1.5" fill="#fff"/>
+      <circle cx="28" cy="39" r="1.8" fill="#fff"/><circle cx="32" cy="39" r="1.8" fill="#fff"/><circle cx="36" cy="39" r="1.8" fill="#fff"/>
+      <circle cx="28" cy="45" r="1.8" fill="#fff"/><circle cx="32" cy="45" r="1.8" fill="#fff"/><circle cx="36" cy="45" r="1.8" fill="#fff"/>
+      <path d="M48 18 a10 10 0 0 1 0 14 M52 14 a16 16 0 0 1 0 22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <!-- Apito -->
+    <symbol id="pg-apito" viewBox="0 0 64 64">
+      <path d="M10 26 H36 V22 H46 V30 H40 a12 12 0 1 1 -22 6 H10 Z" fill="currentColor"/>
+      <circle cx="29" cy="37" r="5" fill="#fff"/>
+      <path d="M50 16 l6 -5 M52 24 h8 M50 32 l6 5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <path d="M10 26 C6 22 6 16 12 14" stroke="currentColor" stroke-width="2" fill="none"/>
+    </symbol>
+    <!-- Buzina a ar -->
+    <symbol id="pg-buzina" viewBox="0 0 64 64">
+      <rect x="8" y="30" width="18" height="26" rx="5" fill="currentColor"/>
+      <rect x="13" y="24" width="8" height="7" fill="currentColor"/>
+      <path d="M17 24 V20 H24 L44 8 V36 L24 26 Z" fill="currentColor"/>
+      <path d="M50 14 a12 12 0 0 1 0 16 M55 9 a18 18 0 0 1 0 26" stroke="currentColor" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <!-- Lanterna -->
+    <symbol id="pg-lanterna" viewBox="0 0 64 64">
+      <rect x="8" y="28" width="26" height="12" rx="3" fill="currentColor" transform="rotate(-20 21 34)"/>
+      <path d="M31 22 L41 18 L46 32 L36 36 Z" fill="currentColor"/>
+      <path d="M46 17 L60 8 M48 25 L62 24 M49 33 L61 40" stroke="#f6c000" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+    <!-- Bastão / cajado -->
+    <symbol id="pg-bastao" viewBox="0 0 64 64">
+      <path d="M18 58 L44 6" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <path d="M40 12 a6 6 0 0 1 10 -2" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M22 50 l8 4" stroke="#f6c000" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+    <!-- Colete refletivo -->
+    <symbol id="pg-colete" viewBox="0 0 64 64">
+      <path d="M22 8 L32 18 L42 8 L52 14 L50 56 H14 L12 14 Z" fill="#f28c28"/>
+      <path d="M14 30 H50 M14 40 H50" stroke="#e8eef2" stroke-width="4"/>
+      <path d="M32 18 V56" stroke="#c96c12" stroke-width="2"/>
+    </symbol>
+    <!-- Telefone de emergência -->
+    <symbol id="pg-telefone" viewBox="0 0 64 64">
+      <rect x="2" y="2" width="60" height="60" rx="12" fill="#2f8f55"/>
+      <path d="M22 14 L28 22 L24 27 C27 34 31 38 38 41 L43 37 L50 43 L45 50 C30 49 15 34 14 19 Z" fill="#fff"/>
+      <path d="M40 14 V28 M33 21 H47" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+    <!-- Olho / atenção ao ambiente -->
+    <symbol id="pg-olho" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="30" fill="#1f5fbf"/>
+      <path d="M10 32 C18 20 46 20 54 32 C46 44 18 44 10 32 Z" fill="#fff"/>
+      <circle cx="32" cy="32" r="8" fill="#1f5fbf"/><circle cx="32" cy="32" r="3.5" fill="#fff"/>
+    </symbol>
+    <!-- Recuar devagar -->
+    <symbol id="pg-recuar" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="30" fill="#1f5fbf"/>
+      <circle cx="36" cy="15" r="5" fill="#fff"/>
+      <path d="M36 21 V37 M36 37 L31 50 M36 37 L41 50 M28 22 L36 26 L44 22" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M24 34 H12 M16 29 L11 34 L16 39" stroke="#f6c000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <!-- Parecer maior (braços erguidos) -->
+    <symbol id="pg-maior" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="30" fill="#1f5fbf"/>
+      <circle cx="32" cy="22" r="5" fill="#fff"/>
+      <path d="M32 28 V42 M32 42 L26 54 M32 42 L38 54 M32 31 L18 14 M32 31 L46 14" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <!-- Ferramentas (montagem) -->
+    <symbol id="pg-ferramenta" viewBox="0 0 64 64">
+      <rect x="2" y="2" width="60" height="60" rx="12" fill="#e9731c"/>
+      <path d="M18 46 L36 28 a9 9 0 0 1 12 -12 l-6 6 l4 4 l6 -6 a9 9 0 0 1 -12 12 L22 50 Z" fill="#fff"/>
+      <path d="M44 46 L22 18 M20 16 l6 2 l-2 4 l-4 -2 Z" stroke="#fff" stroke-width="3" fill="#fff" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="selo">
+        <svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-felino"/></svg>
+        Diálogo Diário de Segurança, Saúde e Meio Ambiente
+      </span>
+      <h1>Cronograma de DDS<br><span>23 a 31 de outubro de 2026</span></h1>
+      <p>Nove temas para as frentes de montagem eletromecânica, com foco nos riscos críticos da atividade, nos cuidados com o meio ambiente e na convivência segura com a fauna, incluindo ataque de felinos e uso do kit felino.</p>
+      <div class="resumo">
+        <div><b>9</b><small>DDS programados</small></div>
+        <div><b>4</b><small>Montagem eletromecânica</small></div>
+        <div><b>2</b><small>Meio ambiente</small></div>
+        <div><b>3</b><small>Fauna e felinos</small></div>
+      </div>
+    </div>
+    <!-- Ilustração: frente de montagem com torre, guindaste e mata -->
+    <svg class="hero-art" viewBox="0 0 460 300" role="img" aria-label="Ilustração de uma frente de montagem eletromecânica ao lado da mata, com uma onça observando">
+      <defs>
+        <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#ffdd99"/></linearGradient>
+        <linearGradient id="solo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a5a3a"/><stop offset="1" stop-color="#5b412a"/></linearGradient>
+      </defs>
+      <rect x="0" y="0" width="460" height="300" rx="22" fill="url(#ceu)"/>
+      <circle cx="360" cy="80" r="38" fill="#fff3c4" opacity=".9"><animate attributeName="r" values="36;40;36" dur="6s" repeatCount="indefinite"/></circle>
+      <path d="M0 190 L70 130 L130 175 L200 115 L280 170 L350 120 L460 185 V300 H0 Z" fill="#a3683f" opacity=".55"/>
+      <rect x="0" y="215" width="460" height="85" rx="0" fill="url(#solo)"/>
+      <rect x="0" y="278" width="460" height="22" rx="0" fill="#4a3522"/>
+      <!-- torre metálica -->
+      <g stroke="#2a3540" stroke-width="3" fill="none">
+        <path d="M150 215 L178 60 L206 215 M160 160 L196 160 M156 185 L200 185 M166 120 L190 120 M171 92 L185 92"/>
+        <path d="M160 160 L200 185 M196 160 L156 185 M166 120 L196 160 M190 120 L160 160"/>
+        <path d="M150 80 H206 M178 60 V50"/>
+      </g>
+      <circle cx="178" cy="48" r="5" fill="#d22f27"><animate attributeName="opacity" values="1;.2;1" dur="1.4s" repeatCount="indefinite"/></circle>
+      <!-- guindaste -->
+      <g>
+        <rect x="236" y="188" width="70" height="27" rx="5" fill="#f6c000" stroke="#2a3540" stroke-width="2"/>
+        <circle cx="252" cy="218" r="9" fill="#2a3540"/><circle cx="290" cy="218" r="9" fill="#2a3540"/>
+        <path d="M270 190 L330 70" stroke="#e9731c" stroke-width="9" stroke-linecap="round"/>
+        <path d="M330 70 V128" stroke="#2a3540" stroke-width="2"/>
+        <g><animateTransform attributeName="transform" type="translate" values="0 0;0 6;0 0" dur="3s" repeatCount="indefinite"/>
+          <path d="M330 128 q-6 0 -6 6 q0 6 6 6" fill="none" stroke="#2a3540" stroke-width="2.5"/>
+          <rect x="314" y="142" width="34" height="18" fill="#556270" stroke="#2a3540" stroke-width="2"/>
+        </g>
+      </g>
+      <!-- trabalhador com capacete -->
+      <g transform="translate(110 168)">
+        <circle cx="0" cy="0" r="8" fill="#e0b48a"/><path d="M-10 -3 C-10 -14 10 -14 10 -3 Z" fill="#fff"/><rect x="-12" y="-4" width="24" height="3" rx="1.5" fill="#fff"/>
+        <path d="M-9 10 H9 L11 36 H-11 Z" fill="#f28c28"/><path d="M-9 20 H9" stroke="#e8eef2" stroke-width="3"/>
+        <path d="M-7 36 V47 M7 36 V47" stroke="#2a3540" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <!-- mata -->
+      <g fill="#2f7d4a">
+        <circle cx="400" cy="200" r="30"/><circle cx="430" cy="185" r="26"/><circle cx="380" cy="175" r="22"/><circle cx="445" cy="215" r="22"/>
+        <rect x="403" y="205" width="8" height="22" fill="#5b412a"/>
+      </g>
+      <g fill="#256a3c"><circle cx="30" cy="205" r="22"/><circle cx="55" cy="195" r="18"/><rect x="33" y="210" width="6" height="16" fill="#5b412a"/></g>
+      <!-- onça espreitando -->
+      <g transform="translate(372 232)">
+        <ellipse cx="0" cy="0" rx="34" ry="13" fill="#d9a441"/>
+        <circle cx="34" cy="-8" r="12" fill="#d9a441"/>
+        <path d="M27 -18 l3 -6 l4 6 M38 -18 l3 -6 l3 6" fill="#d9a441"/>
+        <circle cx="31" cy="-10" r="1.8" fill="#1d2124"><animate attributeName="r" values="1.8;.3;1.8" dur="4s" repeatCount="indefinite"/></circle>
+        <circle cx="39" cy="-10" r="1.8" fill="#1d2124"><animate attributeName="r" values="1.8;.3;1.8" dur="4s" repeatCount="indefinite"/></circle>
+        <path d="M-34 -2 C-50 -6 -54 -20 -46 -24" stroke="#d9a441" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <g fill="#5b3c12"><circle cx="-18" cy="-4" r="3"/><circle cx="-6" cy="2" r="3"/><circle cx="6" cy="-5" r="3"/><circle cx="16" cy="3" r="2.5"/><circle cx="-24" cy="5" r="2.5"/><circle cx="24" cy="-6" r="2.2"/></g>
+        <path d="M-24 10 V20 M-12 11 V20 M12 11 V20 M24 10 V20" stroke="#d9a441" stroke-width="6" stroke-linecap="round"/>
+      </g>
+      <!-- placa de alerta -->
+      <g transform="translate(62 222)">
+        <rect x="-2" y="0" width="4" height="40" fill="#2a3540"/>
+        <use href="#pg-felino" x="-20" y="-36" width="40" height="40"/>
+      </g>
+    </svg>
+  </div>
+  <div class="faixa"></div>
+</header>
+
+<nav class="abas" aria-label="Seções do cronograma">
+  <div class="wrap">
+    <div class="abas-lista" role="tablist">
+      <button class="aba" role="tab" id="t-todos" aria-controls="p-todos" aria-selected="true" data-cor="#1f5fbf">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="10" width="52" height="46" rx="6" fill="none" stroke="currentColor" stroke-width="4"/><path d="M6 24 H58 M20 4 V16 M44 4 V16" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><rect x="16" y="32" width="8" height="8" fill="currentColor"/><rect x="28" y="32" width="8" height="8" fill="currentColor"/><rect x="40" y="32" width="8" height="8" fill="currentColor"/></svg>
+        Cronograma completo</button>
+      <button class="aba" role="tab" id="t-mont" aria-controls="p-mont" aria-selected="false" data-cor="#e9731c">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-ferramenta"/></svg>Montagem eletromecânica</button>
+      <button class="aba" role="tab" id="t-amb" aria-controls="p-amb" aria-selected="false" data-cor="#2f8f55">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-arvore"/></svg>Meio ambiente</button>
+      <button class="aba" role="tab" id="t-fel" aria-controls="p-fel" aria-selected="false" data-cor="#b8860b">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-felino"/></svg>Ataque de felinos</button>
+      <button class="aba" role="tab" id="t-kit" aria-controls="p-kit" aria-selected="false" data-cor="#b8860b">
+        <svg viewBox="0 0 64 64" aria-hidden="true" style="color:#b8860b"><use href="#pg-buzina"/></svg>Kit felino</button>
+      <button class="aba" role="tab" id="t-como" aria-controls="p-como" aria-selected="false" data-cor="#1f5fbf">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-grupo"/></svg>Como conduzir</button>
+      <span class="indicador" aria-hidden="true"></span>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+  <!-- Cronograma completo -->
+  <section class="painel ativo" id="p-todos" role="tabpanel" aria-labelledby="t-todos" tabindex="0">
+    <div class="painel-topo">
+      <div><h2>Cronograma completo</h2><p>Um tema por dia. Cada cartão traz o objetivo, os pontos que o condutor deve abordar, uma pergunta para envolver a equipe e as normas de referência.</p></div>
+      <div class="legenda"><span><i style="background:var(--mont)"></i>Montagem eletromecânica</span><span><i style="background:var(--amb)"></i>Meio ambiente</span><span><i style="background:var(--fel)"></i>Fauna e felinos</span></div>
+    </div>
+    <div class="grade" id="grade"></div>
+  </section>
+
+  <section class="painel" id="p-mont" role="tabpanel" aria-labelledby="t-mont" tabindex="0">
+    <div class="painel-topo"><div><h2>Montagem eletromecânica</h2><p>Riscos críticos da frente de montagem: trabalho em altura, energia perigosa, içamento de cargas e trabalho a quente.</p></div></div>
+    <div class="grade" data-cat="mont"></div>
+  </section>
+
+  <section class="painel" id="p-amb" role="tabpanel" aria-labelledby="t-amb" tabindex="0">
+    <div class="painel-topo"><div><h2>Meio ambiente</h2><p>Resíduos, derramamentos e cuidados com a área de trabalho, que também evitam atrair animais para o canteiro.</p></div></div>
+    <div class="grade" data-cat="amb"></div>
+  </section>
+
+  <section class="painel" id="p-fel" role="tabpanel" aria-labelledby="t-fel" tabindex="0">
+    <div class="painel-topo"><div><h2>Ataque de felinos e convivência com a fauna</h2><p>Como reduzir a chance de encontro, como agir diante de um felino e como comunicar o avistamento.</p></div></div>
+    <div class="grade" data-cat="fel"></div>
+  </section>
+
+  <!-- Kit felino -->
+  <section class="painel" id="p-kit" role="tabpanel" aria-labelledby="t-kit" tabindex="0">
+    <div class="kit-hero">
+      <svg viewBox="0 0 300 220" role="img" aria-label="Ilustração do kit felino: bolsa com apito, buzina a ar, lanterna e rádio">
+        <rect x="0" y="0" width="300" height="220" rx="18" fill="#fff6dd"/>
+        <g><animateTransform attributeName="transform" type="translate" values="0 0;0 -4;0 0" dur="4s" repeatCount="indefinite"/>
+          <rect x="60" y="70" width="180" height="120" rx="18" fill="#b8860b"/>
+          <rect x="60" y="70" width="180" height="34" rx="14" fill="#8f6908"/>
+          <path d="M120 70 V54 a10 10 0 0 1 10 -10 H170 a10 10 0 0 1 10 10 V70" fill="none" stroke="#5b4206" stroke-width="8"/>
+          <rect x="128" y="96" width="44" height="16" rx="4" fill="#5b4206"/>
+          <g fill="#5b3c12" opacity=".55"><circle cx="85" cy="140" r="6"/><circle cx="105" cy="165" r="5"/><circle cx="210" cy="135" r="6"/><circle cx="195" cy="168" r="5"/><circle cx="150" cy="150" r="4"/></g>
+          <text x="150" y="135" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="20" fill="#fff">KIT FELINO</text>
+        </g>
+        <use href="#pg-apito" x="16" y="18" width="52" height="52" style="color:#1d2124"/>
+        <use href="#pg-buzina" x="232" y="18" width="56" height="56" style="color:#d22f27"/>
+        <use href="#pg-lanterna" x="14" y="150" width="52" height="52" style="color:#1d2124"/>
+        <use href="#pg-radio" x="238" y="150" width="50" height="50" style="color:#1f5fbf"/>
+      </svg>
+      <div>
+        <h3>Kit felino: barulho, luz e comunicação ao alcance da mão</h3>
+        <p>O kit serve para afastar o animal sem confronto: chamar atenção com som e luz, parecer maior e acionar apoio rapidamente. Ele só funciona se estiver no corpo, testado e com todos sabendo usar.</p>
+        <div class="aviso"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-felino"/></svg>
+          <span><b>Composição de referência.</b> Os itens abaixo são os mais usados em kits de proteção contra felinos. Confirme a lista oficial e o procedimento da sua unidade antes de aplicar o DDS.</span></div>
+      </div>
+    </div>
+
+    <h3 class="secao"><svg viewBox="0 0 64 64" aria-hidden="true" style="color:#b8860b"><use href="#pg-pegada"/></svg>O que compõe o kit</h3>
+    <div class="itens">
+      <div class="item" style="--i:0"><svg viewBox="0 0 64 64" style="color:#1d2124" aria-hidden="true"><use href="#pg-apito"/></svg><h4>Apito de alta potência</h4><p>Preso ao pescoço por cordão. Som agudo e contínuo para espantar o animal e chamar a equipe.</p></div>
+      <div class="item" style="--i:1"><svg viewBox="0 0 64 64" style="color:#d22f27" aria-hidden="true"><use href="#pg-buzina"/></svg><h4>Buzina a ar (gás)</h4><p>Som muito forte e repentino. Acione em toques longos, apontada para cima, nunca para o ouvido de alguém.</p></div>
+      <div class="item" style="--i:2"><svg viewBox="0 0 64 64" style="color:#1d2124" aria-hidden="true"><use href="#pg-lanterna"/></svg><h4>Lanterna de alta intensidade</h4><p>Obrigatória no início e no fim do dia e em áreas de mata fechada. Facho direto em direção ao animal.</p></div>
+      <div class="item" style="--i:3"><svg viewBox="0 0 64 64" style="color:#1f5fbf" aria-hidden="true"><use href="#pg-radio"/></svg><h4>Rádio de comunicação</h4><p>Canal de emergência combinado e testado antes de sair. Informe local, direção do animal e número de pessoas.</p></div>
+      <div class="item" style="--i:4"><svg viewBox="0 0 64 64" style="color:#5b412a" aria-hidden="true"><use href="#pg-bastao"/></svg><h4>Bastão ou cajado</h4><p>Ajuda a parecer maior e a manter distância. Usado erguido, sem avançar sobre o animal.</p></div>
+      <div class="item" style="--i:5"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-colete"/></svg><h4>Colete refletivo</h4><p>Facilita a localização do trabalhador pela equipe e pelo resgate, principalmente com pouca luz.</p></div>
+    </div>
+
+    <h3 class="secao"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-felino"/></svg>Diante de um felino: o que fazer</h3>
+    <div class="passos">
+      <div class="passo"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-naocorrer"/></svg><div><h4>Não corra e não dê as costas</h4><p>Correr desperta o instinto de caça. Fique de frente para o animal e mantenha a calma.</p></div></div>
+      <div class="passo"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-maior"/></svg><div><h4>Pareça maior</h4><p>Fique de pé, erga os braços, o bastão ou a jaqueta. Agrupe-se com os colegas, ombro a ombro.</p></div></div>
+      <div class="passo"><svg viewBox="0 0 64 64" style="color:#d22f27" aria-hidden="true"><use href="#pg-buzina"/></svg><div><h4>Faça barulho e use a luz</h4><p>Apito, buzina e voz firme e alta. Com pouca luz, aponte a lanterna para o animal.</p></div></div>
+      <div class="passo"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-recuar"/></svg><div><h4>Recue devagar</h4><p>Afaste-se lentamente, sem perder o animal de vista, e deixe uma rota de fuga livre para ele.</p></div></div>
+      <div class="passo"><svg viewBox="0 0 64 64" style="color:#1f5fbf" aria-hidden="true"><use href="#pg-radio"/></svg><div><h4>Comunique na hora</h4><p>Acione o rádio: local, horário, direção do animal e se há feridos. Não volte à área até liberação.</p></div></div>
+      <div class="passo"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-telefone"/></svg><div><h4>Se houver ataque</h4><p>Reaja com o que tiver à mão, proteja cabeça e pescoço e não se finja de morto. Acione o resgate imediatamente.</p></div></div>
+    </div>
+
+    <h3 class="secao"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-olho"/></svg>Inspeção do kit antes da atividade</h3>
+    <div class="checklist">
+      <label><input type="checkbox"><span>Apito no cordão, no pescoço, e não dentro da mochila</span></label>
+      <label><input type="checkbox"><span>Buzina testada com um toque curto e com carga suficiente</span></label>
+      <label><input type="checkbox"><span>Lanterna funcionando e com pilhas ou bateria reserva</span></label>
+      <label><input type="checkbox"><span>Rádio carregado, no canal combinado e com teste de comunicação feito</span></label>
+      <label><input type="checkbox"><span>Equipe sabe quem leva cada item e qual é o ponto de encontro</span></label>
+      <label><input type="checkbox"><span>Avistamentos recentes na área conferidos com o SSMA antes de sair</span></label>
+    </div>
+  </section>
+
+  <!-- Como conduzir -->
+  <section class="painel" id="p-como" role="tabpanel" aria-labelledby="t-como" tabindex="0">
+    <div class="painel-topo"><div><h2>Como conduzir o DDS em 10 minutos</h2><p>Roteiro simples para manter o diálogo objetivo, participativo e registrado.</p></div></div>
+    <div class="roteiro">
+      <div class="etapa"><span class="tempo">1 minuto</span><h4>Abertura</h4><p>Apresente o tema do dia e diga por que ele importa para a atividade de hoje.</p></div>
+      <div class="etapa"><span class="tempo">5 minutos</span><h4>Pontos principais</h4><p>Percorra os pontos do cartão com exemplos da própria frente de trabalho.</p></div>
+      <div class="etapa"><span class="tempo">3 minutos</span><h4>Participação</h4><p>Faça a pergunta do cartão. Ouça relatos, quase acidentes e sugestões da equipe.</p></div>
+      <div class="etapa"><span class="tempo">1 minuto</span><h4>Compromisso e registro</h4><p>Feche com um compromisso prático e colha as assinaturas na lista de presença.</p></div>
+    </div>
+    <h3 class="secao"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-olho"/></svg>Pictogramas usados neste cronograma</h3>
+    <div class="pictos">
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-felino"/></svg><figcaption>Atenção: presença de felinos</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-eletrico"/></svg><figcaption>Risco elétrico</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-loto"/></svg><figcaption>Bloqueio e etiquetagem</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-carga"/></svg><figcaption>Carga suspensa</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-quente"/></svg><figcaption>Trabalho a quente</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-altura"/></svg><figcaption>Uso obrigatório de cinto paraquedista</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-capacete"/></svg><figcaption>Uso obrigatório de capacete</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-grupo"/></svg><figcaption>Deslocamento em grupo</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-naocorrer"/></svg><figcaption>Proibido correr diante do animal</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-naoalimentar"/></svg><figcaption>Proibido alimentar animais</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-residuo"/></svg><figcaption>Descarte correto de resíduos</figcaption></figure>
+      <figure><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#pg-oleo"/></svg><figcaption>Controle de derramamento</figcaption></figure>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center">
+    <span>Cronograma de DDS · 23 a 31 de outubro de 2026 · Segurança do Trabalho</span>
+    <div class="botoes">
+      <button class="btn" type="button" id="b-tema">Alternar claro e escuro</button>
+      <button class="btn" type="button" onclick="window.print()">Imprimir cronograma</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Temas do período: um por dia. cat: mont | amb | fel */
+const TEMAS = [
+  { data: '2026-10-23', cat: 'fel', picto: 'pg-felino', titulo: 'Ataque de felinos: como agir no encontro',
+    objetivo: 'Preparar a equipe para reagir corretamente se avistar uma onça ou suçuarana na frente de trabalho ou no deslocamento.',
+    pontos: ['Felinos evitam pessoas: o ataque costuma ocorrer quando o animal é surpreendido, encurralado ou está com filhotes', 'Nunca correr nem dar as costas; ficar de frente, de pé e parecer maior', 'Fazer barulho com apito, buzina e voz firme e recuar devagar', 'Deixar rota de fuga livre para o animal e jamais persegui-lo ou fotografá-lo de perto', 'Comunicar pelo rádio: local, horário, direção do animal e número de pessoas'],
+    pergunta: 'Se o felino aparecer agora, entre a frente de serviço e o veículo, qual é a nossa rota de saída e quem aciona o rádio?',
+    refs: ['Procedimento de fauna da unidade', 'NR-01 (GRO)', 'Lei 9.605/1998'] },
+  { data: '2026-10-24', cat: 'mont', picto: 'pg-altura', titulo: 'Trabalho em altura na montagem de estruturas metálicas',
+    objetivo: 'Reforçar os controles para montagem de torres, pórticos e estruturas acima de 2 metros.',
+    pontos: ['Permissão de trabalho emitida e análise de risco discutida com quem vai executar', 'Cinto paraquedista inspecionado e talabarte duplo para manter 100% de ancoragem na transposição', 'Ponto de ancoragem definido e aprovado antes da subida', 'Isolamento e sinalização da área abaixo para queda de materiais', 'Ferramentas presas por cordão e plano de resgate conhecido pela equipe'],
+    pergunta: 'Onde vamos ancorar hoje e quem da equipe sabe executar o resgate em altura?',
+    refs: ['NR-35', 'NR-18', 'NR-06'] },
+  { data: '2026-10-25', cat: 'amb', picto: 'pg-residuo', titulo: 'Resíduos na frente de montagem: segregar e destinar',
+    objetivo: 'Garantir a separação correta dos resíduos gerados na montagem e evitar que restos de comida atraiam animais.',
+    pontos: ['Separar sucata metálica, eletrodos, embalagens, panos contaminados e resíduo comum nas baias corretas', 'Resíduo contaminado com óleo ou graxa é perigoso (Classe I) e não vai para o lixo comum', 'Restos de alimento em recipiente fechado: comida exposta atrai presas e, com elas, felinos', 'Nada de queimar ou enterrar resíduos no campo', 'Fim do turno com a área limpa e organizada'],
+    pergunta: 'Que resíduo gerado na nossa frente hoje ainda está sendo descartado no lugar errado?',
+    refs: ['Lei 12.305/2010 (PNRS)', 'NBR 10004', 'Plano de gerenciamento de resíduos da obra'] },
+  { data: '2026-10-26', cat: 'fel', picto: 'pg-buzina', titulo: 'Uso do kit felino: composição, inspeção e uso correto',
+    objetivo: 'Garantir que cada equipe em área de mata leve o kit completo, testado e saiba usá-lo.',
+    pontos: ['Itens do kit e quem leva cada um: apito, buzina a ar, lanterna, rádio e bastão', 'Inspeção antes de sair: buzina com carga, lanterna funcionando, rádio no canal combinado', 'Apito no pescoço e buzina na cintura: dentro da mochila o kit não serve', 'Acionar a buzina em toques longos, apontada para cima, nunca próxima ao ouvido de colegas', 'Registrar e repor itens usados ou com defeito ao fim do turno'],
+    pergunta: 'Todos aqui conseguem pegar o apito e a buzina em menos de 3 segundos? Vamos testar agora.',
+    refs: ['Procedimento de fauna da unidade', 'NR-01 (GRO)'] },
+  { data: '2026-10-27', cat: 'mont', picto: 'pg-loto', titulo: 'Bloqueio e etiquetagem de energias perigosas',
+    objetivo: 'Evitar energização inesperada durante montagem, ajuste e interligação de painéis, motores e equipamentos.',
+    pontos: ['Identificar todas as fontes: elétrica, pneumática, hidráulica, mecânica e por gravidade', 'Desligar, bloquear com cadeado pessoal e etiquetar com nome e data', 'Testar ausência de tensão com instrumento adequado antes de tocar', 'Cada trabalhador coloca o próprio cadeado; ninguém retira cadeado de outra pessoa', 'Liberação só após conferência de que todos saíram e as proteções voltaram ao lugar'],
+    pergunta: 'Qual equipamento da montagem de hoje tem mais de uma fonte de energia a bloquear?',
+    refs: ['NR-10', 'NR-12', 'Procedimento de bloqueio da unidade'] },
+  { data: '2026-10-28', cat: 'mont', picto: 'pg-carga', titulo: 'Içamento de cargas e trabalho com guindaste',
+    objetivo: 'Prevenir queda de carga, tombamento e atingimento de pessoas no içamento de peças e equipamentos.',
+    pontos: ['Plano de rigging para cargas críticas e conhecimento do peso real da peça', 'Inspeção de cintas, manilhas, ganchos e travas antes do uso', 'Área isolada: ninguém sob a carga suspensa nem no raio de giro', 'Um único sinaleiro, com comunicação clara com o operador', 'Uso de cabo-guia para controlar a carga e parada imediata com vento forte ou chuva'],
+    pergunta: 'Quem é o sinaleiro de hoje e como todos vão reconhecer o sinal de parada?',
+    refs: ['NR-11', 'NR-12', 'NR-18'] },
+  { data: '2026-10-29', cat: 'amb', picto: 'pg-oleo', titulo: 'Derramamento de óleo e uso do kit de mitigação ambiental',
+    objetivo: 'Evitar contaminação do solo e de cursos d’água por óleo, graxa e combustível nos equipamentos da montagem.',
+    pontos: ['Bandeja de contenção sob geradores, compressores e máquinas estacionadas', 'Inspeção diária de mangueiras e conexões hidráulicas dos equipamentos', 'Kit de mitigação na frente: mantas, barreiras, luvas e sacos para descarte', 'Em caso de vazamento: conter, absorver, recolher o solo contaminado e comunicar o meio ambiente', 'Abastecimento só em local definido, com contenção, e nunca perto de drenagens'],
+    pergunta: 'Onde está o kit de mitigação mais próximo da nossa frente e o que está faltando nele?',
+    refs: ['Lei 9.605/1998', 'Resolução CONAMA 362/2005', 'Plano de emergência ambiental da obra'] },
+  { data: '2026-10-30', cat: 'mont', picto: 'pg-quente', titulo: 'Trabalho a quente: solda, corte e esmerilhamento',
+    objetivo: 'Prevenir incêndios, queimaduras e lesões nos olhos em atividades de solda e corte na montagem.',
+    pontos: ['Permissão de trabalho a quente e inspeção da área em um raio de 10 metros', 'Remover ou proteger materiais combustíveis e vegetação seca próxima', 'Extintor ao alcance e observador de incêndio durante e após o serviço', 'EPI completo: máscara de solda, avental e luvas de raspa, perneira e proteção respiratória quando necessário', 'Cilindros de gases presos, com válvula corta-chama e mangueiras sem emendas'],
+    pergunta: 'O que, a menos de 10 metros do ponto de solda de hoje, pode pegar fogo?',
+    refs: ['NR-18', 'NR-06', 'NR-23'] },
+  { data: '2026-10-31', cat: 'fel', picto: 'pg-grupo', titulo: 'Convivência com a fauna: prevenir encontros no campo',
+    objetivo: 'Reduzir a chance de encontros com felinos e outros animais silvestres durante o trabalho e os deslocamentos.',
+    pontos: ['Deslocamento em grupo em áreas de mata, nunca sozinho', 'Atenção redobrada ao amanhecer, ao entardecer e à noite, horários de maior atividade dos felinos', 'Observar sinais de presença: pegadas, arranhões em árvores, carcaças e cheiro forte', 'Não alimentar nem se aproximar de animais e manter a área livre de restos de comida', 'Reduzir a velocidade nas vias internas e respeitar a fauna: abater ou capturar animal silvestre é crime'],
+    pergunta: 'Que sinal de presença de animal alguém da equipe já viu nesta área e foi comunicado?',
+    refs: ['Lei 9.605/1998, art. 29', 'Procedimento de fauna da unidade', 'NR-01 (GRO)'] }
+];
+const NOME_CAT = { mont: 'Montagem eletromecânica', amb: 'Meio ambiente', fel: 'Fauna e felinos' };
+const DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+const hoje = (() => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); })();
+
+function cartao(t, i) {
+  const d = new Date(t.data + 'T12:00:00');
+  const el = document.createElement('article');
+  el.className = 'dds ' + t.cat;
+  el.style.setProperty('--i', i);
+  el.innerHTML =
+    '<div class="dds-topo">' +
+      '<div class="data"><b>' + String(d.getDate()).padStart(2, '0') + '</b><small>' + DIAS[d.getDay()] + '</small></div>' +
+      '<div class="dds-titulo"><span class="categoria">' + NOME_CAT[t.cat] + '</span>' + (t.data === hoje ? '<span class="hoje">HOJE</span>' : '') + '<h3>' + t.titulo + '</h3></div>' +
+      '<svg class="picto" viewBox="0 0 64 64" aria-hidden="true" style="color:#d22f27"><use href="#' + t.picto + '"/></svg>' +
+    '</div>' +
+    '<div class="dds-corpo">' +
+      '<p class="objetivo"><b>Objetivo:</b> ' + t.objetivo + '</p>' +
+      '<ul class="pontos">' + t.pontos.map((p) => '<li>' + p + '</li>').join('') + '</ul>' +
+      '<div class="pergunta"><b>Pergunta para a equipe:</b> ' + t.pergunta + '</div>' +
+      '<div class="ref">' + t.refs.map((r) => '<span>' + r + '</span>').join('') + '</div>' +
+    '</div>';
+  return el;
+}
+
+document.getElementById('grade').append(...TEMAS.map(cartao));
+document.querySelectorAll('.grade[data-cat]').forEach((g) => {
+  g.append(...TEMAS.filter((t) => t.cat === g.dataset.cat).map(cartao));
+});
+
+/* Abas com indicador deslizante e teclado (setas, Home, End) */
+const abas = [...document.querySelectorAll('.aba')];
+const indicador = document.querySelector('.indicador');
+function moverIndicador(aba) {
+  indicador.style.left = aba.offsetLeft + 'px';
+  indicador.style.width = aba.offsetWidth + 'px';
+  indicador.style.setProperty('--cor', aba.dataset.cor);
+}
+function abrir(aba, foco) {
+  abas.forEach((a) => {
+    const sel = a === aba;
+    a.setAttribute('aria-selected', sel);
+    a.tabIndex = sel ? 0 : -1;
+    const p = document.getElementById(a.getAttribute('aria-controls'));
+    p.classList.toggle('ativo', sel);
+    // reinicia a animação de entrada dos cartões ao trocar de aba
+    if (sel) p.querySelectorAll('.dds, .item').forEach((c) => { c.style.animation = 'none'; void c.offsetWidth; c.style.animation = ''; });
+  });
+  moverIndicador(aba);
+  aba.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+  if (foco) aba.focus();
+  try { localStorage.setItem('dds-aba', aba.id); } catch (e) { /* sem armazenamento */ }
+}
+abas.forEach((a, i) => {
+  a.addEventListener('click', () => abrir(a));
+  a.addEventListener('keydown', (e) => {
+    let j = null;
+    if (e.key === 'ArrowRight') j = (i + 1) % abas.length;
+    if (e.key === 'ArrowLeft') j = (i - 1 + abas.length) % abas.length;
+    if (e.key === 'Home') j = 0;
+    if (e.key === 'End') j = abas.length - 1;
+    if (j != null) { e.preventDefault(); abrir(abas[j], true); }
+  });
+});
+let inicial = abas[0];
+try { const s = localStorage.getItem('dds-aba'); if (s && document.getElementById(s)) inicial = document.getElementById(s); } catch (e) { /* sem armazenamento */ }
+abrir(inicial);
+window.addEventListener('resize', () => moverIndicador(abas.find((a) => a.getAttribute('aria-selected') === 'true')));
+document.fonts && document.fonts.ready.then(() => moverIndicador(abas.find((a) => a.getAttribute('aria-selected') === 'true')));
+
+/* Tema claro e escuro */
+const raiz = document.documentElement;
+try { const t = localStorage.getItem('dds-tema'); if (t) raiz.dataset.theme = t; } catch (e) { /* sem armazenamento */ }
+document.getElementById('b-tema').addEventListener('click', () => {
+  const escuro = raiz.dataset.theme ? raiz.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  raiz.dataset.theme = escuro ? 'light' : 'dark';
+  try { localStorage.setItem('dds-tema', raiz.dataset.theme); } catch (e) { /* sem armazenamento */ }
+});
+</script>
+</body>
+</html>
