@@ -48,7 +48,11 @@ const Reports = {
     const agora = new Date().toLocaleString('pt-BR');
     const v = (x) => esc(x || '—');
     const pessoas = (r.participantes || []).map((id) => Calc.colab(id)).filter(Boolean).sort((a, b) => a.nome.localeCompare(b.nome));
-    const linhas = pessoas.map((c, i) => '<tr><td>' + (i + 1) + '</td><td>' + esc(c.nome) + '</td><td>' + v(c.funcao) + '</td><td class="rds-ass"><div class="rds-linha"></div></td></tr>');
+    const linhas = pessoas.map((c, i) => {
+      const ass = Anexos.assinatura(r.id, c.id);
+      return '<tr><td>' + (i + 1) + '</td><td>' + esc(c.nome) + '</td><td>' + v(c.funcao) + '</td><td class="rds-ass">' + (ass ? '<img src="' + ass + '" alt="Assinatura">' : '<div class="rds-linha"></div>') + '</td></tr>';
+    });
+    const fotos = Anexos.lista(r.id, 'foto');
     // DDS agendado ou lista curta: linhas em branco para quem assinar no papel
     for (let i = linhas.length; i < Math.max(10, pessoas.length + 3); i++) linhas.push('<tr><td>' + (i + 1) + '</td><td></td><td></td><td class="rds-ass"><div class="rds-linha"></div></td></tr>');
     let n = 2;
@@ -62,6 +66,7 @@ const Reports = {
       '<tr><th>Data</th><td>' + (r.data ? D.br(r.data) : '—') + '</td><th>Hora</th><td>' + v(r.hora) + '</td></tr>' +
       '<tr><th>Duração</th><td>' + (r.duracao ? esc(r.duracao) + ' minuto(s)' : '—') + '</td><th>Local</th><td>' + v(r.local) + '</td></tr></table></section>' +
       '<section><h3>' + (n++) + '. Conteúdo abordado</h3><p class="rds-txt">' + (r.conteudo ? esc(r.conteudo) : esc(r.tema)) + '</p></section>' +
+      '<section><h3>' + (n++) + '. Evidência fotográfica</h3>' + (fotos.length ? '<div class="rds-fotos">' + fotos.map((f) => '<img src="' + f.url + '" alt="Foto do DDS">').join('') + '</div>' : '<p class="rds-hint">Nenhuma evidência fotográfica anexada.</p>') + '</section>' +
       (r.obs ? '<section><h3>' + (n++) + '. Observações finais</h3><p class="rds-txt">' + esc(r.obs) + '</p></section>' : '') +
       '<section><h3>' + (n++) + '. Lista de presença</h3><table class="rds-pres"><thead><tr><th>Nº</th><th>Nome</th><th>Função</th><th>Assinatura</th></tr></thead><tbody>' + linhas.join('') + '</tbody></table></section>' +
       '<footer class="rds-rod">Documento ' + esc(codigo) + ' — gerado automaticamente pelo sistema Gestão SST em ' + esc(agora) + '.</footer></div>';

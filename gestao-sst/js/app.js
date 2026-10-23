@@ -129,6 +129,7 @@ const App = {
   },
 
   async excluir(mod, id) {
+    if (mod === 'dds') await Anexos.excluirDoRegistro(id);
     await DB.del('rec', id);
     this.data[mod] = (this.data[mod] || []).filter((x) => x.id !== id);
     this.versao++;

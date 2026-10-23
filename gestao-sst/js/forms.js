@@ -178,7 +178,7 @@ const Forms = {
     this.extras(mod, form, base);
     this.previa(mod, form, base);
 
-    const salvar = async (continuar) => {
+    const salvar = async (continuar, depois) => {
       const { r, erros, novos } = this.ler(mod, form, base);
       const falta = this.validar(mod, r, novos);
       if (falta.length || erros.length) {
@@ -195,8 +195,9 @@ const Forms = {
       let mudouLista = false;
       m.campos.forEach((c) => { if (c.t === 'sel' && Config.absorver(c.lista, r[c.k])) mudouLista = true; });
       if (mudouLista) await Config.salvar();
-      await App.salvar(mod, r);
+      const salvo = await App.salvar(mod, r);
       toast(novo ? 'Registro incluído' : 'Alterações salvas');
+      if (depois) return depois(salvo);
       if (continuar) {
         Modal.close();
         const keep = {};
@@ -213,6 +214,8 @@ const Forms = {
       } else this.abrir(mod, rec);
     }));
     if (!novo && m.imprimir) rodape.push(button('Imprimir', '', () => Reports.imprimirRegistro(mod, rec)));
+    // DDS: grava o que foi alterado e abre a lista de presença para assinar na tela e anexar fotos
+    if (mod === 'dds') rodape.push(button('Salvar e colher assinaturas', '', () => salvar(false, (salvo) => Anexos.telaDDS(salvo))));
     rodape.push(button('Cancelar', '', () => Modal.close()));
     if (novo) rodape.push(button('Salvar e incluir outro', '', () => salvar(true)));
     rodape.push(button('Salvar', 'btn-primary', () => salvar(false)));

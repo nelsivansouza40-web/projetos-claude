@@ -283,9 +283,26 @@ table.data td.actions { white-space: nowrap; text-align: right; }
 .doc .rds .rds-pres td { height: 30px; vertical-align: bottom; }
 .doc .rds .rds-pres td:first-child, .doc .rds .rds-pres th:first-child { width: 36px; text-align: center; }
 .doc .rds .rds-ass { width: 190px; }
+.doc .rds .rds-ass img { display: block; max-width: 170px; height: 36px; object-fit: contain; }
+.doc .rds .rds-fotos { display: flex; flex-wrap: wrap; gap: 8px; }
+.doc .rds .rds-fotos img { width: 150px; height: 150px; object-fit: cover; border: 1px solid var(--rds-borda); border-radius: 4px; }
+.doc .rds .rds-hint { color: #52514e; font-style: italic; margin: 0; }
 .doc .rds .rds-linha { border-top: 1px solid #0b0b0b; height: 4px; max-width: 170px; }
 .doc .rds .rds-pres tr { page-break-inside: avoid; }
 .doc .rds-rod { margin-top: 24px; border-top: 1px solid var(--rds-borda); padding-top: 8px; font-size: 8pt; color: #52514e; text-align: center; }
+.anx h3 { font-size: 1rem; margin: 16px 0 8px; }
+.anx-lista { display: grid; gap: 8px; }
+.anx-pessoa { display: grid; grid-template-columns: 1fr 180px auto; gap: 8px 12px; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.anx-nome { display: flex; flex-direction: column; }
+.anx-ass img { max-width: 170px; height: 44px; object-fit: contain; background: #fff; border-radius: 4px; }
+.anx-acoes { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.anx-pad { grid-column: 1 / -1; }
+.anx-pad canvas { display: block; width: 100%; background: #fff; border: 1px dashed var(--line); border-radius: 8px; margin-bottom: 6px; cursor: crosshair; }
+.anx-botoes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.anx-fotos { display: flex; flex-wrap: wrap; gap: 10px; }
+.anx-fotos figure { margin: 0; display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.anx-fotos img { width: 120px; height: 120px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+@media (max-width: 600px) { .anx-pessoa { grid-template-columns: 1fr; } .anx-acoes { justify-content: flex-start; } }
 .doc-preview { background: #fff; color: #000; padding: 18px; border: 1px solid var(--line); border-radius: 8px; overflow: auto; }
 
 @media print {

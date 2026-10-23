@@ -2,11 +2,11 @@
  * Service Worker: guarda os arquivos do sistema no dispositivo para abrir sem
  * internet quando publicado em um endereço http(s). Os dados ficam no IndexedDB.
  */
-const CACHE_VERSION = 'gsst-v3';
+const CACHE_VERSION = 'gsst-v4';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './css/app.css',
   './js/util.js', './js/db.js', './js/config.js', './js/schema.js', './js/calc.js', './js/charts.js',
-  './js/forms.js', './js/modules.js', './js/dashboards.js', './js/reports.js', './js/xlsx-import.js',
+  './js/forms.js', './js/modules.js', './js/dashboards.js', './js/reports.js', './js/anexos.js', './js/xlsx-import.js',
   './js/backup.js', './js/demo.js', './js/sync.js', './js/app.js', './icons/icon-192.png', './icons/icon-512.png'
 ];
 
