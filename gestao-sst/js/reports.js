@@ -109,8 +109,9 @@ const Reports = {
       '<table class="fc-itens"><colgroup><col style="width:5%"><col style="width:6%"><col style="width:38%"><col style="width:10%"><col style="width:10%"><col style="width:6%"><col style="width:11%"><col></colgroup>' +
       '<thead><tr><th rowspan="2">Quant.</th><th rowspan="2">Unidade</th><th rowspan="2">EPI (Descrição / Fabricante / Modelo)</th><th rowspan="2">Número do CA</th><th colspan="3">Datas</th><th rowspan="2">Rubrica Empregado</th></tr>' +
       '<tr><th>Entrega</th><th>Motivo da Devolução</th><th>Data de Devolução</th></tr></thead><tbody>' + linhas.join('') + '</tbody></table>' +
-      '<div class="fc-rodape"><div class="fc-sesmt"><div><b>' + esc(emp.responsavel || '') + '</b><span>Responsável pelo SESMT</span></div><div><b></b><span>Assinatura</span></div></div>' +
-      '<div class="fc-legenda">Legenda: Motivos da devolução – ' + Config.lista('motivosDevolucao').map((t) => esc(t.replace(' - ', ' – '))).join('; ') + '</div></div></div>';
+      '<div class="fc-rodape"><div><b>' + esc(emp.responsavel || '') + '</b><span>Assinatura do responsável pelo SESMT</span></div>' +
+      '<div><b></b><span>Assinatura do responsável pelo Almoxarifado</span></div></div>' +
+      '<div class="fc-legenda">Legenda: Motivos da devolução – ' + Config.lista('motivosDevolucao').map((t) => esc(t.replace(' - ', ' – '))).join('; ') + '</div></div>';
   },
   codMED(t) {
     if (!t) return '';
