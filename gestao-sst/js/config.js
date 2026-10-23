@@ -9,6 +9,8 @@ const LISTAS_PADRAO = {
   funcoes: { l: 'Funções', v: [] },
   statusAcidente: { l: 'Situação da investigação do acidente', v: ['Concluído', 'Aguardando ação', 'Investigação'] },
   tiposAcidente: { l: 'Tipos de acidente', v: ['1 - Típico', '2 - Doença ocupacional', '3 - Trajeto'] },
+  unidades: { l: 'Unidades de EPI e uniforme', v: ['UN', 'PAR', 'JOGO', 'KIT'] },
+  motivosDevolucao: { l: 'Motivos da devolução (Ficha de EPI e de uniforme)', v: ['DN - Desgaste natural', 'DF - Defeito do EPI', 'A - Avaria', 'O - Outros'] },
   classeDoenca: { l: 'Classificação da doença ocupacional', v: ['Doença profissional', 'Doença do trabalho'] },
   danos: { l: 'Dano / lesão', v: ['Queimadura', 'Fratura', 'Contusão', 'Objeto estranho', 'Corte', 'Escoriação', 'Torção', 'Luxação', 'Amputação', 'Choque elétrico', 'Intoxicação'] },
   partesCorpo: { l: 'Partes do corpo', v: ['Cabeça', 'Olhos', 'Nariz', 'Pescoço', 'Face', 'Ombro', 'Braço', 'Mão', 'Dedo', 'Tronco', 'Abdômen', 'Coluna', 'Perna', 'Joelho', 'Pé', 'Múltiplas partes'] },
@@ -66,6 +68,13 @@ const PARAMS_PADRAO = {
   objetivoOSS: 'Dar ciência aos empregados, com o seguinte intuito:\nI - Prevenir atos inseguros no desempenho do trabalho;\nII - Divulgar as obrigações e proibições que os empregados devam conhecer e cumprir;\nIII - Dar conhecimento aos empregados de que serão passíveis de punição, pelo descumprimento das ordens de serviço expedidas.',
   termoOSS: 'Declaro que recebi, li e compreendi esta Ordem de Serviço de Segurança, comprometendo-me a cumprir as orientações nela contidas, ciente de que o descumprimento constitui ato faltoso, nos termos do art. 158 da CLT e da NR-01.',
   declaracaoEPI: 'Declaro que recebi os Equipamentos de Proteção Individual (EPI) relacionados abaixo, em perfeito estado de conservação, bem como o treinamento sobre o uso correto, guarda e conservação, comprometendo-me a: usá-los apenas para a finalidade a que se destinam; responsabilizar-me pela guarda e conservação; comunicar qualquer alteração que os torne impróprios para uso; e cumprir as determinações sobre o uso adequado, conforme a NR-06 e o art. 158 da CLT.',
+  termoFicha: 'Declaro para todos os efeitos previstos na legislação, haver recebido gratuitamente, conforme descrito na C.L.T. nos artigos 166, 167 e demais artigos adstritos à matéria, na NR - 6 e nos itens 1.4.2 e 1.5.5.1.2 da NR - 1 DISPOSIÇÕES GERAIS e GERENCIAMENTO DE RISCOS OCUPACIONAIS, após treinamento e orientação do uso adequado, aplicação, guarda, conservação, substituição e requisitos de higiene, em palestra realizada pelo Serviço Especializado em Segurança e Medicina do Trabalho da empresa, {EMPRESA}, situada {ENDERECO}, o(s) equipamento(s) de proteção individual abaixo descrito(s) e designado(s) como EPIs, os quais obrigo-me a usá-lo(s) sistematicamente em meu trabalho, mediante ainda, os termos seguintes:\n' +
+    'a) O EPI será usado unicamente para finalidade a que se destina e qualquer alteração que o torne parcial ou totalmente danificado será por mim comunicado à empresa;\n' +
+    'b) Declaro que me responsabilizo pela guarda e conservação dos EPI\'s que me foram confiados e que, na impossibilidade de seu uso, deverei comunicar a chefia imediatamente, para as providências que se fizerem necessárias, e os devolverei após o vencimento de duração estipulada;\n' +
+    'c) Estou ciente e de pleno acordo que a falta de uso por mim, dos EPI\'s fornecidos pela Empresa, constitui Ato Faltoso, sujeito às sanções disciplinares previstas na legislação pertinente aos assuntos, Regulamento Interno e Normas de Segurança da Empresa;\n' +
+    'd) Reconhecendo expressamente que a sua não utilização configura em falta grave capitulada na letra "h", do Artigo 482 da C.L.T., como ato de indisciplina ou de insubordinação, ensejadora da rescisão do meu contrato de trabalho por justa causa;\n' +
+    'e) Autorizo expressamente a Empresa a proceder descontos nos meus salários, vencimentos, gratificações, indenizações, os valores dos EPI\'s que por ventura por mim forem:\n- Danificados propositadamente;\n- Extraviados;\n- Não devolvidos à empresa para substituição;\n' +
+    'f) Tomei ciência e estou de acordo com os termos da declaração acima, assinando-a de livre e espontânea vontade, após sua leitura nessa data.',
   cipaPrazos: [
     { t: 'Convocar os trabalhadores para a eleição', d: 60, ref: 'fim', dir: -1 },
     { t: 'Comunicar ao sindicato o início do processo eleitoral', d: 60, ref: 'fim', dir: -1 },

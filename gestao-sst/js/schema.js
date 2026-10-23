@@ -118,6 +118,8 @@ const MODULOS = [
     campos: [
       { k: 'codigo', l: 'Código', t: 'num', x: 'NÚM' },
       { k: 'descricao', l: 'Descrição do EPI', t: 'text', req: 1, w: 2, x: 'DESCRIÇÃO DO EPI' },
+      { k: 'categoria', l: 'Categoria', t: 'opt', opts: ['EPI', 'Uniforme'], x: 'CATEGORIA', padrao: 'EPI', hint: 'Uniforme sai na Ficha de uniforme' },
+      { k: 'unidade', l: 'Unidade', t: 'sel', lista: 'unidades', x: 'UNIDADE', padrao: 'UN' },
       { k: 'fabricante', l: 'Fabricante', t: 'text', x: 'FABRICANTE' },
       { k: 'ca', l: 'Número do CA', t: 'text', x: 'NÚMERO DO CA' },
       { k: 'vencCA', l: 'Vencimento do CA', t: 'date', x: 'DATA DE VENCIMENTO' },
@@ -128,8 +130,8 @@ const MODULOS = [
       { k: 'maximo', l: 'Estoque máximo', t: 'num', x: 'MÁXIMO' },
       { k: 'preco', l: 'Preço unitário', t: 'money', x: 'PREÇO UNITÁRIO' }
     ],
-    colunas: ['codigo', 'descricao', 'fabricante', 'ca', 'vencCA', '_statusVenc', 'validadeUso', '_entradas', '_saidas', '_estoque', '_statusEstoque', '_valor'],
-    filtros: ['_statusEstoque', '_statusVenc']
+    colunas: ['codigo', 'descricao', 'categoria', 'fabricante', 'ca', 'vencCA', '_statusVenc', 'validadeUso', '_entradas', '_saidas', '_estoque', '_statusEstoque', '_valor'],
+    filtros: ['categoria', '_statusEstoque', '_statusVenc']
   },
   {
     id: 'movepi', nome: 'Movimentação de EPI', grupo: 'EPI', singular: 'movimentação', fem: 1, aba: 'MOV_EPI', chave: 'epi',
@@ -144,6 +146,7 @@ const MODULOS = [
       { k: 'preco', l: 'Preço unitário', t: 'money', x: 'PREÇO UNITÁRIO', hint: 'Em branco: usa o preço do cadastro' },
       { k: 'med', l: 'MED (motivo)', t: 'sel', lista: 'med', w: 2, x: 'MED (MOTIVO DA ENTREGA OU DEVOLUÇÃO)' },
       { k: 'devolucao', l: 'Data de devolução', t: 'date', x: 'DATA DE DEVOLUÇÃO' },
+      { k: 'motivoDev', l: 'Motivo da devolução', t: 'sel', lista: 'motivosDevolucao', x: 'MOTIVO DA DEVOLUÇÃO', se: (r) => !!r.devolucao },
       { k: 'validadeDias', l: 'Validade de uso (dias)', t: 'num', x: 'VALIDADE DE USO (DIAS)', hint: 'Em branco: usa o prazo do cadastro do EPI', se: (r) => r.tipo !== 'ENTRADA' && r.destino !== 'Fornecedor' },
       { k: 'obs', l: 'Observação', t: 'text', w: 4 }
     ],

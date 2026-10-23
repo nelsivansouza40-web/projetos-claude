@@ -65,24 +65,52 @@ const Reports = {
       linha('Observações', r.obs) + '</table><div class="sign"><div>Responsável</div><div>' + esc(App.emp.responsavel || 'Segurança do Trabalho') + '</div></div>';
   },
 
-  /* ---------------- Ficha de EPI ---------------- */
+  /* ---------------- Ficha de EPI e de uniforme (modelo de controle individual) ---------------- */
   fichaColab: '',
-  fichaHTML(cid) {
+  fichaCat: 'EPI',
+  fichaAno: '',
+  /** Entregas do colaborador na categoria (EPI ou Uniforme) e no ano escolhido ('' = todos). */
+  fichaMovs(cid, cat, ano) {
+    return (App.data.movepi || []).filter((m) => {
+      if (m.colab !== cid) return false;
+      const e = Calc.epi(m.epi) || {};
+      if ((e.categoria === 'Uniforme' ? 'Uniforme' : 'EPI') !== cat) return false;
+      return !ano || String(D.year(m.data)) === String(ano);
+    }).sort((a, b) => (a.data || '').localeCompare(b.data || ''));
+  },
+  fichaHTML(cid, cat = 'EPI', ano = '') {
     const c = Calc.colab(cid);
     if (!c) return '';
-    const movs = (App.data.movepi || []).filter((m) => m.colab === cid).sort((a, b) => (a.data || '').localeCompare(b.data || ''));
-    return this.cabecalho('FICHA DE CONTROLE DE ENTREGA DE EPI') +
-      '<table><tr><th>Colaborador</th><td colspan="3">' + esc(c.nome) + '</td><th>Matrícula</th><td>' + esc(c.matricula) + '</td></tr>' +
-      '<tr><th>CPF</th><td>' + esc(c.cpf) + '</td><th>Função</th><td>' + esc(c.funcao) + '</td><th>Setor</th><td>' + esc(c.setor) + '</td></tr>' +
-      '<tr><th>Admissão</th><td>' + D.br(c.admissao) + '</td><th>RG</th><td>' + esc(c.rg) + '</td><th>Situação</th><td>' + esc(c.status) + '</td></tr></table>' +
-      '<p class="decl">' + esc(Config.params.declaracaoEPI) + '</p>' +
-      '<table><thead><tr><th>Data</th><th>Qtd</th><th>EPI</th><th>CA</th><th>MED</th><th>Troca prevista</th><th>Devolução</th><th style="width:20%">Assinatura</th></tr></thead><tbody>' +
-      (movs.length ? movs.map((m) => {
-        const e = Calc.epi(m.epi) || {};
-        return '<tr><td>' + D.br(m.data) + '</td><td>' + esc(m.qtd) + '</td><td>' + esc((e.descricao || '') + (e.fabricante ? ' — ' + e.fabricante : '')) + '</td><td>' + esc(e.ca) + '</td><td>' + esc(this.codMED(m.med)) + '</td><td>' + D.br(Calc.vencEntrega(m)) + '</td><td>' + D.br(m.devolucao) + '</td><td></td></tr>';
-      }).join('') : '<tr><td colspan="8">Nenhuma entrega registrada.</td></tr>') +
-      '</tbody></table><p style="font-size:8.5pt"><b>MED — Motivo da entrega ou devolução:</b> ' + Config.lista('med').map((t, i) => (i + 1) + ' - ' + esc(t)).join('; ') + '.</p>' +
-      '<div class="sign"><div>' + esc(c.nome) + '</div><div>' + esc(App.emp.responsavel || 'Responsável pela entrega') + '</div></div>';
+    const emp = App.emp || {};
+    const end = [emp.endereco, emp.cidade && emp.uf ? emp.cidade + ' - ' + emp.uf : (emp.cidade || emp.uf), emp.cep ? 'CEP ' + emp.cep : ''].filter(Boolean).join(', ');
+    const termo = String(Config.params.termoFicha || '').replace(/\{EMPRESA\}/g, emp.nome || '').replace(/\{ENDERECO\}/g, end);
+    const titulo = cat === 'Uniforme' ? 'FICHA DE CONTROLE INDIVIDUAL<br>DE UNIFORMES / ANO: ' : 'FICHA DE CONTROLE INDIVIDUAL DE EPI<br>ANO: ';
+    const movs = this.fichaMovs(cid, cat, ano);
+    const anos = [...new Set(movs.map((m) => D.year(m.data)).filter(Boolean))];
+    const rotAno = ano || (anos.length > 1 ? anos[0] + ' a ' + anos[anos.length - 1] : (anos[0] || D.year(D.today())));
+    const cod = (t) => String(t || '').split(' - ')[0];
+    const linhas = movs.map((m) => {
+      const e = Calc.epi(m.epi) || {};
+      const q = Number(m.qtd);
+      return '<tr><td class="c">' + esc(isFinite(q) && q < 10 && q >= 0 ? String(q).padStart(2, '0') : m.qtd) + '</td><td class="c">' + esc(e.unidade || 'UN') + '</td>' +
+        '<td>' + esc((e.descricao || '') + (e.fabricante ? ' — ' + e.fabricante : '')) + '</td><td class="c">' + esc(e.ca || '-') + '</td>' +
+        '<td class="c"><b>' + D.br(m.data) + '</b></td><td class="c">' + esc(cod(m.motivoDev)) + '</td><td class="c">' + (m.devolucao ? D.br(m.devolucao) : '___/___/___') + '</td><td></td></tr>';
+    });
+    // linhas em branco para anotações à mão, como no modelo impresso
+    while (linhas.length < 11) linhas.push('<tr><td></td><td></td><td></td><td></td><td class="c">' + (movs.length ? '' : '___/___/___') + '</td><td></td><td class="c">___/___/___</td><td></td></tr>');
+    return '<style>@page { size: A4 landscape; margin: 8mm; }</style><div class="ficha">' +
+      '<table class="fc-topo"><colgroup><col style="width:30%"><col style="width:19%"><col></colgroup>' +
+      '<tr><td colspan="2" class="fc-tit">' + titulo + esc(rotAno) + '</td>' +
+      '<td rowspan="2" class="fc-termo"><div class="fc-termo-tit">TERMO DE COMPROMISSO</div>' + esc(termo) + '</td></tr>' +
+      '<tr><td colspan="2" class="fc-nome">Nome: <b>' + esc(c.nome) + '</b></td></tr>' +
+      '<tr><td>Cargo/Função: <b>' + esc(c.funcao) + '</b></td><td>Matrícula: <b>' + esc(c.matricula) + '</b></td>' +
+      '<td rowspan="2" class="fc-ass"><div><span>Assinatura do empregado</span></div><div><span>Rubrica do empregado</span></div></td></tr>' +
+      '<tr><td>Setor: <b>' + esc(c.setor) + '</b></td><td>Data de Admissão: <b>' + D.br(c.admissao) + '</b></td></tr></table>' +
+      '<table class="fc-itens"><colgroup><col style="width:5%"><col style="width:6%"><col style="width:38%"><col style="width:10%"><col style="width:10%"><col style="width:6%"><col style="width:11%"><col></colgroup>' +
+      '<thead><tr><th rowspan="2">Quant.</th><th rowspan="2">Unidade</th><th rowspan="2">EPI (Descrição / Fabricante / Modelo)</th><th rowspan="2">Número do CA</th><th colspan="3">Datas</th><th rowspan="2">Rubrica Empregado</th></tr>' +
+      '<tr><th>Entrega</th><th>Motivo da Devolução</th><th>Data de Devolução</th></tr></thead><tbody>' + linhas.join('') + '</tbody></table>' +
+      '<div class="fc-rodape"><div class="fc-sesmt"><div><b>' + esc(emp.responsavel || '') + '</b><span>Responsável pelo SESMT</span></div><div><b></b><span>Assinatura</span></div></div>' +
+      '<div class="fc-legenda">Legenda: Motivos da devolução – ' + Config.lista('motivosDevolucao').map((t) => esc(t.replace(' - ', ' – '))).join('; ') + '</div></div></div>';
   },
   codMED(t) {
     if (!t) return '';
@@ -94,24 +122,33 @@ const Reports = {
     const main = $('#main');
     main.innerHTML = '';
     const ops = Forms.opcoesRef('colab');
-    const head = h('<div class="page-head"><div><h1>Ficha de EPI</h1><p>Ficha individual de entrega conforme NR-06, gerada a partir das movimentações de saída.</p></div><div class="toolbar"></div></div>');
+    const head = h('<div class="page-head"><div><h1>Ficha de EPI e de uniforme</h1><p>Ficha de controle individual conforme NR-06, gerada a partir das movimentações de saída.</p></div><div class="toolbar"></div></div>');
     main.appendChild(head);
+    const anos = [...new Set((App.data.movepi || []).map((m) => D.year(m.data)).filter(Boolean).concat([D.year(D.today())]))].sort().reverse();
+    if (!this.fichaAno && this.fichaAno !== 'todos') this.fichaAno = String(D.year(D.today()));
     const box = h('<div class="card"><div class="row"><label class="field">Colaborador<input type="text" list="dl_ficha" placeholder="Digite o nome" autocomplete="off"><datalist id="dl_ficha">' +
-      ops.map((o) => '<option value="' + esc(o.label) + '">').join('') + '</datalist></label></div></div>');
+      ops.map((o) => '<option value="' + esc(o.label) + '">').join('') + '</datalist></label>' +
+      '<label class="field">Ficha<select id="fc-cat"><option value="EPI">Ficha de EPI</option><option value="Uniforme">Ficha de uniforme</option></select></label>' +
+      '<label class="field">Ano<select id="fc-ano">' + anos.map((a) => '<option value="' + a + '">' + a + '</option>').join('') + '<option value="todos">Todos os anos</option></select></label></div></div>');
+    const selCat = $('#fc-cat', box), selAno = $('#fc-ano', box);
+    selCat.value = this.fichaCat; selAno.value = this.fichaAno;
     main.appendChild(box);
     const prev = h('<div class="doc-preview" style="margin-top:14px"><div class="muted">Escolha um colaborador para ver a ficha.</div></div>');
     main.appendChild(prev);
     const inp = $('input', box);
     const tb = $('.toolbar', head);
-    const bImp = button('Imprimir ficha', 'btn-primary', () => { if (this.fichaColab) this.imprimir(this.fichaHTML(this.fichaColab)); });
+    const html = () => this.fichaHTML(this.fichaColab, this.fichaCat, this.fichaAno === 'todos' ? '' : this.fichaAno);
+    const bImp = button('Imprimir ficha', 'btn-primary', () => { if (this.fichaColab) this.imprimir(html()); });
     const bNova = button('+ Registrar entrega', '', () => Forms.abrir('movepi', null, { tipo: 'SAÍDA', destino: 'Funcionário', colab: this.fichaColab || '' }));
     tb.append(bNova, bImp);
     const mostrar = () => {
       const id = Forms.resolverRef('colab', inp.value);
       this.fichaColab = id || '';
-      prev.innerHTML = id ? '<div class="doc">' + this.fichaHTML(id) + '</div>' : '<div class="muted">Escolha um colaborador para ver a ficha.</div>';
+      prev.innerHTML = id ? '<div class="doc">' + html() + '</div>' : '<div class="muted">Escolha um colaborador para ver a ficha.</div>';
     };
     inp.addEventListener('change', mostrar);
+    selCat.addEventListener('change', () => { this.fichaCat = selCat.value; mostrar(); });
+    selAno.addEventListener('change', () => { this.fichaAno = selAno.value; mostrar(); });
     if (this.fichaColab) { const c = Calc.colab(this.fichaColab); if (c) { inp.value = Forms.rotuloColab(c); mostrar(); } }
   },
 

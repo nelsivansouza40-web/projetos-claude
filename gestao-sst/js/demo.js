@@ -74,7 +74,7 @@ const Demo = {
       ['Luva isolante classe 0', 'Volt Seguro', 180.0, 2, 6, 700, 180]
     ];
     const epis = episBase.map(([descricao, fabricante, preco, minimo, maximo, vencDias, validadeUso], i) => novo('epis', {
-      codigo: i + 1, descricao, fabricante, ca: String(10000 + i * 731), vencCA: dia(vencDias), controlar: 'Sim', validadeUso,
+      codigo: i + 1, descricao, fabricante, ca: String(10000 + i * 731), vencCA: dia(vencDias), controlar: 'Sim', validadeUso, categoria: 'EPI', unidade: [2, 3, 4].includes(i) ? 'PAR' : 'UN',
       saldoInicial: Math.round(maximo * 0.5), minimo, maximo, preco
     }));
     // entradas de compra
@@ -98,6 +98,11 @@ const Demo = {
       const alvo = i === 5 ? 0 : i === 2 ? Math.floor(e.minimo / 2) : Math.round((e.minimo + e.maximo) / 2);
       e.saldoInicial = Math.max(0, alvo - ent + sai);
       if (alvo - ent + sai < 0) novo('movepi', { tipo: 'SAÍDA', epi: e.id, qtd: ent - sai - alvo, destino: 'Funcionário', colab: ativos[i].id, data: dia(-2), med: 'Troca do EPI, danificado ou vencido', preco: '' });
+    });
+    // uniformes (sem CA): saem na Ficha de uniforme
+    [['Camisa de uniforme manga longa', 'Confecções Exemplo', 45, 'UN'], ['Calça de uniforme em brim', 'Confecções Exemplo', 60, 'UN'], ['Meia de algodão', 'Confecções Exemplo', 12, 'PAR']].forEach(([descricao, fabricante, preco, unidade], j) => {
+      const u = novo('epis', { codigo: epis.length + j + 1, descricao, fabricante, ca: '', controlar: 'Não', validadeUso: 180, categoria: 'Uniforme', unidade, saldoInicial: ativos.length * 3, minimo: 20, maximo: ativos.length * 3, preco });
+      ativos.forEach((c) => novo('movepi', { tipo: 'SAÍDA', epi: u.id, qtd: 2, destino: 'Funcionário', colab: c.id, data: D.addDays(c.admissao > dia(-200) ? c.admissao : dia(-200), int(0, 5)), med: 'Primeira entrega', preco: '' }));
     });
 
     /* ---------- Treinamentos ---------- */

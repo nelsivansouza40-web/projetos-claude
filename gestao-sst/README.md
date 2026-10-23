@@ -17,7 +17,7 @@ cada registro **no momento em que é salvo**.
 |---|---|
 | Início | Painéis (visão geral, acidentes, colaboradores, treinamentos, EPI, auditorias e desvios, 5W2H, riscos, extintores e hidrantes) · Pendências e vencimentos |
 | Pessoas | Colaboradores · Pesquisa do colaborador (prontuário) · Treinamentos · ASO · DDS · Advertências |
-| EPI | Cadastro com estoque, validade do CA e validade de uso (prazo de troca) · Movimentação com troca prevista por entrega · Ficha de EPI (NR-06) para impressão |
+| EPI | Cadastro de EPI e uniforme com estoque, validade do CA e validade de uso (prazo de troca) · Movimentação com troca prevista e motivo da devolução · Ficha de controle individual de EPI e de uniforme (NR-06) para impressão |
 | Ocorrências | Acidentes (TF, TG, pirâmide de Bird) · Desvios e incidentes · Auditorias |
 | Gestão | Plano 5W2H · Riscos com matriz 5×5 · Documentos · OSS · Atividades por função · Produtos químicos |
 | Emergência | Extintores (recarga e teste hidrostático) · Hidrantes |

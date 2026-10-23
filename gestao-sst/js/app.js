@@ -362,7 +362,7 @@ const App = {
     main.appendChild(mat);
 
     const txt = h('<div class="card"><h2>Textos padrão dos documentos</h2><div class="cfg-grid">' +
-      [['objetivoOSS', 'Objetivo da OSS'], ['termoOSS', 'Termo de responsabilidade da OSS'], ['declaracaoEPI', 'Declaração da Ficha de EPI']].map(([k, l]) =>
+      [['objetivoOSS', 'Objetivo da OSS'], ['termoOSS', 'Termo de responsabilidade da OSS'], ['termoFicha', 'Termo de compromisso da Ficha de EPI e de uniforme ({EMPRESA} e {ENDERECO} vêm do cadastro da empresa)']].map(([k, l]) =>
         '<label class="field">' + l + '<textarea data-t="' + k + '" rows="6">' + esc(p[k]) + '</textarea></label>').join('') + '</div></div>');
     $$('[data-t]', txt).forEach((inp) => inp.addEventListener('change', async () => { p[inp.dataset.t] = inp.value; await Config.salvar(); toast('Texto salvo'); }));
     main.appendChild(txt);
