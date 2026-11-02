@@ -12,6 +12,7 @@
     espessura: '0,35',
     aba: '',
     papel: 'A4',
+    colorido: true,
     resultado: null,
     folhas: [],
   };
@@ -23,8 +24,8 @@
   } catch (e) { /* sem armazenamento: segue com o padrão */ }
   function salvar() {
     try {
-      const { modelo, valores, material, espessura, aba, papel } = estado;
-      localStorage.setItem(CHAVE, JSON.stringify({ modelo, valores, material, espessura, aba, papel }));
+      const { modelo, valores, material, espessura, aba, papel, colorido } = estado;
+      localStorage.setItem(CHAVE, JSON.stringify({ modelo, valores, material, espessura, aba, papel, colorido }));
     } catch (e) { /* ignora */ }
   }
 
@@ -47,6 +48,7 @@
     $('espessura').value = estado.espessura;
     $('aba').value = estado.aba;
     $('papel').value = estado.papel;
+    $('colorido').checked = !!estado.colorido;
   }
 
   function montarCampos() {
@@ -56,6 +58,10 @@
     $('campos').innerHTML = m.campos.map((c) => {
       const idc = 'campo-' + estado.modelo + '-' + c.id;
       const v = vals[c.id] != null ? vals[c.id] : (c.padrao === '' ? '' : String(c.padrao).replace('.', ','));
+      if (c.tipo === 'arquivo') {
+        const nome = window.Importar && window.Importar.estado.nome;
+        return `<div class="campo"><span class="rotulo-campo">${esc(c.rotulo)}</span><input type="file" id="${idc}" class="oculto" data-arquivo="1" accept=".obj,.stl"><label class="botao-arquivo" for="${idc}">Escolher arquivo .obj ou .stl</label><span class="dica" id="info-arquivo">${nome ? 'Carregado: ' + esc(nome) : 'Nenhum arquivo escolhido.'}</span></div>`;
+      }
       if (c.tipo === 'opcoes') {
         return `<div class="campo"><label for="${idc}">${esc(c.rotulo)}</label><div class="entrada"><select id="${idc}" data-campo="${c.id}">${
           c.opcoes.map(([k, n]) => `<option value="${k}"${k === v ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select></div></div>`;
@@ -67,6 +73,7 @@
   function lerCampos() {
     const vals = estado.valores[estado.modelo] = estado.valores[estado.modelo] || {};
     for (const el of $('campos').querySelectorAll('[data-campo]')) vals[el.dataset.campo] = el.value;
+    if (estado.modelo === 'importar') vals.arquivo = undefined;
     return vals;
   }
 
@@ -120,6 +127,7 @@
       titulo: `${m.nome}${medidas ? ' — ' + medidas : ''}`,
       numero: i + 1,
       total: estado.folhas.length,
+      colorido: !!estado.colorido && !!(estado.resultado && estado.resultado.cena),
       rodape: `Material: ${mat && mat.t != null ? mat.nome : 'espessura informada'} (${br(t, t < 1 ? 2 : 1)} mm). Imprima em tamanho real (100%), sem ajustar à página.`,
     };
   }
@@ -134,18 +142,21 @@
     emenda: 'fill="#000" fill-opacity="0.08" stroke="none"',
     moldura: 'fill="none" stroke="#9a9a9a" stroke-width="0.2" stroke-dasharray="3 2"',
     regua: 'fill="none" stroke="#111" stroke-width="0.25"',
+    fundoNumero: 'fill="#ffffff" fill-opacity="0.85" stroke="none"',
   };
   let contClip = 0;
+  let previa = null;
   function svgDaFolha(ops, papel) {
     const partes = [];
     const pt = (p) => p[0].toFixed(2) + ',' + p[1].toFixed(2);
     for (const op of ops) {
       if (op.t === 'poli') {
         const tag = op.fechado ? 'polygon' : 'polyline';
-        partes.push(`<${tag} points="${op.pts.map(pt).join(' ')}" ${ESTILOS[op.estilo] || ESTILOS.corte}/>`);
+        const estilo = op.estilo === 'face' ? `fill="${op.cor}" stroke="${op.cor}" stroke-width="0.12"` : (ESTILOS[op.estilo] || ESTILOS.corte);
+        partes.push(`<${tag} points="${op.pts.map(pt).join(' ')}" ${estilo}/>`);
       } else if (op.t === 'texto') {
         const anc = op.ancora === 'inicio' ? 'start' : op.ancora === 'fim' ? 'end' : 'middle';
-        const cor = op.cor === 'marca' ? '#6f6f6f' : '#151515';
+        const cor = op.cor === 'marca' ? '#6f6f6f' : op.cor === 'numero' ? '#2d3a8c' : '#151515';
         const giro = op.giro ? ` transform="rotate(${op.giro} ${op.x.toFixed(2)} ${op.y.toFixed(2)})"` : '';
         partes.push(`<text x="${op.x.toFixed(2)}" y="${op.y.toFixed(2)}"${giro} font-size="${(op.tam * 1.15).toFixed(2)}" text-anchor="${anc}" dominant-baseline="middle" fill="${cor}" font-family="Arial, Helvetica, sans-serif"${op.negrito ? ' font-weight="700"' : ''}>${esc(op.txt)}</text>`);
       } else if (op.t === 'recorte') {
@@ -166,6 +177,12 @@
     $('verificacoes').innerHTML = r.verificacoes.map((v) =>
       `<li><span class="sinal${v.ok ? '' : ' nao'}" aria-label="${v.ok ? 'confere' : 'não confere'}">${v.ok ? '✓' : '✗'}</span><span>${esc(v.texto)}</span></li>`).join('');
 
+    if (r.cena && window.Previa3D) {
+      $('bloco-previa').hidden = false;
+      previa = previa || new window.Previa3D($('previa'));
+      previa.mostrar(r.cena);
+    } else $('bloco-previa').hidden = true;
+    $('linha-colorido').hidden = !r.cena;
     const svgs = estado.folhas.map((f, i) => svgDaFolha(P.desenharFolha(f, papel, infoFolha(i)), papel));
     $('folhas').innerHTML = svgs.map((s, i) => `<div class="folha-env">${s}<span>Folha ${i + 1} de ${svgs.length}</span></div>`).join('');
     $('impressao').innerHTML = svgs.join('');
@@ -217,7 +234,7 @@
         else if (op.t === 'texto') {
           doc.setFont('helvetica', op.negrito ? 'bold' : 'normal');
           doc.setFontSize(op.tam * 1.15 * MM_PT);
-          doc.setTextColor(op.cor === 'marca' ? 110 : 20);
+          if (op.cor === 'numero') doc.setTextColor(45, 58, 140); else doc.setTextColor(op.cor === 'marca' ? 110 : 20);
           if (op.giro) {
             // texto girado 90° (sentido horário): posição calculada aqui, pois o alinhamento do jsPDF ignora o giro
             const larg = doc.getTextWidth(op.txt);
@@ -248,6 +265,8 @@
       case 'aba': doc.setFillColor(212, 212, 212); estilo = 'F'; break;
       case 'encaixe': doc.setFillColor(241, 241, 241); estilo = 'F'; break;
       case 'emenda': doc.setFillColor(235, 235, 235); estilo = 'F'; break;
+      case 'fundoNumero': doc.setFillColor(255, 255, 255); estilo = 'F'; break;
+      case 'face': { const n = parseInt(op.cor.slice(1), 16); doc.setFillColor((n >> 16) & 255, (n >> 8) & 255, n & 255); doc.setDrawColor((n >> 16) & 255, (n >> 8) & 255, n & 255); doc.setLineWidth(0.12); estilo = 'FD'; break; }
       case 'dobra': doc.setDrawColor(208, 52, 44); doc.setLineWidth(0.25); doc.setLineDashPattern([2, 1.2], 0); break;
       case 'marca': doc.setDrawColor(138, 138, 138); doc.setLineWidth(0.2); doc.setLineDashPattern([0.8, 0.8], 0); break;
       case 'moldura': doc.setDrawColor(154, 154, 154); doc.setLineWidth(0.2); doc.setLineDashPattern([3, 2], 0); break;
@@ -301,8 +320,24 @@
   if (dentroDeMoldura) $('btn-imprimir').hidden = true; // a impressão direta não funciona dentro de quadros
 
   $('modelo').addEventListener('change', () => { estado.modelo = $('modelo').value; montarCampos(); atualizar(); });
-  $('campos').addEventListener('input', agendar);
-  $('campos').addEventListener('change', agendar);
+  $('campos').addEventListener('change', (e) => {
+    if (!e.target.dataset.arquivo) return;
+    const arq = e.target.files && e.target.files[0];
+    if (!arq) return;
+    $('info-arquivo').textContent = 'Lendo ' + arq.name + '…';
+    const leitor = new FileReader();
+    leitor.onload = () => {
+      try {
+        const info = window.Importar.definir(arq.name, leitor.result);
+        $('info-arquivo').textContent = `Carregado: ${arq.name} (${info.faces} faces).`;
+        atualizar();
+      } catch (err) { $('info-arquivo').textContent = err.message; }
+    };
+    leitor.onerror = () => { $('info-arquivo').textContent = 'Não foi possível ler o arquivo.'; };
+    leitor.readAsArrayBuffer(arq);
+  });
+  $('campos').addEventListener('input', (e) => { if (!e.target.dataset.arquivo) agendar(); });
+  $('campos').addEventListener('change', (e) => { if (!e.target.dataset.arquivo) agendar(); });
   $('material').addEventListener('change', () => {
     estado.material = $('material').value;
     const m = G.MATERIAIS.find((x) => x.id === estado.material);
@@ -318,6 +353,7 @@
   });
   $('aba').addEventListener('input', agendar);
   $('papel').addEventListener('change', atualizar);
+  $('colorido').addEventListener('change', () => { estado.colorido = $('colorido').checked; atualizar(); });
   $('btn-pdf').addEventListener('click', baixarPdf);
   $('btn-imprimir').addEventListener('click', () => window.print());
 

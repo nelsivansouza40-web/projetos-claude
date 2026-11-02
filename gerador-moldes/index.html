@@ -49,6 +49,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { margin: 0; }
 body {
   background: var(--fundo); color: var(--texto);
@@ -106,6 +107,14 @@ button:disabled { opacity: .55; cursor: progress; }
 .lista-conf .sinal.nao { color: var(--erro); }
 .aviso { border-radius: var(--raio); padding: 10px 12px; font-size: .9rem; background: var(--alerta-fundo); color: var(--texto); border: 1px solid color-mix(in srgb, var(--alerta) 45%, transparent); }
 .erro { background: var(--erro-fundo); border-color: color-mix(in srgb, var(--erro) 45%, transparent); }
+.oculto { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+.rotulo-campo { font-weight: 600; font-size: .92rem; }
+.botao-arquivo { display: inline-block; align-self: flex-start; cursor: pointer; border: 1px solid var(--linha); border-radius: var(--raio); padding: 9px 14px; font-weight: 600; background: var(--superficie); color: var(--texto); }
+.oculto:focus-visible + .botao-arquivo, .botao-arquivo:hover { outline: 2px solid var(--acao); outline-offset: 1px; }
+.marcar { display: flex; gap: 8px; align-items: center; font-weight: 600; font-size: .92rem; cursor: pointer; }
+.marcar input { width: 18px; height: 18px; accent-color: var(--destaque); }
+#previa { width: 100%; height: 340px; display: block; touch-action: none; cursor: grab; background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--superficie) 70%, var(--linha)), var(--superficie)); border-radius: var(--raio); }
+.previa-bloco .dica { font-size: .82rem; color: var(--texto-suave); }
 .mensagem { font-size: .88rem; color: var(--texto-suave); min-height: 1.2em; }
 
 .mesa { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -186,6 +195,7 @@ td.num { font-family: var(--fonte-numero); font-variant-numeric: tabular-nums; w
           <div class="entrada"><input id="aba" inputmode="decimal" autocomplete="off" placeholder="auto"><span class="un">mm</span></div>
         </div>
       </div>
+      <label class="marcar" id="linha-colorido"><input type="checkbox" id="colorido"> Imprimir as peças coloridas</label>
       <div class="campo">
         <label for="papel">Papel da impressora</label>
         <div class="entrada"><select id="papel"></select></div>
@@ -210,7 +220,12 @@ td.num { font-family: var(--fonte-numero); font-variant-numeric: tabular-nums; w
       <button role="tab" id="aba-folhas" aria-selected="true" aria-controls="painel-folhas" type="button">Folhas para imprimir</button>
       <button role="tab" id="aba-montagem" aria-selected="false" aria-controls="painel-montagem" type="button">Peças e montagem</button>
     </div>
-    <div id="painel-folhas" role="tabpanel" aria-labelledby="aba-folhas">
+    <div id="painel-folhas" role="tabpanel" aria-labelledby="aba-folhas" class="secao">
+      <div class="bloco previa-bloco" id="bloco-previa" hidden>
+        <h2>Como fica montado</h2>
+        <canvas id="previa" aria-label="Prévia 3D da figura montada. Arraste para girar."></canvas>
+        <span class="dica">Arraste para girar.</span>
+      </div>
       <div class="base-corte" id="folhas"></div>
     </div>
     <div id="painel-montagem" role="tabpanel" aria-labelledby="aba-montagem" class="secao" hidden>
@@ -236,6 +251,11 @@ td.num { font-family: var(--fonte-numero); font-variant-numeric: tabular-nums; w
 
 <script src="js/lib/jspdf.umd.min.js"></script>
 <script src="js/geometria.js"></script>
+<script src="js/malha3d.js"></script>
+<script src="js/figuras.js"></script>
+<script src="js/figuras2.js"></script>
+<script src="js/importar.js"></script>
+<script src="js/previa3d.js"></script>
 <script src="js/paginacao.js"></script>
 <script src="js/app.js"></script>
 </body>

@@ -3,6 +3,10 @@
 const assert = require('assert');
 const G = require('../js/geometria.js');
 const P = require('../js/paginacao.js');
+const M = require('../js/malha3d.js');
+const F = require('../js/figuras.js');
+require('../js/figuras2.js');
+const I = require('../js/importar.js');
 
 let ok = 0;
 function teste(nome, fn) {
@@ -11,7 +15,7 @@ function teste(nome, fn) {
 const perto = (a, b, tol, msg) => assert.ok(Math.abs(a - b) <= tol, `${msg}: ${a} ≠ ${b}`);
 
 // 1. Todos os modelos com valores padrão, em todos os materiais
-for (const [id, m] of Object.entries(G.MODELOS)) {
+for (const [id, m] of Object.entries(G.MODELOS).filter(([i]) => i !== 'importar')) {
   for (const mat of G.MATERIAIS.filter((x) => x.t != null)) {
     teste(`${id} em ${mat.nome}`, () => {
       const v = {};
@@ -113,6 +117,85 @@ teste('peça que não cabe é girada até caber na folha', () => {
   const r = G.gerar('piramide', { lados: 4, lado: 8, alt: 8, base: 'sim' }, 0.35, 0, area);
   assert.strictEqual(P.paginar(r.pecas, P.PAPEIS.A4).length, 1);
   assert.ok(r.pecas[0].simples);
+});
+
+// 5. Figuras 3D: malhas fechadas e coerentes, planificação sem distorção
+for (const id of Object.keys(F.CATALOGO)) {
+  teste(`figura ${id}: malhas fechadas e faces planas`, () => {
+    const fig = new F.Figura();
+    F.CATALOGO[id].construir(fig);
+    for (const parte of fig.partes) {
+      const m = parte.malha;
+      const dir = new Set(), cont = new Map();
+      m.f.forEach((f) => f.forEach((a, k) => {
+        const b = f[(k + 1) % f.length];
+        const d = a + '>' + b;
+        assert.ok(!dir.has(d), `${parte.nome}: faces com sentidos trocados`);
+        dir.add(d);
+        const u = a < b ? a + '_' + b : b + '_' + a;
+        cont.set(u, (cont.get(u) || 0) + 1);
+      }));
+      if (!m.aberta) {
+        for (const [, n] of cont) assert.strictEqual(n, 2, `${parte.nome}: malha aberta`);
+        assert.ok(M.volume(m) > 0, `${parte.nome}: volume negativo`);
+      }
+      for (const f of m.f) {
+        if (f.length < 4) continue;
+        const pts = f.map((i) => m.v[i]);
+        const n = M.norm(M.normalNewell(pts));
+        for (const p of pts) assert.ok(Math.abs(M.dot(M.sub(p, pts[0]), n)) < 1e-3, `${parte.nome}: face não plana`);
+      }
+    }
+  });
+  for (const papel of ['A4', 'A3']) {
+    teste(`figura ${id} em ${papel}: molde sem distorção e sem cruzamentos`, () => {
+      const area = P.areaUtil(P.PAPEIS[papel]);
+      const r = G.gerar(id, { tam: G.MODELOS[id].campos[0].padrao }, 0.2, 0, area);
+      assert.ok(r.verificacoes[0].ok, r.verificacoes[0].texto);
+      for (const p of r.pecas) assert.ok(p.simples, `peça ${p.codigo} cruzada`);
+      for (const f of P.paginar(r.pecas, P.PAPEIS[papel])) assert.ok(f.tipo === 'pecas', `peça ${f.peca && f.peca.codigo} maior que a folha`);
+    });
+  }
+}
+
+// 6. Importação de modelo 3D
+function esferaOBJ(n) {
+  const linhas = [];
+  for (let i = 0; i <= n; i++) for (let j = 0; j < 2 * n; j++) {
+    const t = Math.PI * i / n, f = Math.PI * j / n;
+    linhas.push(`v ${Math.sin(t) * Math.cos(f)} ${Math.cos(t)} ${Math.sin(t) * Math.sin(f)}`);
+  }
+  const id = (i, j) => i * 2 * n + (j % (2 * n)) + 1;
+  for (let i = 0; i < n; i++) for (let j = 0; j < 2 * n; j++) linhas.push(`f ${id(i, j)} ${id(i + 1, j)} ${id(i + 1, j + 1)} ${id(i, j + 1)}`);
+  return linhas.join('\n');
+}
+function caixaSTL() {
+  const v = [[0, 0, 0], [40, 0, 0], [40, 20, 0], [0, 20, 0], [0, 0, 10], [40, 0, 10], [40, 20, 10], [0, 20, 10]];
+  const t = [[0, 2, 1], [0, 3, 2], [4, 5, 6], [4, 6, 7], [0, 1, 5], [0, 5, 4], [1, 2, 6], [1, 6, 5], [2, 3, 7], [2, 7, 6], [3, 0, 4], [3, 4, 7]];
+  const buf = new ArrayBuffer(84 + t.length * 50);
+  const dv = new DataView(buf);
+  dv.setUint32(80, t.length, true);
+  t.forEach((tri, k) => tri.forEach((vi, j) => v[vi].forEach((x, c) => dv.setFloat32(84 + k * 50 + 12 + j * 12 + c * 4, x, true))));
+  return buf;
+}
+teste('importar .obj de alta resolução (simplifica e planifica)', () => {
+  const texto = esferaOBJ(40);
+  const enc = new TextEncoder().encode(texto);
+  const info = I.definir('esfera.obj', enc.buffer);
+  assert.ok(info.faces > 3000);
+  const r = G.gerar('importar', { tam: 12, faces: 200, eixo: 'y' }, 0.2, 0, P.areaUtil(P.PAPEIS.A4));
+  assert.ok(r.verificacoes[0].ok, r.verificacoes[0].texto);
+  assert.ok(r.pecas.every((p) => p.simples));
+  const nFaces = r.cena[0].f.length;
+  assert.ok(nFaces <= 200 && nFaces >= 60, 'faces após simplificar: ' + nFaces);
+});
+teste('importar .stl binário: caixa sem linhas de dobra nas diagonais', () => {
+  I.definir('caixa.stl', caixaSTL());
+  const r = G.gerar('importar', { tam: 12, faces: 300, eixo: 'z' }, 0.2, 0, P.areaUtil(P.PAPEIS.A4));
+  assert.ok(r.verificacoes[0].ok);
+  const dobras = r.pecas.reduce((s, p) => s + p.dobras.length, 0);
+  const abas = r.pecas.reduce((s, p) => s + p.abas.length, 0);
+  assert.ok(dobras - abas <= 5, 'uma caixa aberta em cruz tem 5 dobras; encontradas ' + (dobras - abas));
 });
 
 // 4. Paginação: tudo dentro da área útil e sem sobreposição

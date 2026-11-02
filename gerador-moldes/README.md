@@ -14,17 +14,41 @@ papel, papel-cartão, papelão (até 10 mm) e EVA.
 
 ## Modelos
 
-| Grupo | Modelo | Uso típico |
-|---|---|---|
-| Formas básicas | Caixa (com ou sem tampa) | embalagem, maquete de prédio, organizador |
-| | Cilindro | porta-lápis, torre, tronco |
-| | Cone | chapéu, telhado de torre, cone de sinalização |
-| | Tronco de cone | copo, vaso, cauda de bicho |
-| | Prisma de 3 a 12 lados | pata de bicho, coluna, embalagem sextavada |
-| | Pirâmide de 3 a 12 lados | telhado, enfeite |
-| | Tronco de pirâmide | cabeça de bicho, focinho, suporte |
-| | Peça plana | placa, disco, pé, etiqueta |
-| Figuras | Tatu | figura completa com 29 peças (40 cm) |
+| Grupo | Modelos |
+|---|---|
+| Formas básicas (medidas livres) | caixa, cilindro, cone, tronco de cone, prisma, pirâmide, tronco de pirâmide, peça plana |
+| Animais | tatu, arara, pombo, jabuti, cobra, coelho, aranha, joaninha, abelha, libélula, marimbondo, onça-pintada, leão, raposa, anta, girafa |
+| Corpo humano | cabeça, nariz, olho, orelha, boca, braço, antebraço, punho, mão, coxa, perna, pé |
+| Veículos | carro, caminhão baú, empilhadeira |
+| Instalações | galpão industrial, casa, caixa d'água elevada |
+| EPI e EPC | capacete, protetor auricular tipo concha, botina, óculos de proteção, cone de sinalização, extintor |
+| Máquinas | trator, betoneira |
+| Personagens | trabalhador com EPI, robô |
+| Seu modelo 3D | importação de arquivo .obj ou .stl (por exemplo, de Printables, Thingiverse ou Sketchfab) |
+
+As partes do corpo vêm em tamanho real por padrão (cabeça, braço, mão, pé etc.);
+olho, orelha, nariz e boca vêm ampliados para estudo e demonstração.
+
+## Figuras 3D: como o molde é gerado
+
+1. Cada figura é descrita como um conjunto de formas 3D de faces planas
+   (`js/figuras.js` e `js/figuras2.js`), com cores e pinturas (olhos, pintas,
+   janelas, faixas refletivas).
+2. O campo **Acabamento** multiplica o número de faces das partes arredondadas
+   (simples, médio, suave, muito suave).
+3. Faces maiores que a folha são divididas automaticamente.
+4. O planificador (`js/malha3d.js`) abre a malha no plano girando cada face em
+   torno da aresta comum. Por isso **todas as arestas mantêm o comprimento
+   real**, e os testes conferem isso. As junções mais planas são abertas primeiro;
+   corpos arredondados saem em gomos, como casca de laranja aberta.
+5. Onde duas faces quase não mudam de direção, não há linha de dobra: o papel
+   é curvado à mão, para a superfície ficar lisa.
+6. Bordas cortadas recebem um **número** (bordas com o mesmo número se colam) e
+   uma aba de cola sem sobrepor outras partes.
+7. A prévia 3D mostra a figura montada; dá para girar com o dedo ou o mouse.
+
+Modelos importados são simplificados para o número de faces escolhido
+(agrupamento de vértices) antes de planificar.
 
 ## Como as medidas são calculadas
 
@@ -60,6 +84,10 @@ As medidas de todas as peças saem do comprimento total:
 - `js/app.js`: formulário, prévia em SVG, impressão e PDF.
 - `js/lib/jspdf.umd.min.js`: biblioteca jsPDF 2.5.1 (licença MIT, em
   `js/lib/jspdf-LICENSE.txt`) para gerar o PDF sem internet.
+- `js/malha3d.js`: formas 3D, pinturas, subdivisão e planificação.
+- `js/figuras.js`, `js/figuras2.js`: catálogo de figuras.
+- `js/importar.js`: leitura e simplificação de .obj e .stl.
+- `js/previa3d.js`: prévia 3D da figura montada.
 - `testes/testes.js`: testes automáticos.
 
 ## Testes
@@ -73,7 +101,7 @@ contorno se cruza (inclusive com centenas de medidas aleatórias), conferem as
 contas de cada forma e verificam que as peças ficam dentro da folha e não se
 sobrepõem.
 
-## Próximas etapas previstas
+## Próximas etapas possíveis
 
-- Novas figuras montadas com os mesmos módulos.
-- Importação de modelo 3D (.obj ou .stl) com planificação automática.
+- Mais figuras no catálogo, com os mesmos módulos.
+- Simplificação de modelos importados com preservação de cantos vivos.

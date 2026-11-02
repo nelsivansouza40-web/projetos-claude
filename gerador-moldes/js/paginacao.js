@@ -47,7 +47,6 @@
   function paginar(pecas, papel) {
     const area = areaUtil(papel);
     const folhas = [];
-    const prateleiras = [];
     const grandes = [];
     const itens = [];
     for (const peca of pecas) {
@@ -65,25 +64,57 @@
       it.h = it.rot ? it.bb.w : it.bb.h;
     }
     const normais = itens.filter((it) => !grandes.includes(it));
-    normais.sort((a, b) => b.h - a.h || b.w - a.w);
+    normais.sort((a, b) => Math.max(b.bb.w, b.bb.h) - Math.max(a.bb.w, a.bb.h) || b.bb.w * b.bb.h - a.bb.w * a.bb.h);
 
-    // Prateleiras (primeiro encaixe, alturas decrescentes)
-    for (const it of normais) {
-      let pr = prateleiras.find((s) => it.h <= s.h + 0.01 && s.x + it.w <= area.w + 0.01);
-      if (!pr) {
-        let folha = folhas[folhas.length - 1];
-        const ultimo = prateleiras.filter((s) => s.folha === folha).pop();
-        let y = ultimo ? ultimo.y + ultimo.h + FOLGA : 0;
-        if (!folha || y + it.h > area.h + 0.01) {
-          folha = { tipo: 'pecas', itens: [] };
-          folhas.push(folha);
-          y = 0;
+    // Encaixe por retângulos livres (MaxRects, menor sobra): aproveita os vãos das folhas
+    const W = area.w + FOLGA, H = area.h + FOLGA;
+    const livres = [];
+    const encaixar = (fi, w, h) => {
+      let melhor = null;
+      for (const r of livres[fi]) {
+        if (w <= r.w + 1e-6 && h <= r.h + 1e-6) {
+          const sobra = Math.min(r.w - w, r.h - h);
+          if (!melhor || sobra < melhor.sobra || (sobra === melhor.sobra && r.y + r.x * 1e-3 < melhor.y + melhor.x * 1e-3)) melhor = { x: r.x, y: r.y, sobra };
         }
-        pr = { folha, y, h: it.h, x: 0 };
-        prateleiras.push(pr);
       }
-      pr.folha.itens.push({ peca: it.peca, copia: it.copia, bb: it.bb, rot: it.rot, x: area.x + pr.x, y: area.y + pr.y });
-      pr.x += it.w + FOLGA;
+      return melhor;
+    };
+    const ocupar = (fi, x, y, w, h) => {
+      const novos = [];
+      for (const r of livres[fi]) {
+        if (x >= r.x + r.w || x + w <= r.x || y >= r.y + r.h || y + h <= r.y) { novos.push(r); continue; }
+        if (x > r.x) novos.push({ x: r.x, y: r.y, w: x - r.x, h: r.h });
+        if (x + w < r.x + r.w) novos.push({ x: x + w, y: r.y, w: r.x + r.w - x - w, h: r.h });
+        if (y > r.y) novos.push({ x: r.x, y: r.y, w: r.w, h: y - r.y });
+        if (y + h < r.y + r.h) novos.push({ x: r.x, y: y + h, w: r.w, h: r.y + r.h - y - h });
+      }
+      livres[fi] = novos.filter((r, i) => r.w > 1 && r.h > 1 && !novos.some((q, j) => j !== i &&
+        r.x >= q.x && r.y >= q.y && r.x + r.w <= q.x + q.w && r.y + r.h <= q.y + q.h && (j < i || r.x !== q.x || r.y !== q.y || r.w !== q.w || r.h !== q.h)));
+    };
+    for (const it of normais) {
+      const opcoes = [false, true].filter((rot) => {
+        const w = rot ? it.bb.h : it.bb.w, h = rot ? it.bb.w : it.bb.h;
+        return w <= area.w + 0.01 && h <= area.h + 0.01;
+      });
+      let escolha = null;
+      for (let fi = 0; fi < folhas.length && !escolha; fi++) {
+        if (folhas[fi].tipo !== 'pecas') continue;
+        for (const rot of opcoes) {
+          const w = (rot ? it.bb.h : it.bb.w) + FOLGA, h = (rot ? it.bb.w : it.bb.h) + FOLGA;
+          const m = encaixar(fi, w, h);
+          if (m && (!escolha || m.sobra < escolha.sobra)) escolha = { fi, rot, x: m.x, y: m.y, w, h, sobra: m.sobra };
+        }
+      }
+      if (!escolha) {
+        folhas.push({ tipo: 'pecas', itens: [] });
+        const fi = folhas.length - 1;
+        livres[fi] = [{ x: 0, y: 0, w: W, h: H }];
+        const rot = opcoes.length === 2 ? it.bb.h > it.bb.w : opcoes[0];
+        const w = (rot ? it.bb.h : it.bb.w) + FOLGA, h = (rot ? it.bb.w : it.bb.h) + FOLGA;
+        escolha = { fi, rot, x: 0, y: 0, w, h };
+      }
+      ocupar(escolha.fi, escolha.x, escolha.y, escolha.w, escolha.h);
+      folhas[escolha.fi].itens.push({ peca: it.peca, copia: it.copia, bb: it.bb, rot: escolha.rot, x: area.x + escolha.x, y: area.y + escolha.y });
     }
 
     // Peças grandes: divididas em partes
@@ -110,10 +141,16 @@
   }
 
   /** Operações de desenho de uma peça já posicionada. */
-  function opsPeca(peca, T, rot) {
+  function opsPeca(peca, T, rot, colorido) {
     const giro = rot ? 90 : 0;
     const ops = [];
     for (const a of peca.abas) ops.push({ t: 'poli', pts: a.pts.map(T), fechado: true, estilo: a.tipo === 'encaixe' ? 'encaixe' : 'aba' });
+    for (const f of peca.faces || []) {
+      if (colorido && f.cor && f.cor.toLowerCase() !== '#ffffff') ops.push({ t: 'poli', pts: f.pts.map(T), fechado: true, estilo: 'face', cor: f.cor });
+      for (const d of f.deco || []) {
+        ops.push(colorido ? { t: 'poli', pts: d.pts.map(T), fechado: true, estilo: 'face', cor: d.cor } : { t: 'poli', pts: d.pts.map(T), fechado: true, estilo: 'marca' });
+      }
+    }
     for (const m of peca.marcas || []) ops.push({ t: 'poli', pts: m.map(T), fechado: false, estilo: 'marca' });
     for (const d of peca.dobras) ops.push({ t: 'poli', pts: d.map(T), fechado: false, estilo: 'dobra' });
     for (const c of peca.contornos) ops.push({ t: 'poli', pts: c.map(T), fechado: true, estilo: 'corte' });
@@ -126,7 +163,11 @@
     if (menor > 22) ops.push({ t: 'texto', giro, x: r[0] + abaixo[0], y: r[1] + abaixo[1], txt: peca.nome + (peca.qtd > 1 ? ` (×${peca.qtd})` : ''), tam: Math.max(2, tam * 0.45) });
     for (const tx of peca.textos || []) {
       const p = T([tx.x, tx.y]);
-      ops.push({ t: 'texto', giro, x: p[0], y: p[1], txt: tx.t, tam: tx.tam || 2, cor: 'marca' });
+      if (tx.numero) {
+        const tm = tx.tam || 2, lw = (tx.t.length * 0.62 + 0.5) * tm * 1.15 / 2, lh = tm * 0.62;
+        ops.push({ t: 'poli', estilo: 'fundoNumero', fechado: true, pts: rot ? [[p[0] - lh, p[1] - lw], [p[0] + lh, p[1] - lw], [p[0] + lh, p[1] + lw], [p[0] - lh, p[1] + lw]] : [[p[0] - lw, p[1] - lh], [p[0] + lw, p[1] - lh], [p[0] + lw, p[1] + lh], [p[0] - lw, p[1] + lh]] });
+      }
+      ops.push({ t: 'texto', giro, x: p[0], y: p[1], txt: tx.t, tam: tx.tam || 2, cor: tx.numero ? 'numero' : 'marca' });
     }
     return ops;
   }
@@ -140,10 +181,10 @@
     ops.push({ t: 'texto', x: papel.w - MARGEM.dir, y: 8, txt: `Folha ${info.numero} de ${info.total}`, tam: 3, ancora: 'fim' });
 
     if (folha.tipo === 'pecas') {
-      for (const it of folha.itens) ops.push(...opsPeca(it.peca, transformacao(it.bb, it.rot, it.x, it.y), it.rot));
+      for (const it of folha.itens) ops.push(...opsPeca(it.peca, transformacao(it.bb, it.rot, it.x, it.y), it.rot, info.colorido));
     } else {
       ops.push({ t: 'recorte', x: area.x, y: area.y, w: area.w, h: area.h });
-      ops.push(...opsPeca(folha.peca, transformacao(folha.bb, folha.rot, folha.x, folha.y), folha.rot));
+      ops.push(...opsPeca(folha.peca, transformacao(folha.bb, folha.rot, folha.x, folha.y), folha.rot, info.colorido));
       ops.push({ t: 'fimRecorte' });
       // faixas de emenda
       if (folha.coluna < folha.colunas - 1) {

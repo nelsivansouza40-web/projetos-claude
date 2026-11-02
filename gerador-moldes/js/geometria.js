@@ -898,7 +898,7 @@
       ],
     },
     tatu: {
-      nome: 'Tatu', grupo: 'Figuras', gerar: gerarTatu,
+      nome: 'Tatu', grupo: 'Animais', gerar: gerarTatu,
       descricao: 'Tatu com casco de faixas, cabeça, cauda e quatro patas. As peças saem do comprimento total e fecham entre si.',
       campos: [
         { id: 'comp', rotulo: 'Comprimento total (focinho à cauda)', un: 'cm', padrao: 40 },
@@ -935,6 +935,7 @@
       marcas: (p.marcas || []).map((m) => m.map(R)),
       textos: (p.textos || []).map((tx) => { const q = R([tx.x, tx.y]); return Object.assign({}, tx, { x: q[0], y: q[1] }); }),
       rotulo: R(p.rotulo),
+      faces: p.faces && p.faces.map((f) => ({ pts: f.pts.map(R), cor: f.cor, deco: (f.deco || []).map((d) => ({ pts: d.pts.map(R), cor: d.cor })) })),
     });
   }
 
