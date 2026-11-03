@@ -367,4 +367,9 @@
   }
 
   atualizar();
+
+  // Funciona sem internet quando aberto pelo endereço do site (http/https)
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http') && !dentroDeMoldura) {
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});
+  }
 })();
