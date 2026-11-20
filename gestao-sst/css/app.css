@@ -322,6 +322,8 @@ svg.corpo { display: block; width: 100%; max-width: 620px; margin: 0 auto; heigh
 @media (max-width: 600px) { .anx-pessoa { grid-template-columns: 1fr; } .anx-acoes { justify-content: flex-start; } }
 .anx-entregas { flex-direction: column; flex-wrap: nowrap; max-height: 180px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
 .anx-termo { max-height: 70px; overflow: auto; }
+.anx-ass-form { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+.anx-ass-form > span:first-child { font-weight: 600; font-size: .85rem; }
 .doc .ficha td.fc-rub { text-align: center; padding: 1px 2px; }
 .doc .ficha td.fc-rub img { display: block; max-height: 22px; max-width: 100%; margin: 0 auto; }
 .doc .ficha .fc-cod { font-size: 5.5pt; line-height: 1.1; color: #333; }

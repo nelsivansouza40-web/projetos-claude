@@ -186,7 +186,11 @@ const Reports = {
       if (!this.fichaColab) { toast('Escolha um colaborador.'); return; }
       Anexos.assinarEntregas(this.fichaColab, this.fichaCat, null, () => this.paginaFicha());
     });
-    tb.append(bNova, bAss, button('Conferir código', '', () => Anexos.telaConferir()), bImp);
+    const bApagar = button('Apagar assinatura', '', () => {
+      if (!this.fichaColab) { toast('Escolha um colaborador.'); return; }
+      Anexos.telaApagarAssinaturas(this.fichaColab, this.fichaCat, () => this.paginaFicha());
+    });
+    tb.append(bNova, bAss, bApagar, button('Conferir código', '', () => Anexos.telaConferir()), bImp);
     const mostrar = () => {
       const id = Forms.resolverRef('colab', inp.value);
       this.fichaColab = id || '';

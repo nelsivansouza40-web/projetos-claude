@@ -135,6 +135,35 @@ const Anexos = {
     q = this.quadro($('canvas', body));
   },
 
+  apagarAssinatura(ref, colab) {
+    return this.excluirOnde((a) => a.ref === ref && a.tipo === 'assinatura' && a.colab === colab);
+  },
+
+  /** Tela com as entregas já assinadas do colaborador, para apagar uma assinatura colhida por engano. */
+  telaApagarAssinaturas(cid, cat, depois) {
+    const c = Calc.colab(cid);
+    if (!c) { toast('Escolha um colaborador.'); return; }
+    const body = h('<div class="anx"></div>');
+    const desenhar = () => {
+      const feitas = this.entregasDoColab(cid, cat).map((m) => ({ m, a: this.assinaturaInfo(m.id, cid) })).filter((x) => x.a);
+      body.innerHTML = '<p><b>' + esc(c.nome) + '</b></p>' + (feitas.length
+        ? '<p class="small">Apague só a assinatura colhida por engano. A entrega continua registrada e volta a aparecer como "sem assinatura".</p>' +
+          '<div class="anx-lista">' + feitas.map((x) => '<div class="anx-pessoa"><div class="anx-nome"><b>' + esc(this.resumoEntrega(x.m)) + '</b><span class="muted small">' + esc(this.rotuloAssinatura(x.a)) + '</span></div>' +
+            '<div class="anx-ass"><img src="' + x.a.url + '" alt="Assinatura"></div>' +
+            '<div class="anx-acoes"><button type="button" class="btn btn-sm btn-danger" data-apagar="' + x.m.id + '">Apagar assinatura</button></div></div>').join('') + '</div>'
+        : '<p class="muted">Nenhuma entrega assinada deste colaborador.</p>');
+      $$('[data-apagar]', body).forEach((b) => b.addEventListener('click', async () => {
+        const m = feitas.find((x) => x.m.id === b.dataset.apagar).m;
+        if (!await confirmar('Apagar a assinatura da entrega "' + this.resumoEntrega(m) + '"? Esta ação não pode ser desfeita.', 'Apagar', true)) return this.telaApagarAssinaturas(cid, cat, depois);
+        await this.apagarAssinatura(m.id, cid);
+        toast('Assinatura apagada');
+        this.telaApagarAssinaturas(cid, cat, depois);
+      }));
+    };
+    desenhar();
+    Modal.open({ title: 'Apagar assinatura', body, foot: [button('Fechar', 'btn-primary', () => { Modal.close(); if (depois) depois(); })] });
+  },
+
   /** Tela para conferir um código de verificação de assinatura. */
   telaConferir() {
     const body = h('<div><label class="field">Código de verificação<input type="text" placeholder="Ex.: 3F2A-9C1E-5B7D" autocomplete="off"></label><div class="anx-res" style="margin-top:10px"></div></div>');

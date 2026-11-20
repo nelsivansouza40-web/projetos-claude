@@ -258,6 +258,19 @@ const Forms = {
       };
       form.elements.epi.addEventListener('change', atualizarPreco);
       atualizarPreco();
+      // entrega já assinada: mostra a assinatura e permite apagar
+      const ass = base.id && base.colab ? Anexos.assinaturaInfo(base.id, base.colab) : null;
+      if (ass) {
+        const box = h('<div class="w4 anx-ass-form"><span>Assinatura do colaborador</span><div class="anx-ass"><img src="' + ass.url + '" alt="Assinatura"></div>' +
+          '<span class="small muted">' + esc(Anexos.rotuloAssinatura(ass)) + '</span></div>');
+        box.appendChild(button('Apagar assinatura', 'btn-sm btn-danger', async () => {
+          if (!await confirmar('Apagar a assinatura desta entrega? A entrega continua registrada e volta a aparecer como "sem assinatura".', 'Apagar', true)) return this.abrir(mod, base);
+          await Anexos.apagarAssinatura(base.id, base.colab);
+          toast('Assinatura apagada');
+          this.abrir(mod, (App.data.movepi || []).find((x) => x.id === base.id) || base);
+        }));
+        form.appendChild(box);
+      }
     }
     if (mod === 'aso') {
       form.elements.medico.addEventListener('change', () => {
