@@ -54,6 +54,36 @@ const App = {
     let t = 'auto';
     try { t = localStorage.getItem('gsst_tema') || 'auto'; } catch (e) { /* padrão */ }
     if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t);
+    // cor de fundo escolhida em Configurações (só no tema claro: no escuro, o fundo escuro do tema prevalece)
+    let fundo = '';
+    try { fundo = localStorage.getItem('gsst_fundo') || ''; } catch (e) { /* padrão */ }
+    const escuro = t === 'dark' || (t === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+    if (fundo && !escuro) document.documentElement.style.setProperty('--bg', fundo);
+    else document.documentElement.style.removeProperty('--bg');
+    if (!this._temaOuvindo && window.matchMedia) {
+      this._temaOuvindo = true;
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => this.aplicarTema());
+    }
+  },
+
+  CORES_FUNDO: [['', 'Padrão'], ['#ffffff', 'Branco'], ['#e8f1fb', 'Azul claro'], ['#eaf6ee', 'Verde claro'], ['#f7f2e8', 'Areia'], ['#f1edf9', 'Lilás claro'], ['#fdeee6', 'Pêssego'], ['#e6e8ec', 'Cinza']],
+
+  cardCorFundo() {
+    let atual = '';
+    try { atual = localStorage.getItem('gsst_fundo') || ''; } catch (e) { /* padrão */ }
+    const card = h('<div class="card"><h2>Cor de fundo</h2><p class="small muted">Escolha a cor de fundo das telas. Vale para este computador e para o tema claro; no tema escuro, o fundo continua escuro.</p>' +
+      '<div class="cor-fundo">' + this.CORES_FUNDO.map(([c, n]) => '<button type="button" class="cor-op" data-cor="' + c + '" aria-pressed="' + (c === atual) + '" title="' + n + '">' +
+        '<span class="cor-amostra" style="background:' + (c || '#f4f6f9') + '"></span><span>' + n + '</span></button>').join('') +
+      '<label class="cor-op" title="Outra cor"><input type="color" value="' + esc(atual && !this.CORES_FUNDO.some((x) => x[0] === atual) ? atual : '#f4f6f9') + '" aria-label="Escolher outra cor"><span>Outra cor</span></label></div></div>');
+    const escolher = (cor) => {
+      try { if (cor) localStorage.setItem('gsst_fundo', cor); else localStorage.removeItem('gsst_fundo'); } catch (e) { /* sem armazenamento */ }
+      this.aplicarTema();
+      $$('[data-cor]', card).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cor === cor)));
+      toast(cor ? 'Cor de fundo aplicada' : 'Cor de fundo padrão restaurada');
+    };
+    $$('[data-cor]', card).forEach((b) => b.addEventListener('click', () => escolher(b.dataset.cor)));
+    $('input[type=color]', card).addEventListener('change', (e) => escolher(e.target.value));
+    return card;
   },
 
   async trocarEmpresa(id) {
@@ -353,6 +383,7 @@ const App = {
     $('#cfg-tema', par).addEventListener('change', (e) => { try { localStorage.setItem('gsst_tema', e.target.value); } catch (x) { /* ignora */ } this.aplicarTema(); });
     $$('[data-p]', par).forEach((inp) => inp.addEventListener('change', async () => { p[inp.dataset.p] = Number(inp.value) || 0; await Config.salvar(); toast('Parâmetro salvo'); }));
     main.appendChild(par);
+    main.appendChild(this.cardCorFundo());
 
     const aso = h('<div class="card"><h2>Validade do ASO por tipo (dias)</h2><p class="small muted">Deixe em branco para tipos sem vencimento (ex.: demissional). O PCMSO define a periodicidade de cada exame.</p><div class="cfg-grid">' +
       Config.lista('tiposASO').map((t) => '<label class="field">' + esc(t) + '<input type="number" min="0" data-aso="' + esc(t) + '" value="' + esc((p.asoValidade || {})[t] ?? '') + '"></label>').join('') + '</div></div>');

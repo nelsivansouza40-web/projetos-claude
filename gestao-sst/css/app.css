@@ -322,6 +322,11 @@ svg.corpo { display: block; width: 100%; max-width: 620px; margin: 0 auto; heigh
 @media (max-width: 600px) { .anx-pessoa { grid-template-columns: 1fr; } .anx-acoes { justify-content: flex-start; } }
 .anx-entregas { flex-direction: column; flex-wrap: nowrap; max-height: 180px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
 .anx-termo { max-height: 70px; overflow: auto; }
+.cor-fundo { display: flex; flex-wrap: wrap; gap: 10px; }
+.cor-op { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 10px; min-width: 84px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; font-size: .8rem; cursor: pointer; }
+.cor-op[aria-pressed="true"] { border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand); }
+.cor-amostra { width: 40px; height: 28px; border-radius: 6px; border: 1px solid var(--axis); }
+.cor-op input[type=color] { width: 40px; height: 28px; padding: 0; border: 1px solid var(--axis); border-radius: 6px; background: none; cursor: pointer; }
 .anx-ass-form { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
 .anx-ass-form > span:first-child { font-weight: 600; font-size: .85rem; }
 .doc .ficha td.fc-rub { text-align: center; padding: 1px 2px; }
