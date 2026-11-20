@@ -188,7 +188,9 @@ const Paineis = {
 
     const tipo = this.contar(L, (r) => r.tipo);
     g.appendChild(Charts.card('Por tipo de acidente', (b) => Charts.rosca(b, { itens: tipo.slice(0, 6) }), this.tab(tipo)));
-    [['Parte do corpo atingida', 'parte'], ['Dano / lesão', 'dano'], ['Agente causador', 'agente'], ['Gravidade', 'gravidade']].forEach(([t, k]) => {
+    const partes = this.contar(L, (r) => r.parte);
+    g.appendChild(Charts.card('Partes do corpo atingidas', (b) => Charts.corpo(b, { itens: partes }), this.tab(partes)));
+    [['Dano / lesão', 'dano'], ['Agente causador', 'agente'], ['Gravidade', 'gravidade']].forEach(([t, k]) => {
       const it = this.contar(L, (r) => r[k]);
       g.appendChild(Charts.card(t, (b) => Charts.ranking(b, { itens: it }), this.tab(it)));
     });

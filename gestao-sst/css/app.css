@@ -169,6 +169,23 @@ table.data td.actions { white-space: nowrap; text-align: right; }
 .charts { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 14px; }
 .chart-card { background: var(--chart-surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); min-width: 0; }
 .chart-card.wide { grid-column: 1 / -1; }
+svg.corpo { display: block; width: 100%; max-width: 620px; margin: 0 auto; height: auto; }
+.corpo-base { fill: var(--surface-2); stroke: var(--axis); stroke-width: 1.2; }
+.corpo-reg { fill: transparent; }
+.corpo-reg.on { fill: var(--critical); }
+.corpo-coluna { stroke: var(--axis); stroke-width: 3; stroke-dasharray: 5 4; }
+.corpo-coluna.on { stroke: var(--critical); }
+.corpo-linha { fill: none; stroke: var(--axis); stroke-width: 1.2; }
+.corpo-linha.on { stroke: var(--brand); stroke-width: 1.8; }
+.corpo-ponto { fill: var(--axis); }
+.corpo-ponto.on { fill: var(--brand); }
+.corpo-box { fill: var(--surface); stroke: var(--line); }
+.corpo-box.on { fill: var(--brand); stroke: var(--brand); }
+.corpo-rot { font-size: 11px; font-weight: 600; fill: var(--muted); letter-spacing: .3px; }
+.corpo-rot.on { fill: var(--brand-ink); }
+.corpo-num { font-size: 20px; font-weight: 700; fill: var(--muted); }
+.corpo-num.on { fill: var(--brand-ink); }
+.corpo-nota { text-align: center; margin: 6px 0 0; }
 .chart-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
 .chart-head h3 { font-size: .92rem; margin: 0; }
 .chart-head .btn { padding: 2px 8px; font-size: .74rem; }

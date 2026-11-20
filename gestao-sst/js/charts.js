@@ -165,6 +165,100 @@ const Charts = {
       'Q' + (x + w) + ',' + (y + hgt) + ' ' + (x + w - r) + ',' + (y + hgt) + 'H' + x + 'Z';
   },
 
+  /**
+   * Figura do corpo humano (vista de frente) com a quantidade de acidentes por
+   * parte atingida: a região fica mais vermelha quanto mais acidentes tem, e cada
+   * parte tem um quadro com o número, ligado à região por uma linha.
+   * itens: [{nome, valor}] com os nomes da lista "Partes do corpo".
+   */
+  corpo(body, { itens }) {
+    const PARTES = [
+      // [chave, rótulo, lado, sinônimos]
+      ['cabeca', 'Cabeça', 'e', ['cabeca', 'cranio', 'couro cabeludo']],
+      ['face', 'Face', 'e', ['face', 'rosto', 'boca', 'orelha', 'ouvido', 'mandibula', 'dente', 'dentes']],
+      ['pescoco', 'Pescoço', 'e', ['pescoco']],
+      ['ombro', 'Ombro', 'e', ['ombro', 'ombros', 'clavicula']],
+      ['tronco', 'Tronco', 'e', ['tronco', 'torax', 'peito', 'costela', 'costelas']],
+      ['abdomen', 'Abdômen', 'e', ['abdomen', 'barriga', 'quadril', 'virilha']],
+      ['mao', 'Mão', 'e', ['mao', 'maos', 'punho', 'pulso']],
+      ['joelho', 'Joelho', 'e', ['joelho', 'joelhos']],
+      ['olhos', 'Olhos', 'd', ['olhos', 'olho']],
+      ['nariz', 'Nariz', 'd', ['nariz']],
+      ['braco', 'Braço', 'd', ['braco', 'bracos', 'antebraco', 'cotovelo']],
+      ['coluna', 'Coluna (costas)', 'd', ['coluna', 'costas', 'lombar']],
+      ['dedo', 'Dedos', 'd', ['dedo', 'dedos']],
+      ['perna', 'Perna', 'd', ['perna', 'pernas', 'coxa', 'canela']],
+      ['pe', 'Pé', 'd', ['pe', 'pes', 'tornozelo', 'calcanhar']],
+      ['multiplas', 'Múltiplas partes', 'd', ['multiplas partes', 'multiplas', 'varias partes']]
+    ];
+    const conta = {}, outras = [];
+    PARTES.forEach((p) => { conta[p[0]] = 0; });
+    itens.forEach((it) => {
+      if (!it.valor) return;
+      const n = norm(it.nome);
+      const p = PARTES.find((x) => x[3].includes(n));
+      if (p) conta[p[0]] += it.valor; else outras.push(it);
+    });
+    const total = itens.reduce((s, i) => s + (i.valor || 0), 0);
+    if (!total) return this.vazio(body, 'Nenhum acidente com parte do corpo informada no período.');
+    const max = Math.max(1, ...PARTES.map((p) => conta[p[0]]));
+
+    // formas de cada região: [tipo, atributos]
+    const F = {
+      braco: [['rect', 'x="222" y="140" width="26" height="168" rx="13" transform="rotate(10 235 140)"'], ['rect', 'x="352" y="140" width="26" height="168" rx="13" transform="rotate(-10 365 140)"']],
+      perna: [['rect', 'x="262" y="292" width="36" height="206" rx="15"'], ['rect', 'x="302" y="292" width="36" height="206" rx="15"']],
+      abdomen: [['rect', 'x="258" y="226" width="84" height="74" rx="12"']],
+      tronco: [['rect', 'x="252" y="124" width="96" height="108" rx="20"']],
+      ombro: [['ellipse', 'cx="252" cy="140" rx="22" ry="16"'], ['ellipse', 'cx="348" cy="140" rx="22" ry="16"']],
+      pescoco: [['rect', 'x="289" y="100" width="22" height="26" rx="4"']],
+      cabeca: [['ellipse', 'cx="300" cy="60" rx="36" ry="42"']],
+      face: [['ellipse', 'cx="300" cy="74" rx="25" ry="24"']],
+      olhos: [['circle', 'cx="288" cy="58" r="5"'], ['circle', 'cx="312" cy="58" r="5"']],
+      nariz: [['path', 'd="M300 63 L294 80 H306 Z"']],
+      mao: [['circle', 'cx="205" cy="316" r="15"'], ['circle', 'cx="395" cy="316" r="15"']],
+      dedo: [['rect', 'x="194" y="326" width="5" height="17" rx="2.5"'], ['rect', 'x="202" y="328" width="5" height="18" rx="2.5"'], ['rect', 'x="210" y="326" width="5" height="17" rx="2.5"'],
+        ['rect', 'x="385" y="326" width="5" height="17" rx="2.5"'], ['rect', 'x="393" y="328" width="5" height="18" rx="2.5"'], ['rect', 'x="401" y="326" width="5" height="17" rx="2.5"']],
+      joelho: [['circle', 'cx="280" cy="398" r="13"'], ['circle', 'cx="320" cy="398" r="13"']],
+      pe: [['ellipse', 'cx="274" cy="506" rx="25" ry="10"'], ['ellipse', 'cx="326" cy="506" rx="25" ry="10"']]
+    };
+    const ponto = { cabeca: [272, 34], face: [282, 86], pescoco: [290, 114], ombro: [240, 140], tronco: [266, 186], abdomen: [270, 262], mao: [196, 318], joelho: [272, 398],
+      olhos: [312, 58], nariz: [304, 74], braco: [380, 222], coluna: [300, 232], dedo: [404, 340], perna: [330, 352], pe: [338, 506] };
+    const ordem = ['braco', 'perna', 'abdomen', 'tronco', 'ombro', 'pescoco', 'cabeca', 'face', 'olhos', 'nariz', 'mao', 'dedo', 'joelho', 'pe'];
+    const fmtA = (v) => fmtInt(v) + (v === 1 ? ' acidente' : ' acidentes');
+    const dica = (k, rot) => esc('<div>' + esc(rot) + '</div><b>' + esc(fmtA(conta[k])) + '</b>' + (conta[k] ? ' · ' + Math.round(conta[k] * 100 / total) + '% do total' : ''));
+    const rot = Object.fromEntries(PARTES.map((p) => [p[0], p[1]]));
+
+    let s = '<svg class="corpo" viewBox="0 0 600 540" role="img" aria-label="Partes do corpo atingidas">';
+    // silhueta
+    ordem.forEach((k) => F[k].forEach(([t, a]) => { s += '<' + t + ' ' + a + ' class="corpo-base"/>'; }));
+    // regiões atingidas, mais fortes quanto mais acidentes
+    ordem.forEach((k) => {
+      const v = conta[k];
+      F[k].forEach(([t, a]) => {
+        s += '<' + t + ' ' + a + ' class="corpo-reg' + (v ? ' on' : '') + '"' + (v ? ' style="fill-opacity:' + (0.3 + 0.65 * v / max).toFixed(2) + '"' : '') + ' data-tip="' + dica(k, rot[k]) + '"/>';
+      });
+    });
+    s += '<line x1="300" y1="132" x2="300" y2="296" class="corpo-coluna' + (conta.coluna ? ' on' : '') + '" data-tip="' + dica('coluna', rot.coluna) + '"/>';
+    // quadros com o número de cada parte
+    const lados = { e: PARTES.filter((p) => p[2] === 'e'), d: PARTES.filter((p) => p[2] === 'd') };
+    ['e', 'd'].forEach((lado) => lados[lado].forEach((p, i) => {
+      const k = p[0], v = conta[k], y = 8 + i * 66, x = lado === 'e' ? 6 : 466, w = 128, hgt = 50;
+      const on = v > 0;
+      if (ponto[k]) {
+        const [ax, ay] = ponto[k], bx = lado === 'e' ? x + w : x, by = y + hgt / 2;
+        s += '<polyline points="' + bx + ',' + by + ' ' + (lado === 'e' ? bx + 14 : bx - 14) + ',' + by + ' ' + ax + ',' + ay + '" class="corpo-linha' + (on ? ' on' : '') + '"/>';
+        s += '<circle cx="' + ax + '" cy="' + ay + '" r="3" class="corpo-ponto' + (on ? ' on' : '') + '"/>';
+      }
+      s += '<g data-tip="' + dica(k, p[1]) + '"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + hgt + '" rx="6" class="corpo-box' + (on ? ' on' : '') + '"/>';
+      s += '<text x="' + (x + w / 2) + '" y="' + (y + 17) + '" text-anchor="middle" class="corpo-rot' + (on ? ' on' : '') + '">' + esc(p[1].toUpperCase()) + '</text>';
+      s += '<text x="' + (x + w / 2) + '" y="' + (y + 41) + '" text-anchor="middle" class="corpo-num' + (on ? ' on' : '') + '">' + fmtInt(v) + '</text></g>';
+    }));
+    s += '</svg>';
+    let nota = '<p class="small muted corpo-nota">' + fmtA(total) + ' com parte do corpo informada. Quanto mais forte o vermelho, mais acidentes na região.';
+    if (outras.length) nota += ' Outras partes: ' + outras.map((o) => esc(o.nome) + ' (' + fmtInt(o.valor) + ')').join(', ') + '.';
+    body.innerHTML = s + nota + '</p>';
+  },
+
   /** Rosca para composição de poucas partes (até 6). itens: [{nome, valor, cor}] */
   rosca(body, { itens, fmt = fmtNum, centro }) {
     const lista = itens.filter((i) => i.valor > 0);
