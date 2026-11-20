@@ -1,0 +1,304 @@
+{
+  "nr": "01",
+  "titulo": "GRO e PGR",
+  "chamada": "Gerenciar riscos é uma rotina da empresa, não um documento na gaveta",
+  "icone": "FaClipboardList",
+  "carga": "4 horas (carga sugerida para lideranças, CIPA e equipes de SST)",
+  "periodicidade": "A NR-01 não fixa carga horária para este tema. Recomenda-se reciclagem a cada 2 anos, acompanhando a revisão da avaliação de riscos, ou sempre que houver mudança relevante no PGR ou na norma.",
+  "publico": "Lideranças, membros da CIPA, nomeados, profissionais de SST e gestores responsáveis por processos.",
+  "prerequisitos": "Não há. Recomenda-se ter em mãos o PGR da empresa, com inventário de riscos e plano de ação.",
+  "instrutor": "Profissional de segurança do trabalho com experiência na elaboração e gestão do PGR.",
+  "objetivos": [
+    "Explicar a estrutura da NR-01 e as responsabilidades de empregador e trabalhadores",
+    "Aplicar as etapas do Gerenciamento de Riscos Ocupacionais",
+    "Interpretar o inventário de riscos e o plano de ação do PGR",
+    "Reconhecer fatores de riscos psicossociais e como incluí-los no GRO",
+    "Organizar capacitações conforme as regras gerais da NR-01"
+  ],
+  "recursos": [
+    "Projetor e apresentação",
+    "Cópia do inventário de riscos e do plano de ação da empresa, ou modelo de exemplo",
+    "Formulários de inventário de riscos em branco para a oficina",
+    "Matriz de risco impressa",
+    "Lista de presença e provas impressas"
+  ],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na oficina de inventário de riscos.",
+  "referencias": [
+    "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais, texto vigente",
+    "NR-17 Ergonomia",
+    "NR-07 Programa de Controle Médico de Saúde Ocupacional",
+    "Guia de informações sobre os fatores de riscos psicossociais relacionados ao trabalho, Ministério do Trabalho e Emprego"
+  ],
+  "modulos": [
+    {
+      "titulo": "A NR-01 e as responsabilidades",
+      "duracao": 35,
+      "gancho": "A NR-01 é a porta de entrada de todas as normas regulamentadoras. Se ela não estiver bem aplicada, nenhuma outra NR funciona direito. Vamos começar entendendo o que ela pede de cada um.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "O que a NR-01 estabelece",
+          "cards": [
+            {"t": "Disposições gerais", "d": "Campo de aplicação, termos e definições comuns a todas as NRs"},
+            {"t": "Responsabilidades", "d": "Deveres do empregador e dos trabalhadores em segurança e saúde"},
+            {"t": "GRO e PGR", "d": "Como a empresa identifica, avalia e controla os riscos ocupacionais"},
+            {"t": "Capacitação", "d": "Regras gerais para treinamentos, certificados e ensino a distância"}
+          ],
+          "fala": "A NR-01 tem quatro grandes blocos. As disposições gerais, que valem para todas as normas e trazem os termos e as definições. As responsabilidades de empregadores e trabalhadores. O Gerenciamento de Riscos Ocupacionais, o GRO, que se materializa no Programa de Gerenciamento de Riscos, o PGR. E as regras gerais de capacitação, que dizem como os treinamentos de todas as NRs devem ser organizados e comprovados. Por isso costumamos dizer que a NR-01 é a base de todas as outras.",
+          "apoio": "Pilha de normas regulamentadoras com a NR-01 na base"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Responsabilidades",
+          "esquerda": {"t": "Empregador", "itens": ["Cumprir e fazer cumprir as normas de SST", "Informar os riscos e as medidas de prevenção", "Elaborar ordens de serviço sobre SST", "Implementar medidas ouvindo os trabalhadores"]},
+          "direita": {"t": "Trabalhador", "itens": ["Cumprir as normas e as ordens de serviço", "Submeter-se aos exames médicos previstos", "Colaborar com a aplicação das NRs", "Usar o EPI fornecido"]},
+          "fala": "Do lado do empregador, a NR-01 pede que ele cumpra e faça cumprir as normas, informe os trabalhadores sobre os riscos e as medidas de prevenção, elabore ordens de serviço sobre segurança e saúde e implemente as medidas de prevenção ouvindo os trabalhadores. Do lado do trabalhador, cabe cumprir as normas e as ordens de serviço, fazer os exames médicos previstos, colaborar com a empresa e usar o EPI. A recusa injustificada a essas obrigações é considerada ato faltoso.",
+          "pergunta": "Como a empresa informa hoje os trabalhadores sobre os riscos da função?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Direito de recusa",
+          "texto": "O trabalhador pode interromper a atividade diante de risco grave e iminente, comunicando imediatamente o superior.",
+          "itens": [
+            "Vale para situações que, a seu ver, envolvam risco grave e iminente",
+            "O trabalhador comunica o superior hierárquico na hora",
+            "O empregador avalia e só retoma após adotar as medidas corretivas",
+            "Não pode haver punição por exercer o direito de boa-fé"
+          ],
+          "fala": "A NR-01 garante o direito de recusa. Sempre que o trabalhador constatar uma situação que, na avaliação dele, envolva risco grave e iminente para a sua vida ou saúde ou de outras pessoas, ele pode interromper a atividade, comunicando imediatamente o superior. A empresa avalia, corrige e só então retoma o trabalho. Para a liderança, a mensagem é: quem para um serviço inseguro está cumprindo a norma e precisa ser apoiado, não questionado.",
+          "dica": "Pergunte às lideranças como reagiriam a uma recusa no meio de uma entrega urgente."
+        }
+      ]
+    },
+    {
+      "titulo": "Gerenciamento de Riscos Ocupacionais",
+      "duracao": 45,
+      "gancho": "Perigo e risco não são a mesma coisa. Essa diferença, que parece detalhe, muda a forma como a empresa decide onde investir em prevenção. Vamos ver como o GRO funciona na prática.",
+      "slides": [
+        {
+          "tipo": "comparar",
+          "titulo": "Perigo e risco",
+          "esquerda": {"t": "Perigo", "itens": ["Fonte com potencial de causar lesão ou agravo à saúde", "Exemplo: tanque com solvente inflamável", "Existe independentemente da exposição"]},
+          "direita": {"t": "Risco", "itens": ["Combinação da probabilidade de ocorrer com a severidade da lesão", "Exemplo: incêndio durante transferência do solvente", "Depende das condições e dos controles"]},
+          "fala": "Perigo é a fonte com potencial de causar lesão ou problema de saúde. O tanque de solvente é um perigo. Risco é a combinação de duas coisas: a probabilidade de o evento acontecer e a severidade da lesão, se acontecer. O risco de incêndio na transferência do solvente depende de como é feita a operação, se há aterramento, ventilação, procedimento. Por isso o mesmo perigo pode representar riscos diferentes em duas empresas. O GRO trabalha sobre o risco, porque é nele que conseguimos interferir.",
+          "pergunta": "Deem um exemplo de perigo da nossa empresa e dos riscos que ele gera."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Etapas do GRO",
+          "passos": [
+            {"t": "Evitar", "d": "Eliminar riscos já no projeto e nas mudanças"},
+            {"t": "Identificar", "d": "Levantar perigos e possíveis lesões"},
+            {"t": "Avaliar", "d": "Definir o nível de risco"},
+            {"t": "Classificar", "d": "Decidir a necessidade e a prioridade das medidas"},
+            {"t": "Controlar", "d": "Implementar e acompanhar as medidas"}
+          ],
+          "fala": "O GRO é um ciclo. Começa evitando riscos sempre que possível, ainda no projeto de um processo ou na compra de uma máquina. Depois identificamos os perigos e as possíveis lesões. Avaliamos os riscos, chegando a um nível. Classificamos esses riscos para decidir quais precisam de medidas e em que prioridade. E por fim implementamos as medidas e acompanhamos se elas funcionam. É um ciclo porque recomeça sempre que algo muda: um processo novo, um acidente, uma nova exigência legal.",
+          "apoio": "Equipe de SST e liderança caminhando pela área com prancheta"
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Matriz de risco",
+          "cabecalho": ["Severidade × Probabilidade", "Baixa · Média · Alta"],
+          "linhas": [
+            ["Leve", "Trivial · Baixo · Moderado"],
+            ["Moderada", "Baixo · Moderado · Alto"],
+            ["Grave", "Moderado · Alto · Crítico"],
+            ["Critério", "A empresa define e documenta as escalas e os níveis que adota"]
+          ],
+          "fala": "A avaliação usa uma combinação de severidade e probabilidade. A NR-01 não impõe uma matriz específica. A empresa escolhe os critérios, mas precisa documentar como chegou ao nível de risco. Nesta matriz de exemplo, uma lesão leve com baixa probabilidade dá um risco trivial, e uma lesão grave com alta probabilidade dá um risco crítico. O que importa é que o mesmo critério seja usado em toda a empresa, para que a priorização seja coerente.",
+          "dica": "Mostre a matriz que a empresa usa no PGR e compare com o exemplo."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Ordem das medidas de prevenção",
+          "passos": [
+            {"t": "Eliminação", "d": "Retirar o fator de risco"},
+            {"t": "Proteção coletiva", "d": "Minimizar e controlar na fonte e no meio"},
+            {"t": "Administrativas", "d": "Organização do trabalho, procedimentos e treinamento"},
+            {"t": "Proteção individual", "d": "EPI como complemento"}
+          ],
+          "fala": "Definido o risco, a NR-01 estabelece a ordem das medidas. Primeiro a eliminação do fator de risco. Depois a minimização com medidas de proteção coletiva. Em seguida, as medidas administrativas ou de organização do trabalho. E só então as medidas de proteção individual. Um plano de ação que só tem compra de EPI e treinamento está pulando etapas, e a fiscalização sabe olhar para isso."
+        }
+      ]
+    },
+    {
+      "titulo": "PGR: inventário de riscos e plano de ação",
+      "duracao": 40,
+      "gancho": "O PGR não é um documento para guardar na gaveta. Ele é a agenda de prevenção da empresa. Vamos abrir os dois documentos que o compõem.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "O que o inventário de riscos registra",
+          "itens": [
+            "Caracterização dos processos, ambientes e atividades",
+            "Perigos, possíveis lesões, fontes e circunstâncias",
+            "Grupos de trabalhadores expostos",
+            "Avaliação e classificação dos riscos com os critérios usados",
+            "Dados de avaliações e monitoramentos de agentes, quando houver"
+          ],
+          "destaque": "O histórico do inventário deve ser mantido por no mínimo 20 anos.",
+          "fala": "O inventário de riscos é o retrato dos riscos da empresa. Ele registra os processos, ambientes e atividades, os perigos e as possíveis lesões, de onde vem cada perigo e em que circunstâncias ele se manifesta, quais grupos de trabalhadores estão expostos e o resultado da avaliação, com os critérios adotados. Quando há medições de ruído, de agentes químicos ou de calor, esses dados também entram. O inventário deve ser mantido atualizado, e o histórico das atualizações, guardado por no mínimo vinte anos.",
+          "pergunta": "Quem aqui já participou do levantamento de riscos do PGR da empresa?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "O que o plano de ação define",
+          "cards": [
+            {"t": "Medidas", "d": "Ações de prevenção a introduzir, aprimorar ou manter"},
+            {"t": "Cronograma", "d": "Prazos realistas, coerentes com o nível de risco"},
+            {"t": "Acompanhamento", "d": "Como a execução será verificada e por quem"},
+            {"t": "Resultado", "d": "Como a eficácia da medida será aferida"}
+          ],
+          "fala": "O segundo documento é o plano de ação. Para cada risco que exige controle, ele indica as medidas a serem introduzidas, aprimoradas ou mantidas, o cronograma, a forma de acompanhamento e como será aferido o resultado. Repare na última parte: não basta dizer que a medida foi feita, é preciso verificar se ela funcionou. Instalar exaustão e nunca medir se a concentração caiu não fecha o ciclo.",
+          "dica": "Escolha uma linha real do plano de ação da empresa e analise se as quatro informações estão presentes."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Quando revisar a avaliação de riscos",
+          "cabecalho": ["Situação", "Revisão"],
+          "linhas": [
+            ["Periodicidade", "A cada 2 anos, ou 3 anos para empresas com sistema de gestão de SST certificado"],
+            ["Mudanças", "Após inovações e modificações em tecnologias, ambientes, processos e organização do trabalho"],
+            ["Medidas", "Após a implementação das medidas de prevenção, para avaliar riscos residuais"],
+            ["Ocorrências", "Após acidentes ou doenças relacionadas ao trabalho"],
+            ["Requisitos", "Quando mudarem os requisitos legais aplicáveis ou forem identificadas inadequações"]
+          ],
+          "fala": "A avaliação de riscos tem revisão periódica a cada dois anos, ou três anos para empresas com sistema de gestão de segurança e saúde certificado. Mas a revisão também é obrigatória sempre que algo muda: uma nova máquina, uma mudança de layout ou de processo, depois de implantar uma medida, depois de um acidente ou doença do trabalho e quando mudam os requisitos legais. Na prática, um PGR bem gerido é atualizado várias vezes entre uma revisão periódica e outra.",
+          "apoio": "Linha do tempo com marcos de revisão do PGR"
+        }
+      ]
+    },
+    {
+      "titulo": "Fatores de riscos psicossociais",
+      "duracao": 40,
+      "gancho": "Afastamentos por transtornos mentais cresceram muito nos últimos anos. A NR-01 passou a exigir que esses fatores de risco sejam tratados no GRO como qualquer outro. Vamos entender o que muda na prática.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Exemplos de fatores psicossociais",
+          "cards": [
+            {"t": "Demandas", "d": "Metas excessivas, ritmo intenso, jornadas longas e sobrecarga"},
+            {"t": "Controle", "d": "Pouca autonomia, papéis mal definidos e mudanças sem comunicação"},
+            {"t": "Relações", "d": "Assédio moral ou sexual, conflitos, violência e falta de apoio da liderança"},
+            {"t": "Condições", "d": "Trabalho isolado, insegurança, eventos traumáticos e baixo reconhecimento"}
+          ],
+          "fala": "Fatores de riscos psicossociais são aspectos da organização do trabalho e das relações que podem causar adoecimento. Eles aparecem nas demandas, como metas impossíveis e jornadas longas. No controle sobre o trabalho, como falta de autonomia e funções mal definidas. Nas relações, como assédio, conflitos e falta de apoio. E em condições específicas, como trabalho isolado ou exposição a eventos traumáticos. Repare que estamos falando de como o trabalho é organizado, e não de características pessoais do trabalhador.",
+          "pergunta": "Quais desses fatores aparecem com mais frequência nas conversas com as equipes?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Como incluir no GRO",
+          "passos": [
+            {"t": "Identificar", "d": "Questionários, entrevistas, grupos e análise de indicadores"},
+            {"t": "Avaliar", "d": "Mesmos critérios de severidade e probabilidade"},
+            {"t": "Registrar", "d": "Incluir no inventário de riscos"},
+            {"t": "Agir", "d": "Medidas na organização do trabalho no plano de ação"}
+          ],
+          "fala": "Os fatores psicossociais seguem o mesmo ciclo do GRO. Para identificar, usamos ferramentas como questionários validados, entrevistas, grupos de discussão e indicadores como afastamentos, rotatividade e queixas. A avaliação de riscos e a análise ergonômica preliminar da NR-17 ajudam nesse levantamento. Os riscos identificados entram no inventário e as medidas entram no plano de ação. E as medidas precisam atacar a organização do trabalho, como redistribuir demandas e capacitar lideranças, e não se resumir a palestras sobre resiliência.",
+          "dica": "Reforce que o sigilo das respostas individuais é condição para um levantamento confiável."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Medidas que funcionam",
+          "itens": [
+            "Metas e prazos compatíveis com a equipe e os recursos disponíveis",
+            "Papéis e responsabilidades claros e comunicação das mudanças",
+            "Canal de denúncia com sigilo e apuração de assédio e violência",
+            "Lideranças capacitadas para acolher e encaminhar",
+            "Pausas, jornadas controladas e apoio após eventos traumáticos"
+          ],
+          "destaque": "A medida mais eficaz atua na organização do trabalho, não apenas no indivíduo.",
+          "fala": "Algumas medidas têm efeito comprovado. Ajustar metas e prazos à capacidade real da equipe. Deixar claro o papel de cada um e comunicar as mudanças antes que aconteçam. Ter um canal de denúncia com sigilo e apuração séria de assédio e violência, o que também é exigido pela NR-05. Capacitar as lideranças para perceber sinais e encaminhar. E cuidar das jornadas, das pausas e do apoio após eventos traumáticos. Tudo isso entra no plano de ação com prazo e responsável.",
+          "pergunta": "Que medida dessa lista seria mais urgente na nossa empresa?"
+        }
+      ]
+    },
+    {
+      "titulo": "Capacitação e treinamentos",
+      "duracao": 20,
+      "gancho": "A NR-01 também define as regras que valem para os treinamentos de todas as outras normas. Se o treinamento não seguir essas regras, ele pode não ser reconhecido na fiscalização.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Tipos de treinamento",
+          "cards": [
+            {"t": "Inicial", "d": "Antes de o trabalhador iniciar as atividades"},
+            {"t": "Periódico", "d": "Na periodicidade definida em cada NR"},
+            {"t": "Eventual", "d": "Mudança de procedimentos ou condições, evento que indique necessidade ou retorno de afastamento superior a 180 dias"},
+            {"t": "Aproveitamento", "d": "Treinamento feito em outra empresa pode ser aproveitado se atender aos requisitos da norma"}
+          ],
+          "fala": "A NR-01 organiza os treinamentos em três tipos. O inicial, feito antes de o trabalhador começar as atividades. O periódico, conforme a periodicidade de cada norma. E o eventual, quando muda um procedimento ou condição de trabalho, quando um acidente ou evento indica necessidade, ou no retorno de afastamento superior a cento e oitenta dias, salvo regra específica de outra NR, como a NR-35. A norma também permite aproveitar treinamentos feitos em outra empresa, desde que atendam aos requisitos de conteúdo e validade.",
+          "dica": "Comente que algumas NRs têm regras próprias que prevalecem, como os 90 dias de afastamento da NR-35."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "O certificado precisa conter",
+          "itens": [
+            "Nome e documento do trabalhador",
+            "Conteúdo programático e carga horária",
+            "Data e local de realização",
+            "Nome e qualificação dos instrutores",
+            "Assinatura do responsável técnico pela capacitação"
+          ],
+          "destaque": "O certificado é entregue ao trabalhador e uma cópia fica arquivada na empresa.",
+          "fala": "Todo treinamento precisa ser comprovado. O certificado deve trazer o nome e o documento do trabalhador, o conteúdo programático, a carga horária, a data e o local, o nome e a qualificação dos instrutores e a assinatura do responsável técnico. Uma cópia fica arquivada na empresa e o original é entregue ao trabalhador. Os treinamentos também podem ser feitos a distância ou de forma semipresencial, desde que sigam as regras do anexo da NR-01 e não sejam vedados pela norma específica, especialmente nas partes práticas.",
+          "pergunta": "Nossos certificados atuais trazem todas essas informações?"
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Oficina de inventário de riscos",
+    "duracao": 30,
+    "descricao": "Em grupos, os participantes elaboram uma linha completa do inventário de riscos e do plano de ação para uma atividade real da empresa.",
+    "itens": [
+      "Descreveu a atividade e o ambiente de trabalho",
+      "Identificou perigos e possíveis lesões, com fonte e circunstância",
+      "Indicou os grupos de trabalhadores expostos",
+      "Avaliou severidade e probabilidade e chegou ao nível de risco",
+      "Propôs medidas seguindo a ordem de prioridade da NR-01",
+      "Definiu prazo, responsável e forma de aferir o resultado"
+    ]
+  },
+  "caso": {
+    "titulo": "O PGR que ninguém conhecia",
+    "relato": "Uma distribuidora de alimentos contratou uma consultoria que entregou um PGR completo, com 80 páginas, assinado e encadernado. Dois anos depois, a empresa havia instalado uma câmara fria, comprado três empilhadeiras e criado um turno noturno, com metas de separação por hora. Nenhuma dessas mudanças foi incluída no documento. Em uma madrugada, um conferente do turno noturno escorregou na saída da câmara fria e foi atingido por uma empilhadeira. Na investigação, os supervisores disseram que nunca tinham visto o PGR, e o plano de ação tinha 12 itens vencidos, a maioria de compra de EPI.",
+    "perguntas": [
+      "Quais situações deveriam ter levado à revisão da avaliação de riscos?",
+      "Que perigos novos o inventário deveria registrar?",
+      "Que medidas seguindo a ordem de prioridade poderiam ter evitado o acidente?",
+      "Há fatores psicossociais envolvidos? Quais?",
+      "Como fazer o PGR chegar às lideranças e aos trabalhadores?"
+    ],
+    "analise": "A instalação da câmara fria, a entrada das empilhadeiras e a criação do turno noturno eram mudanças que exigiam revisão da avaliação de riscos. O inventário deveria registrar piso escorregadio por condensação, exposição ao frio, circulação de pedestres e empilhadeiras e trabalho noturno com metas por hora. Medidas coletivas e administrativas, como separação física das rotas, piso antiderrapante, cortina de ar, iluminação, sinalização e revisão das metas, viriam antes do EPI. As metas por hora no turno noturno são um fator psicossocial que aumenta pressa e fadiga. O PGR só cumpre seu papel quando é revisado nas mudanças e conhecido por quem gerencia o trabalho."
+  },
+  "dinamica": {
+    "titulo": "Perigo ou risco?",
+    "objetivo": "Fixar a diferença entre perigo e risco e treinar a avaliação.",
+    "tempo": 15,
+    "passos": [
+      "Projete ou leia 10 frases curtas, como empilhadeira, ser atropelado por empilhadeira, ruído, perda auditiva por exposição ao ruído.",
+      "A turma classifica cada frase como perigo, risco ou consequência.",
+      "Escolha duas situações de risco e peça que os participantes as posicionem na matriz de risco, justificando severidade e probabilidade.",
+      "Compare as respostas e discuta por que avaliações diferentes aparecem.",
+      "Feche mostrando a importância de critérios documentados."
+    ]
+  },
+  "dds": {
+    "titulo": "Mudou? Avise a segurança",
+    "texto": "Pessoal, hoje o recado é curto. Toda vez que alguma coisa muda no nosso trabalho, uma máquina nova, um produto químico diferente, um layout novo ou até um turno a mais, os riscos mudam junto. E o nosso programa de gerenciamento de riscos precisa acompanhar. Então, se você perceber uma mudança que ainda não foi avaliada, avise a liderança ou a segurança. Não é burocracia. É assim que a gente garante que as proteções acompanham o trabalho real, e não o trabalho de dois anos atrás."
+  },
+  "prova": [
+    {"q": "O PGR é composto, no mínimo, por:", "o": ["Mapa de riscos e CAT", "Inventário de riscos e plano de ação", "PCMSO e laudo de insalubridade", "Ordem de serviço e ficha de EPI"], "c": 1, "com": "O PGR é formado pelo inventário de riscos e pelo plano de ação."},
+    {"q": "Risco ocupacional é:", "o": ["A fonte com potencial de causar lesão", "A combinação da probabilidade de ocorrer o evento com a severidade da lesão", "Qualquer máquina perigosa", "O acidente já ocorrido"], "c": 1, "com": "Perigo é a fonte; risco é a combinação de probabilidade e severidade."},
+    {"q": "Segundo a NR-01, a primeira medida na ordem de prioridade é:", "o": ["Fornecer EPI", "Treinar os trabalhadores", "Eliminar os fatores de risco", "Sinalizar a área"], "c": 2, "com": "A ordem é eliminação, proteção coletiva, medidas administrativas e proteção individual."},
+    {"q": "A revisão periódica da avaliação de riscos deve ocorrer a cada:", "o": ["1 ano", "2 anos, ou 3 anos para empresas com sistema de gestão certificado", "5 anos", "Somente após acidentes"], "c": 1, "com": "A periodicidade é de 2 anos, ou 3 anos com certificação em sistema de gestão de SST."},
+    {"q": "Qual situação exige revisão da avaliação de riscos antes do prazo periódico?", "o": ["Troca do uniforme", "Instalação de um novo processo produtivo", "Mudança do nome fantasia da empresa", "Férias coletivas"], "c": 1, "com": "Inovações e modificações em processos exigem revisão."},
+    {"q": "O histórico das atualizações do inventário de riscos deve ser mantido por:", "o": ["5 anos", "10 anos", "No mínimo 20 anos", "Até a próxima revisão"], "c": 2, "com": "A NR-01 exige manter o histórico por no mínimo 20 anos."},
+    {"q": "São exemplos de fatores de riscos psicossociais:", "o": ["Ruído e calor", "Metas excessivas, assédio e falta de autonomia", "Poeira e fumos metálicos", "Vibração de corpo inteiro"], "c": 1, "com": "Fatores psicossociais estão ligados à organização do trabalho e às relações."},
+    {"q": "O direito de recusa permite ao trabalhador:", "o": ["Recusar qualquer tarefa sem justificativa", "Interromper a atividade diante de risco grave e iminente, comunicando o superior", "Faltar ao trabalho sem desconto", "Escolher o próprio EPI"], "c": 1, "com": "O direito vale para situações de risco grave e iminente, com comunicação imediata ao superior."},
+    {"q": "O treinamento eventual previsto na NR-01 é exigido, entre outras situações, no retorno de afastamento superior a:", "o": ["30 dias", "90 dias", "180 dias", "1 ano"], "c": 2, "com": "A regra geral da NR-01 é 180 dias, salvo prazo diferente em NR específica."},
+    {"q": "O certificado de treinamento deve conter:", "o": ["Apenas o nome do trabalhador", "Nome e documento do trabalhador, conteúdo, carga horária, data, local, instrutores e assinatura do responsável técnico", "Somente a carga horária", "A nota da prova"], "c": 1, "com": "Esses são os dados mínimos exigidos pela NR-01."}
+  ]
+}

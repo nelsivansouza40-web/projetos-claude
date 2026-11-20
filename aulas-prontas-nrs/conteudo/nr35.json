@@ -1,0 +1,407 @@
+{
+  "nr": "35",
+  "titulo": "Trabalho em Altura",
+  "chamada": "Planejar, proteger e resgatar: cada etapa evita uma queda",
+  "icone": "FaPersonFalling",
+  "carga": "8 horas (treinamento inicial teórico e prático)",
+  "periodicidade": "Treinamento periódico a cada 2 anos, com carga mínima de 8 horas. Treinamento eventual quando houver mudança de procedimentos, condições ou operações, evento que indique necessidade, retorno de afastamento superior a 90 dias ou mudança de empresa.",
+  "publico": "Trabalhadores que executam ou acompanham atividades acima de 2,00 m do nível inferior com risco de queda.",
+  "prerequisitos": "Avaliação de saúde com aptidão para trabalho em altura registrada no ASO, conforme o PCMSO.",
+  "instrutor": "Instrutores com proficiência comprovada no assunto, sob responsabilidade de profissional qualificado em segurança no trabalho.",
+  "objetivos": [
+    "Reconhecer quando uma atividade é trabalho em altura e quais requisitos da NR-35 se aplicam",
+    "Elaborar e interpretar a análise de risco e a permissão de trabalho",
+    "Selecionar, inspecionar e usar corretamente o sistema de proteção contra quedas",
+    "Identificar condições impeditivas e exercer o direito de recusa",
+    "Agir em emergências, acionando o resgate e prestando os primeiros socorros"
+  ],
+  "recursos": [
+    "Projetor e apresentação",
+    "Cinturão tipo paraquedista, talabartes com e sem absorvedor, trava-quedas e conectores para manuseio",
+    "Ponto de ancoragem ou estrutura de treinamento para a prática",
+    "Modelos impressos de análise de risco e permissão de trabalho",
+    "Lista de presença e provas impressas"
+  ],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e desempenho satisfatório em todos os itens do checklist prático.",
+  "referencias": [
+    "NR-35 Trabalho em Altura, texto vigente",
+    "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais",
+    "NR-06 Equipamento de Proteção Individual",
+    "NR-07 Programa de Controle Médico de Saúde Ocupacional",
+    "ABNT NBR 15836 Cinturão de segurança tipo paraquedista",
+    "ABNT NBR 16325 Dispositivos de ancoragem"
+  ],
+  "modulos": [
+    {
+      "titulo": "Norma, conceitos e responsabilidades",
+      "duracao": 60,
+      "gancho": "Queda de altura continua entre as primeiras causas de morte no trabalho no Brasil. Quase sempre, o acidente aconteceu num serviço rápido, que ninguém achou que precisava planejar. Neste módulo você vai entender o que a NR-35 exige e de quem é cada responsabilidade.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Quando a atividade é trabalho em altura",
+          "valor": "2,00 m",
+          "legenda": "acima do nível inferior, com risco de queda",
+          "itens": [
+            "Vale para qualquer atividade, rotineira ou não",
+            "O que define é a diferença de nível e o risco de queda, não o cargo",
+            "Telhados, andaimes, escadas, plataformas, caminhões e beiradas de laje"
+          ],
+          "fala": "Vamos começar pela definição, porque é nela que muita gente se perde. Para a NR-35, trabalho em altura é toda atividade executada acima de dois metros do nível inferior, onde exista risco de queda. Repare que a norma não fala de cargo nem de setor. Fala de diferença de nível e de risco. O eletricista que sobe no forro, o motorista que amarra a carga em cima da carroceria e o pedreiro na beirada da laje estão todos no mesmo campo de aplicação. Se existe a possibilidade de cair de mais de dois metros, a NR-35 vale.",
+          "pergunta": "Quais atividades da nossa empresa acontecem acima de 2 metros e quase nunca são tratadas como trabalho em altura?",
+          "apoio": "Imagens de trabalhador em telhado, em carroceria de caminhão e em escada de mão"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Responsabilidades do empregador",
+          "cards": [
+            {"t": "Planejar", "d": "Garantir análise de risco, permissão de trabalho quando aplicável e procedimentos para as atividades rotineiras"},
+            {"t": "Preparar", "d": "Capacitar, avaliar a saúde e autorizar formalmente quem vai trabalhar em altura"},
+            {"t": "Fornecer", "d": "Disponibilizar sistemas de proteção adequados, inspecionados e compatíveis entre si"},
+            {"t": "Interromper", "d": "Suspender a atividade sempre que surgir um risco não previsto que não possa ser controlado"}
+          ],
+          "fala": "A NR-35 coloca sobre o empregador a responsabilidade de organizar o trabalho antes que alguém suba. Isso significa garantir a análise de risco, emitir a permissão de trabalho quando for o caso e ter procedimentos escritos para o que é rotina. Também cabe à empresa capacitar, avaliar a saúde e autorizar formalmente cada trabalhador. Ela precisa fornecer equipamentos adequados e em bom estado. E existe um ponto que vale destacar: a empresa deve suspender o trabalho quando aparecer um risco que não estava previsto e que não pode ser controlado na hora.",
+          "dica": "Peça à turma exemplos de situações em que o serviço deveria ter sido interrompido e não foi."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Responsabilidades do trabalhador",
+          "itens": [
+            "Cumprir os procedimentos e as orientações recebidas",
+            "Inspecionar os equipamentos antes de cada uso",
+            "Interromper a atividade diante de risco grave e iminente",
+            "Comunicar ao superior imediato qualquer situação de risco",
+            "Zelar pela própria segurança e pela de quem pode ser afetado"
+          ],
+          "destaque": "Direito de recusa: interromper o trabalho diante de risco grave e iminente é um direito e um dever.",
+          "fala": "Do lado do trabalhador, a norma também é clara. Cumprir os procedimentos, inspecionar o equipamento antes de usar e comunicar qualquer situação de risco. O ponto mais importante aqui é o direito de recusa. Se você percebe um risco grave e iminente, como uma ancoragem solta ou um vento forte chegando, você tem o direito de interromper a atividade e comunicar ao seu superior. Isso não é indisciplina. É exatamente o comportamento que a norma espera de um profissional capacitado.",
+          "pergunta": "Alguém aqui já parou um serviço por achar que estava inseguro? Como a liderança reagiu?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Do treinamento à autorização",
+          "passos": [
+            {"t": "Capacitado", "d": "Aprovado no treinamento teórico e prático de 8 horas"},
+            {"t": "Apto", "d": "Saúde avaliada e aptidão registrada no ASO"},
+            {"t": "Autorizado", "d": "Anuência formal da empresa para trabalhar em altura"},
+            {"t": "Reciclado", "d": "Treinamento periódico a cada 2 anos ou eventual quando necessário"}
+          ],
+          "fala": "Para trabalhar em altura não basta ter feito o curso. São etapas que se somam. Primeiro o trabalhador é capacitado, ou seja, aprovado no treinamento teórico e prático de oito horas. Depois tem a saúde avaliada, com foco em condições que podem causar mal súbito, e a aptidão registrada no ASO. Com essas duas etapas, a empresa dá a anuência formal, e aí ele está autorizado. A cada dois anos vem o periódico, e o treinamento eventual sempre que mudar o procedimento, houver um acidente, um afastamento maior que noventa dias ou a troca de empresa.",
+          "dica": "Mostre um modelo de documento de autorização usado pela empresa."
+        }
+      ]
+    },
+    {
+      "titulo": "Análise de risco, permissão de trabalho e condições impeditivas",
+      "duracao": 60,
+      "gancho": "Toda queda que eu já investiguei tinha um ponto em comum: alguém começou o serviço sem parar dois minutos para pensar no que poderia dar errado. Neste módulo vamos ver como a análise de risco e a permissão de trabalho evitam isso.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Hierarquia do planejamento",
+          "passos": [
+            {"t": "Evitar", "d": "Fazer o trabalho a partir do nível do solo sempre que houver meio alternativo"},
+            {"t": "Eliminar", "d": "Adotar medidas que eliminem o risco de queda, como plataformas com guarda-corpo"},
+            {"t": "Minimizar", "d": "Quando o risco não puder ser eliminado, reduzir as consequências da queda"}
+          ],
+          "fala": "Antes de escolher o cinturão, a NR-35 manda fazer uma pergunta: esse trabalho precisa mesmo ser feito em altura? A primeira opção é evitar, por exemplo baixando a luminária para fazer a manutenção no chão ou usando uma ferramenta de cabo longo. Se não der para evitar, a segunda opção é eliminar o risco de queda, com plataforma, guarda-corpo ou cobertura de aberturas. Só quando nada disso for possível entramos na terceira etapa, que é minimizar as consequências da queda com o sistema de retenção. O cinturão é a última barreira, não a primeira.",
+          "pergunta": "Que trabalho em altura da nossa rotina poderia ser feito do chão?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "O que a análise de risco precisa considerar",
+          "cards": [
+            {"t": "Local e entorno", "d": "Isolamento, sinalização, condições meteorológicas e trabalhos simultâneos"},
+            {"t": "Proteção", "d": "Pontos de ancoragem, seleção, inspeção e limitações do sistema de proteção"},
+            {"t": "Riscos adicionais", "d": "Eletricidade, queda de materiais, calor, produtos químicos e espaço confinado"},
+            {"t": "Emergência", "d": "Plano de resgate, comunicação e forma de supervisão da atividade"}
+          ],
+          "fala": "A análise de risco é feita antes de cada atividade e precisa responder a algumas perguntas. Como está o local, ele está isolado e sinalizado? Como está o tempo? Tem outra equipe trabalhando embaixo? Onde vai ser a ancoragem e qual equipamento será usado? Existem riscos que se somam à altura, como rede elétrica próxima ou ferramentas que podem cair? E, por fim, se alguém ficar pendurado, quem vai resgatar, com qual equipamento e como a equipe vai se comunicar? Se uma dessas perguntas fica sem resposta, a análise não está pronta.",
+          "apoio": "Formulário de análise de risco preenchido por uma equipe em campo"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Procedimento ou permissão de trabalho",
+          "esquerda": {"t": "Atividade rotineira", "itens": ["Procedimento operacional escrito", "Análise de risco pode estar no procedimento", "Equipe treinada no procedimento"]},
+          "direita": {"t": "Atividade não rotineira", "itens": ["Permissão de trabalho emitida e aprovada", "Disponível no local durante o serviço", "Válida para a atividade e o turno"]},
+          "fala": "A norma separa dois casos. Para a atividade rotineira, aquela que se repete sempre do mesmo jeito, a empresa deve ter um procedimento operacional escrito, e a análise de risco pode estar contida nele. Já para a atividade não rotineira, é obrigatória a permissão de trabalho. Ela é emitida e aprovada pelo responsável pela autorização, fica disponível no local enquanto o serviço acontece e vale apenas para aquela atividade e aquele turno. Mudou a condição, mudou a equipe ou virou o turno, a permissão precisa ser revista.",
+          "dica": "Entregue um modelo de permissão de trabalho em branco e peça que a turma preencha para um caso real."
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Condições impeditivas",
+          "texto": "Se uma condição impeditiva aparecer, o trabalho para. Não existe jeitinho.",
+          "itens": [
+            "Vento forte, chuva ou descargas atmosféricas",
+            "Ancoragem ausente, duvidosa ou sem resistência conhecida",
+            "Iluminação insuficiente",
+            "Equipamento com defeito ou sem inspeção",
+            "Trabalhador com mal-estar, sonolência ou sob efeito de álcool ou medicamento"
+          ],
+          "fala": "Condição impeditiva é qualquer situação que impede o início ou exige a interrupção do trabalho. As mais comuns são vento forte, chuva e raios, uma ancoragem que ninguém sabe se aguenta, falta de iluminação, equipamento com defeito e o próprio trabalhador sem condições, com tontura, sono ou sob efeito de álcool ou remédio. Essas condições devem estar escritas na análise de risco e na permissão de trabalho. E quando aparecerem, o trabalho para. Não existe jeitinho, nem terminar rápido só esse pedaço.",
+          "pergunta": "Que outras condições impeditivas existem nas nossas atividades?"
+        }
+      ]
+    },
+    {
+      "titulo": "Riscos e medidas de proteção coletiva",
+      "duracao": 60,
+      "gancho": "Cair não é o único risco de quem trabalha em altura. Ferramenta que despenca, choque elétrico, telha que quebra. Neste módulo vamos olhar para os riscos e para as proteções que protegem todo mundo ao mesmo tempo.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Riscos inerentes ao trabalho em altura",
+          "cards": [
+            {"t": "Queda de pessoas", "d": "Bordas, aberturas no piso, telhados frágeis, escadas e plataformas instáveis"},
+            {"t": "Queda de materiais", "d": "Ferramentas e peças que atingem quem está no nível inferior"},
+            {"t": "Riscos elétricos", "d": "Proximidade de redes e equipamentos energizados"},
+            {"t": "Fatores humanos", "d": "Pressa, fadiga, calor, mal súbito e excesso de confiança"}
+          ],
+          "fala": "O risco principal é a queda da própria pessoa, seja pela borda, por uma abertura no piso, por uma telha que quebra ou por uma escada que escorrega. Mas existe também a queda de materiais, que atinge quem está embaixo. Tem o risco elétrico, muito comum em fachadas e postes. E tem os fatores humanos: pressa, cansaço, calor e excesso de confiança. Uma boa análise olha para todos eles, e não só para o cinturão.",
+          "apoio": "Telha de fibrocimento quebrada, ferramenta caída e área isolada embaixo"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Proteção coletiva vem primeiro",
+          "itens": [
+            "Guarda-corpo e rodapé em bordas de lajes, plataformas e passarelas",
+            "Fechamento ou cobertura resistente de aberturas no piso",
+            "Plataformas de trabalho e andaimes montados por profissional habilitado",
+            "Telas e redes de proteção",
+            "Isolamento e sinalização da área abaixo do trabalho"
+          ],
+          "destaque": "A proteção coletiva protege todos, não depende de comportamento e não exige ajuste individual.",
+          "fala": "A NR-35 dá preferência ao sistema de proteção coletiva contra quedas. Guarda-corpo com rodapé, fechamento de aberturas, plataformas e andaimes bem montados e redes de proteção. A vantagem é simples: a proteção coletiva protege todo mundo ao mesmo tempo, não depende de alguém lembrar de conectar o talabarte e não precisa de ajuste. Só quando ela não for possível, ou não for suficiente, entramos com o sistema individual.",
+          "pergunta": "Onde, na nossa área, um guarda-corpo resolveria um risco que hoje é controlado só com cinturão?"
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Escadas, andaimes e plataformas",
+          "cabecalho": ["Meio de acesso", "Pontos de atenção"],
+          "linhas": [
+            ["Escada de mão", "Uso para acesso e serviços rápidos, apoio firme, ultrapassar 1 m do ponto de apoio, uma pessoa por vez"],
+            ["Escada extensível", "Travas funcionando, ângulo correto e amarração no topo"],
+            ["Andaime", "Montagem por pessoa capacitada, piso completo, guarda-corpo e liberação antes do uso"],
+            ["Plataforma elevatória", "Operador capacitado, inspeção diária e cinturão conectado ao ponto do cesto"]
+          ],
+          "fala": "Os meios de acesso também são fonte de acidente. A escada de mão serve para subir e para serviços rápidos, com apoio firme e ultrapassando um metro do ponto de apoio. A escada extensível precisa das travas funcionando e de amarração no topo. O andaime só pode ser usado depois de montado por pessoa capacitada, com piso completo, guarda-corpo e liberação. E na plataforma elevatória, o operador deve ser capacitado e o cinturão fica conectado no ponto de ancoragem do próprio cesto.",
+          "dica": "Se possível, leve uma escada da empresa para a sala e faça a inspeção junto com a turma."
+        }
+      ]
+    },
+    {
+      "titulo": "Sistemas individuais e EPI para trabalho em altura",
+      "duracao": 75,
+      "gancho": "O cinturão só salva se estiver inteiro, bem ajustado e conectado no lugar certo. Neste módulo vamos montar o sistema de proteção individual peça por peça.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Os três elementos do sistema individual",
+          "passos": [
+            {"t": "Ancoragem", "d": "Ponto ou linha capaz de suportar a força da queda, definido em projeto ou por profissional habilitado"},
+            {"t": "Elemento de ligação", "d": "Talabarte, trava-quedas e conectores que unem a ancoragem ao cinturão"},
+            {"t": "Cinturão paraquedista", "d": "EPI que distribui a força da queda pelo corpo e mantém o trabalhador na posição correta"}
+          ],
+          "fala": "O sistema individual de proteção contra quedas tem três partes e todas precisam funcionar juntas. A ancoragem é o ponto onde tudo se prende, e ela precisa aguentar a força de uma queda, por isso deve ser definida em projeto ou por profissional habilitado. O elemento de ligação é o talabarte, o trava-quedas e os conectores. E o cinturão tipo paraquedista é o EPI que segura o corpo. Se uma dessas três partes falhar, o sistema inteiro falha.",
+          "apoio": "Close das três partes: ponto de ancoragem, talabarte com absorvedor e cinturão"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Tipos de sistema individual",
+          "cards": [
+            {"t": "Restrição de movimentação", "d": "Impede que o trabalhador alcance a borda. A queda não acontece"},
+            {"t": "Retenção de queda", "d": "Permite a queda e a interrompe com segurança, usando absorvedor de energia"},
+            {"t": "Posicionamento", "d": "Mantém o trabalhador apoiado na posição de trabalho, sempre com retenção associada"},
+            {"t": "Acesso por cordas", "d": "Técnica específica, com equipe e capacitação próprias, conforme anexo da norma"}
+          ],
+          "fala": "Existem diferentes formas de usar o sistema individual. Na restrição de movimentação, o comprimento do talabarte impede que a pessoa chegue até a borda, então a queda nem acontece, e essa é a melhor opção. Na retenção de queda, a queda pode acontecer, e o sistema a interrompe com o absorvedor de energia reduzindo a força no corpo. O posicionamento serve para manter a pessoa apoiada, como no poste, e sempre exige uma retenção associada. O acesso por cordas é uma técnica específica, com capacitação própria.",
+          "pergunta": "Na nossa atividade mais comum em altura, qual desses sistemas usamos?"
+        },
+        {
+          "tipo": "numero",
+          "titulo": "Zona livre de queda",
+          "valor": "ZLQ",
+          "legenda": "espaço livre abaixo do trabalhador para a queda ser retida sem colisão",
+          "itens": [
+            "Soma o comprimento do talabarte, a abertura do absorvedor, a altura do trabalhador e uma margem de segurança",
+            "Ancoragem acima da cintura reduz a distância de queda",
+            "Pouca altura livre exige trava-quedas retrátil ou restrição de movimentação"
+          ],
+          "fala": "Aqui está um conceito que muita gente ignora: a zona livre de queda. Quando o sistema retém a queda, o corpo ainda percorre uma distância, que soma o comprimento do talabarte, a abertura do absorvedor de energia e a altura do próprio trabalhador, mais uma margem de segurança. Se a altura livre embaixo for menor que isso, a pessoa bate no chão ou numa estrutura mesmo com tudo conectado. Por isso a ancoragem deve ficar preferencialmente acima da cintura e, em alturas pequenas, usamos trava-quedas retrátil ou restrição de movimentação.",
+          "dica": "Faça um cálculo de exemplo no quadro com os dados do fabricante de um talabarte da empresa."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Inspeção antes do uso",
+          "cabecalho": ["Componente", "Recusar o equipamento quando houver"],
+          "linhas": [
+            ["Cinturão", "Fitas cortadas, desfiadas, queimadas ou com produto químico, costuras rompidas, fivelas deformadas"],
+            ["Talabarte", "Absorvedor aberto ou rompido, fita danificada, sinal de queda já retida"],
+            ["Conectores", "Trava que não fecha sozinha, trincas, corrosão ou deformação"],
+            ["Trava-quedas", "Travamento falhando, peças soltas, linha de vida danificada"],
+            ["Identificação", "CA ilegível ou ausente, validade vencida ou sem registro de inspeção periódica"]
+          ],
+          "fala": "Antes de cada uso, o próprio trabalhador inspeciona o equipamento. No cinturão, olhe fitas e costuras procurando cortes, desfiamentos, queimaduras e manchas de produto químico, e confira se as fivelas estão perfeitas. No talabarte, veja se o absorvedor está fechado. Se ele estiver aberto, o equipamento já segurou uma queda e deve sair de uso. Nos conectores, a trava precisa fechar sozinha. E confira a identificação e o certificado de aprovação. Equipamento com qualquer defeito é recusado e separado para descarte, nunca devolvido ao armário.",
+          "apoio": "Mãos inspecionando costuras do cinturão e testando a trava de um mosquetão"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Como vestir e ajustar o cinturão",
+          "passos": [
+            {"t": "Pegar pela argola dorsal", "d": "Desembaraçar as fitas"},
+            {"t": "Vestir", "d": "Passar ombros e encaixar as pernas"},
+            {"t": "Ajustar pernas", "d": "Cabem dois dedos entre fita e coxa"},
+            {"t": "Ajustar peito", "d": "Fita peitoral na altura do esterno"},
+            {"t": "Conferir", "d": "Argola dorsal entre as escápulas"}
+          ],
+          "fala": "Agora vamos vestir o cinturão. Segure pela argola dorsal e deixe as fitas caírem, assim fica fácil ver se alguma está torcida. Passe os braços como se fosse um colete e encaixe as fitas das pernas. Ajuste as pernas até caberem dois dedos entre a fita e a coxa. Feche a fita peitoral na altura do meio do peito. Por fim, peça para um colega conferir se a argola dorsal ficou entre as escápulas. Cinturão frouxo pode deixar a pessoa escorregar durante a queda.",
+          "dica": "Este conteúdo é demonstrado e praticado por todos na parte prática."
+        }
+      ]
+    },
+    {
+      "titulo": "Acidentes típicos",
+      "duracao": 45,
+      "gancho": "Os acidentes em altura se repetem com uma regularidade assustadora. Mudam o lugar e o nome, mas a causa costuma ser a mesma. Vamos aprender com eles para não repetir.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Onde as quedas mais acontecem",
+          "cards": [
+            {"t": "Telhados", "d": "Telhas frágeis, claraboias e beirais sem linha de vida"},
+            {"t": "Escadas", "d": "Escada inadequada, mal apoiada ou usada como plataforma de trabalho"},
+            {"t": "Andaimes", "d": "Montagem incompleta, piso solto e ausência de guarda-corpo"},
+            {"t": "Veículos", "d": "Carrocerias, tanques e baús durante carga, lona e amarração"}
+          ],
+          "fala": "Quando olhamos os registros de acidentes, quatro situações aparecem sempre. O telhado, com a telha que parecia firme e quebrou. A escada, usada do jeito errado ou mal apoiada. O andaime montado pela metade. E o veículo, que ninguém enxerga como trabalho em altura, mas a carroceria de um caminhão facilmente passa de dois metros. Repare que em quase todos esses casos o serviço era considerado rápido e simples.",
+          "pergunta": "Qual dessas situações é mais comum aqui na empresa?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Causas que se repetem",
+          "itens": [
+            "Serviço iniciado sem análise de risco ou sem permissão de trabalho",
+            "Ausência de ponto de ancoragem ou ancoragem improvisada",
+            "Talabarte desconectado durante a movimentação",
+            "Equipamento danificado ou sem inspeção",
+            "Pressão por prazo e normalização do desvio"
+          ],
+          "destaque": "Na maioria dos casos, o equipamento existia. Ele não estava conectado.",
+          "fala": "As causas também se repetem. Serviço que começou sem análise de risco. Ancoragem improvisada num cano ou numa telha. Talabarte desconectado no momento em que a pessoa se desloca. Equipamento danificado. E por trás de tudo, a pressão por prazo e aquele costume de fazer errado tantas vezes sem acontecer nada que o errado vira normal. Vale guardar uma frase: na maioria dos acidentes, o equipamento estava lá, mas não estava conectado.",
+          "dica": "Use o estudo de caso do material de apoio neste momento."
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Cem por cento conectado",
+          "texto": "Durante toda a movimentação em altura, pelo menos um ponto de conexão permanece preso.",
+          "itens": [
+            "Talabarte duplo para transpor obstáculos",
+            "Conectar o segundo antes de soltar o primeiro",
+            "Linha de vida instalada antes do acesso à área de risco"
+          ],
+          "fala": "Para eliminar a principal causa de queda com equipamento disponível, usamos a regra dos cem por cento conectado. Durante toda a movimentação, pelo menos um ponto fica preso. Para isso usamos o talabarte duplo: quando chega num obstáculo, você conecta a segunda perna do talabarte do outro lado e só depois solta a primeira. E a linha de vida é instalada antes de alguém entrar na área de risco, nunca depois.",
+          "apoio": "Trabalhador transpondo uma coluna com talabarte em Y"
+        }
+      ]
+    },
+    {
+      "titulo": "Emergência, resgate e primeiros socorros",
+      "duracao": 60,
+      "gancho": "O cinturão segurou a queda. E agora? Uma pessoa pendurada corre risco de vida em pouco tempo. Neste módulo vamos ver por que o resgate precisa ser planejado antes do trabalho começar.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Suspensão inerte",
+          "valor": "Minutos",
+          "legenda": "é o tempo que a equipe tem para retirar alguém suspenso e imóvel",
+          "itens": [
+            "As fitas comprimem as pernas e o sangue fica retido nos membros inferiores",
+            "Pode causar desmaio e complicações graves",
+            "Por isso o plano de resgate é definido antes do início do trabalho"
+          ],
+          "fala": "Depois que o sistema retém a queda, começa outro problema. Uma pessoa suspensa e imóvel no cinturão tem o sangue retido nas pernas, porque as fitas comprimem a região e os músculos não ajudam o retorno da circulação. Isso pode levar ao desmaio e a complicações graves em pouco tempo. Por isso não dá para esperar o bombeiro chegar para pensar no resgate. Ele precisa estar planejado antes de alguém subir.",
+          "apoio": "Simulação de trabalhador suspenso no cinturão em estrutura de treinamento"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "O plano de resgate define",
+          "cards": [
+            {"t": "Quem", "d": "Equipe de resgate capacitada, própria ou contratada, disponível durante o trabalho"},
+            {"t": "Com o quê", "d": "Kit de resgate, macas, cordas e equipamentos testados e no local"},
+            {"t": "Como", "d": "Técnica de resgate previamente treinada para aquele cenário"},
+            {"t": "Comunicação", "d": "Rádio ou telefone e números do SAMU 192 e dos Bombeiros 193 à mão"}
+          ],
+          "fala": "O plano de resgate responde a quatro perguntas. Quem vai resgatar, sabendo que essa equipe precisa estar capacitada e disponível enquanto o trabalho acontece. Com que equipamento, que precisa estar no local e testado. Como, ou seja, qual técnica será usada naquele cenário específico, já treinada antes. E como a equipe vai se comunicar e chamar o socorro externo. Se o plano não responde a essas perguntas, o trabalho não começa.",
+          "pergunta": "Se alguém ficasse suspenso hoje no nosso telhado, quanto tempo levaríamos para tirá-lo de lá?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Primeiros socorros após uma queda",
+          "passos": [
+            {"t": "Segurança", "d": "Avaliar a cena e não se tornar a próxima vítima"},
+            {"t": "Acionar", "d": "Ligar para o SAMU 192 ou Bombeiros 193 e para a brigada"},
+            {"t": "Avaliar", "d": "Verificar consciência e respiração"},
+            {"t": "Proteger", "d": "Não mover a vítima com suspeita de trauma, salvo risco iminente"},
+            {"t": "Informar", "d": "Relatar ao socorro a altura da queda e o tempo de suspensão"}
+          ],
+          "fala": "Se acontecer uma queda, a primeira regra é não virar a próxima vítima, então avalie a cena antes de se aproximar. Acione o socorro, SAMU no 192 ou Bombeiros no 193, e a brigada da empresa. Verifique se a pessoa está consciente e respirando. Se houver suspeita de trauma na coluna, não movimente a vítima, a não ser que exista um risco imediato, como fogo. E quando o socorro chegar, informe a altura da queda e quanto tempo a pessoa ficou suspensa, porque essa informação muda o atendimento.",
+          "dica": "Se houver tempo e boneco de treinamento, faça uma demonstração rápida de avaliação da vítima."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática supervisionada",
+    "duracao": 90,
+    "descricao": "Cada participante executa individualmente os itens abaixo, acompanhado pelo instrutor, em estrutura de treinamento a baixa altura ou com proteção coletiva.",
+    "itens": [
+      "Inspecionou o cinturão, o talabarte e os conectores e identificou defeitos simulados",
+      "Vestiu e ajustou o cinturão corretamente, com conferência da argola dorsal",
+      "Conectou o talabarte ao ponto de ancoragem acima da cintura",
+      "Transpôs um obstáculo mantendo-se cem por cento conectado com talabarte duplo",
+      "Utilizou trava-quedas em linha de vida vertical",
+      "Preencheu a análise de risco e a permissão de trabalho de uma atividade simulada",
+      "Participou da simulação de resgate e acionamento de emergência"
+    ]
+  },
+  "caso": {
+    "titulo": "A troca de telhas que levaria vinte minutos",
+    "relato": "Numa sexta-feira à tarde, o supervisor de manutenção pediu a dois colaboradores que trocassem três telhas quebradas no telhado do almoxarifado, a cerca de 6 metros do piso, antes da chuva prevista para o fim do dia. Os dois tinham treinamento de NR-35 válido. Como o serviço era rápido, ninguém emitiu permissão de trabalho. Eles levaram cinturões e talabartes, mas o telhado não tinha linha de vida, e os talabartes foram presos a uma terça metálica próxima da área de trabalho. Para buscar uma telha nova na borda, um deles soltou o talabarte e caminhou sobre as telhas de fibrocimento. Uma delas cedeu e ele caiu sobre o piso do almoxarifado, sofrendo fraturas graves.",
+    "perguntas": [
+      "Quais requisitos da NR-35 deixaram de ser cumpridos?",
+      "Quais condições impeditivas estavam presentes ou previsíveis?",
+      "Que medidas de proteção coletiva poderiam ter sido adotadas?",
+      "Qual foi o papel da pressão por prazo na sequência de decisões?",
+      "O que cada pessoa envolvida poderia ter feito diferente?"
+    ],
+    "analise": "A atividade era não rotineira e exigia análise de risco e permissão de trabalho. Não havia sistema de ancoragem definido, e a terça metálica foi usada sem avaliação de resistência. A telha de fibrocimento não suporta o peso de uma pessoa e exigia passarelas ou tábuas apoiadas sobre a estrutura, além de linha de vida. A movimentação sem conexão contrariou a regra dos cem por cento conectado. A previsão de chuva era um fator de pressão que deveria ter levado ao adiamento do serviço. O supervisor responde pelo planejamento e os trabalhadores tinham o direito e o dever de recusar a atividade nas condições encontradas."
+  },
+  "dinamica": {
+    "titulo": "Caça aos defeitos",
+    "objetivo": "Treinar o olhar para a inspeção de equipamentos antes do uso.",
+    "tempo": 20,
+    "passos": [
+      "Antes da aula, prepare uma mesa com 6 a 8 equipamentos, metade em boas condições e metade com defeitos reais ou simulados, como fita cortada, absorvedor aberto ou conector sem trava.",
+      "Divida a turma em grupos de 3 a 4 pessoas.",
+      "Cada grupo tem 5 minutos para inspecionar os itens e classificar cada um como liberado ou recusado, justificando.",
+      "Compare as respostas dos grupos e comente cada defeito, explicando o risco que ele representa.",
+      "Feche reforçando que a inspeção é responsabilidade de quem vai usar o equipamento."
+    ]
+  },
+  "dds": {
+    "titulo": "Dois minutos que salvam",
+    "texto": "Bom dia, pessoal. Hoje quero falar de dois minutos. É o tempo que leva para olhar o cinturão antes de vestir, conferir se o absorvedor do talabarte está fechado e testar a trava do mosquetão. Parece pouco, e é. Mas a maior parte das quedas com equipamento acontece porque alguém pulou exatamente essa etapa, ou porque soltou o talabarte para dar só um passo. Então hoje o combinado é este: antes de subir, dois minutos de inspeção. Lá em cima, cem por cento conectado. E se alguma coisa não estiver certa, a gente para e conversa. Ninguém aqui precisa correr risco para terminar um serviço. Alguma dúvida?"
+  },
+  "prova": [
+    {"q": "Segundo a NR-35, considera-se trabalho em altura toda atividade executada:", "o": ["Acima de 1,50 m do nível inferior, em qualquer situação", "Acima de 2,00 m do nível inferior, onde haja risco de queda", "Acima de 3,00 m, somente em atividades de construção", "Em qualquer altura, desde que o trabalhador use escada"], "c": 1, "com": "A NR-35 define trabalho em altura como atividade acima de 2,00 m do nível inferior com risco de queda."},
+    {"q": "A carga horária mínima do treinamento inicial de trabalho em altura é de:", "o": ["4 horas teóricas", "8 horas, teórico e prático", "16 horas práticas", "40 horas, teórico e prático"], "c": 1, "com": "O treinamento inicial é teórico e prático, com carga horária mínima de 8 horas."},
+    {"q": "O treinamento periódico de NR-35 deve ser realizado:", "o": ["A cada ano", "A cada 2 anos", "A cada 3 anos", "Somente após um acidente"], "c": 1, "com": "O periódico é bienal, com carga mínima de 8 horas."},
+    {"q": "Para ser considerado autorizado, o trabalhador precisa:", "o": ["Apenas ter concluído o treinamento", "Ter mais de dois anos de experiência", "Ser capacitado, ter a aptidão registrada no ASO e ter anuência formal da empresa", "Possuir curso técnico em segurança do trabalho"], "c": 2, "com": "Autorização exige capacitação, avaliação de saúde com aptidão e anuência formal da empresa."},
+    {"q": "Na hierarquia do planejamento do trabalho em altura, a primeira medida é:", "o": ["Fornecer cinturão paraquedista", "Evitar o trabalho em altura sempre que houver meio alternativo", "Instalar linha de vida", "Emitir a permissão de trabalho"], "c": 1, "com": "A primeira medida é evitar o trabalho em altura; depois eliminar o risco de queda e, por último, minimizar as consequências."},
+    {"q": "A permissão de trabalho é obrigatória para:", "o": ["Atividades rotineiras com procedimento escrito", "Atividades não rotineiras", "Qualquer atividade abaixo de 2 metros", "Somente trabalhos noturnos"], "c": 1, "com": "Atividades não rotineiras exigem permissão de trabalho; as rotineiras seguem procedimento operacional."},
+    {"q": "Qual das situações abaixo é uma condição impeditiva?", "o": ["Céu limpo e vento fraco", "Ancoragem sem resistência conhecida", "Área isolada e sinalizada", "Equipamento inspecionado no início do turno"], "c": 1, "com": "Ancoragem duvidosa ou sem resistência conhecida impede o início do trabalho."},
+    {"q": "Durante a inspeção, o talabarte deve ser retirado de uso quando:", "o": ["Estiver sujo de poeira", "O absorvedor de energia estiver aberto ou rompido", "Tiver sido usado no dia anterior", "A etiqueta estiver voltada para dentro"], "c": 1, "com": "Absorvedor aberto indica que o equipamento já reteve uma queda ou está danificado."},
+    {"q": "A regra dos cem por cento conectado significa:", "o": ["Usar dois cinturões ao mesmo tempo", "Manter pelo menos um ponto de conexão preso durante toda a movimentação em altura", "Conectar o talabarte somente ao chegar ao local de trabalho", "Conectar todos os trabalhadores na mesma ancoragem"], "c": 1, "com": "Pelo menos um ponto de conexão permanece preso o tempo todo, geralmente com talabarte duplo."},
+    {"q": "Sobre a suspensão inerte, é correto afirmar:", "o": ["Não oferece risco se o cinturão estiver bem ajustado", "O resgate pode aguardar a chegada do socorro externo sem planejamento", "O resgate deve ser planejado antes do início do trabalho, pois o tempo de suspensão é crítico", "Ocorre apenas com trabalhadores acima do peso"], "c": 2, "com": "A suspensão prolongada pode causar desmaio e complicações graves; o resgate precisa ser planejado com antecedência."}
+  ]
+}

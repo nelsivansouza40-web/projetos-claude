@@ -1,0 +1,351 @@
+{
+  "nr": "12",
+  "titulo": "Segurança no Trabalho em Máquinas e Equipamentos",
+  "chamada": "Proteção no lugar, energia bloqueada e nenhuma mão na zona de perigo",
+  "icone": "FaGears",
+  "carga": "8 horas (carga sugerida para operadores; ajuste conforme a complexidade das máquinas)",
+  "periodicidade": "A NR-12 exige capacitação com carga horária que garanta a execução segura das atividades, distribuída em no máximo 8 horas diárias e dentro do horário normal de trabalho. A reciclagem é obrigatória sempre que houver modificações significativas nas instalações e na operação de máquinas ou troca de métodos, processos e organização do trabalho.",
+  "publico": "Operadores de máquinas e equipamentos, trabalhadores de manutenção, inspeção e lideranças de produção.",
+  "prerequisitos": "Não há. Para a parte prática, o participante deve conhecer a máquina que irá operar e ter o ASO em dia.",
+  "instrutor": "Trabalhadores ou profissionais qualificados para este fim, com supervisão de profissional legalmente habilitado que se responsabiliza pela adequação do conteúdo, da forma, da carga horária e das qualificações dos instrutores.",
+  "objetivos": [
+    "Identificar os riscos associados a cada máquina e as proteções existentes contra cada um deles",
+    "Explicar o funcionamento das proteções e por que devem ser mantidas",
+    "Usar corretamente os dispositivos de partida, parada e emergência",
+    "Aplicar o bloqueio de energias nas operações de inspeção, limpeza, ajuste e manutenção",
+    "Saber o que fazer quando uma proteção estiver danificada ou deixar de funcionar"
+  ],
+  "recursos": [
+    "Projetor e apresentação",
+    "Acesso a uma máquina real da empresa, parada e bloqueada, para a prática",
+    "Kit de bloqueio com cadeados, garras e etiquetas",
+    "Manual de instruções da máquina usada na prática",
+    "Checklist pré-operacional impresso",
+    "Lista de presença e provas impressas"
+  ],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e desempenho satisfatório em todos os itens do checklist prático.",
+  "referencias": [
+    "NR-12 Segurança no Trabalho em Máquinas e Equipamentos, texto vigente, incluindo o Anexo II",
+    "ABNT NBR ISO 12100 Segurança de máquinas: princípios gerais de projeto, apreciação e redução de riscos",
+    "ABNT NBR 14153 Segurança de máquinas: partes de sistemas de comando relacionadas à segurança",
+    "ABNT NBR ISO 13857 Distâncias de segurança"
+  ],
+  "modulos": [
+    {
+      "titulo": "A NR-12 e os conceitos básicos",
+      "duracao": 60,
+      "gancho": "Uma máquina não distingue uma peça de metal de uma mão. Ela faz exatamente o que foi projetada para fazer, com a mesma força, toda vez. A NR-12 existe para manter as pessoas fora do caminho dessa força.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Zona de perigo",
+          "valor": "Zona",
+          "legenda": "qualquer região dentro ou ao redor da máquina onde uma pessoa possa sofrer lesão",
+          "itens": [
+            "Pontos de prensagem, corte, arraste e projeção",
+            "Inclui partes móveis de transmissão, como correias, polias e engrenagens",
+            "O objetivo da NR-12 é impedir o acesso à zona de perigo durante o funcionamento"
+          ],
+          "fala": "O conceito central da NR-12 é a zona de perigo. É qualquer região dentro ou ao redor da máquina onde uma pessoa possa se ferir: o ponto onde a prensa desce, a lâmina corta, o rolo puxa ou a peça é projetada. Também incluem-se as transmissões de força, como correias, polias e engrenagens. Toda a lógica da norma é esta: durante o funcionamento, ninguém deve conseguir alcançar a zona de perigo, seja por cima, por baixo, pela lateral ou através da proteção.",
+          "pergunta": "Na máquina que você opera, onde fica a zona de perigo?",
+          "apoio": "Máquina com a zona de perigo destacada em vermelho"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Princípios da redução de riscos",
+          "passos": [
+            {"t": "Projeto seguro", "d": "Eliminar ou reduzir o perigo na concepção da máquina"},
+            {"t": "Proteções e dispositivos", "d": "Impedir o acesso à zona de perigo"},
+            {"t": "Informação", "d": "Sinalização, manual e procedimentos"},
+            {"t": "Capacitação", "d": "Operador treinado para a máquina específica"}
+          ],
+          "fala": "A NR-12 segue os princípios de redução de riscos das normas técnicas. Primeiro, a máquina deve ser segura pelo projeto, eliminando o perigo sempre que possível. Depois vêm as proteções e os dispositivos de segurança, que impedem o acesso à zona de perigo. Em seguida, as informações: sinalização, manual de instruções e procedimentos. E por fim a capacitação de quem opera e mantém. A escolha das proteções deve ser baseada na apreciação de riscos da máquina, feita por profissional habilitado.",
+          "dica": "Mostre a apreciação de riscos de uma máquina da empresa, se houver."
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Responsabilidades",
+          "esquerda": {"t": "Empregador", "itens": ["Adotar medidas de proteção conforme a NR-12", "Manter proteções e dispositivos funcionando", "Capacitar os trabalhadores", "Garantir manutenção com bloqueio de energias"]},
+          "direita": {"t": "Trabalhador", "itens": ["Cumprir os procedimentos de operação segura", "Não alterar, remover ou burlar proteções", "Comunicar falhas nas proteções", "Participar dos treinamentos"]},
+          "fala": "Ao empregador cabe adotar as medidas de proteção previstas na NR-12, manter proteções e dispositivos funcionando, capacitar os trabalhadores e garantir que a manutenção seja feita com as energias bloqueadas. Ao trabalhador cabe cumprir os procedimentos, nunca alterar, remover ou burlar uma proteção, comunicar imediatamente qualquer falha e participar dos treinamentos. Burlar uma proteção para ganhar tempo é a origem de boa parte das amputações registradas no país.",
+          "pergunta": "Por que vocês acham que as pessoas burlam as proteções?"
+        }
+      ]
+    },
+    {
+      "titulo": "Riscos em máquinas e equipamentos",
+      "duracao": 60,
+      "gancho": "Cada máquina tem os seus riscos. Para se proteger, o operador precisa saber reconhecer cada um deles, e não apenas o mais óbvio.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Riscos mecânicos",
+          "cards": [
+            {"t": "Esmagamento e prensagem", "d": "Partes que se aproximam, como prensas, dobradeiras e cilindros"},
+            {"t": "Corte e cisalhamento", "d": "Lâminas, serras, guilhotinas e bordas cortantes"},
+            {"t": "Arraste e enroscamento", "d": "Rolos, eixos, correias e polias que puxam roupas, luvas e cabelos"},
+            {"t": "Impacto e projeção", "d": "Peças, cavacos, fragmentos de ferramentas e fluidos sob pressão"}
+          ],
+          "fala": "Os riscos mecânicos são os mais conhecidos. Esmagamento e prensagem, quando duas partes se aproximam. Corte e cisalhamento, em lâminas, serras e guilhotinas. Arraste e enroscamento, quando um rolo, eixo ou correia puxa a roupa, a luva ou o cabelo e leva o corpo junto. E impacto e projeção de peças, cavacos e fluidos. Uma observação importante: em máquinas com partes rotativas, luvas, roupas folgadas, cabelo solto e adornos aumentam o risco de arraste.",
+          "dica": "Peça que cada participante cite o risco mecânico principal da máquina que opera."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Outros riscos em máquinas",
+          "cards": [
+            {"t": "Elétricos", "d": "Painéis abertos, cabos danificados e falta de aterramento"},
+            {"t": "Energias armazenadas", "d": "Pressão hidráulica e pneumática, molas, gravidade e capacitores"},
+            {"t": "Térmicos e químicos", "d": "Superfícies quentes, fluidos de corte, vapores e poeiras"},
+            {"t": "Ruído, vibração e ergonomia", "d": "Exposição contínua, posturas e esforço na alimentação da máquina"}
+          ],
+          "fala": "Além dos riscos mecânicos, as máquinas trazem riscos elétricos, como painéis abertos e cabos danificados. Trazem energias armazenadas, que continuam presentes mesmo com a máquina desligada: pressão hidráulica e pneumática, molas comprimidas, partes que podem cair pela gravidade e capacitores carregados. Há riscos térmicos e químicos, como superfícies quentes e fluidos de corte. E há ruído, vibração e riscos ergonômicos na alimentação e retirada de peças.",
+          "pergunta": "Que energia continua presente na sua máquina mesmo depois de desligada?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Situações de maior risco",
+          "itens": [
+            "Desenroscar, limpar ou retirar peças com a máquina em movimento",
+            "Ajustes e testes com proteções abertas",
+            "Manutenção sem bloqueio e sem dissipar energias residuais",
+            "Partida inesperada por outra pessoa ou falha de comando",
+            "Operação por pessoa não capacitada para aquela máquina"
+          ],
+          "destaque": "A maioria dos acidentes graves com máquinas acontece fora da operação normal.",
+          "fala": "Estatísticas de acidentes mostram que boa parte dos acidentes graves com máquinas não acontece na operação normal. Acontece quando alguém tenta desenroscar, limpar ou retirar uma peça com a máquina em movimento. Quando ajusta ou testa com a proteção aberta. Quando faz manutenção sem bloquear e sem dissipar as energias. Quando outra pessoa dá partida sem saber que havia alguém lá dentro. E quando alguém sem capacitação opera a máquina. São esses momentos que exigem mais disciplina.",
+          "apoio": "Operador tentando retirar uma peça presa com a máquina em movimento, em simulação"
+        }
+      ]
+    },
+    {
+      "titulo": "Proteções e dispositivos de segurança",
+      "duracao": 90,
+      "gancho": "Toda proteção tem um motivo. Quando a gente entende como ela funciona, entende também por que ela nunca deve ser desativada.",
+      "slides": [
+        {
+          "tipo": "comparar",
+          "titulo": "Proteções fixas e móveis",
+          "esquerda": {"t": "Proteção fixa", "itens": ["Mantida em posição de forma permanente", "Removível somente com ferramenta", "Usada onde não há acesso frequente"]},
+          "direita": {"t": "Proteção móvel", "itens": ["Pode ser aberta sem ferramenta", "Associada a dispositivo de intertravamento", "Ao abrir, a máquina para ou não parte"]},
+          "fala": "As proteções físicas se dividem em dois tipos. A proteção fixa fica presa permanentemente e só pode ser retirada com ferramenta. Ela é usada onde não há necessidade de acesso frequente, como na cobertura de uma correia. A proteção móvel pode ser aberta sem ferramenta e, por isso, precisa estar ligada a um dispositivo de intertravamento: ao abrir, a máquina para, e enquanto estiver aberta, a máquina não parte. Em alguns casos, a proteção também fica travada até que o movimento perigoso tenha cessado.",
+          "apoio": "Abertura de uma porta intertravada parando a máquina"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Dispositivos de segurança",
+          "cards": [
+            {"t": "Intertravamento", "d": "Chaves de segurança que monitoram a posição das proteções móveis"},
+            {"t": "Sensores de presença", "d": "Cortinas de luz, scanners e tapetes que detectam a entrada na zona de perigo"},
+            {"t": "Comando bimanual", "d": "Exige as duas mãos no comando, longe da zona de perigo, durante o ciclo"},
+            {"t": "Interfaces de segurança", "d": "Relés e controladores de segurança que monitoram e garantem a parada"}
+          ],
+          "fala": "Os dispositivos de segurança complementam as proteções. As chaves de intertravamento monitoram se a proteção móvel está fechada. Os sensores de presença, como cortinas de luz, scanners a laser e tapetes, param a máquina quando alguém entra na zona de perigo. O comando bimanual exige as duas mãos no comando durante o movimento perigoso, mantendo-as longe da ferramenta. E por trás de tudo estão as interfaces de segurança, como relés e controladores, que monitoram esses dispositivos e garantem a parada.",
+          "pergunta": "Que dispositivos de segurança existem nas máquinas do seu setor?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Proteção burlada é acidente programado",
+          "texto": "Nenhuma meta justifica desativar, calçar ou contornar uma proteção.",
+          "itens": [
+            "Imã ou fita na chave de intertravamento",
+            "Comando bimanual acionado com o joelho ou com peso",
+            "Cortina de luz desalinhada de propósito ou desligada",
+            "Proteção fixa retirada e não recolocada após manutenção"
+          ],
+          "fala": "Toda burla de proteção tem um padrão. Um ímã ou uma fita colada na chave de intertravamento. Um comando bimanual acionado com o joelho ou com um peso sobre um dos botões. Uma cortina de luz desalinhada ou desligada. Uma proteção retirada na manutenção e que nunca voltou. Quem faz isso geralmente quer ganhar tempo ou contornar uma falha. Se a proteção atrapalha a produção, o caminho é comunicar e corrigir, e não desativar.",
+          "dica": "Se houver registro de burla na empresa, discuta sem expor pessoas."
+        }
+      ]
+    },
+    {
+      "titulo": "Partida, parada, emergência e sinalização",
+      "duracao": 45,
+      "gancho": "Saber parar a máquina rapidamente é tão importante quanto saber operá-la. Vamos conhecer os dispositivos de comando e de emergência.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Dispositivos de partida e parada",
+          "itens": [
+            "Instalados de modo que não possam ser acionados acidentalmente",
+            "Partida e religamento somente por ação intencional",
+            "Localizados fora da zona de perigo e ao alcance do operador",
+            "Identificados de forma clara e em português"
+          ],
+          "destaque": "A máquina não pode partir sozinha quando a energia volta.",
+          "fala": "Os dispositivos de partida e parada devem ficar fora da zona de perigo e ao alcance do operador, ser identificados de forma clara e não podem ser acionados por acidente, por exemplo por um esbarrão. A partida e o religamento só podem acontecer por ação intencional. Isso inclui uma situação importante: se faltar energia e ela voltar, a máquina não pode partir sozinha.",
+          "pergunta": "Na sua máquina, o que acontece quando a energia volta depois de uma queda?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Parada de emergência",
+          "passos": [
+            {"t": "Acionar", "d": "Botão vermelho sobre fundo amarelo, fácil de alcançar"},
+            {"t": "Parar", "d": "Movimento perigoso interrompido o mais rápido possível"},
+            {"t": "Manter", "d": "O botão fica retido até ser rearmado manualmente"},
+            {"t": "Rearmar", "d": "Rearme não reinicia a máquina, exige nova partida"}
+          ],
+          "fala": "A parada de emergência é usada quando algo sai do controle. O botão é vermelho, sobre fundo amarelo, e fica em local de fácil acesso. Ao ser acionado, interrompe o movimento perigoso o mais rápido possível e fica retido até ser rearmado manualmente. E o rearme não pode dar partida na máquina: depois de rearmar, é necessária uma nova partida intencional. A parada de emergência não substitui as proteções e não deve ser usada como botão de desligar no dia a dia.",
+          "dica": "Teste a parada de emergência de uma máquina real durante a prática."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Sinalização e informação",
+          "cards": [
+            {"t": "Sinalização de segurança", "d": "Indica riscos, proibições e obrigações na própria máquina"},
+            {"t": "Identificação", "d": "Fabricante, modelo, ano e dados técnicos visíveis"},
+            {"t": "Manual de instruções", "d": "Em português, disponível para operadores e manutenção"},
+            {"t": "Procedimentos", "d": "Operação, limpeza, ajuste e manutenção descritos passo a passo"}
+          ],
+          "fala": "A máquina também deve informar. A sinalização de segurança indica os riscos, as proibições e as obrigações, como o uso de óculos ou a proibição de retirar a proteção. A identificação traz fabricante, modelo e dados técnicos. O manual de instruções, em português, deve estar disponível. E a empresa deve ter procedimentos escritos de operação, limpeza, ajuste e manutenção. O operador precisa saber onde encontrar essas informações.",
+          "apoio": "Placas de sinalização afixadas em uma máquina"
+        }
+      ]
+    },
+    {
+      "titulo": "Bloqueio de energias e manutenção segura",
+      "duracao": 60,
+      "gancho": "Limpar, ajustar, desenroscar ou consertar: tudo isso exige a máquina parada e com as energias bloqueadas. Vamos ver como fazer isso do jeito certo.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Sequência de bloqueio",
+          "passos": [
+            {"t": "Preparar", "d": "Identificar todas as fontes de energia"},
+            {"t": "Desligar", "d": "Parar a máquina pelo comando normal"},
+            {"t": "Isolar", "d": "Seccionar as fontes de energia"},
+            {"t": "Bloquear", "d": "Cadeado e etiqueta individuais"},
+            {"t": "Dissipar", "d": "Aliviar pressões, travar partes e descarregar energias"},
+            {"t": "Testar", "d": "Tentar a partida para confirmar o bloqueio"}
+          ],
+          "fala": "Toda intervenção com risco de partida inesperada exige bloqueio. Primeiro, identifique todas as fontes de energia, que podem ser elétrica, pneumática, hidráulica, mecânica e térmica. Desligue a máquina pelo comando normal. Isole as fontes, abrindo chaves e válvulas. Coloque o seu cadeado e a sua etiqueta. Dissipe as energias residuais: alivie a pressão, trave as partes que podem cair e descarregue os acumuladores. E, por fim, tente dar a partida para confirmar que a máquina não liga. Só então comece o trabalho.",
+          "dica": "Demonstre a sequência completa em uma máquina real durante a prática."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Energias residuais",
+          "cabecalho": ["Energia", "Como dissipar ou controlar"],
+          "linhas": [
+            ["Pneumática", "Fechar a válvula de entrada e abrir a válvula de alívio até o manômetro indicar zero"],
+            ["Hidráulica", "Aliviar a pressão do sistema e dos acumuladores"],
+            ["Gravitacional", "Baixar a parte móvel ou travar com calço ou pino de segurança"],
+            ["Mecânica", "Aguardar a parada de volantes e liberar molas comprimidas"],
+            ["Elétrica", "Seccionar, bloquear e aguardar a descarga de capacitores e inversores"]
+          ],
+          "fala": "As energias residuais são as que continuam na máquina depois de desligada. Na pneumática, feche a entrada de ar e abra a válvula de alívio até o manômetro marcar zero. Na hidráulica, alivie a pressão do sistema e dos acumuladores. Na gravitacional, baixe a parte que pode cair ou trave com calço ou pino de segurança. Na mecânica, espere volantes pararem e libere molas. E na elétrica, além de seccionar e bloquear, aguarde a descarga de capacitores e inversores de frequência.",
+          "pergunta": "Na manutenção da sua máquina, qual energia residual costuma ser esquecida?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Regras da manutenção segura",
+          "itens": [
+            "Somente pessoas capacitadas e autorizadas fazem manutenção",
+            "Cada pessoa coloca e retira o próprio cadeado",
+            "Ajustes com a máquina em funcionamento só com procedimento específico e medidas alternativas",
+            "Ao final, recolocar todas as proteções e testar os dispositivos de segurança",
+            "Registrar a manutenção e comunicar a liberação ao operador"
+          ],
+          "destaque": "A máquina só volta a operar com todas as proteções no lugar e testadas.",
+          "fala": "A manutenção segue regras claras. Só faz quem é capacitado e autorizado. Cada pessoa coloca e retira o seu próprio cadeado, nunca o de outro colega. Ajustes que exigem a máquina funcionando só podem ser feitos com procedimento específico e medidas alternativas de proteção, como velocidade reduzida e comando de ação continuada. Ao terminar, todas as proteções voltam para o lugar e os dispositivos de segurança são testados. E a liberação é registrada e comunicada ao operador."
+        }
+      ]
+    },
+    {
+      "titulo": "Método de trabalho seguro e falhas nas proteções",
+      "duracao": 45,
+      "gancho": "No fim do dia, a segurança em máquinas se decide nas pequenas escolhas do operador. Vamos fechar com o método de trabalho seguro e com o que fazer quando algo não está certo.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Antes, durante e depois da operação",
+          "passos": [
+            {"t": "Antes", "d": "Checklist pré-operacional, proteções no lugar e emergência testada"},
+            {"t": "Durante", "d": "Seguir o procedimento, sem mãos na zona de perigo"},
+            {"t": "Anormalidade", "d": "Parar, bloquear e comunicar"},
+            {"t": "Depois", "d": "Desligar, limpar com bloqueio e registrar ocorrências"}
+          ],
+          "fala": "O método de trabalho seguro começa antes de ligar a máquina, com o checklist pré-operacional: proteções no lugar, dispositivos funcionando e parada de emergência testada. Durante a operação, siga o procedimento e mantenha as mãos fora da zona de perigo, usando ferramentas manuais quando necessário. Diante de qualquer anormalidade, como peça presa ou ruído estranho, pare a máquina, bloqueie e comunique. E ao final, desligue, faça a limpeza com a máquina bloqueada e registre o que aconteceu.",
+          "apoio": "Operador preenchendo checklist pré-operacional ao lado da máquina"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Quando a proteção falha",
+          "texto": "Proteção danificada ou que não funciona: a máquina para e só volta depois de corrigida.",
+          "itens": [
+            "Parar a máquina e não continuar operando",
+            "Comunicar imediatamente o supervisor e a manutenção",
+            "Sinalizar a máquina como fora de operação",
+            "Somente manutenção capacitada remove ou ajusta proteções"
+          ],
+          "fala": "O Anexo II da NR-12 exige que o operador saiba o que fazer quando uma proteção for danificada ou deixar de funcionar. A resposta é sempre a mesma: parar a máquina, não continuar operando, comunicar imediatamente o supervisor e a manutenção e sinalizar a máquina como fora de operação. A remoção ou o ajuste das proteções é tarefa do pessoal de manutenção ou inspeção capacitado. O operador não conserta a proteção por conta própria.",
+          "pergunta": "Como funciona hoje a comunicação de falha de proteção aqui na empresa?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Hábitos que evitam amputações",
+          "cards": [
+            {"t": "Ferramenta, não mão", "d": "Usar empurradores, pinças e ganchos para posicionar e retirar peças"},
+            {"t": "Sem adornos", "d": "Nada de anéis, correntes, cabelo solto ou roupa folgada perto de partes rotativas"},
+            {"t": "Luva certa", "d": "Não usar luvas perto de partes rotativas quando houver risco de arraste"},
+            {"t": "Comunicar", "d": "Toda falha, travamento ou improviso é informado e tratado"}
+          ],
+          "fala": "Alguns hábitos simples evitam a maior parte das amputações. Usar ferramentas, como empurradores e pinças, para posicionar e retirar peças, em vez das mãos. Não usar anéis, correntes, cabelo solto ou roupa folgada perto de partes rotativas. Avaliar o uso de luvas: perto de rolos e eixos girando, a luva pode ser puxada e levar a mão junto. E comunicar toda falha, travamento ou improviso, para que a causa seja tratada.",
+          "dica": "Mostre os dispositivos auxiliares de alimentação disponíveis nas máquinas da empresa."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática na máquina",
+    "duracao": 90,
+    "descricao": "Em máquina real da empresa, parada e sob supervisão, cada participante executa os itens abaixo.",
+    "itens": [
+      "Identificou as zonas de perigo e as proteções existentes",
+      "Realizou o checklist pré-operacional completo",
+      "Testou a parada de emergência e o intertravamento das proteções móveis",
+      "Executou a sequência de bloqueio com cadeado e etiqueta individuais",
+      "Dissipou as energias residuais e testou a tentativa de partida",
+      "Demonstrou o método de trabalho seguro com uso de dispositivo auxiliar",
+      "Explicou o que fazer diante de uma proteção danificada"
+    ]
+  },
+  "caso": {
+    "titulo": "A peça presa na esteira",
+    "relato": "Em uma indústria de embalagens, uma operadora percebeu que uma caixa havia travado na entrada de uma esteira transportadora que alimentava uma seladora. A proteção da região dos rolos tinha sido retirada semanas antes para uma manutenção e não foi recolocada. Para não parar a linha e não atrasar o lote, ela tentou soltar a caixa com a mão enquanto a esteira funcionava. A luva foi puxada entre a correia e o rolo de tração, levando a mão junto. O botão de emergência mais próximo estava a cerca de 6 metros, do outro lado da seladora. Ela sofreu fratura e lesões graves em três dedos.",
+    "perguntas": [
+      "Quais requisitos da NR-12 não estavam sendo cumpridos?",
+      "Por que a proteção não foi recolocada e quem deveria ter verificado?",
+      "Qual o papel da luva no mecanismo do acidente?",
+      "O que a operadora deveria ter feito ao perceber a caixa travada?",
+      "Que medidas de engenharia e de gestão a empresa deve adotar?"
+    ],
+    "analise": "A proteção fixa dos rolos foi retirada e não recolocada após a manutenção, sem verificação de liberação. A parada de emergência estava longe do ponto de intervenção. A operadora tentou desenroscar a peça com a máquina em movimento, situação típica de acidente grave, provavelmente pressionada pela meta. A luva aumentou o risco de arraste. O correto seria parar a esteira, bloquear e retirar a caixa com a máquina parada. A empresa deve recolocar a proteção, instalar dispositivo de parada de emergência acessível ao longo da esteira, como cabo de emergência, revisar o procedimento de liberação pós-manutenção, criar procedimento para desobstrução com bloqueio e discutir com a liderança que parar a linha por segurança não pode ser penalizado."
+  },
+  "dinamica": {
+    "titulo": "Caça às zonas de perigo",
+    "objetivo": "Treinar a identificação de zonas de perigo e das proteções correspondentes.",
+    "tempo": 20,
+    "passos": [
+      "Imprima fotos de três máquinas da empresa, de preferência de ângulos diferentes.",
+      "Em grupos, os participantes marcam nas fotos todas as zonas de perigo e indicam o tipo de risco de cada uma.",
+      "Ao lado de cada zona, indicam qual proteção existe ou qual deveria existir.",
+      "Cada grupo apresenta uma máquina e os demais complementam.",
+      "Encaminhe as situações sem proteção identificadas pela turma à liderança e à manutenção."
+    ]
+  },
+  "dds": {
+    "titulo": "Travou? Parou, bloqueou",
+    "texto": "Pessoal, o assunto de hoje é a peça travada. Ela vai acontecer, na esteira, na prensa, na serra. E a tentação de resolver rapidinho, com a máquina ligada, é grande. Mas é exatamente nesse rapidinho que a maioria das mãos é perdida. Então a regra é esta: travou, parou, bloqueou. Desligue, coloque o seu cadeado, confirme que a máquina não parte e só então retire a peça, de preferência com uma ferramenta. Se a proteção estiver fora do lugar ou não funcionar, a máquina não opera. Ninguém aqui vai ser cobrado por parar uma máquina por segurança."
+  },
+  "prova": [
+    {"q": "Zona de perigo é:", "o": ["A sala onde fica a máquina", "Qualquer região dentro ou ao redor da máquina onde a pessoa possa sofrer lesão", "Apenas o painel elétrico", "A área de estoque de peças"], "c": 1, "com": "A zona de perigo inclui todos os pontos onde há risco de lesão."},
+    {"q": "Proteção fixa é aquela que:", "o": ["Pode ser aberta a qualquer momento sem ferramenta", "É mantida em posição e só pode ser removida com ferramenta", "Funciona apenas com sensores", "É feita de material transparente"], "c": 1, "com": "A proteção fixa só sai com ferramenta e é usada onde não há acesso frequente."},
+    {"q": "A proteção móvel deve estar associada a:", "o": ["Uma placa de aviso apenas", "Um dispositivo de intertravamento", "Um cadeado do operador", "Uma câmera"], "c": 1, "com": "Ao abrir a proteção móvel, o intertravamento para a máquina ou impede a partida."},
+    {"q": "Ao rearmar o botão de parada de emergência:", "o": ["A máquina deve reiniciar automaticamente", "A máquina não reinicia; é preciso nova partida intencional", "O botão é removido", "A proteção é desativada"], "c": 1, "com": "O rearme não pode provocar a partida da máquina."},
+    {"q": "Durante a manutenção, energia residual é:", "o": ["A energia da rede elétrica", "Energia que permanece na máquina após desligada, como pressão, molas e gravidade", "A energia do operador", "Somente a energia térmica"], "c": 1, "com": "Energias residuais precisam ser dissipadas ou controladas antes da intervenção."},
+    {"q": "No bloqueio de energias, a regra correta é:", "o": ["Um cadeado coletivo com a chave no painel", "Cada trabalhador coloca e retira o próprio cadeado", "O supervisor coloca o cadeado de todos", "Basta desligar no botão de parada"], "c": 1, "com": "O bloqueio é individual para que ninguém religue com outra pessoa exposta."},
+    {"q": "Se uma proteção estiver danificada, o operador deve:", "o": ["Continuar operando com cuidado", "Consertar por conta própria", "Parar a máquina, comunicar e sinalizar como fora de operação", "Retirar a proteção para não atrapalhar"], "c": 2, "com": "O Anexo II exige que o operador saiba agir quando a proteção falha."},
+    {"q": "Usar um ímã na chave de intertravamento é:", "o": ["Uma melhoria aceitável", "Uma burla que anula a proteção e pode causar acidente grave", "Permitido para máquinas antigas", "Obrigatório na manutenção"], "c": 1, "com": "Burlar proteções é proibido e está na origem de muitas amputações."},
+    {"q": "Para retirar uma peça travada, o procedimento correto é:", "o": ["Puxar com a mão com a máquina em baixa velocidade", "Parar, bloquear, confirmar que a máquina não parte e retirar com ferramenta", "Pedir a um colega para segurar o botão de parada", "Usar luva grossa e puxar rapidamente"], "c": 1, "com": "Desobstrução se faz com a máquina parada e bloqueada."},
+    {"q": "A capacitação em máquinas segundo a NR-12 deve:", "o": ["Ter no máximo 2 horas", "Garantir a execução segura das atividades, com no máximo 8 horas diárias e dentro do horário de trabalho", "Ser feita apenas uma vez na vida", "Ser feita fora do horário de trabalho"], "c": 1, "com": "A carga deve ser suficiente para a execução segura, distribuída em até 8 horas diárias."}
+  ]
+}

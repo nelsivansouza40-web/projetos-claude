@@ -1,0 +1,304 @@
+{
+  "nr": "18",
+  "titulo": "Segurança e Saúde no Trabalho na Indústria da Construção",
+  "chamada": "Canteiro organizado, bordas protegidas e cada um sabendo os riscos da sua função",
+  "icone": "FaTrowelBricks",
+  "carga": "4 horas (treinamento inicial, antes do início das atividades)",
+  "periodicidade": "Treinamento inicial antes de o trabalhador iniciar as atividades. Treinamentos periódico e eventual conforme o texto vigente da NR-18 e as regras gerais da NR-01, incluindo mudança de função, de fase da obra ou de procedimentos. Atividades específicas, como trabalho em altura, operação de equipamentos e eletricidade, exigem os treinamentos das normas correspondentes.",
+  "publico": "Trabalhadores da indústria da construção, próprios e terceirizados, em obras de construção, demolição, reforma e manutenção.",
+  "prerequisitos": "Não há. Recomenda-se ter em mãos o PGR da obra e a planta do canteiro.",
+  "instrutor": "Profissional de segurança do trabalho ou instrutor capacitado, com conhecimento do canteiro e dos riscos da obra.",
+  "objetivos": [
+    "Conhecer as condições e o meio ambiente de trabalho do canteiro de obras",
+    "Identificar os riscos inerentes à sua função e às fases da obra",
+    "Reconhecer e preservar as proteções coletivas existentes no canteiro",
+    "Usar corretamente os EPIs exigidos para a sua atividade",
+    "Agir de forma segura em escavações, movimentação de cargas, máquinas e instalações elétricas provisórias"
+  ],
+  "recursos": [
+    "Projetor e apresentação",
+    "Planta do canteiro com áreas de vivência, rotas e locais de risco",
+    "EPIs utilizados na obra para demonstração",
+    "Checklist de inspeção do canteiro",
+    "Lista de presença e provas impressas"
+  ],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na inspeção guiada do canteiro.",
+  "referencias": [
+    "NR-18 Segurança e Saúde no Trabalho na Indústria da Construção, texto vigente",
+    "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais",
+    "NR-35 Trabalho em Altura",
+    "NR-10 Segurança em Instalações e Serviços em Eletricidade",
+    "NR-12 Segurança no Trabalho em Máquinas e Equipamentos"
+  ],
+  "modulos": [
+    {
+      "titulo": "O canteiro de obras e a NR-18",
+      "duracao": 40,
+      "gancho": "A construção civil está sempre entre os setores com mais acidentes graves e mortes no Brasil. E o canteiro muda todos os dias: o risco de hoje não é o de ontem. Vamos começar conhecendo o lugar onde você vai trabalhar.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "O PGR da obra",
+          "cards": [
+            {"t": "Inventário e plano de ação", "d": "Riscos de cada fase da obra e as medidas para controlá-los"},
+            {"t": "Projetos de proteção", "d": "Proteções coletivas e sistemas de proteção contra quedas dimensionados"},
+            {"t": "Instalações provisórias", "d": "Projeto elétrico e das áreas de vivência do canteiro"},
+            {"t": "EPIs", "d": "Relação dos equipamentos de proteção individual por função"}
+          ],
+          "fala": "Toda obra precisa de um Programa de Gerenciamento de Riscos específico para aquele canteiro. Além do inventário de riscos e do plano de ação exigidos pela NR-01, o PGR da obra traz os projetos das proteções coletivas e dos sistemas de proteção contra quedas, o projeto das instalações elétricas provisórias, o projeto das áreas de vivência e a relação de EPIs por função. Ele deve acompanhar as fases da obra: fundação, estrutura, alvenaria e acabamento têm riscos diferentes.",
+          "pergunta": "Em que fase está a obra em que você vai trabalhar?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Áreas de vivência",
+          "itens": [
+            "Instalações sanitárias limpas, com chuveiro, lavatório e vaso",
+            "Vestiário com armários individuais",
+            "Local para refeições, com mesas, assentos e água potável",
+            "Alojamento e lavanderia quando houver trabalhadores alojados",
+            "Água potável, fresca e em quantidade suficiente em todo o canteiro"
+          ],
+          "destaque": "Cuidar da área de vivência é responsabilidade da empresa e de quem a utiliza.",
+          "fala": "O canteiro deve ter áreas de vivência adequadas: instalações sanitárias, vestiário com armários individuais, local para refeições e água potável em quantidade suficiente. Quando há trabalhadores alojados, também alojamento e lavanderia. Essas áreas precisam ser mantidas limpas e em bom estado. A empresa fornece e mantém, e cada trabalhador ajuda a conservar. Banheiro sujo e falta de água não são detalhe, são fonte de doença.",
+          "dica": "Use a planta do canteiro para mostrar onde ficam as áreas de vivência e as rotas de circulação."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Organização do canteiro",
+          "cards": [
+            {"t": "Circulação", "d": "Rotas de pedestres separadas de máquinas e veículos, sinalizadas e desobstruídas"},
+            {"t": "Ordem e limpeza", "d": "Entulho retirado com frequência, sem pregos expostos e sem materiais no caminho"},
+            {"t": "Armazenamento", "d": "Materiais empilhados de forma estável, longe de bordas e aberturas"},
+            {"t": "Sinalização", "d": "Indicação de riscos, uso obrigatório de EPI, saídas e equipamentos de emergência"}
+          ],
+          "fala": "Canteiro organizado é canteiro mais seguro. As rotas de pedestres devem ser separadas das de máquinas e veículos e ficar livres. O entulho é retirado com frequência, e tábuas com pregos expostos não podem ficar pelo chão. Materiais são empilhados de forma estável, longe de bordas e aberturas. E a sinalização indica riscos, EPIs obrigatórios, saídas e equipamentos de emergência. Grande parte dos tropeços, cortes e perfurações vem da desorganização.",
+          "apoio": "Canteiro organizado com rotas sinalizadas em contraste com área com entulho espalhado"
+        }
+      ]
+    },
+    {
+      "titulo": "Quedas e proteções coletivas",
+      "duracao": 50,
+      "gancho": "Queda de altura é a principal causa de morte na construção civil. E a maior parte dessas quedas acontece por bordas e aberturas sem proteção. Vamos ver como o canteiro deve estar protegido.",
+      "slides": [
+        {
+          "tipo": "alerta",
+          "titulo": "Proteção coletiva obrigatória",
+          "texto": "Onde houver risco de queda de pessoas ou de materiais, a proteção coletiva é obrigatória.",
+          "itens": [
+            "Periferia de lajes com guarda-corpo e rodapé ou redes",
+            "Aberturas no piso fechadas com tampa resistente e fixada",
+            "Poço do elevador e vãos de escada protegidos",
+            "Bandejas ou redes para conter queda de materiais"
+          ],
+          "fala": "A NR-18 determina que, onde houver risco de queda de trabalhadores ou de projeção de materiais, a proteção coletiva é obrigatória. Na periferia das lajes, usa-se guarda-corpo com rodapé ou sistemas de redes. As aberturas no piso recebem tampa resistente e fixada, para não ser retirada nem deslizar. O poço do elevador e os vãos de escada são protegidos. E bandejas ou redes contêm a queda de materiais sobre quem está embaixo. As dimensões e a resistência seguem o projeto da obra.",
+          "pergunta": "Onde, nesta obra, existe hoje uma borda ou abertura sem proteção?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Regras para as proteções coletivas",
+          "itens": [
+            "Não retirar a proteção sem autorização e sem medida substituta",
+            "Recolocar imediatamente ao terminar o serviço",
+            "Não apoiar materiais nem subir no guarda-corpo",
+            "Comunicar qualquer proteção danificada ou ausente",
+            "Usar cinturão e ancoragem sempre que a proteção coletiva precisar ser retirada"
+          ],
+          "destaque": "A proteção coletiva só funciona se ficar no lugar.",
+          "fala": "As proteções coletivas só funcionam se ficarem no lugar. Por isso, ninguém retira um guarda-corpo ou uma tampa de abertura sem autorização e sem uma medida substituta, como o cinturão conectado a uma ancoragem. Terminou o serviço, a proteção volta imediatamente. Não se apoia material no guarda-corpo e não se sobe nele. E qualquer proteção danificada ou ausente deve ser comunicada na hora. Muitas quedas acontecem por uma tampa que alguém tirou e não recolocou.",
+          "dica": "Pergunte quem já encontrou uma abertura destampada e o que fez."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Escadas e andaimes",
+          "cabecalho": ["Equipamento", "Pontos de atenção"],
+          "linhas": [
+            ["Escada de mão", "Somente para acesso provisório e serviços de pequeno porte; apoio firme e ultrapassar 1 m o piso superior"],
+            ["Andaime", "Montado por trabalhador capacitado, conforme projeto quando exigido, com piso completo, guarda-corpo e rodapé"],
+            ["Antes do uso", "Inspeção diária do andaime e liberação pelo responsável"],
+            ["Proibições", "Improvisar plataformas com tambores, caixas ou tábuas soltas e sobrecarregar o piso"]
+          ],
+          "fala": "A escada de mão só pode ser usada para acesso provisório e serviços de pequeno porte, com apoio firme e ultrapassando um metro o piso superior. O andaime é montado por trabalhador capacitado, seguindo o projeto quando ele for exigido, com piso de trabalho completo, guarda-corpo e rodapé. Antes do uso, todos os dias, o andaime é inspecionado e liberado. E é proibido improvisar plataformas com tambores, caixas ou tábuas soltas, ou sobrecarregar o piso com material. Trabalho em altura exige também o treinamento da NR-35.",
+          "apoio": "Andaime bem montado com guarda-corpo, rodapé e placa de liberação"
+        }
+      ]
+    },
+    {
+      "titulo": "Escavações, demolição e movimentação de materiais",
+      "duracao": 40,
+      "gancho": "Um metro cúbico de terra pesa mais de uma tonelada. Quando um talude desaba sobre um trabalhador, não há tempo para reagir. Vamos falar das atividades em que o risco vem de cima ou dos lados.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Escavações",
+          "valor": "1,25 m",
+          "legenda": "acima desta profundidade, a escavação exige estabilidade garantida e escada ou rampa de acesso",
+          "itens": [
+            "Taludes com inclinação segura ou escoramento dimensionado por profissional habilitado",
+            "Material escavado e equipamentos afastados da borda",
+            "Interferências subterrâneas, como redes de gás e energia, identificadas antes"
+          ],
+          "fala": "As escavações exigem cuidado especial. A partir de um metro e vinte e cinco de profundidade, a estabilidade dos taludes precisa ser garantida por inclinação segura ou por escoramento dimensionado por profissional habilitado, e deve haver escada ou rampa para entrada e saída rápida. O material retirado e os equipamentos ficam afastados da borda, porque o peso pode provocar o desabamento. E antes de escavar, identificam-se as redes subterrâneas de gás, água e energia.",
+          "pergunta": "O que pode provocar o desabamento de uma vala que parecia firme?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Demolição",
+          "cards": [
+            {"t": "Antes de começar", "d": "Desligar e retirar as instalações de energia, água, gás e esgoto"},
+            {"t": "Planejamento", "d": "Sequência de demolição definida por profissional habilitado"},
+            {"t": "Isolamento", "d": "Área isolada e sinalizada, inclusive para vizinhos e pedestres"},
+            {"t": "Entulho", "d": "Remoção por calhas fechadas, sem lançar material em queda livre"}
+          ],
+          "fala": "Na demolição, antes de qualquer golpe, as instalações de energia, água, gás e esgoto são desligadas e retiradas. A sequência de demolição é planejada por profissional habilitado, para que a estrutura não desabe de forma descontrolada. A área é isolada e sinalizada, inclusive para vizinhos e pedestres. E o entulho é removido por calhas fechadas, nunca lançado em queda livre.",
+          "apoio": "Calha fechada para descida de entulho em fachada"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Movimentação de cargas",
+          "itens": [
+            "Equipamentos de guindar operados por trabalhadores qualificados e autorizados",
+            "Nunca permanecer ou passar sob carga suspensa",
+            "Amarração feita por amarrador capacitado e comunicação com sinaleiro",
+            "Respeitar a capacidade do equipamento e as condições de vento",
+            "Elevador de obra: carga e passageiros conforme a sinalização"
+          ],
+          "destaque": "Carga suspensa: ninguém embaixo, nunca.",
+          "fala": "A movimentação de cargas com gruas, guinchos e elevadores de obra só pode ser feita por operadores qualificados e autorizados. A regra mais importante é nunca permanecer nem passar sob carga suspensa. A amarração é feita por amarrador capacitado e a comunicação com o operador é feita pelo sinaleiro. Respeita-se a capacidade do equipamento e suspende-se a operação com vento forte. No elevador de obra, cargas e passageiros seguem a sinalização e a capacidade indicadas.",
+          "dica": "Mostre a área de içamento do canteiro e onde ela fica isolada."
+        }
+      ]
+    },
+    {
+      "titulo": "Máquinas, ferramentas e eletricidade no canteiro",
+      "duracao": 35,
+      "gancho": "Serra circular, betoneira, extensões espalhadas pelo chão molhado. São equipamentos do dia a dia que causam acidentes graves quando a gente se acostuma com eles.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Serra circular de bancada",
+          "cards": [
+            {"t": "Coifa protetora", "d": "Cobre o disco e se ajusta à peça"},
+            {"t": "Cutelo divisor", "d": "Impede que a madeira feche sobre o disco e seja projetada"},
+            {"t": "Empurrador", "d": "Peças pequenas são empurradas com dispositivo, nunca com a mão"},
+            {"t": "Operador", "d": "Somente trabalhador capacitado, com óculos e protetor auricular"}
+          ],
+          "fala": "A serra circular é uma das máquinas que mais causam amputações na construção. Ela precisa ter coifa protetora sobre o disco, cutelo divisor, que impede a madeira de fechar sobre o disco e ser arremessada, e empurrador para peças pequenas. A mesa deve ser estável e a máquina aterrada. Só opera quem foi capacitado, usando óculos e protetor auricular. E nunca se retira a coifa para ganhar velocidade.",
+          "apoio": "Serra circular com coifa, cutelo e empurrador"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Instalações elétricas provisórias",
+          "itens": [
+            "Executadas e mantidas por trabalhador qualificado e autorizado",
+            "Quadros fechados, sinalizados e com dispositivo DR",
+            "Cabos protegidos contra danos mecânicos e sem emendas expostas",
+            "Tomadas e plugues adequados, sem fios desencapados ligados direto",
+            "Extensões fora de poças e de rotas de veículos"
+          ],
+          "destaque": "Gambiarra elétrica em canteiro molhado é choque à espera de acontecer.",
+          "fala": "As instalações elétricas do canteiro seguem um projeto e são executadas e mantidas por trabalhador qualificado e autorizado conforme a NR-10. Os quadros ficam fechados, sinalizados e com dispositivo DR. Os cabos são protegidos contra danos e não podem ter emendas expostas. Equipamentos são ligados por plugue e tomada, nunca com os fios enfiados direto. E as extensões ficam longe de poças e de rotas de veículos. No canteiro, umidade e improviso formam a combinação mais perigosa.",
+          "pergunta": "Que gambiarra elétrica vocês já viram em obra?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Ferramentas e equipamentos",
+          "itens": [
+            "Usar cada ferramenta só para a finalidade para a qual foi feita",
+            "Inspecionar antes do uso e retirar a ferramenta danificada",
+            "Manter as proteções das ferramentas elétricas, como a capa da esmerilhadeira",
+            "Desligar da tomada antes de trocar discos e acessórios",
+            "Ferramentas de fixação a pólvora somente por operador habilitado"
+          ],
+          "destaque": "Ferramenta certa, em bom estado e com proteção.",
+          "fala": "Toda ferramenta deve ser usada só para a finalidade para a qual foi projetada e inspecionada antes do uso. Ferramentas elétricas mantêm as suas proteções, como a capa da esmerilhadeira, e são desligadas da tomada antes da troca de discos. O disco deve ser compatível com a rotação da máquina. E ferramentas de fixação a pólvora só podem ser usadas por operador habilitado. Ferramenta danificada sai de uso e é comunicada."
+        }
+      ]
+    },
+    {
+      "titulo": "EPI no canteiro e conduta segura",
+      "duracao": 25,
+      "gancho": "Para fechar, vamos falar dos equipamentos que você vai usar todos os dias e da atitude que faz diferença na obra.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "EPIs mais usados na construção",
+          "cabecalho": ["EPI", "Quando usar"],
+          "linhas": [
+            ["Capacete com jugular", "Durante toda a permanência no canteiro"],
+            ["Calçado de segurança", "Durante toda a permanência no canteiro, contra perfuração e impacto"],
+            ["Óculos e protetor facial", "Corte, esmerilhamento, demolição e manuseio de produtos"],
+            ["Protetor auricular", "Serra, martelete, betoneira e outras fontes de ruído"],
+            ["Luvas e cinturão", "Luva conforme o risco da tarefa; cinturão em trabalho em altura sem proteção coletiva"]
+          ],
+          "fala": "No canteiro, alguns EPIs são permanentes: capacete com jugular e calçado de segurança durante todo o tempo na obra. Outros dependem da tarefa: óculos e protetor facial em corte, esmerilhamento e demolição; protetor auricular perto da serra, do martelete e da betoneira; luvas adequadas ao risco, como as de raspa para materiais ásperos e as impermeáveis para cimento; e cinturão paraquedista quando o trabalho em altura não estiver protegido por proteção coletiva. O cimento molhado, por exemplo, causa queimaduras e dermatites.",
+          "dica": "Mostre fisicamente cada EPI e explique o ajuste da jugular do capacete."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Conduta segura na obra",
+          "cards": [
+            {"t": "Conhecer", "d": "Saber os riscos da sua função e as medidas de proteção"},
+            {"t": "Preservar", "d": "Manter proteções coletivas, sinalização e isolamentos no lugar"},
+            {"t": "Recusar", "d": "Interromper o trabalho diante de risco grave e iminente"},
+            {"t": "Comunicar", "d": "Avisar o encarregado sobre condições inseguras e quase acidentes"}
+          ],
+          "fala": "A conduta segura na obra se resume em quatro atitudes. Conhecer os riscos da sua função e as medidas de proteção. Preservar as proteções coletivas, a sinalização e os isolamentos. Recusar o trabalho quando houver risco grave e iminente, comunicando o superior, um direito garantido pela NR-01. E comunicar ao encarregado qualquer condição insegura e qualquer quase acidente. Na obra, quem vê primeiro um risco protege toda a equipe.",
+          "pergunta": "A quem você deve comunicar uma condição insegura nesta obra?"
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Inspeção guiada do canteiro",
+    "duracao": 20,
+    "descricao": "O instrutor conduz o grupo por um percurso no canteiro, apontando as áreas de vivência, as proteções coletivas, as rotas e os locais de risco. Cada participante preenche o checklist.",
+    "itens": [
+      "Identificou as áreas de vivência e as rotas de circulação",
+      "Localizou proteções coletivas e apontou eventuais falhas",
+      "Identificou os quadros elétricos e os equipamentos de emergência",
+      "Reconheceu a área de içamento e as restrições de acesso",
+      "Indicou os EPIs exigidos para a sua função"
+    ]
+  },
+  "caso": {
+    "titulo": "A tampa que ninguém recolocou",
+    "relato": "Em um edifício residencial em fase de estrutura, uma equipe de instalações retirou a tampa de madeira de uma abertura no piso do quarto pavimento para passar tubulações para o andar de baixo. Ao final do expediente, a equipe saiu sem recolocar a tampa, deixando apenas um pedaço de sacaria por cima, para não perder o lugar. Na manhã seguinte, um servente que carregava blocos com um carrinho de mão não percebeu a abertura coberta pela sacaria e caiu cerca de 3 metros até o pavimento inferior. A empresa tinha PGR, as tampas estavam previstas no projeto de proteção coletiva e todos haviam feito o treinamento inicial.",
+    "perguntas": [
+      "Que regra sobre proteções coletivas foi descumprida?",
+      "Por que a sacaria tornou a situação ainda mais perigosa?",
+      "Quem deveria ter verificado o canteiro ao final do expediente e no início do dia?",
+      "Que medida substituta a equipe de instalações deveria ter adotado?",
+      "Que mudança na rotina da obra evitaria a repetição?"
+    ],
+    "analise": "A proteção coletiva foi retirada sem medida substituta e não foi recolocada ao final do serviço. A sacaria escondeu a abertura e criou uma armadilha, pior do que a abertura exposta. Faltou a inspeção de fechamento do dia pela equipe e a inspeção de abertura pelo encarregado. A medida substituta seria isolar a área com guarda-corpo provisório e sinalização enquanto a tampa estivesse fora, e recolocá-la fixada ao final. Recomenda-se incluir a verificação das aberturas no checklist diário de início e fim de turno, exigir autorização para retirar qualquer proteção e usar tampas fixadas que não possam ser deslocadas facilmente."
+  },
+  "dinamica": {
+    "titulo": "Encontre os erros",
+    "objetivo": "Treinar o olhar para condições inseguras no canteiro.",
+    "tempo": 15,
+    "passos": [
+      "Projete uma foto ou ilustração de canteiro com várias condições inseguras, como abertura sem proteção, andaime sem guarda-corpo, extensão em poça e trabalhador sem capacete.",
+      "Dê 3 minutos para cada participante anotar o maior número de erros que encontrar.",
+      "Peça que digam os erros em voz alta e marque na imagem.",
+      "Para cada erro, a turma indica a medida correta.",
+      "Feche lembrando que esses erros aparecem todos os dias nas obras e que cada um deve comunicar o que encontrar."
+    ]
+  },
+  "dds": {
+    "titulo": "Tirou, recoloca",
+    "texto": "Bom dia, pessoal. Hoje o recado é sobre as proteções coletivas. Guarda-corpo, tampa de abertura, rede, isolamento de área. Às vezes a gente precisa tirar uma delas para fazer um serviço. Tudo bem, desde que seja autorizado e que exista uma proteção no lugar enquanto isso. Mas terminou, recoloca. Não deixa para amanhã, não deixa para o colega e nunca cobre uma abertura com papelão ou sacaria, porque isso esconde o buraco. Quem passar por ali depois confia que está protegido. Tirou, recoloca. Essa é a regra da nossa obra."
+  },
+  "prova": [
+    {"q": "O treinamento inicial da NR-18 deve ser realizado:", "o": ["Após o primeiro mês de trabalho", "Antes de o trabalhador iniciar as atividades", "Somente em obras com mais de 50 trabalhadores", "Apenas para os encarregados"], "c": 1, "com": "O treinamento inicial acontece antes do início das atividades no canteiro."},
+    {"q": "Onde houver risco de queda de trabalhadores ou de projeção de materiais, é obrigatório:", "o": ["Apenas sinalizar", "Instalar proteção coletiva", "Usar somente capacete", "Trabalhar com mais atenção"], "c": 1, "com": "A NR-18 exige proteção coletiva nessas situações."},
+    {"q": "Uma tampa de abertura no piso retirada para um serviço deve:", "o": ["Ser deixada de lado até o fim da obra", "Ser coberta com sacaria", "Ser recolocada e fixada ao terminar o serviço, com medida substituta enquanto estiver fora", "Ser trocada por fita zebrada definitiva"], "c": 2, "com": "A proteção volta ao lugar ao final e há medida substituta durante o serviço."},
+    {"q": "A escada de mão pode ser utilizada para:", "o": ["Qualquer serviço de longa duração", "Acesso provisório e serviços de pequeno porte", "Transporte de cargas pesadas", "Substituir andaimes em fachadas"], "c": 1, "com": "A escada de mão é para acesso provisório e serviços de pequeno porte."},
+    {"q": "Escavações com profundidade superior a 1,25 m devem:", "o": ["Ser feitas sem acompanhamento", "Ter estabilidade garantida e escada ou rampa de acesso", "Ser cobertas com lona", "Ser feitas apenas à noite"], "c": 1, "com": "Acima de 1,25 m é preciso garantir a estabilidade dos taludes e o acesso seguro."},
+    {"q": "Em relação à carga suspensa, é correto:", "o": ["Passar rapidamente por baixo", "Nunca permanecer nem passar sob carga suspensa", "Segurar a carga com as mãos para guiar", "Permanecer embaixo se estiver de capacete"], "c": 1, "com": "Ninguém deve ficar ou passar sob carga suspensa."},
+    {"q": "A serra circular de bancada deve possuir:", "o": ["Apenas botão de liga e desliga", "Coifa protetora, cutelo divisor e empurrador", "Disco sem proteção para ver melhor o corte", "Lâmina de qualquer diâmetro"], "c": 1, "com": "Esses dispositivos evitam contato com o disco e o retrocesso da peça."},
+    {"q": "Os quadros elétricos provisórios do canteiro devem:", "o": ["Ficar abertos para facilitar o uso", "Ficar fechados, sinalizados e com dispositivo DR", "Ser instalados por qualquer trabalhador", "Ficar no chão, perto das poças"], "c": 1, "com": "Quadros fechados, sinalizados e com DR, executados por profissional qualificado e autorizado."},
+    {"q": "No entulho de demolição, o correto é:", "o": ["Lançar em queda livre pela fachada", "Remover por calhas fechadas", "Acumular nas bordas das lajes", "Queimar no canteiro"], "c": 1, "com": "A remoção por calhas fechadas evita queda de material sobre pessoas."},
+    {"q": "O capacete e o calçado de segurança no canteiro devem ser usados:", "o": ["Apenas em altura", "Durante toda a permanência no canteiro", "Somente quando o encarregado estiver presente", "Apenas pelos operadores de máquinas"], "c": 1, "com": "São EPIs de uso permanente dentro do canteiro."}
+  ]
+}

@@ -1,0 +1,454 @@
+{
+  "nr": "10",
+  "titulo": "Segurança em Instalações e Serviços em Eletricidade",
+  "chamada": "Desenergizar, bloquear, testar e aterrar antes de tocar",
+  "icone": "FaBolt",
+  "carga": "40 horas (curso básico, conforme Anexo II da NR-10)",
+  "periodicidade": "Reciclagem bienal e sempre que ocorrer troca de função ou mudança de empresa, retorno de afastamento ao trabalho ou inatividade por período superior a três meses, ou modificações significativas nas instalações elétricas ou troca de métodos, processos e organização do trabalho. Trabalhos no Sistema Elétrico de Potência exigem também o curso complementar SEP.",
+  "publico": "Trabalhadores que interagem com instalações elétricas e serviços com eletricidade, em qualquer das fases de geração, transmissão, distribuição e consumo.",
+  "prerequisitos": "Para atuar como profissional autorizado: qualificação, habilitação ou capacitação conforme a NR-10, avaliação de saúde compatível registrada no ASO e anuência formal da empresa.",
+  "instrutor": "Profissionais com qualificação técnica nos temas, sob responsabilidade de profissional legalmente habilitado em eletricidade e de profissional qualificado em segurança do trabalho para os temas de SST.",
+  "objetivos": [
+    "Identificar os riscos do choque elétrico, do arco elétrico e dos riscos adicionais",
+    "Aplicar as medidas de controle do risco elétrico, com prioridade para a desenergização",
+    "Executar a sequência de desenergização e reenergização prevista na NR-10",
+    "Selecionar e inspecionar equipamentos de proteção coletiva e individual",
+    "Agir em emergências, incluindo combate a princípio de incêndio e primeiros socorros"
+  ],
+  "recursos": [
+    "Projetor e apresentação",
+    "Painel didático ou quadro de distribuição desenergizado para prática",
+    "Kit de bloqueio com cadeados, garras multiplicadoras e etiquetas",
+    "Detector de tensão, conjunto de aterramento temporário e luvas isolantes",
+    "Extintores para prática de combate a princípio de incêndio",
+    "Manequim para treino de reanimação cardiopulmonar",
+    "Lista de presença e provas impressas"
+  ],
+  "aprovacao": "Frequência integral, nota mínima de 7,0 na avaliação teórica e desempenho satisfatório em todos os itens do checklist prático.",
+  "referencias": [
+    "NR-10 Segurança em Instalações e Serviços em Eletricidade, texto vigente",
+    "ABNT NBR 5410 Instalações elétricas de baixa tensão",
+    "ABNT NBR 14039 Instalações elétricas de média tensão",
+    "NR-23 Proteção contra incêndios",
+    "NR-35 Trabalho em altura e NR-33 Espaços confinados, para riscos adicionais"
+  ],
+  "caso_modulo": 6,
+  "modulos": [
+    {
+      "titulo": "Introdução, regulamentação e responsabilidades",
+      "duracao": 240,
+      "gancho": "A eletricidade não se vê, não tem cheiro e não avisa. A NR-10 existe para que ninguém dependa da sorte ao trabalhar com ela. Vamos começar entendendo quem pode trabalhar e em que condições.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Faixas de tensão",
+          "cabecalho": ["Faixa", "Corrente alternada · Corrente contínua"],
+          "linhas": [
+            ["Extra-baixa tensão", "Até 50 V entre fases ou fase e terra · até 120 V"],
+            ["Baixa tensão", "Acima de 50 V até 1.000 V · acima de 120 V até 1.500 V"],
+            ["Alta tensão", "Acima de 1.000 V · acima de 1.500 V"],
+            ["Aplicação", "Geração, transmissão, distribuição e consumo, incluindo projeto, montagem, operação e manutenção"]
+          ],
+          "fala": "A NR-10 se aplica a todas as fases da eletricidade, da geração ao consumo, e a qualquer trabalho feito perto de instalações elétricas. Para organizar as exigências, a norma usa faixas de tensão. Extra-baixa tensão vai até cinquenta volts em corrente alternada. Baixa tensão vai de cinquenta até mil volts. Acima de mil volts é alta tensão. Em corrente contínua, os limites são cento e vinte e mil e quinhentos volts. Repare que a tomada de casa, de 127 ou 220 volts, já é baixa tensão e pode matar.",
+          "pergunta": "Quais tensões existem nas instalações em que vocês trabalham?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Quem pode trabalhar com eletricidade",
+          "passos": [
+            {"t": "Qualificado", "d": "Curso específico na área elétrica reconhecido pelo sistema oficial de ensino"},
+            {"t": "Habilitado", "d": "Qualificado e com registro no conselho de classe"},
+            {"t": "Capacitado", "d": "Treinado por profissional habilitado e autorizado, trabalhando sob sua responsabilidade"},
+            {"t": "Autorizado", "d": "Qualificado, habilitado ou capacitado, apto no ASO, treinado na NR-10 e com anuência formal da empresa"}
+          ],
+          "fala": "A NR-10 define quatro situações. Profissional qualificado é quem concluiu curso específico na área elétrica reconhecido pelo sistema oficial de ensino, como um técnico em eletrotécnica. Habilitado é o qualificado com registro no conselho de classe. Capacitado é quem recebeu capacitação de um profissional habilitado e autorizado e trabalha sob a responsabilidade dele. E autorizado é quem, sendo qualificado, habilitado ou capacitado, tem saúde compatível no ASO, fez este treinamento e recebeu a anuência formal da empresa. Só o autorizado pode intervir em instalações elétricas.",
+          "dica": "Mostre o modelo de documento de autorização e o crachá ou identificação usada pela empresa."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Documentação das instalações",
+          "itens": [
+            "Esquemas unifilares atualizados, com especificação do sistema de aterramento e dos dispositivos de proteção",
+            "Prontuário de instalações elétricas para carga instalada superior a 75 kW",
+            "Procedimentos e instruções técnicas e administrativas de segurança",
+            "Registros de inspeções do SPDA e dos aterramentos e testes de isolação de EPI e EPC",
+            "Comprovação da qualificação, capacitação, autorização e treinamento dos trabalhadores"
+          ],
+          "destaque": "Sem diagrama atualizado, ninguém sabe com certeza o que está desligando.",
+          "fala": "Toda empresa deve manter os esquemas unifilares das instalações atualizados, com o sistema de aterramento e os dispositivos de proteção. Estabelecimentos com carga instalada acima de setenta e cinco quilowatts também precisam do prontuário de instalações elétricas, que reúne procedimentos, registros de inspeção do SPDA e dos aterramentos, testes de isolação de equipamentos de proteção, a comprovação da autorização e do treinamento dos trabalhadores e os relatórios de inspeção. Na prática, o diagrama desatualizado é uma das grandes causas de acidente: a pessoa desliga um disjuntor achando que desligou o circuito certo.",
+          "pergunta": "O diagrama do quadro que você mais usa está atualizado?"
+        }
+      ]
+    },
+    {
+      "titulo": "Riscos em instalações e serviços com eletricidade",
+      "duracao": 300,
+      "gancho": "O choque elétrico é o risco mais conhecido, mas não é o único. O arco elétrico pode causar queimaduras graves sem que ninguém encoste na parte energizada. Vamos entender cada risco e como ele age no corpo.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Efeitos da corrente no corpo humano",
+          "cabecalho": ["Corrente aproximada", "Efeito provável (corrente alternada, 60 Hz)"],
+          "linhas": [
+            ["Cerca de 1 mA", "Limiar de percepção, formigamento"],
+            ["Cerca de 10 mA", "Contração muscular que pode impedir de soltar o condutor"],
+            ["Cerca de 30 mA", "Dificuldade respiratória e risco de asfixia"],
+            ["Acima de 50 a 100 mA", "Risco de fibrilação ventricular, que pode levar à morte"],
+            ["Correntes altas", "Queimaduras internas e externas graves"]
+          ],
+          "fala": "O efeito do choque depende principalmente da intensidade da corrente que passa pelo corpo, do caminho que ela percorre e do tempo de contato. Como referência aproximada, por volta de um miliampere já sentimos formigamento. Perto de dez miliamperes, os músculos se contraem e a pessoa pode não conseguir soltar o condutor. Por volta de trinta miliamperes surge dificuldade para respirar. E acima de cinquenta a cem miliamperes existe risco de fibrilação ventricular, em que o coração perde o ritmo e para de bombear sangue. Por isso o dispositivo DR de trinta miliamperes é tão importante.",
+          "dica": "Esclareça que os valores são referências aproximadas e variam com o caminho da corrente e o tempo de exposição."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos elétricos",
+          "cards": [
+            {"t": "Choque elétrico", "d": "Contato direto com parte energizada ou indireto com massa que ficou energizada por falha"},
+            {"t": "Arco elétrico", "d": "Descarga pelo ar com calor intenso, luz, pressão, projeção de metal fundido e queimaduras graves"},
+            {"t": "Campos eletromagnéticos", "d": "Exposição próxima a sistemas de alta tensão e equipamentos de grande potência"},
+            {"t": "Quedas e reações", "d": "O susto do choque provoca quedas de escadas, andaimes e estruturas"}
+          ],
+          "fala": "Os riscos elétricos são vários. O choque, que pode acontecer por contato direto com a parte energizada ou indireto, quando uma carcaça fica energizada por falha de isolamento. O arco elétrico, uma descarga pelo ar que gera temperaturas de milhares de graus, luz intensa, onda de pressão e projeção de metal fundido, causando queimaduras graves mesmo sem contato. Os campos eletromagnéticos, perto de sistemas de alta tensão. E as quedas: muitas mortes por eletricidade acontecem porque o choque derruba a pessoa de uma escada.",
+          "apoio": "Vídeo ou imagem de ensaio de arco elétrico em laboratório"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Riscos adicionais",
+          "cards": [
+            {"t": "Altura", "d": "Serviços em postes, estruturas e forros exigem também as medidas da NR-35"},
+            {"t": "Espaço confinado", "d": "Galerias e caixas subterrâneas exigem as medidas da NR-33"},
+            {"t": "Áreas classificadas", "d": "Atmosferas explosivas exigem equipamentos certificados e controle de fontes de ignição"},
+            {"t": "Umidade e clima", "d": "Água reduz a resistência do corpo; chuva e descargas atmosféricas impedem serviços externos"}
+          ],
+          "fala": "Além do risco elétrico, existem os riscos adicionais, que a NR-10 manda considerar em toda análise de risco. Trabalho em altura, que exige a NR-35. Espaços confinados, como galerias e caixas subterrâneas, que exigem a NR-33. Áreas classificadas, com possibilidade de atmosfera explosiva, onde uma faísca é fonte de ignição. E a umidade e as condições atmosféricas: a pele molhada conduz muito mais, e chuva e raios impedem serviços em instalações externas.",
+          "pergunta": "Em quais serviços de vocês o risco elétrico aparece junto com um risco adicional?"
+        }
+      ]
+    },
+    {
+      "titulo": "Análise de risco e medidas de controle do risco elétrico",
+      "duracao": 420,
+      "gancho": "A medida mais segura contra o risco elétrico é simples de dizer e exige disciplina para fazer: trabalhar com a instalação desenergizada. Neste módulo vamos ver a sequência que torna isso confiável.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Desenergização: sequência obrigatória",
+          "passos": [
+            {"t": "Seccionar", "d": "Abrir o dispositivo de manobra do circuito"},
+            {"t": "Impedir religação", "d": "Bloquear com cadeado e travar o dispositivo"},
+            {"t": "Testar", "d": "Constatar a ausência de tensão com detector"},
+            {"t": "Aterrar", "d": "Aterrar e equipotencializar os condutores"},
+            {"t": "Proteger e sinalizar", "d": "Proteger partes energizadas próximas e sinalizar o impedimento"}
+          ],
+          "fala": "A NR-10 define a sequência para considerar uma instalação desenergizada. Primeiro, seccionamento: abrir o dispositivo de manobra. Segundo, impedimento de reenergização, com bloqueio por cadeado e travamento. Terceiro, constatação da ausência de tensão, com detector adequado e testado. Quarto, instalação de aterramento temporário com equipotencialização dos condutores. Quinto, proteção dos elementos energizados que existirem na zona controlada. E sexto, instalação da sinalização de impedimento de reenergização. Só depois dessas etapas a instalação é considerada desenergizada.",
+          "dica": "Repita a sequência com a turma em voz alta e demonstre no painel didático."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Reenergização: sequência obrigatória",
+          "passos": [
+            {"t": "Retirar ferramentas", "d": "Recolher ferramentas, utensílios e equipamentos"},
+            {"t": "Liberar a zona", "d": "Retirar os trabalhadores não envolvidos da zona controlada"},
+            {"t": "Remover aterramento", "d": "Retirar aterramento temporário e proteções adicionais"},
+            {"t": "Remover sinalização", "d": "Retirar a sinalização de impedimento"},
+            {"t": "Religar", "d": "Destravar e religar os dispositivos de seccionamento"}
+          ],
+          "fala": "A volta da energia também tem sequência obrigatória, e muitos acidentes acontecem aqui. Primeiro, retirar ferramentas, utensílios e equipamentos. Depois, retirar da zona controlada todos os trabalhadores não envolvidos. Em seguida, remover o aterramento temporário, a equipotencialização e as proteções adicionais. Retirar a sinalização de impedimento. E só então destravar e religar os dispositivos. Cada trabalhador retira o próprio cadeado, e ninguém religa um circuito sem confirmar que todos saíram.",
+          "pergunta": "Já viram alguém religar um circuito sem confirmar se havia gente trabalhando?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Medidas de proteção coletiva",
+          "cards": [
+            {"t": "Aterramento e equipotencialização", "d": "Ligar massas ao terra e igualar potenciais para evitar diferenças perigosas"},
+            {"t": "Seccionamento automático", "d": "Disjuntores e dispositivos DR desligam o circuito em caso de falha"},
+            {"t": "Barreiras e invólucros", "d": "Impedem o contato com partes energizadas"},
+            {"t": "Extra-baixa tensão", "d": "Uso de tensões de segurança em ambientes de maior risco"}
+          ],
+          "fala": "Quando a desenergização não é possível, ou como proteção adicional, usamos medidas coletivas. Aterramento de proteção e equipotencialização, para que as carcaças não fiquem com tensão perigosa. Seccionamento automático, com disjuntores e o dispositivo DR, que detecta a fuga de corrente e desliga em frações de segundo. Barreiras, invólucros e obstáculos, que impedem o contato com partes vivas. Isolação dupla ou reforçada. E o uso de extra-baixa tensão em locais de maior risco, como dentro de tanques metálicos.",
+          "apoio": "Close de um dispositivo DR e do botão de teste"
+        },
+        {
+          "tipo": "numero",
+          "titulo": "Bloqueio individual",
+          "valor": "1 pessoa",
+          "legenda": "um cadeado, uma etiqueta e uma chave que fica com quem está trabalhando",
+          "itens": [
+            "Cada trabalhador coloca o seu próprio cadeado no ponto de bloqueio",
+            "Com mais de uma pessoa, usa-se garra multiplicadora",
+            "A etiqueta identifica quem bloqueou, quando e por quê"
+          ],
+          "fala": "O bloqueio é a garantia de que ninguém vai religar o circuito enquanto você trabalha. A regra é uma pessoa, um cadeado, uma chave. Cada trabalhador coloca o seu próprio cadeado e fica com a chave no bolso. Quando há várias pessoas, usamos a garra multiplicadora, que permite vários cadeados no mesmo ponto. A etiqueta identifica quem bloqueou, quando e por quê. Cadeado coletivo com chave pendurada no quadro não é bloqueio.",
+          "dica": "Faça cada participante colocar o próprio cadeado na garra multiplicadora durante a prática."
+        }
+      ]
+    },
+    {
+      "titulo": "Normas técnicas, equipamentos de proteção coletiva e individual",
+      "duracao": 240,
+      "gancho": "O equipamento de proteção para eletricidade tem uma particularidade: ele precisa ser isolante e estar perfeito. Um furo invisível numa luva isolante muda tudo.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Normas técnicas de referência",
+          "cards": [
+            {"t": "ABNT NBR 5410", "d": "Instalações elétricas de baixa tensão: proteção, aterramento, dimensionamento"},
+            {"t": "ABNT NBR 14039", "d": "Instalações elétricas de média tensão, de 1,0 kV a 36,2 kV"},
+            {"t": "ABNT NBR 5419", "d": "Proteção contra descargas atmosféricas"},
+            {"t": "Normas da concessionária", "d": "Padrões de entrada de energia e procedimentos de acesso à rede"}
+          ],
+          "fala": "A NR-10 determina que as instalações sigam as normas técnicas oficiais. As principais são a NBR 5410, para baixa tensão, que trata de proteção, aterramento e uso do DR. A NBR 14039, para média tensão. A NBR 5419, de proteção contra descargas atmosféricas. E as normas da concessionária local para entrada de energia. Na ausência de norma brasileira, valem as normas internacionais cabíveis. O profissional autorizado não precisa decorar essas normas, mas precisa saber que elas existem e consultar quando necessário."
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "EPC e EPI para eletricidade",
+          "esquerda": {"t": "Proteção coletiva", "itens": ["Conjunto de aterramento temporário", "Tapetes e mantas isolantes", "Cones, fitas e placas de sinalização", "Detector de tensão e ferramentas isoladas"]},
+          "direita": {"t": "Proteção individual", "itens": ["Luvas isolantes com luva de cobertura", "Capacete classe B e protetor facial para arco", "Vestimenta resistente a arco e chama", "Calçado sem partes metálicas"]},
+          "fala": "Os equipamentos de proteção coletiva incluem o conjunto de aterramento temporário, tapetes e mantas isolantes, sinalização e isolamento da área, detector de tensão e ferramentas isoladas. Os EPIs incluem luvas isolantes, sempre com a luva de cobertura por cima para proteger contra cortes, capacete com proteção para eletricidade, protetor facial para arco, vestimenta resistente a arco e chama e calçado sem partes metálicas. A NR-10 exige que as vestimentas sejam adequadas à condutibilidade, à inflamabilidade e às influências eletromagnéticas.",
+          "dica": "Mostre a etiqueta de uma vestimenta resistente a arco e explique a classificação de proteção."
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Proibido em serviços com eletricidade",
+          "texto": "Adornos metálicos e roupas sintéticas transformam um incidente em lesão grave.",
+          "itens": [
+            "Anéis, alianças, pulseiras, relógios, correntes e piercings",
+            "Roupas sintéticas que derretem e grudam na pele no arco elétrico",
+            "Luva isolante sem teste de insuflação antes do uso",
+            "Ferramentas improvisadas ou com isolação danificada"
+          ],
+          "fala": "A NR-10 proíbe o uso de adornos pessoais nos trabalhos com eletricidade ou em suas proximidades. Uma aliança pode fechar um curto-circuito e causar queimadura grave no dedo. Roupas sintéticas derretem com o calor do arco e grudam na pele. A luva isolante deve passar pelo teste de insuflação antes de cada uso, para detectar furos. E ferramentas improvisadas ou com isolação danificada não podem ser usadas.",
+          "pergunta": "Quem aqui ainda trabalha de aliança?"
+        }
+      ]
+    },
+    {
+      "titulo": "Rotinas de trabalho e procedimentos",
+      "duracao": 300,
+      "gancho": "Os serviços elétricos seguros não dependem da experiência de quem faz, dependem do procedimento que todos seguem. Vamos ver como organizar e liberar o trabalho.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Zonas de risco e controlada",
+          "valor": "0,20 m",
+          "legenda": "raio da zona de risco em instalações abaixo de 1 kV; a zona controlada vai até 0,70 m",
+          "itens": [
+            "Zona de risco: acesso só para autorizados, com técnicas e ferramentas apropriadas",
+            "Zona controlada: acesso restrito a profissionais autorizados",
+            "Os raios aumentam com a tensão conforme a tabela do Anexo I da NR-10"
+          ],
+          "fala": "A NR-10 define distâncias em torno das partes energizadas. A zona de risco é a mais próxima, onde só entra profissional autorizado, com técnicas e ferramentas apropriadas. A zona controlada fica em volta dela e também é restrita a autorizados. Para instalações abaixo de mil volts, a zona de risco tem raio de vinte centímetros e a zona controlada vai até setenta centímetros. Esses raios aumentam conforme a tensão, segundo a tabela do Anexo I da norma.",
+          "dica": "Projete a tabela completa do Anexo I e comente as faixas existentes na empresa."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Liberação de serviços",
+          "passos": [
+            {"t": "Planejar", "d": "Ordem de serviço com escopo, local e equipe"},
+            {"t": "Analisar", "d": "Análise de risco com riscos elétricos e adicionais"},
+            {"t": "Liberar", "d": "Permissão de trabalho emitida por responsável autorizado"},
+            {"t": "Executar", "d": "Seguir o procedimento e a desenergização"},
+            {"t": "Encerrar", "d": "Reenergizar, inspecionar e registrar"}
+          ],
+          "fala": "Todo serviço em instalação elétrica começa com planejamento: uma ordem de serviço com o escopo, o local e a equipe. Em seguida, a análise de risco, incluindo os riscos adicionais. Então a liberação, com permissão de trabalho emitida por responsável autorizado. A execução segue o procedimento escrito e a sequência de desenergização. E o encerramento inclui a reenergização na ordem correta, a inspeção e o registro. Os procedimentos devem conter objetivo, campo de aplicação, base técnica, competências, responsabilidades, cuidados e medidas de controle.",
+          "pergunta": "Que serviço elétrico da nossa rotina ainda é feito sem procedimento escrito?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Sinalização e inspeção",
+          "cards": [
+            {"t": "Sinalização", "d": "Identificação de circuitos, travamentos, restrição de acesso e impedimento de reenergização"},
+            {"t": "Áreas", "d": "Painéis fechados, salas elétricas sinalizadas e acesso controlado"},
+            {"t": "Ferramental", "d": "Inspeção visual antes do uso e retirada imediata do que estiver danificado"},
+            {"t": "Instrumentos", "d": "Detector testado antes e depois do uso, em fonte conhecida"}
+          ],
+          "fala": "A sinalização deve identificar circuitos, travamentos, áreas de acesso restrito e o impedimento de reenergização. Painéis precisam estar fechados e salas elétricas sinalizadas, com acesso controlado. Ferramentas e equipamentos passam por inspeção visual antes do uso. E um cuidado importante com o detector de tensão: teste-o em uma fonte conhecida antes e depois da medição. Se ele estiver com defeito, vai indicar ausência de tensão em um circuito energizado.",
+          "apoio": "Trabalhador testando o detector de tensão em uma tomada antes da medição"
+        }
+      ]
+    },
+    {
+      "titulo": "Proteção e combate a incêndios",
+      "duracao": 180,
+      "gancho": "Uma conexão frouxa, um cabo sobrecarregado ou um painel sujo podem ser o começo de um incêndio. Vamos ver como evitar e como combater o princípio de incêndio com segurança.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Causas de incêndio de origem elétrica",
+          "cards": [
+            {"t": "Sobrecarga", "d": "Condutores subdimensionados ou muitos equipamentos na mesma tomada"},
+            {"t": "Mau contato", "d": "Conexões frouxas que aquecem e carbonizam o isolamento"},
+            {"t": "Curto-circuito", "d": "Falha de isolamento que gera arco e faíscas"},
+            {"t": "Acúmulo", "d": "Poeira, óleo e materiais combustíveis dentro ou perto de painéis"}
+          ],
+          "fala": "As causas mais comuns de incêndio de origem elétrica são a sobrecarga, quando um condutor recebe mais corrente do que suporta, como nos benjamins e extensões; o mau contato, com conexões frouxas que aquecem até carbonizar o isolamento; o curto-circuito, que gera arco e faíscas; e o acúmulo de poeira, óleo e materiais combustíveis dentro ou perto dos painéis. Termografia, reaperto programado e limpeza dos painéis são medidas preventivas simples e eficazes.",
+          "pergunta": "Onde vocês já viram benjamins ou extensões improvisadas na empresa?"
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Classes de incêndio e extintores",
+          "cabecalho": ["Classe", "Material e agente extintor indicado"],
+          "linhas": [
+            ["A", "Sólidos que queimam em profundidade, como madeira e papel: água e pó ABC"],
+            ["B", "Líquidos e gases inflamáveis: pó químico, espuma e CO2"],
+            ["C", "Equipamentos energizados: CO2 e pó químico, nunca água ou espuma"],
+            ["D", "Metais combustíveis: pó especial"],
+            ["K", "Óleos e gorduras de cozinha: agente específico classe K"]
+          ],
+          "fala": "Cada classe de incêndio tem o agente extintor correto. Classe A, sólidos como madeira e papel, apaga com água ou pó ABC. Classe B, líquidos e gases inflamáveis, com pó químico, espuma ou gás carbônico. Classe C, equipamentos energizados, com gás carbônico ou pó químico, e nunca com água ou espuma, que conduzem eletricidade. Classe D, metais, com pó especial. E classe K, óleos de cozinha. Sempre que possível, desligue a energia antes de combater o fogo em equipamento elétrico.",
+          "dica": "Mostre os extintores da empresa e leia o rótulo de cada um."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Combate ao princípio de incêndio",
+          "itens": [
+            "Acionar o alarme e a brigada antes de tentar combater",
+            "Desligar a energia do circuito, se for seguro",
+            "Usar o extintor correto, de costas para o vento e com rota de fuga livre",
+            "Direcionar o jato para a base do fogo",
+            "Abandonar o local se o fogo não ceder rapidamente"
+          ],
+          "destaque": "Extintor é para princípio de incêndio. Fogo grande é para os bombeiros.",
+          "fala": "Diante de um princípio de incêndio, primeiro acione o alarme e a brigada. Se for seguro, desligue a energia do circuito. Use o extintor correto, mantendo a rota de fuga às suas costas e o vento a seu favor. Direcione o jato para a base das chamas, não para a fumaça. E se o fogo não ceder em poucos segundos, abandone o local e feche as portas. O extintor serve para princípio de incêndio. Incêndio desenvolvido é trabalho para os bombeiros.",
+          "apoio": "Prática com extintor de CO2 em campo de treinamento"
+        }
+      ]
+    },
+    {
+      "titulo": "Acidentes de origem elétrica",
+      "duracao": 180,
+      "gancho": "Quase todo acidente elétrico tem uma história parecida: alguém confiou que o circuito estava desligado. Vamos olhar para as causas e aprender com elas.",
+      "slides": [
+        {
+          "tipo": "comparar",
+          "titulo": "Causas diretas e indiretas",
+          "esquerda": {"t": "Causas diretas", "itens": ["Contato com parte energizada", "Contato com massa energizada por falha", "Arco elétrico por manobra ou curto", "Tensão de passo e de toque"]},
+          "direita": {"t": "Causas indiretas", "itens": ["Desenergização incompleta ou sem teste", "Diagrama desatualizado", "Ausência de bloqueio individual", "Pressa, improviso e excesso de confiança"]},
+          "fala": "As causas diretas são aquelas que produzem a lesão: o contato com a parte energizada, o contato com uma carcaça energizada por falha de isolamento, o arco em uma manobra ou curto e as tensões de passo e de toque perto de aterramentos durante falhas. Mas o que leva a essas situações são as causas indiretas: desenergização feita pela metade ou sem teste, diagrama desatualizado, ausência de bloqueio, pressa, improviso e excesso de confiança. É nas causas indiretas que a prevenção atua.",
+          "pergunta": "Qual dessas causas indiretas vocês acham mais comum?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Situações típicas de acidente",
+          "itens": [
+            "Desligar o disjuntor errado por falta de identificação",
+            "Medir tensão com instrumento inadequado ou danificado",
+            "Retorno de energia por gerador ou circuito alimentado por dois lados",
+            "Religação por outra pessoa que não sabia do serviço",
+            "Contato acidental com rede aérea ao movimentar escadas, andaimes ou guindastes"
+          ],
+          "destaque": "Toda instalação é considerada energizada até que se prove o contrário com teste.",
+          "fala": "Algumas situações aparecem em quase todos os relatórios. Desligar o disjuntor errado porque o quadro não estava identificado. Medir com instrumento inadequado ou danificado. Retorno de energia por um gerador ou por um circuito alimentado pelos dois lados. Alguém religar o circuito porque não sabia que havia gente trabalhando, o que o bloqueio individual evita. E contato com rede aérea ao movimentar escadas, andaimes e guindastes. A regra de ouro é tratar toda instalação como energizada até provar o contrário com teste.",
+          "dica": "Use o estudo de caso do material de apoio ao final deste módulo."
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Direito de recusa na eletricidade",
+          "texto": "Sem desenergização confirmada, sem bloqueio ou sem procedimento, o serviço não começa.",
+          "itens": [
+            "A NR-10 garante ao trabalhador interromper tarefas com risco grave e iminente",
+            "Comunicar o superior imediato, que deve diligenciar as medidas",
+            "Não existe serviço urgente o bastante para dispensar o teste de ausência de tensão"
+          ],
+          "fala": "A NR-10 garante expressamente o direito de recusa: o trabalhador pode interromper suas tarefas sempre que constatar evidências de riscos graves e iminentes para sua segurança e saúde ou de outras pessoas, comunicando imediatamente o superior, que deve tomar as providências. Na eletricidade, isso significa que, sem desenergização confirmada, sem bloqueio ou sem procedimento, o serviço não começa. Não existe urgência que justifique pular o teste de ausência de tensão."
+        }
+      ]
+    },
+    {
+      "titulo": "Primeiros socorros",
+      "duracao": 240,
+      "gancho": "Em um acidente elétrico, os primeiros minutos decidem. Mas o primeiro cuidado é com você mesmo: quem toca na vítima ainda energizada vira a segunda vítima.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Atendimento à vítima de choque",
+          "passos": [
+            {"t": "Desligar", "d": "Interromper a energia antes de tocar na vítima"},
+            {"t": "Acionar", "d": "SAMU 192, Bombeiros 193 e brigada"},
+            {"t": "Avaliar", "d": "Responsividade e respiração"},
+            {"t": "Reanimar", "d": "RCP e desfibrilador se não houver respiração normal"},
+            {"t": "Acompanhar", "d": "Manter a observação até a chegada do socorro"}
+          ],
+          "fala": "Diante de uma vítima de choque, a primeira ação é interromper a energia, desligando o circuito. Em baixa tensão, se não for possível desligar, afaste a vítima com material isolante seco. Em alta tensão, não se aproxime e acione a concessionária. Chame o SAMU no 192 ou os Bombeiros no 193 e a brigada. Avalie se a vítima responde e se respira normalmente. Se não respirar, inicie a reanimação cardiopulmonar e use o desfibrilador assim que estiver disponível. E fique com a vítima até a chegada do socorro.",
+          "apoio": "Demonstração de reanimação em manequim"
+        },
+        {
+          "tipo": "numero",
+          "titulo": "Reanimação cardiopulmonar",
+          "valor": "100 a 120",
+          "legenda": "compressões por minuto, com profundidade de 5 a 6 cm no centro do peito",
+          "itens": [
+            "Mãos sobrepostas no centro do tórax e braços estendidos",
+            "Permitir o retorno completo do tórax entre as compressões",
+            "Usar o desfibrilador externo automático assim que chegar e seguir as instruções do aparelho"
+          ],
+          "fala": "A reanimação cardiopulmonar mantém o sangue circulando até a chegada do desfibrilador e do socorro. Posicione as mãos sobrepostas no centro do peito, com os braços estendidos. Comprima de cem a cento e vinte vezes por minuto, com profundidade de cinco a seis centímetros, deixando o tórax voltar completamente entre as compressões. Quem é treinado pode intercalar trinta compressões com duas ventilações. Assim que o desfibrilador chegar, ligue o aparelho e siga as instruções de voz.",
+          "dica": "Todos os participantes devem praticar as compressões no manequim por pelo menos dois minutos."
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Queimaduras elétricas",
+          "esquerda": {"t": "Faça", "itens": ["Resfriar com água corrente em temperatura ambiente", "Cobrir com pano limpo e úmido", "Retirar adornos antes do inchaço", "Encaminhar sempre ao atendimento médico"]},
+          "direita": {"t": "Não faça", "itens": ["Aplicar pomadas, manteiga ou pasta de dente", "Estourar bolhas", "Retirar tecido grudado na pele", "Usar gelo diretamente na queimadura"]},
+          "fala": "A queimadura elétrica engana, porque a lesão interna costuma ser muito maior do que a marca na pele. Por isso toda vítima de choque deve ser avaliada por um médico, mesmo que pareça bem. No local, resfrie a área com água corrente em temperatura ambiente, cubra com pano limpo e úmido e retire anéis e relógios antes que a região inche. Não aplique pomadas nem receitas caseiras, não estoure bolhas, não arranque tecido grudado e não use gelo.",
+          "pergunta": "Que receitas caseiras para queimadura vocês já ouviram falar?"
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática supervisionada",
+    "duracao": 270,
+    "descricao": "Em painel didático desenergizado e em ambiente controlado, cada participante executa os procedimentos abaixo, acompanhado pelo instrutor.",
+    "itens": [
+      "Executou a sequência completa de desenergização, na ordem correta",
+      "Aplicou bloqueio individual com cadeado e etiqueta em garra multiplicadora",
+      "Testou o detector de tensão antes e depois da verificação de ausência de tensão",
+      "Instalou e removeu o aterramento temporário na ordem correta",
+      "Realizou o teste de insuflação da luva isolante e inspecionou os EPIs",
+      "Executou a sequência de reenergização",
+      "Operou o extintor adequado em princípio de incêndio simulado",
+      "Realizou compressões torácicas em manequim com frequência e profundidade adequadas"
+    ]
+  },
+  "caso": {
+    "titulo": "O disjuntor do quadro ao lado",
+    "relato": "Um eletricista de manutenção recebeu a tarefa de trocar uma tomada industrial no galpão de expedição. Ele foi até o quadro indicado, desligou o disjuntor identificado como tomadas expedição e, como o serviço era rápido, não colocou cadeado nem etiqueta. Também não testou a ausência de tensão, porque o detector estava no almoxarifado. A identificação do quadro estava desatualizada desde uma reforma, e a tomada era alimentada por outro circuito. Ao soltar os condutores, ele recebeu um choque e caiu da escada, fraturando o punho. Minutos antes, um colega havia religado o disjuntor desligado achando que ele tinha desarmado.",
+    "perguntas": [
+      "Quais etapas da sequência de desenergização foram omitidas?",
+      "Que documento da empresa estava desatualizado e qual a consequência?",
+      "O bloqueio individual teria evitado qual parte do problema?",
+      "Quais riscos adicionais estavam presentes?",
+      "Que medidas a empresa deve adotar além de treinar novamente o eletricista?"
+    ],
+    "analise": "Foram omitidos o impedimento de reenergização, a constatação da ausência de tensão e a sinalização. A identificação do quadro e o diagrama unifilar estavam desatualizados, o que levou ao desligamento do circuito errado; o teste de ausência de tensão teria revelado o erro. O bloqueio com cadeado e etiqueta teria impedido o colega de religar o disjuntor. O trabalho em escada era um risco adicional que agravou a lesão. A empresa deve atualizar diagramas e identificações, garantir detector de tensão e kit de bloqueio disponíveis junto à equipe, revisar o procedimento de troca de tomadas e reforçar que nenhum serviço é rápido demais para a sequência completa."
+  },
+  "dinamica": {
+    "titulo": "Sequência embaralhada",
+    "objetivo": "Fixar a ordem das etapas de desenergização e reenergização.",
+    "tempo": 20,
+    "passos": [
+      "Prepare dois conjuntos de cartões: um com as seis etapas da desenergização e outro com as cinco etapas da reenergização, misturados.",
+      "Divida a turma em grupos e entregue os cartões embaralhados.",
+      "Cada grupo monta as duas sequências no menor tempo possível.",
+      "Confira a ordem com a turma e peça que cada grupo explique o risco de inverter duas etapas.",
+      "Repita a atividade no final do dia para verificar a fixação."
+    ]
+  },
+  "dds": {
+    "titulo": "Testou? Então trabalhe",
+    "texto": "Pessoal, a conversa de hoje é sobre uma frase que já matou muita gente: eu desliguei, pode mexer. Desligar não é suficiente. Disjuntor pode estar identificado errado, pode ter retorno por outro circuito, alguém pode religar. Então a nossa regra é: desligou, bloqueou com o seu cadeado, testou o detector numa fonte conhecida, mediu a ausência de tensão e testou o detector de novo. Só aí a instalação está desenergizada. E se faltar detector ou cadeado, o serviço espera. Nenhuma tomada vale a vida de ninguém."
+  },
+  "prova": [
+    {"q": "Pela NR-10, considera-se baixa tensão em corrente alternada:", "o": ["Até 50 V", "Acima de 50 V e até 1.000 V", "Acima de 1.000 V", "Somente 220 V"], "c": 1, "com": "Baixa tensão em CA vai de mais de 50 V até 1.000 V."},
+    {"q": "O trabalhador autorizado é aquele que:", "o": ["Possui apenas o curso técnico", "É qualificado, habilitado ou capacitado, tem ASO compatível, treinamento NR-10 e anuência formal da empresa", "Tem mais de cinco anos de experiência", "Foi indicado pelos colegas"], "c": 1, "com": "A autorização reúne qualificação ou capacitação, saúde, treinamento e anuência formal."},
+    {"q": "A primeira etapa da sequência de desenergização é:", "o": ["Instalar o aterramento temporário", "Seccionamento", "Constatar ausência de tensão", "Sinalizar o impedimento"], "c": 1, "com": "A sequência começa pelo seccionamento e segue com impedimento de reenergização, teste, aterramento, proteção e sinalização."},
+    {"q": "Antes de constatar a ausência de tensão, o detector deve ser:", "o": ["Calibrado no fim do ano", "Testado em uma fonte conhecida", "Guardado no almoxarifado", "Usado sem luvas"], "c": 1, "com": "O detector é testado antes e depois da medição para confirmar que funciona."},
+    {"q": "O prontuário de instalações elétricas é obrigatório para estabelecimentos com carga instalada superior a:", "o": ["10 kW", "50 kW", "75 kW", "150 kW"], "c": 2, "com": "A exigência vale para carga instalada superior a 75 kW."},
+    {"q": "Para incêndio em equipamento energizado, o agente extintor indicado é:", "o": ["Água", "Espuma", "CO2 ou pó químico", "Areia molhada"], "c": 2, "com": "Água e espuma conduzem eletricidade e não devem ser usadas em equipamentos energizados."},
+    {"q": "Sobre adornos pessoais em serviços com eletricidade:", "o": ["São permitidos se forem de ouro", "São proibidos nos trabalhos com eletricidade ou em suas proximidades", "São permitidos com luva", "Só o relógio é proibido"], "c": 1, "com": "A NR-10 proíbe adornos pessoais nesses trabalhos."},
+    {"q": "A reciclagem do treinamento NR-10 deve ocorrer:", "o": ["A cada 5 anos", "A cada 2 anos e nas situações previstas na norma", "Somente após acidente", "Anualmente para todos"], "c": 1, "com": "Reciclagem bienal e também em troca de função, afastamento superior a três meses ou mudanças significativas."},
+    {"q": "Ao encontrar uma vítima de choque ainda em contato com a instalação, a primeira ação é:", "o": ["Puxar a vítima pelo braço", "Interromper a energia antes de tocar na vítima", "Jogar água na vítima", "Iniciar imediatamente a RCP"], "c": 1, "com": "Quem toca na vítima energizada se torna a segunda vítima."},
+    {"q": "Na reanimação cardiopulmonar de adultos, a frequência recomendada de compressões é de:", "o": ["30 a 50 por minuto", "60 a 80 por minuto", "100 a 120 por minuto", "150 a 180 por minuto"], "c": 2, "com": "Recomenda-se 100 a 120 compressões por minuto, com 5 a 6 cm de profundidade."}
+  ]
+}

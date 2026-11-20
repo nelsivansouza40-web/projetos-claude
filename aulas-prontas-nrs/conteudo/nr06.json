@@ -1,0 +1,284 @@
+{
+  "nr": "06",
+  "titulo": "Equipamento de Proteção Individual",
+  "chamada": "O EPI certo, bem ajustado, em todo o tempo de exposição",
+  "icone": "FaHelmetSafety",
+  "carga": "4 horas (carga sugerida; a NR-06 não fixa carga horária mínima)",
+  "periodicidade": "A NR-06 não define periodicidade. Recomenda-se reciclagem anual ou sempre que houver troca de modelo de EPI, mudança de função ou de processo, ou quando se verificar uso inadequado.",
+  "publico": "Todos os trabalhadores que utilizam EPI e as lideranças que acompanham o seu uso.",
+  "prerequisitos": "Não há. Recomenda-se ter em mãos o inventário de riscos do PGR e a relação de EPIs da função de cada participante.",
+  "instrutor": "Profissional de segurança do trabalho ou instrutor com conhecimento dos riscos e dos EPIs utilizados na empresa.",
+  "objetivos": [
+    "Explicar o que é EPI e quando ele deve ser utilizado na hierarquia de controle",
+    "Identificar as responsabilidades do empregador e do trabalhador previstas na NR-06",
+    "Verificar o Certificado de Aprovação e as informações do fabricante",
+    "Selecionar o EPI de acordo com o risco e a parte do corpo a proteger",
+    "Usar, guardar, higienizar e substituir corretamente os equipamentos"
+  ],
+  "recursos": [
+    "Projetor e apresentação",
+    "Amostras dos EPIs utilizados na empresa, novos e danificados",
+    "Ficha de entrega de EPI em branco",
+    "Respiradores para demonstração de teste de vedação",
+    "Lista de presença e provas impressas"
+  ],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na prática de colocação e ajuste dos EPIs.",
+  "referencias": [
+    "NR-06 Equipamento de Proteção Individual, texto vigente",
+    "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais",
+    "CLT, artigos 157, 158 e 166",
+    "Fundacentro, Programa de Proteção Respiratória: recomendações, seleção e uso de respiradores"
+  ],
+  "modulos": [
+    {
+      "titulo": "O que é EPI e quando usar",
+      "duracao": 40,
+      "gancho": "Todo mundo aqui já usou EPI. Mas pouca gente sabe responder por que, naquele caso, o EPI foi a escolha. Neste módulo você vai entender onde o EPI se encaixa na prevenção e por que ele nunca é a primeira medida.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Definição de EPI",
+          "valor": "EPI",
+          "legenda": "dispositivo ou produto de uso individual que protege contra riscos à segurança e à saúde no trabalho",
+          "itens": [
+            "É de uso individual: cada trabalhador tem o seu",
+            "Precisa ter Certificado de Aprovação válido",
+            "EPI conjugado protege contra mais de um risco ao mesmo tempo"
+          ],
+          "fala": "Pela NR-06, equipamento de proteção individual é todo dispositivo ou produto de uso individual destinado a proteger o trabalhador contra riscos que podem ameaçar a sua segurança e a sua saúde. Três palavras importam aqui. Individual, porque cada um tem o seu e não se empresta capacete nem protetor auricular. Proteção, porque ele não elimina o risco, apenas reduz a exposição. E aprovação, porque só vale como EPI o equipamento que tem Certificado de Aprovação. Existe ainda o EPI conjugado, que protege contra mais de um risco, como um capacete com protetor facial acoplado.",
+          "pergunta": "Quais EPIs vocês usam hoje e contra qual risco cada um protege?",
+          "apoio": "Mesa com capacete, óculos, protetor auricular, luvas e calçado de segurança"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Hierarquia das medidas de prevenção",
+          "passos": [
+            {"t": "Eliminar", "d": "Retirar o perigo do processo"},
+            {"t": "Substituir", "d": "Trocar por algo menos perigoso"},
+            {"t": "Engenharia", "d": "Proteções coletivas, enclausuramento, ventilação"},
+            {"t": "Administrativas", "d": "Procedimentos, rodízio, sinalização e treinamento"},
+            {"t": "EPI", "d": "Proteção complementar ou em situações de emergência"}
+          ],
+          "fala": "A NR-01 define uma ordem para controlar os riscos, e o EPI está no final dela. Primeiro tentamos eliminar o perigo. Se não der, substituímos por algo menos perigoso, como um produto químico menos tóxico. Depois vêm as medidas de engenharia, como enclausurar uma máquina barulhenta ou instalar exaustão. Em seguida, as medidas administrativas, como procedimentos e rodízio. O EPI entra quando essas medidas não são viáveis, quando não bastam, enquanto estão sendo implantadas ou em emergências. Ele depende do comportamento de cada pessoa, e é por isso que fica por último.",
+          "pergunta": "Que risco da nossa empresa hoje é controlado só com EPI e poderia ter uma medida coletiva?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Quando o EPI é obrigatório",
+          "cards": [
+            {"t": "Coletiva inviável", "d": "Quando as medidas de proteção coletiva forem tecnicamente inviáveis ou não oferecerem proteção completa"},
+            {"t": "Implantação", "d": "Enquanto as medidas de proteção coletiva estiverem sendo implantadas"},
+            {"t": "Emergência", "d": "Para atender situações de emergência, como vazamentos e resgates"},
+            {"t": "Indicado no PGR", "d": "Sempre que o inventário de riscos e o plano de ação indicarem o uso"}
+          ],
+          "fala": "A empresa deve fornecer EPI em três situações clássicas. Quando as medidas coletivas são tecnicamente inviáveis ou não protegem por completo. Enquanto essas medidas estão sendo implantadas. E para emergências, como um vazamento químico. Na prática, quem diz qual EPI cada função usa é o PGR, a partir do inventário de riscos. Por isso a lista de EPIs não deve ser cópia de outra empresa, ela tem que nascer da avaliação dos riscos reais.",
+          "dica": "Se possível, mostre o trecho do PGR da empresa que define os EPIs de uma função."
+        }
+      ]
+    },
+    {
+      "titulo": "Responsabilidades e Certificado de Aprovação",
+      "duracao": 45,
+      "gancho": "Se o trabalhador se acidenta sem o EPI, de quem é a culpa? A resposta não é tão simples, e a NR-06 deixa bem claro o papel de cada um. Vamos ver isso agora.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Cabe ao empregador",
+          "itens": [
+            "Fornecer gratuitamente o EPI adequado ao risco e em perfeito estado",
+            "Adquirir somente EPI com Certificado de Aprovação",
+            "Orientar e treinar sobre uso, guarda e conservação",
+            "Exigir o uso e registrar o fornecimento",
+            "Substituir imediatamente quando danificado ou extraviado e cuidar da higienização e manutenção quando aplicável"
+          ],
+          "destaque": "Fornecer não basta. A empresa também treina, exige o uso e registra a entrega.",
+          "fala": "A NR-06 lista as obrigações do empregador. Fornecer o EPI de graça, adequado ao risco e em perfeito estado. Comprar só equipamento com Certificado de Aprovação. Orientar e treinar sobre uso, guarda e conservação, que é exatamente o que estamos fazendo agora. Exigir o uso e registrar a entrega, em ficha, livro ou sistema eletrônico. E substituir na hora o EPI que estragou ou foi perdido, além de cuidar da higienização e da manutenção quando for o caso. Repare que entregar o EPI e esquecer não cumpre a norma.",
+          "pergunta": "Como é feito hoje o registro de entrega de EPI na nossa empresa?"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Cabe ao trabalhador",
+          "esquerda": {"t": "Obrigações", "itens": ["Usar o EPI apenas para a finalidade a que se destina", "Responsabilizar-se pela guarda e conservação", "Comunicar qualquer alteração que o torne impróprio", "Cumprir as orientações sobre uso adequado"]},
+          "direita": {"t": "Consequências", "itens": ["Recusa injustificada é ato faltoso pela CLT", "Pode gerar advertência e suspensão", "Uso incorreto anula a proteção", "O risco maior é sempre para a própria saúde"]},
+          "fala": "O trabalhador também tem obrigações. Usar o EPI só para a finalidade correta, cuidar da guarda e da conservação, avisar quando o equipamento estiver danificado e seguir as orientações recebidas. A CLT considera ato faltoso a recusa injustificada ao uso do EPI fornecido, o que pode levar a medidas disciplinares. Mas o ponto principal não é a punição. Quem perde a audição, a visão ou um dedo é o trabalhador, e isso nenhuma advertência devolve.",
+          "dica": "Evite um tom punitivo. Use exemplos de pessoas que perderam a audição ou a visão por não usar a proteção."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Certificado de Aprovação",
+          "cabecalho": ["Item", "O que verificar"],
+          "linhas": [
+            ["Número do CA", "Gravado no próprio EPI de forma legível e permanente"],
+            ["Consulta", "Situação do CA no sistema oficial do Ministério do Trabalho antes da compra"],
+            ["Compatibilidade", "O CA cobre a proteção de que você precisa e o uso pretendido"],
+            ["Validade", "CA válido na compra e prazo de validade do próprio produto indicado pelo fabricante"],
+            ["Manual", "Instruções em português sobre uso, limpeza, guarda e substituição"]
+          ],
+          "fala": "O Certificado de Aprovação, o CA, é o documento que comprova que aquele modelo de EPI foi avaliado e aprovado. O número do CA deve estar gravado no equipamento. Antes de comprar, consulte a situação do CA no sistema oficial do Ministério do Trabalho e confira se ele cobre a proteção que você precisa. Uma luva aprovada para risco mecânico, por exemplo, não serve para produto químico. Verifique também a validade do produto indicada pelo fabricante e leia o manual, que deve vir em português.",
+          "dica": "Faça uma consulta de CA ao vivo, usando o número gravado em um EPI da empresa.",
+          "apoio": "Close do número do CA gravado em um capacete e em uma luva"
+        }
+      ]
+    },
+    {
+      "titulo": "Tipos de EPI e seleção pelo risco",
+      "duracao": 60,
+      "gancho": "Não existe EPI bom para tudo. Uma luva que protege do corte pode derreter no contato com solvente. Neste módulo vamos aprender a escolher o equipamento certo para cada risco.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "EPI por parte do corpo",
+          "cabecalho": ["Proteção", "Exemplos"],
+          "linhas": [
+            ["Cabeça", "Capacete de segurança, capuz e balaclava"],
+            ["Olhos e face", "Óculos de segurança, protetor facial e máscara de solda"],
+            ["Auditiva", "Protetor de inserção, tipo concha e semiauricular"],
+            ["Respiratória", "Peça facial filtrante, respiradores com filtro e equipamentos de adução de ar"],
+            ["Membros e tronco", "Luvas, mangas, creme protetor, calçados, perneiras, aventais e vestimentas"]
+          ],
+          "fala": "O Anexo I da NR-06 organiza os EPIs pela parte do corpo protegida. Proteção da cabeça, com capacete, capuz e balaclava. Olhos e face, com óculos, protetor facial e máscara de solda. Proteção auditiva, com protetores de inserção, tipo concha e semiauriculares. Proteção respiratória, com as peças filtrantes, os respiradores com filtro e os de adução de ar. E os membros e o tronco, com luvas, mangas, creme protetor, calçados, perneiras e vestimentas. Existe ainda a proteção do corpo inteiro e a proteção contra quedas, que estudamos na NR-35.",
+          "apoio": "Sequência de imagens de cada grupo de EPI"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Como selecionar o EPI",
+          "passos": [
+            {"t": "Risco", "d": "Identificar o agente e a intensidade no inventário de riscos"},
+            {"t": "Proteção", "d": "Definir a proteção necessária, como atenuação ou tipo de filtro"},
+            {"t": "Modelo", "d": "Escolher modelos com CA compatível"},
+            {"t": "Usuário", "d": "Testar conforto, tamanho e compatibilidade com outros EPIs"},
+            {"t": "Registro", "d": "Formalizar na relação de EPIs da função"}
+          ],
+          "fala": "A seleção segue uma lógica. Primeiro entendemos o risco: qual agente, em que intensidade e por quanto tempo. Depois definimos a proteção necessária, por exemplo quantos decibéis o protetor precisa reduzir ou qual filtro o respirador precisa ter. Então escolhemos modelos com CA compatível. E aqui vem uma etapa que muitas empresas pulam: testar com quem vai usar. EPI desconfortável ou do tamanho errado acaba no bolso. A norma pede que a seleção considere a participação dos trabalhadores e, onde houver, da CIPA e do SESMT.",
+          "pergunta": "Que EPI vocês acham desconfortável hoje? O que poderia ser testado no lugar dele?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Erros comuns de seleção",
+          "cards": [
+            {"t": "Luva genérica", "d": "Luva de raspa usada com produto químico ou luva nitrílica em risco de corte"},
+            {"t": "Respirador errado", "d": "Máscara de poeira usada contra vapores orgânicos de solventes e tintas"},
+            {"t": "Protetor mal colocado", "d": "Plugue apenas encostado na entrada do ouvido, sem vedação"},
+            {"t": "Óculos sem vedação", "d": "Óculos comuns contra respingos químicos que exigem vedação lateral ou protetor facial"}
+          ],
+          "fala": "Alguns erros aparecem em quase toda inspeção. A luva de raspa usada para manusear solvente, ou a luva nitrílica fina usada para manusear chapa cortante. A máscara de poeira usada na pintura, onde o risco é vapor orgânico e o filtro certo é outro. O protetor auricular apenas encostado na orelha. E o óculos comum diante de respingo químico. Em todos esses casos o trabalhador está de EPI, mas não está protegido.",
+          "dica": "Mostre fisicamente cada par de EPI errado e EPI correto."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Proteção respiratória",
+          "itens": [
+            "O filtro deve ser compatível com o contaminante: partículas, gases e vapores ou combinados",
+            "Barba e costeletas impedem a vedação no rosto",
+            "Fazer teste de vedação sempre que colocar o respirador",
+            "Trocar o filtro conforme o programa de proteção respiratória e as orientações do fabricante",
+            "Atmosferas com pouco oxigênio exigem equipamento de adução de ar"
+          ],
+          "destaque": "Respirador sem vedação deixa o ar contaminado entrar pelas bordas.",
+          "fala": "A proteção respiratória merece atenção especial, porque o erro não aparece na hora. O filtro precisa ser compatível com o contaminante, seja partícula, gás e vapor, ou os dois. O respirador só funciona se vedar no rosto, e barba impede essa vedação. Toda vez que colocar o respirador, faça o teste de vedação: tape a entrada de ar e inspire, a máscara deve se contrair levemente. A troca do filtro segue o programa de proteção respiratória. E atenção: em local com pouco oxigênio, nenhum filtro resolve, é preciso equipamento com fornecimento de ar.",
+          "dica": "Demonstre o teste de vedação de pressão negativa e positiva."
+        }
+      ]
+    },
+    {
+      "titulo": "Uso, guarda, conservação e substituição",
+      "duracao": 35,
+      "gancho": "O melhor EPI do mercado vira lixo em poucas semanas se for guardado no lugar errado. Vamos falar agora do cuidado do dia a dia.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Cuidados do dia a dia",
+          "cards": [
+            {"t": "Inspecionar", "d": "Antes de usar, procurar trincas, rasgos, deformações e desgaste"},
+            {"t": "Higienizar", "d": "Limpar conforme o manual, sem solventes que danifiquem o material"},
+            {"t": "Guardar", "d": "Local limpo, seco e protegido do sol, longe de produtos químicos"},
+            {"t": "Não alterar", "d": "Não furar, pintar, cortar ou adaptar o equipamento"}
+          ],
+          "fala": "O cuidado diário tem quatro partes. Inspecionar antes de usar, procurando trincas no capacete, furos na luva ou elástico frouxo no óculos. Higienizar seguindo o manual, porque alguns produtos de limpeza danificam o material. Guardar em local limpo e seco, longe do sol e de produtos químicos, nada de capacete no painel do carro. E nunca alterar o equipamento: furar o capacete para ventilar ou cortar a ponta da luva acaba com a proteção e com o certificado.",
+          "apoio": "Armário de EPI organizado em contraste com EPIs jogados sobre uma bancada"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Quando substituir",
+          "texto": "EPI danificado não volta para o armário. Ele é trocado na hora.",
+          "itens": [
+            "Danos visíveis, deformação ou perda de partes",
+            "Após receber impacto, como capacete atingido por objeto",
+            "Filtro saturado, com cheiro ou dificuldade para respirar",
+            "Prazo de validade ou de troca do fabricante vencido",
+            "Perda de ajuste, vedação ou conforto que impeça o uso correto"
+          ],
+          "fala": "Existem sinais claros de que o EPI precisa ser trocado. Dano visível ou peça faltando. Capacete que recebeu um impacto, mesmo sem trinca aparente. Respirador em que você começa a sentir o cheiro do produto ou tem dificuldade para respirar. Prazo de validade vencido. E perda de ajuste, como o protetor tipo concha com a almofada endurecida. Quando isso acontecer, comunique e troque. A empresa é obrigada a substituir imediatamente.",
+          "pergunta": "Quanto tempo leva hoje para trocar um EPI danificado aqui?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Registro de entrega",
+          "itens": [
+            "Ficha, livro ou sistema eletrônico, inclusive com biometria",
+            "Nome do trabalhador, EPI, número do CA, data e quantidade",
+            "Assinatura ou confirmação eletrônica na entrega",
+            "Registro de devolução e substituição",
+            "Arquivo disponível para fiscalização"
+          ],
+          "destaque": "Sem registro, para a fiscalização e para a Justiça, o EPI não foi entregue.",
+          "fala": "Toda entrega de EPI precisa ser registrada. Pode ser em ficha, livro ou sistema eletrônico, inclusive com biometria. O registro mostra quem recebeu, qual EPI, o número do CA, a data e a quantidade, com a assinatura ou confirmação do trabalhador. Também se registram as devoluções e trocas. Esse documento protege as duas partes. Para a fiscalização e para a Justiça do Trabalho, EPI entregue sem registro é EPI que não foi entregue.",
+          "dica": "Mostre a ficha de EPI usada na empresa e explique como conferir os dados antes de assinar."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática de colocação e ajuste",
+    "duracao": 30,
+    "descricao": "Cada participante coloca, ajusta e inspeciona os EPIs da sua função, com conferência do instrutor.",
+    "itens": [
+      "Inspecionou o EPI e identificou defeitos em amostras danificadas",
+      "Conferiu o número do CA gravado no equipamento",
+      "Ajustou corretamente a suspensão e a jugular do capacete",
+      "Inseriu o protetor auricular de inserção com a técnica correta",
+      "Realizou o teste de vedação do respirador",
+      "Explicou como guardar e quando substituir o seu EPI"
+    ]
+  },
+  "caso": {
+    "titulo": "A luva que estava na ficha",
+    "relato": "Em uma indústria metalúrgica, um auxiliar de produção foi remanejado para o setor de pintura para cobrir férias. A ficha de EPI mostrava que ele havia recebido luvas de raspa e máscara descartável para poeira, os mesmos equipamentos do setor de origem. No segundo dia, ao limpar as pistolas de pintura com solvente, ele trabalhou com as luvas de raspa encharcadas por mais de uma hora. No fim do turno sentiu tontura e dor de cabeça, e dias depois apresentou dermatite nas duas mãos. A empresa alegou que o EPI havia sido entregue e registrado.",
+    "perguntas": [
+      "O EPI entregue era adequado ao risco do setor de pintura?",
+      "Que falhas aconteceram na mudança de função?",
+      "Qual era a proteção respiratória e para as mãos adequada?",
+      "A existência da ficha de EPI assinada protege a empresa neste caso?",
+      "Como evitar que isso se repita em remanejamentos e coberturas de férias?"
+    ],
+    "analise": "O EPI fornecido não era adequado ao risco. A luva de raspa absorve o solvente e mantém o produto em contato com a pele, e a máscara para partículas não retém vapores orgânicos. A mudança de função exigia nova avaliação dos riscos, nova seleção de EPI e treinamento específico. O correto seria luva com resistência química compatível com o solvente, conforme a ficha de dados de segurança do produto, e respirador com filtro para vapores orgânicos, além de ventilação no local de limpeza. A ficha assinada comprova a entrega, mas não a adequação, e a obrigação da NR-06 é fornecer EPI adequado ao risco."
+  },
+  "dinamica": {
+    "titulo": "Que EPI eu uso aqui?",
+    "objetivo": "Exercitar a seleção do EPI a partir do risco.",
+    "tempo": 20,
+    "passos": [
+      "Prepare cartões com situações reais da empresa, por exemplo esmerilhamento, limpeza com produto alcalino, operação de empilhadeira e pintura com spray.",
+      "Divida a turma em grupos e entregue dois cartões para cada grupo.",
+      "Cada grupo lista os riscos da situação e os EPIs necessários, indicando o tipo exato, como o filtro do respirador ou o material da luva.",
+      "Os grupos apresentam e o instrutor corrige, mostrando as amostras de EPI correspondentes.",
+      "Feche lembrando que antes do EPI devem ser consideradas as medidas coletivas."
+    ]
+  },
+  "dds": {
+    "titulo": "EPI no bolso não protege",
+    "texto": "Pessoal, vamos falar de um hábito que todo mundo já viu. O protetor auricular pendurado no pescoço, o óculos na testa e a luva no bolso de trás. O EPI está ali, mas não está protegendo. A perda auditiva acontece aos poucos e não volta. Um cavaco no olho acontece em um segundo. Então o combinado de hoje é simples: entrou na área, o EPI está no lugar certo, do jeito certo, o tempo todo. Se ele incomoda, machuca ou não serve, fale com a segurança. A gente testa outro modelo. O que não dá é trabalhar sem proteção."
+  },
+  "prova": [
+    {"q": "Segundo a NR-06, o EPI é:", "o": ["Qualquer equipamento usado no trabalho", "Dispositivo ou produto de uso individual destinado à proteção contra riscos à segurança e à saúde", "Equipamento de proteção para uso coletivo", "Uniforme fornecido pela empresa"], "c": 1, "com": "EPI é de uso individual e destinado à proteção contra riscos à segurança e à saúde no trabalho."},
+    {"q": "Na hierarquia das medidas de prevenção, o EPI é:", "o": ["A primeira medida a ser adotada", "A medida mais eficaz", "Uma medida complementar, adotada quando as demais não forem viáveis ou suficientes", "Dispensável quando há treinamento"], "c": 2, "com": "O EPI fica no final da hierarquia porque depende do comportamento individual."},
+    {"q": "É obrigação do empregador:", "o": ["Cobrar o valor do EPI em parcelas", "Fornecer o EPI gratuitamente, adequado ao risco e em perfeito estado", "Fornecer EPI apenas a pedido do trabalhador", "Comprar EPI sem CA quando for mais barato"], "c": 1, "com": "O fornecimento é gratuito, adequado ao risco e em perfeito estado de conservação."},
+    {"q": "O Certificado de Aprovação comprova que:", "o": ["O trabalhador foi treinado", "O modelo de EPI foi avaliado e aprovado para a proteção indicada", "A empresa está regular perante a fiscalização", "O EPI não precisa ser substituído"], "c": 1, "com": "O CA atesta a aprovação do modelo para a proteção a que se destina."},
+    {"q": "A recusa injustificada ao uso do EPI fornecido:", "o": ["É um direito do trabalhador", "Constitui ato faltoso segundo a CLT", "Não tem consequência", "Só é falta se houver acidente"], "c": 1, "com": "A CLT considera ato faltoso a recusa injustificada ao uso do EPI."},
+    {"q": "Para limpeza com solvente orgânico, a proteção respiratória adequada é:", "o": ["Máscara descartável para poeira", "Respirador com filtro para vapores orgânicos", "Máscara de tecido", "Nenhuma, se o local for aberto"], "c": 1, "com": "Filtros para partículas não retêm vapores; é preciso filtro químico compatível."},
+    {"q": "Qual fator impede a vedação do respirador no rosto?", "o": ["Uso de óculos de grau", "Barba e costeletas na área de vedação", "Cabelo comprido", "Uso de protetor auricular"], "c": 1, "com": "Pelos na área de vedação criam passagens para o ar contaminado."},
+    {"q": "Um capacete que recebeu impacto forte, sem trinca aparente, deve ser:", "o": ["Usado normalmente", "Pintado para esconder marcas", "Substituído", "Furado para ventilação"], "c": 2, "com": "O impacto pode comprometer a estrutura mesmo sem dano visível."},
+    {"q": "O registro de entrega de EPI pode ser feito em:", "o": ["Somente em livro físico", "Livro, ficha ou sistema eletrônico", "Apenas por mensagem de celular", "Não é necessário registrar"], "c": 1, "com": "A NR-06 aceita livros, fichas ou sistema eletrônico, inclusive biométrico."},
+    {"q": "Sobre guarda e conservação, é correto:", "o": ["Guardar o capacete no painel do carro", "Limpar o EPI com qualquer solvente", "Guardar em local limpo, seco e protegido do sol e de produtos químicos", "Cortar a ponta dos dedos da luva para ter mais tato"], "c": 2, "com": "Calor, sol e produtos químicos degradam os materiais do EPI."}
+  ]
+}

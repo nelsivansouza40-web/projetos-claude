@@ -1,0 +1,428 @@
+{
+  "nr": "05",
+  "titulo": "CIPA",
+  "chamada": "A comissão que leva a voz do trabalhador para dentro da gestão de riscos",
+  "icone": "FaPeopleGroup",
+  "carga": "20 horas (kit estruturado para grau de risco 4)",
+  "periodicidade": "Carga horária mínima conforme o grau de risco do estabelecimento: 8 horas para grau 1, 12 horas para grau 2, 16 horas para grau 3 e 20 horas para grau 4. Para graus menores, reduza proporcionalmente o tempo de cada módulo, mantendo todos os conteúdos. O treinamento é realizado antes da posse; no primeiro mandato da CIPA, em até 30 dias contados da posse. Repete-se a cada novo mandato.",
+  "publico": "Membros titulares e suplentes da CIPA, representantes do empregador e dos empregados, e nomeados.",
+  "prerequisitos": "Ter sido eleito ou designado para a CIPA, ou nomeado pela organização.",
+  "instrutor": "Profissional de segurança do trabalho ou instrutor com conhecimento comprovado dos temas, sob responsabilidade técnica de profissional qualificado em SST.",
+  "objetivos": [
+    "Compreender a organização, as atribuições e o funcionamento da CIPA",
+    "Reconhecer os riscos do ambiente de trabalho e registrar a percepção dos trabalhadores",
+    "Participar da investigação e análise de acidentes e doenças do trabalho",
+    "Aplicar noções de higiene do trabalho e de legislação trabalhista e previdenciária em SST",
+    "Atuar na inclusão de pessoas com deficiência e na prevenção ao assédio e à violência no trabalho"
+  ],
+  "recursos": [
+    "Projetor e apresentação",
+    "Planta baixa ou croqui do estabelecimento para o mapa de riscos",
+    "Formulários de inspeção e de investigação de acidentes",
+    "Cópia do PGR e do calendário de reuniões da CIPA",
+    "Lista de presença e provas impressas"
+  ],
+  "aprovacao": "Frequência integral, nota mínima de 7,0 na avaliação teórica e participação nas oficinas práticas.",
+  "referencias": [
+    "NR-05 Comissão Interna de Prevenção de Acidentes e de Assédio, texto vigente",
+    "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais",
+    "Lei 8.213/1991, Planos de Benefícios da Previdência Social",
+    "Lei 13.146/2015, Lei Brasileira de Inclusão",
+    "Lei 14.457/2022, Programa Emprega + Mulheres"
+  ],
+  "caso_modulo": 3,
+  "modulos": [
+    {
+      "titulo": "Organização e funcionamento da CIPA",
+      "duracao": 120,
+      "gancho": "Você foi escolhido para representar os seus colegas na prevenção de acidentes e de assédio. Antes de qualquer coisa, precisa saber como a CIPA funciona e o que se espera de você.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Composição da CIPA",
+          "cards": [
+            {"t": "Representantes do empregador", "d": "Titulares e suplentes designados pela organização"},
+            {"t": "Representantes dos empregados", "d": "Titulares e suplentes eleitos em votação secreta"},
+            {"t": "Presidente e vice", "d": "Presidente designado pelo empregador e vice escolhido entre os eleitos"},
+            {"t": "Dimensionamento", "d": "Número de membros conforme o grau de risco e o número de empregados, pelo Quadro I"}
+          ],
+          "fala": "A CIPA é formada por representantes do empregador, designados pela empresa, e representantes dos empregados, eleitos pelos colegas em votação secreta. O presidente é designado pelo empregador e o vice-presidente é escolhido entre os representantes eleitos. Quantos membros a CIPA tem depende do grau de risco da atividade e do número de empregados do estabelecimento, conforme o Quadro I da norma. Quando o estabelecimento não atinge o mínimo para ter CIPA, a empresa nomeia um representante para cumprir os objetivos da norma.",
+          "pergunta": "Quantos membros tem a nossa CIPA e por que esse número?"
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Mandato, estabilidade e reuniões",
+          "cabecalho": ["Tema", "Regra da NR-05"],
+          "linhas": [
+            ["Mandato", "Duração de 1 ano, permitida uma reeleição"],
+            ["Estabilidade", "Eleito titular ou suplente não pode ser dispensado sem justa causa do registro da candidatura até 1 ano após o fim do mandato"],
+            ["Reuniões ordinárias", "Mensais, em calendário preestabelecido e durante o expediente"],
+            ["Reuniões extraordinárias", "Acidente grave ou fatal, denúncia de risco grave e iminente ou pedido de uma das representações"],
+            ["Registro", "Atas assinadas e disponíveis aos membros e à fiscalização"]
+          ],
+          "fala": "O mandato é de um ano, com uma reeleição permitida. Os representantes eleitos, titulares e suplentes, têm estabilidade desde o registro da candidatura até um ano após o fim do mandato, ou seja, não podem ser dispensados sem justa causa. As reuniões ordinárias são mensais, com calendário definido e em horário de expediente. Há reunião extraordinária quando ocorre acidente grave ou fatal, quando há denúncia de risco grave e iminente ou a pedido de uma das representações. Tudo é registrado em ata.",
+          "dica": "Mostre a ata de uma reunião real e o calendário anual da CIPA."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Atribuições da CIPA",
+          "itens": [
+            "Acompanhar a identificação de perigos, a avaliação de riscos e as medidas de prevenção",
+            "Registrar a percepção de riscos dos trabalhadores, por mapa de riscos ou outra técnica",
+            "Verificar ambientes e condições de trabalho e acompanhar a análise de acidentes",
+            "Propor a análise e, se for o caso, a interrupção de atividades em risco grave e iminente",
+            "Promover anualmente a SIPAT e incluir a prevenção ao assédio e à violência nas suas ações"
+          ],
+          "destaque": "A CIPA não substitui o SESMT. Ela acompanha, verifica, propõe e dá voz aos trabalhadores.",
+          "fala": "As atribuições da CIPA estão listadas na norma. Acompanhar o processo de identificação de perigos e avaliação de riscos do PGR. Registrar como os trabalhadores percebem os riscos, usando o mapa de riscos ou outra técnica. Verificar os ambientes de trabalho e acompanhar a análise de acidentes. Propor a análise e até a interrupção de atividades quando houver risco grave e iminente. Elaborar um plano de trabalho, promover a SIPAT todos os anos e incluir a prevenção ao assédio e à violência nas suas atividades.",
+          "pergunta": "Qual dessas atribuições a nossa CIPA cumpre melhor? E qual precisa melhorar?"
+        }
+      ]
+    },
+    {
+      "titulo": "Estudo do ambiente e dos riscos do processo produtivo",
+      "duracao": 150,
+      "gancho": "Ninguém conhece melhor os riscos de um posto de trabalho do que quem trabalha nele todos os dias. O papel do cipeiro é transformar essa percepção em informação para a gestão.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Grupos de riscos ocupacionais",
+          "cards": [
+            {"t": "Físicos e químicos", "d": "Ruído, calor, vibração, radiações, poeiras, fumos, gases e vapores"},
+            {"t": "Biológicos", "d": "Vírus, bactérias, fungos e parasitas"},
+            {"t": "Ergonômicos e psicossociais", "d": "Postura, esforço, repetição, ritmo, metas, jornada e relações de trabalho"},
+            {"t": "Acidentes", "d": "Máquinas, eletricidade, quedas, incêndio, movimentação de cargas e veículos"}
+          ],
+          "fala": "Para estudar o ambiente, organizamos os riscos em grupos. Os físicos, como ruído, calor e vibração, e os químicos, como poeiras, fumos e vapores. Os biológicos, como vírus e bactérias. Os ergonômicos e psicossociais, que envolvem postura, esforço, repetição, ritmo e a forma como o trabalho é organizado. E os riscos de acidentes, como máquinas, eletricidade, quedas e incêndio. Essa classificação ajuda a não esquecer nenhum tipo de risco na hora de percorrer a área.",
+          "apoio": "Imagens de diferentes postos de trabalho com riscos destacados"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Inspeção de segurança pela CIPA",
+          "passos": [
+            {"t": "Planejar", "d": "Definir área, roteiro e checklist"},
+            {"t": "Observar", "d": "Percorrer a área e ouvir os trabalhadores"},
+            {"t": "Registrar", "d": "Anotar situações com local, foto e descrição"},
+            {"t": "Encaminhar", "d": "Levar à reunião e propor medidas"},
+            {"t": "Acompanhar", "d": "Verificar se as medidas foram implantadas"}
+          ],
+          "fala": "Uma das formas mais práticas de atuação da CIPA é a inspeção. Ela começa com planejamento: qual área, qual roteiro, qual checklist. Na área, observamos e conversamos com quem trabalha ali, porque muitos riscos só aparecem na conversa. Registramos cada situação com local, foto e descrição clara. Levamos para a reunião, discutimos e propomos medidas. E, principalmente, acompanhamos se a medida foi implantada. Inspeção sem acompanhamento vira lista de reclamações.",
+          "dica": "Faça uma inspeção real em uma área da empresa durante a oficina prática."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Mapa de riscos e percepção dos trabalhadores",
+          "itens": [
+            "Registro gráfico dos riscos sobre a planta ou croqui do setor",
+            "Construído com a participação dos trabalhadores de cada área",
+            "Círculos de cores e tamanhos indicam o tipo e a intensidade percebida",
+            "Afixado em local visível e atualizado a cada mandato ou mudança",
+            "As informações alimentam o inventário de riscos do PGR"
+          ],
+          "destaque": "A NR-05 aceita o mapa de riscos ou outra técnica apropriada, sem ordem de preferência.",
+          "fala": "A CIPA tem a atribuição de registrar a percepção dos trabalhadores sobre os riscos. A ferramenta mais conhecida é o mapa de riscos, desenhado sobre a planta do setor, com círculos de cores e tamanhos diferentes para o tipo e a intensidade de cada risco. Ele é feito junto com os trabalhadores da área e fica afixado em local visível. A norma atual permite usar o mapa ou outra técnica apropriada. O mais importante é que essas informações cheguem ao inventário de riscos do PGR.",
+          "pergunta": "Onde está afixado hoje o mapa de riscos do seu setor?"
+        }
+      ]
+    },
+    {
+      "titulo": "Acidentes e doenças relacionados ao trabalho",
+      "duracao": 150,
+      "gancho": "Todo acidente dá sinais antes de acontecer. Quem aprende a ler esses sinais consegue agir antes da lesão.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Conceitos",
+          "cards": [
+            {"t": "Acidente típico", "d": "Ocorre pelo exercício do trabalho e causa lesão, perda ou redução da capacidade"},
+            {"t": "Acidente de trajeto", "d": "Ocorre no percurso entre a residência e o local de trabalho, para fins previdenciários"},
+            {"t": "Doença profissional", "d": "Produzida pelo exercício de trabalho peculiar a determinada atividade"},
+            {"t": "Doença do trabalho", "d": "Adquirida em função de condições especiais em que o trabalho é realizado"}
+          ],
+          "fala": "Pela legislação previdenciária, acidente de trabalho é aquele que ocorre pelo exercício do trabalho e provoca lesão ou perturbação que cause morte, perda ou redução da capacidade para o trabalho. O acidente de trajeto, entre a casa e o trabalho, é equiparado para fins da Previdência. E as doenças também são equiparadas a acidente: a doença profissional, típica de certa atividade, como a silicose em quem trabalha com sílica, e a doença do trabalho, causada pelas condições em que a atividade é feita, como a LER em atividades repetitivas.",
+          "pergunta": "Quais doenças relacionadas ao trabalho vocês acham que podem aparecer na nossa atividade?"
+        },
+        {
+          "tipo": "numero",
+          "titulo": "A pirâmide dos eventos",
+          "valor": "1 : 600",
+          "legenda": "para cada lesão grave, centenas de incidentes e desvios acontecem antes",
+          "itens": [
+            "Estudos de Frank Bird indicam a proporção entre lesões graves, leves, danos e incidentes",
+            "Desvios e quase acidentes são avisos de que o controle está falhando",
+            "Registrar e tratar os pequenos eventos é a forma de evitar os grandes"
+          ],
+          "fala": "Os estudos de Frank Bird mostraram que, para cada lesão grave, acontecem muitas lesões leves, danos materiais e centenas de incidentes sem lesão. Os números exatos variam de empresa para empresa, mas a lógica permanece: o acidente grave é a ponta de algo que já vinha acontecendo. Cada quase acidente é um aviso gratuito. Quando a CIPA incentiva o registro de desvios e quase acidentes e acompanha o tratamento, ela está agindo antes da lesão.",
+          "dica": "Pergunte quantos quase acidentes foram registrados no último mês e compare com a realidade percebida pela turma."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Medidas de prevenção no estabelecimento",
+          "itens": [
+            "Conhecer o inventário de riscos e o plano de ação do PGR",
+            "Verificar se as medidas previstas estão implantadas e funcionando",
+            "Estimular o registro de desvios e quase acidentes sem punição",
+            "Acompanhar os indicadores de acidentes e afastamentos",
+            "Levar as situações à reunião mensal com proposta de solução"
+          ],
+          "destaque": "Prevenir é agir sobre as condições de trabalho antes que a lesão aconteça.",
+          "fala": "Na prática, como a CIPA ajuda na prevenção? Conhecendo o inventário de riscos e o plano de ação, para saber o que a empresa se comprometeu a fazer. Verificando em campo se as medidas existem e funcionam. Estimulando o registro de desvios e quase acidentes, sem que isso vire motivo de punição. Acompanhando os indicadores. E levando cada situação para a reunião mensal já com uma proposta de solução, e não só com o problema.",
+          "pergunta": "Que indicador de segurança a CIPA deveria acompanhar todo mês?"
+        }
+      ]
+    },
+    {
+      "titulo": "Investigação e análise de acidentes",
+      "duracao": 180,
+      "gancho": "Investigar um acidente não é procurar culpado. É entender o que falhou no sistema para que aquilo não aconteça de novo com outra pessoa.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Etapas da investigação",
+          "passos": [
+            {"t": "Preservar", "d": "Atender a vítima e preservar o local"},
+            {"t": "Coletar", "d": "Fotos, depoimentos, documentos e condições"},
+            {"t": "Reconstituir", "d": "Montar a sequência dos fatos"},
+            {"t": "Analisar", "d": "Identificar causas imediatas e básicas"},
+            {"t": "Agir", "d": "Definir medidas, prazos e responsáveis"}
+          ],
+          "fala": "A investigação segue uma sequência. Primeiro, atender a vítima e preservar o local, sem mexer no que for possível manter. Depois, coletar informações: fotos, depoimentos das pessoas envolvidas e testemunhas, documentos como permissões de trabalho e registros de manutenção. Com isso, reconstituímos a sequência dos fatos. Em seguida analisamos as causas, das mais imediatas às mais profundas. E terminamos com medidas, prazos e responsáveis. A CIPA participa e acompanha a análise e propõe medidas.",
+          "apoio": "Equipe fotografando e anotando em área isolada com fita zebrada"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Ferramentas de análise",
+          "cards": [
+            {"t": "Cinco porquês", "d": "Perguntar por que sucessivamente até chegar à causa de origem"},
+            {"t": "Espinha de peixe", "d": "Organizar causas em método, máquina, material, mão de obra, meio ambiente e medição"},
+            {"t": "Árvore de causas", "d": "Representar graficamente os fatos que se combinaram para gerar o acidente"},
+            {"t": "Linha do tempo", "d": "Ordenar os eventos e decisões antes, durante e depois do acidente"}
+          ],
+          "fala": "Existem várias ferramentas, e a escolha depende da complexidade do caso. Os cinco porquês funcionam para casos simples: pergunte por que até chegar a uma causa que a empresa consegue corrigir. A espinha de peixe organiza as causas em categorias como método, máquina e material. A árvore de causas é mais completa e mostra como vários fatos se combinaram. E a linha do tempo ajuda a entender as decisões tomadas em sequência. O que todas têm em comum é ir além do ato do trabalhador.",
+          "dica": "Use o estudo de caso do material de apoio para aplicar os cinco porquês em grupo."
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Culpa ou causa",
+          "esquerda": {"t": "Foco na culpa", "itens": ["Conclusão: falta de atenção do trabalhador", "Medida: advertência e retreinamento", "Resultado: o acidente se repete com outra pessoa"]},
+          "direita": {"t": "Foco na causa", "itens": ["Pergunta: por que o erro foi possível?", "Medida: mudar condições, projeto e organização", "Resultado: a falha é removida do sistema"]},
+          "fala": "Quando a investigação termina em falta de atenção do trabalhador, a medida costuma ser advertência e retreinamento. E o mesmo acidente se repete com outra pessoa, porque a condição que permitiu o erro continua lá. A análise focada na causa pergunta por que aquele erro foi possível: faltou proteção na máquina? O procedimento era impraticável? Havia pressão por produção? As medidas, então, mudam as condições e a organização do trabalho. Essa é a postura que a CIPA deve defender.",
+          "pergunta": "Lembram de algum acidente aqui que terminou com a conclusão de falta de atenção?"
+        }
+      ]
+    },
+    {
+      "titulo": "Princípios de higiene do trabalho",
+      "duracao": 150,
+      "gancho": "Alguns riscos não fazem barulho nem deixam marca na hora. O ruído, a poeira e o calor agem aos poucos. A higiene ocupacional é a ciência que cuida desses riscos.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "As etapas da higiene ocupacional",
+          "passos": [
+            {"t": "Antecipar", "d": "Prever riscos em novos projetos e mudanças"},
+            {"t": "Reconhecer", "d": "Identificar agentes e trabalhadores expostos"},
+            {"t": "Avaliar", "d": "Medir a exposição e comparar com limites"},
+            {"t": "Controlar", "d": "Adotar medidas na fonte, no meio e no trabalhador"}
+          ],
+          "fala": "A higiene ocupacional trabalha em quatro etapas. Antecipar, prevendo os riscos de um projeto antes que ele seja implantado. Reconhecer quais agentes existem e quem está exposto. Avaliar, geralmente com medições, comparando a exposição com os limites de tolerância e níveis de ação. E controlar, adotando medidas. A CIPA participa principalmente do reconhecimento, porque os trabalhadores sabem dizer onde há fumaça, cheiro, barulho e calor.",
+          "apoio": "Técnico realizando dosimetria de ruído em um trabalhador"
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Controle: fonte, meio e trabalhador",
+          "cabecalho": ["Onde agir", "Exemplos"],
+          "linhas": [
+            ["Na fonte", "Substituir produto, enclausurar máquina, manutenção, umidificar processo com poeira"],
+            ["No meio", "Ventilação local exaustora, barreiras, distanciamento e isolamento da área"],
+            ["No trabalhador", "Redução do tempo de exposição, rodízio, treinamento e EPI"],
+            ["Saúde", "Exames do PCMSO para acompanhar efeitos da exposição"]
+          ],
+          "fala": "O controle segue uma lógica de onde agir. Primeiro na fonte, que é onde o agente nasce: trocar um produto, enclausurar uma máquina, fazer manutenção ou umidificar um processo que gera poeira. Depois no meio, por onde o agente se propaga, com ventilação exaustora, barreiras e distanciamento. Por último, no trabalhador, reduzindo o tempo de exposição, fazendo rodízio, treinando e fornecendo EPI. E o PCMSO acompanha a saúde de quem está exposto para identificar efeitos cedo.",
+          "pergunta": "Que agente da nossa empresa poderia ser controlado na fonte?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Sinais que a CIPA deve observar",
+          "itens": [
+            "Necessidade de falar alto para ser ouvido a um metro de distância",
+            "Poeira visível no ar ou acumulada em superfícies",
+            "Cheiro de produto químico, irritação nos olhos ou na garganta",
+            "Sensação de calor intenso, suor excessivo e mal-estar",
+            "Queixas repetidas de dores no mesmo setor"
+          ],
+          "destaque": "Esses sinais não substituem medições, mas indicam onde elas são necessárias.",
+          "fala": "O cipeiro não precisa de equipamento para perceber sinais de exposição. Se é preciso gritar para conversar com um colega a um metro, provavelmente o ruído está alto. Poeira visível no ar ou acumulada, cheiro de produto, irritação nos olhos, calor excessivo e queixas repetidas de dor no mesmo setor são sinais claros. Eles não substituem uma avaliação técnica, mas mostram onde ela é necessária. Registre e leve para a reunião."
+        }
+      ]
+    },
+    {
+      "titulo": "Legislação trabalhista e previdenciária em SST",
+      "duracao": 120,
+      "gancho": "Quando acontece um acidente, uma série de obrigações legais entra em cena. O cipeiro precisa conhecer o básico para orientar os colegas e cobrar o que é devido.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Fontes legais da SST",
+          "cards": [
+            {"t": "Constituição Federal", "d": "Direito à redução dos riscos inerentes ao trabalho por meio de normas de saúde, higiene e segurança"},
+            {"t": "CLT", "d": "Capítulo V trata da segurança e medicina do trabalho e dá base às NRs"},
+            {"t": "Normas Regulamentadoras", "d": "Detalham as obrigações técnicas para empregadores e trabalhadores"},
+            {"t": "Lei 8.213/1991", "d": "Define acidente de trabalho, CAT e benefícios previdenciários"}
+          ],
+          "fala": "A segurança e saúde no trabalho tem base em várias normas. A Constituição garante ao trabalhador a redução dos riscos inerentes ao trabalho. A CLT, no capítulo da segurança e medicina do trabalho, dá a base legal das normas regulamentadoras. As NRs detalham as obrigações técnicas. E a Lei 8.213 trata dos benefícios da Previdência e define o que é acidente de trabalho, além da obrigação de comunicar o acidente.",
+          "dica": "Mostre onde consultar o texto atualizado das NRs no site do Ministério do Trabalho."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Comunicação de Acidente de Trabalho",
+          "cabecalho": ["Item", "Regra"],
+          "linhas": [
+            ["Quando", "Até o primeiro dia útil seguinte ao acidente; em caso de morte, imediatamente"],
+            ["Quem emite", "A empresa; na falta, o próprio acidentado, dependentes, sindicato, médico ou autoridade pública"],
+            ["Como", "Pelo eSocial, no evento de comunicação de acidente de trabalho"],
+            ["Abrange", "Acidentes típicos, de trajeto e doenças relacionadas ao trabalho, com ou sem afastamento"]
+          ],
+          "fala": "Todo acidente de trabalho deve ser comunicado à Previdência pela CAT, a Comunicação de Acidente de Trabalho. O prazo é até o primeiro dia útil seguinte ao acidente e, em caso de morte, imediatamente. A empresa é responsável pela emissão, hoje feita pelo eSocial. Se ela não emitir, o próprio trabalhador, seus dependentes, o sindicato, o médico ou uma autoridade pública podem fazer. A CAT vale para acidentes típicos, de trajeto e doenças, com ou sem afastamento.",
+          "pergunta": "Vocês sabem quem emite a CAT aqui na empresa?"
+        },
+        {
+          "tipo": "numero",
+          "titulo": "Garantia após o acidente",
+          "valor": "12 meses",
+          "legenda": "de garantia de emprego após o fim do benefício por incapacidade acidentário",
+          "itens": [
+            "Vale para quem recebeu o benefício acidentário da Previdência",
+            "Conta a partir da cessação do benefício",
+            "A CAT é o documento que inicia o reconhecimento do acidente"
+          ],
+          "fala": "Um ponto que o cipeiro precisa conhecer é a garantia de emprego do acidentado. Quem sofre acidente de trabalho e recebe o benefício por incapacidade acidentário da Previdência tem garantia de emprego por doze meses depois que o benefício termina. Por isso a emissão correta da CAT é tão importante: ela é o documento que inicia o reconhecimento do acidente e garante os direitos do trabalhador."
+        }
+      ]
+    },
+    {
+      "titulo": "Inclusão de pessoas com deficiência e reabilitados",
+      "duracao": 60,
+      "gancho": "Um ambiente pensado para todas as pessoas é um ambiente mais seguro para todo mundo. A NR-05 inclui este tema no treinamento da CIPA por um bom motivo.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Base legal da inclusão",
+          "cards": [
+            {"t": "Lei Brasileira de Inclusão", "d": "Garante à pessoa com deficiência o direito ao trabalho em ambiente acessível e inclusivo"},
+            {"t": "Reserva de vagas", "d": "Empresas com 100 ou mais empregados devem preencher de 2 a 5 por cento das vagas"},
+            {"t": "Reabilitados", "d": "Trabalhadores reabilitados pela Previdência também integram a reserva"},
+            {"t": "Adaptação razoável", "d": "Ajustes no posto, nas ferramentas e na organização para permitir o trabalho"}
+          ],
+          "fala": "A Lei Brasileira de Inclusão garante à pessoa com deficiência o direito ao trabalho em um ambiente acessível e inclusivo. A Lei 8.213 obriga empresas com cem ou mais empregados a preencher de dois a cinco por cento das vagas com pessoas com deficiência ou reabilitados pela Previdência. E a adaptação razoável é o conjunto de ajustes no posto de trabalho, nas ferramentas e na organização que permite à pessoa trabalhar com segurança e autonomia.",
+          "dica": "Convide, se possível, um colaborador com deficiência da empresa para falar sobre a sua experiência."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "O papel da CIPA",
+          "itens": [
+            "Considerar as pessoas com deficiência nas inspeções e no mapa de riscos",
+            "Verificar rotas de fuga, alarmes e sinalização acessíveis",
+            "Incluir as necessidades de cada pessoa no plano de emergência",
+            "Combater atitudes discriminatórias e piadas",
+            "Propor adaptações nos postos de trabalho"
+          ],
+          "destaque": "Alarme só sonoro não avisa quem tem deficiência auditiva. Pense em todos ao planejar.",
+          "fala": "Na prática, a CIPA contribui de várias formas. Considerando as pessoas com deficiência ao inspecionar e mapear riscos. Verificando se rotas de fuga, alarmes e sinalização atendem a todos: um alarme só sonoro não avisa uma pessoa surda, e uma rota com degraus não serve para quem usa cadeira de rodas. Incluindo as necessidades individuais no plano de emergência. E combatendo atitudes discriminatórias, inclusive as piadas que muita gente acha inofensivas.",
+          "pergunta": "Nosso plano de emergência considera pessoas com deficiência?"
+        }
+      ]
+    },
+    {
+      "titulo": "Prevenção e combate ao assédio e à violência no trabalho",
+      "duracao": 90,
+      "gancho": "Desde 2022, a CIPA passou a ser também a Comissão Interna de Prevenção de Acidentes e de Assédio. Isso mostra que o assédio é tratado como risco à saúde do trabalhador.",
+      "slides": [
+        {
+          "tipo": "comparar",
+          "titulo": "Assédio moral e assédio sexual",
+          "esquerda": {"t": "Assédio moral", "itens": ["Condutas abusivas e repetidas", "Humilhação, isolamento, ameaças e sobrecarga proposital", "Afeta a dignidade e a saúde mental"]},
+          "direita": {"t": "Assédio sexual", "itens": ["Conduta de conotação sexual não desejada", "Pode ocorrer uma única vez", "É crime previsto no Código Penal"]},
+          "fala": "Precisamos diferenciar os dois tipos. O assédio moral é um conjunto de condutas abusivas e repetidas, como humilhar em público, isolar, ameaçar, dar tarefas impossíveis de propósito. Ele afeta a dignidade e a saúde mental. O assédio sexual é uma conduta de conotação sexual não desejada, que pode acontecer uma única vez, e é crime previsto no Código Penal. Os dois são formas de violência no trabalho e precisam ser prevenidos e apurados.",
+          "dica": "Conduza o tema com cuidado e informe o canal de denúncia da empresa antes de abrir para discussão."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "O que a lei exige da empresa",
+          "cards": [
+            {"t": "Regras de conduta", "d": "Normas internas sobre assédio e violência, divulgadas a todos"},
+            {"t": "Canal de denúncia", "d": "Procedimento para receber e acompanhar denúncias, com sigilo"},
+            {"t": "Apuração", "d": "Investigação dos fatos e aplicação de sanções administrativas"},
+            {"t": "Capacitação", "d": "Ações de orientação e sensibilização, no mínimo a cada 12 meses"}
+          ],
+          "fala": "A Lei 14.457, de 2022, exige que as empresas com CIPA adotem medidas de prevenção. Ter regras de conduta sobre assédio e violência, divulgadas a todos. Ter procedimentos para receber e acompanhar denúncias, com sigilo. Apurar os fatos e aplicar sanções quando for o caso. E realizar ações de capacitação e sensibilização pelo menos a cada doze meses. A CIPA deve incluir esses temas nas suas atividades e práticas.",
+          "pergunta": "Todos aqui conhecem o canal de denúncia da empresa?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Como o cipeiro deve agir",
+          "passos": [
+            {"t": "Ouvir", "d": "Acolher sem julgar nem duvidar"},
+            {"t": "Orientar", "d": "Indicar o canal de denúncia"},
+            {"t": "Preservar", "d": "Manter o sigilo das informações"},
+            {"t": "Prevenir", "d": "Levar o tema para a SIPAT e as reuniões"}
+          ],
+          "fala": "Se um colega procurar você para relatar uma situação de assédio, ouça com atenção, sem julgar e sem duvidar. Oriente sobre o canal de denúncia da empresa. Preserve o sigilo, porque a exposição pode piorar a situação de quem denuncia. E, como CIPA, trabalhe na prevenção, levando o tema para a SIPAT, para as reuniões e para as ações de conscientização. O cipeiro não é investigador do caso, mas é uma porta de entrada importante.",
+          "apoio": "Conversa reservada entre dois colegas em uma sala"
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Oficinas práticas da CIPA",
+    "duracao": 150,
+    "descricao": "Em grupos, os participantes realizam uma inspeção em área real, constroem o mapa de riscos de um setor e analisam um acidente com os cinco porquês.",
+    "itens": [
+      "Realizou inspeção em área com checklist e registro fotográfico",
+      "Construiu o mapa de riscos do setor com a participação dos trabalhadores",
+      "Aplicou os cinco porquês ao estudo de caso de acidente",
+      "Elaborou uma proposta de medida com prazo e responsável",
+      "Redigiu uma ata de reunião com os encaminhamentos da oficina"
+    ]
+  },
+  "caso": {
+    "titulo": "A prensa que travava",
+    "relato": "Em uma fábrica de autopeças, os operadores de uma prensa reclamavam havia meses que o sensor da proteção móvel travava a máquina várias vezes por turno, atrasando a produção. O problema foi mencionado em duas reuniões da CIPA, registrado em ata como em análise pela manutenção, mas não houve prazo nem responsável. Para cumprir a meta do dia, um operador passou a manter a proteção aberta com um pedaço de arame. Numa tarde, ao retirar uma peça mal posicionada, ele teve dois dedos atingidos pela ferramenta. A primeira versão da investigação concluiu que o operador agiu com imprudência ao burlar a proteção.",
+    "perguntas": [
+      "Aplique os cinco porquês a partir do fato de o operador ter burlado a proteção.",
+      "Quais foram as falhas da CIPA no acompanhamento do problema?",
+      "A conclusão de imprudência resolve a causa do acidente?",
+      "Que medidas de engenharia e de organização deveriam ser adotadas?",
+      "Como a meta de produção influenciou a decisão do operador?"
+    ],
+    "analise": "O operador burlou a proteção porque ela travava a máquina; ela travava porque o sensor estava com defeito ou mal ajustado; o defeito não foi corrigido porque a demanda não teve prazo nem responsável; e a pressão pela meta tornava o travamento inaceitável para a produção. A causa está no sistema e não apenas no ato do operador. A CIPA registrou o problema, mas não acompanhou a solução nem propôs a análise de risco grave e iminente. As medidas incluem correção e validação do sistema de segurança da prensa, dispositivo que impeça a burla, revisão das metas quando houver paradas por segurança e acompanhamento das pendências da CIPA com prazo e responsável."
+  },
+  "dinamica": {
+    "titulo": "O cipeiro na prática",
+    "objetivo": "Exercitar a atuação do cipeiro em situações do dia a dia.",
+    "tempo": 30,
+    "passos": [
+      "Prepare cartões com situações, como um colega relata que a escada está quebrada, um trabalhador comenta que sofre humilhações do supervisor, ou um quase acidente com empilhadeira não foi registrado.",
+      "Divida a turma em duplas e entregue um cartão para cada dupla.",
+      "Cada dupla define o que o cipeiro deve fazer, a quem encaminhar e o que acompanhar.",
+      "As duplas apresentam e a turma comenta.",
+      "Feche reforçando que a CIPA acompanha até a solução e não apenas registra."
+    ]
+  },
+  "dds": {
+    "titulo": "A CIPA está aqui para ouvir",
+    "texto": "Bom dia a todos. Eu faço parte da CIPA e quero lembrar uma coisa. A CIPA existe para levar a voz de vocês até a gestão de segurança. Se você viu uma situação de risco, um quase acidente que ninguém registrou ou passou por algum constrangimento no trabalho, fale com um cipeiro. A gente leva para a reunião, cobra prazo e responsável e acompanha até resolver. Também temos o canal de denúncia, com sigilo, para casos de assédio. Ninguém precisa enfrentar um problema de segurança ou de respeito sozinho."
+  },
+  "prova": [
+    {"q": "A CIPA é composta por:", "o": ["Somente representantes eleitos", "Representantes do empregador, designados, e dos empregados, eleitos", "Apenas profissionais do SESMT", "Membros indicados pelo sindicato"], "c": 1, "com": "A composição é paritária entre designados pela empresa e eleitos pelos empregados."},
+    {"q": "O mandato dos membros eleitos da CIPA é de:", "o": ["6 meses", "1 ano, permitida uma reeleição", "2 anos, sem reeleição", "Indeterminado"], "c": 1, "com": "Mandato de um ano com uma reeleição permitida."},
+    {"q": "A estabilidade do cipeiro eleito vai:", "o": ["Da posse até o fim do mandato", "Do registro da candidatura até 1 ano após o fim do mandato", "Somente durante as reuniões", "Do registro da candidatura até a eleição"], "c": 1, "com": "A garantia vai do registro da candidatura até um ano após o término do mandato."},
+    {"q": "As reuniões ordinárias da CIPA são:", "o": ["Semanais", "Mensais, em calendário preestabelecido", "Trimestrais", "Somente quando há acidente"], "c": 1, "com": "Reuniões ordinárias mensais, durante o expediente."},
+    {"q": "Para um estabelecimento de grau de risco 4, a carga horária mínima do treinamento da CIPA é de:", "o": ["8 horas", "12 horas", "16 horas", "20 horas"], "c": 3, "com": "8, 12, 16 e 20 horas para os graus de risco 1, 2, 3 e 4."},
+    {"q": "A CAT deve ser emitida:", "o": ["Em até 30 dias", "Até o primeiro dia útil seguinte ao acidente e, em caso de morte, imediatamente", "Somente quando há afastamento", "Apenas em acidentes graves"], "c": 1, "com": "Prazo da Lei 8.213, com ou sem afastamento."},
+    {"q": "Na investigação de acidentes, a abordagem correta é:", "o": ["Identificar o culpado e aplicar punição", "Buscar as causas no sistema para evitar repetição", "Arquivar quando não houver afastamento", "Concluir sempre por falta de atenção"], "c": 1, "com": "O foco é nas causas e nas condições que permitiram o acidente."},
+    {"q": "Na higiene ocupacional, a prioridade de controle é:", "o": ["No trabalhador, com EPI", "Na fonte do agente", "No meio, com sinalização", "Na redução do salário de insalubridade"], "c": 1, "com": "Controlar na fonte é mais eficaz que no meio ou no trabalhador."},
+    {"q": "Empresas com 100 ou mais empregados devem reservar para pessoas com deficiência ou reabilitados:", "o": ["1% das vagas", "De 2% a 5% das vagas", "10% das vagas", "Não há reserva obrigatória"], "c": 1, "com": "A Lei 8.213 estabelece de 2% a 5% conforme o porte."},
+    {"q": "Diante de um relato de assédio, o cipeiro deve:", "o": ["Divulgar o caso para alertar os colegas", "Acolher, orientar sobre o canal de denúncia e preservar o sigilo", "Confrontar o acusado", "Ignorar, pois não é atribuição da CIPA"], "c": 1, "com": "Acolhimento, orientação ao canal de denúncia e sigilo são a conduta correta."}
+  ]
+}

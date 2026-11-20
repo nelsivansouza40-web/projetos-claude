@@ -1,0 +1,374 @@
+{
+  "nr": "33",
+  "titulo": "Segurança e Saúde nos Trabalhos em Espaços Confinados",
+  "chamada": "Testar a atmosfera, liberar por escrito e nunca entrar para socorrer sem preparo",
+  "icone": "FaMaskVentilator",
+  "carga": "16 horas (trabalhadores autorizados e vigias)",
+  "periodicidade": "Treinamento periódico anual, com carga horária mínima de 8 horas, e treinamento eventual nas situações previstas na NR-01. Supervisores de entrada exigem capacitação de 40 horas, com conteúdo complementar não coberto por este kit.",
+  "publico": "Trabalhadores autorizados a entrar em espaços confinados e vigias.",
+  "prerequisitos": "Avaliação de saúde com aptidão para trabalho em espaço confinado registrada no ASO, considerando os fatores de risco psicossociais e a capacidade de uso de proteção respiratória.",
+  "instrutor": "Instrutores com conhecimentos e experiência comprovada em espaços confinados, sob responsabilidade técnica de profissional qualificado em segurança do trabalho.",
+  "objetivos": [
+    "Reconhecer um espaço confinado e os riscos da atmosfera perigosa",
+    "Interpretar a avaliação atmosférica e as medidas de controle de riscos",
+    "Utilizar corretamente os equipamentos de monitoramento, ventilação e proteção",
+    "Seguir os procedimentos e a Permissão de Entrada e Trabalho",
+    "Cumprir as funções de vigia e trabalhador autorizado e agir em emergências"
+  ],
+  "recursos": [
+    "Projetor e apresentação",
+    "Detector multigás com cilindro de gás para teste de resposta",
+    "Ventilador ou exaustor com dutos",
+    "Respiradores e, se disponível, equipamento autônomo para demonstração",
+    "Tripé de resgate, guincho e cinturão com ponto de resgate",
+    "Modelos de PET em branco",
+    "Lista de presença e provas impressas"
+  ],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e desempenho satisfatório em todos os itens do checklist prático.",
+  "referencias": [
+    "NR-33 Segurança e Saúde nos Trabalhos em Espaços Confinados, texto vigente",
+    "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais",
+    "NR-35 Trabalho em Altura",
+    "Fundacentro, Programa de Proteção Respiratória",
+    "ABNT NBR 16577 Espaço confinado: prevenção de acidentes, procedimentos e medidas de proteção"
+  ],
+  "caso_modulo": 5,
+  "modulos": [
+    {
+      "titulo": "Definições e legislação",
+      "duracao": 90,
+      "gancho": "Um espaço confinado pode parecer inofensivo: um tanque vazio, uma galeria seca, um poço de visita. O perigo é invisível e quase sempre silencioso. Vamos começar entendendo o que torna um espaço confinado.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "O que é espaço confinado",
+          "passos": [
+            {"t": "Não projetado", "d": "Não foi feito para ocupação humana contínua"},
+            {"t": "Acesso limitado", "d": "Meios limitados de entrada e saída"},
+            {"t": "Atmosfera perigosa", "d": "Existe ou pode existir atmosfera perigosa"}
+          ],
+          "fala": "Para a NR-33, espaço confinado é qualquer área ou ambiente que atenda ao mesmo tempo a três condições. Não foi projetado para ocupação humana contínua. Tem meios limitados de entrada e saída. E nele existe ou pode existir uma atmosfera perigosa. Tanques, silos, caldeiras, reatores, galerias, poços de visita, tubulações e porões de navio são exemplos comuns. Repare que basta a possibilidade de atmosfera perigosa: um tanque limpo e vazio continua sendo espaço confinado.",
+          "pergunta": "Quais espaços confinados existem na nossa empresa?",
+          "apoio": "Sequência de imagens: tanque, silo, galeria subterrânea e poço de visita"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Atmosfera perigosa",
+          "cards": [
+            {"t": "Deficiência de oxigênio", "d": "Oxigênio consumido ou deslocado por outros gases"},
+            {"t": "Enriquecimento de oxigênio", "d": "Excesso de oxigênio que aumenta muito o risco de incêndio"},
+            {"t": "Inflamáveis", "d": "Gases, vapores ou poeiras combustíveis que podem explodir"},
+            {"t": "Tóxicos", "d": "Gases como sulfeto de hidrogênio e monóxido de carbono"}
+          ],
+          "fala": "A atmosfera perigosa pode ter quatro origens. Deficiência de oxigênio, quando ele é consumido por ferrugem e fermentação ou deslocado por gases como nitrogênio e gás carbônico. Enriquecimento de oxigênio, que faz qualquer material queimar com muito mais facilidade. Presença de gases, vapores ou poeiras inflamáveis. E gases tóxicos, como o sulfeto de hidrogênio, comum em esgotos, e o monóxido de carbono, de motores a combustão. Na maioria dos casos, nenhum desses perigos pode ser percebido pelos sentidos.",
+          "dica": "Explique que o sulfeto de hidrogênio paralisa o olfato em concentrações altas, então não sentir cheiro não significa segurança."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "O que a NR-33 exige",
+          "itens": [
+            "Identificar, isolar e sinalizar todos os espaços confinados",
+            "Avaliar e controlar os riscos antes e durante a entrada",
+            "Emitir a Permissão de Entrada e Trabalho antes de cada entrada",
+            "Capacitar trabalhadores autorizados, vigias e supervisores",
+            "Manter equipe e recursos de resgate disponíveis"
+          ],
+          "destaque": "Entrada não autorizada em espaço confinado é proibida.",
+          "fala": "A NR-33 exige que a empresa identifique todos os espaços confinados, isole e sinalize cada um deles para impedir a entrada de pessoas não autorizadas. Antes e durante cada entrada, os riscos devem ser avaliados e controlados. A entrada só acontece com a Permissão de Entrada e Trabalho emitida. Trabalhadores autorizados, vigias e supervisores devem ser capacitados. E deve existir equipe e recursos de resgate disponíveis. A sinalização indica perigo, espaço confinado e entrada não autorizada."
+        }
+      ]
+    },
+    {
+      "titulo": "Reconhecimento, avaliação e controle de riscos",
+      "duracao": 180,
+      "gancho": "Nenhum sentido humano é capaz de dizer se a atmosfera de um tanque é segura. Só o instrumento diz. Neste módulo vamos ver como avaliar e controlar os riscos antes de entrar.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Oxigênio na atmosfera",
+          "cabecalho": ["Concentração de O2", "Situação"],
+          "linhas": [
+            ["Cerca de 20,9%", "Ar normal"],
+            ["Abaixo de 19,5%", "Deficiência de oxigênio: entrada proibida sem medidas de controle e equipamento com suprimento de ar"],
+            ["Acima de 23%", "Enriquecimento de oxigênio: risco elevado de incêndio e explosão"],
+            ["Quedas acentuadas", "Perda de coordenação, inconsciência e morte em poucos minutos"]
+          ],
+          "fala": "O ar normal tem cerca de vinte vírgula nove por cento de oxigênio. Abaixo de dezenove e meio por cento, a atmosfera é deficiente em oxigênio e a entrada não pode acontecer sem medidas de controle e equipamento com suprimento de ar. Acima de vinte e três por cento, há enriquecimento, com risco elevado de incêndio. Quando o oxigênio cai muito, a pessoa perde a coordenação e a consciência em poucos minutos, às vezes após uma ou duas respirações, sem nenhum aviso.",
+          "dica": "Reforce que qualquer variação do oxigênio em relação ao ar normal indica que algo está acontecendo no espaço."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Avaliação atmosférica",
+          "passos": [
+            {"t": "Testar o detector", "d": "Teste de resposta com gás padrão e calibração em dia"},
+            {"t": "Medir de fora", "d": "Antes da entrada, sem expor o trabalhador"},
+            {"t": "Oxigênio", "d": "Primeiro parâmetro avaliado"},
+            {"t": "Inflamáveis", "d": "Em percentual do limite inferior de explosividade"},
+            {"t": "Tóxicos", "d": "Gases previstos para aquele espaço"},
+            {"t": "Vários níveis", "d": "Topo, meio e fundo, e monitoramento contínuo"}
+          ],
+          "fala": "A avaliação começa pelo próprio detector: ele precisa estar calibrado e passar no teste de resposta com gás padrão. A medição é feita de fora, antes da entrada, com sonda ou mangueira. Primeiro o oxigênio, porque a falta dele afeta a leitura dos outros sensores. Depois os inflamáveis, medidos em percentual do limite inferior de explosividade. E então os tóxicos previstos. Mede-se em vários níveis, porque gases pesados ficam no fundo e leves no topo. Durante o trabalho, o monitoramento é contínuo.",
+          "apoio": "Trabalhador medindo a atmosfera com sonda pela boca de visita"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Medidas de controle",
+          "cards": [
+            {"t": "Isolar", "d": "Bloquear energias e fluidos com raquetes, flanges cegos, desconexão de linhas e cadeados"},
+            {"t": "Purgar e ventilar", "d": "Ventilação mecânica contínua, nunca com oxigênio puro"},
+            {"t": "Eliminar fontes", "d": "Equipamentos adequados para áreas classificadas e controle de faíscas"},
+            {"t": "Proteger", "d": "Proteção respiratória adequada, iluminação, comunicação e EPIs"}
+          ],
+          "fala": "As medidas de controle começam pelo isolamento: bloquear energias e fluidos que possam entrar no espaço, com raquetes, flanges cegos, desconexão de linhas e bloqueio com cadeado. Fechar só a válvula não basta. Depois, purga e ventilação mecânica contínua. E atenção: nunca ventile com oxigênio puro, porque isso cria uma atmosfera enriquecida. Elimine fontes de ignição usando equipamentos certificados para áreas classificadas. E garanta proteção respiratória adequada, iluminação, comunicação e os EPIs necessários.",
+          "pergunta": "Por que fechar uma válvula não é suficiente para isolar uma linha?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Condições que impedem a entrada",
+          "texto": "Leitura fora dos limites ou alarme do detector: ninguém entra, e quem está dentro sai imediatamente.",
+          "itens": [
+            "Oxigênio abaixo de 19,5% ou acima de 23%",
+            "Inflamáveis acima do limite definido, usualmente 10% do LIE",
+            "Tóxicos acima dos limites de exposição",
+            "Detector sem teste de resposta ou com falha",
+            "Ausência de vigia, de comunicação ou de recursos de resgate"
+          ],
+          "fala": "Algumas condições impedem a entrada. Oxigênio fora da faixa segura. Inflamáveis acima do limite definido no procedimento, usualmente dez por cento do limite inferior de explosividade. Tóxicos acima dos limites de exposição. Detector sem teste ou com falha. E ausência de vigia, de comunicação ou dos recursos de resgate. Se o alarme do detector soar durante o trabalho, todos saem imediatamente. Não se discute a leitura com o instrumento."
+        }
+      ]
+    },
+    {
+      "titulo": "Funcionamento dos equipamentos",
+      "duracao": 150,
+      "gancho": "Detector, ventilador, respirador e tripé. Cada um desses equipamentos tem um jeito certo de usar, e o erro em qualquer um deles pode custar uma vida.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Detector de gases",
+          "itens": [
+            "Calibração periódica conforme o fabricante e teste de resposta antes do uso",
+            "Ligar e zerar em ar limpo, fora do espaço confinado",
+            "Aguardar o tempo de resposta em cada ponto medido",
+            "Acompanhar o trabalhador ou ficar em ponto representativo durante a atividade",
+            "Alarme soou: evacuar, não silenciar"
+          ],
+          "destaque": "Detector sem teste de resposta é só uma caixa com display.",
+          "fala": "O detector de gases é o equipamento mais importante na entrada em espaço confinado. Ele precisa de calibração periódica e de teste de resposta antes de cada uso, expondo os sensores a um gás padrão. É ligado e zerado em ar limpo, longe do espaço confinado. Em cada ponto medido, aguarde o tempo de resposta indicado pelo fabricante. Durante o trabalho, ele acompanha o trabalhador ou fica em um ponto representativo. E se o alarme soar, a reação é evacuar, nunca silenciar o aparelho.",
+          "dica": "Faça o teste de resposta ao vivo e mostre o alarme disparando."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Ventilação",
+          "cards": [
+            {"t": "Insuflação", "d": "Leva ar limpo para dentro e dilui contaminantes"},
+            {"t": "Exaustão", "d": "Retira contaminantes junto à fonte, como em soldas"},
+            {"t": "Posicionamento", "d": "Captação de ar limpo longe de escapamentos e da saída de exaustão"},
+            {"t": "Continuidade", "d": "Ventilação mantida durante todo o trabalho, com monitoramento"}
+          ],
+          "fala": "A ventilação pode ser por insuflação, levando ar limpo para dentro, ou por exaustão, retirando o contaminante perto da fonte, como em trabalhos de solda. Muitas vezes as duas são combinadas. A captação de ar limpo deve ficar longe de escapamentos de veículos e geradores e longe da própria saída de exaustão. A ventilação é mantida durante todo o trabalho, com monitoramento contínuo, porque a atividade pode gerar novos contaminantes.",
+          "apoio": "Ventilador com duto insuflando ar pela boca de visita"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Proteção respiratória",
+          "esquerda": {"t": "Respirador purificador", "itens": ["Filtra o ar do próprio ambiente", "Só com oxigênio adequado", "Filtro compatível com o contaminante"]},
+          "direita": {"t": "Respirador com suprimento de ar", "itens": ["Fornece ar de fonte independente", "Linha de ar ou equipamento autônomo", "Exigido em deficiência de oxigênio e atmosferas IPVS"]},
+          "fala": "Existem dois grandes grupos de respiradores. O purificador filtra o ar do próprio ambiente e só pode ser usado quando o oxigênio está adequado e o contaminante é conhecido, com filtro compatível. O respirador com suprimento de ar fornece ar de uma fonte independente, por linha de ar ou cilindro autônomo, e é obrigatório quando falta oxigênio ou em atmosferas imediatamente perigosas à vida ou à saúde. A seleção segue o programa de proteção respiratória da empresa.",
+          "pergunta": "Por que um respirador com filtro não protege em um tanque com pouco oxigênio?"
+        }
+      ]
+    },
+    {
+      "titulo": "Procedimentos e Permissão de Entrada e Trabalho",
+      "duracao": 150,
+      "gancho": "A Permissão de Entrada e Trabalho é o documento que transforma todo o planejamento em uma decisão por escrito: pode entrar ou não pode. Vamos ver como ela funciona.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "O que a PET registra",
+          "cards": [
+            {"t": "Identificação", "d": "Espaço, objetivo do trabalho, data, horário e validade"},
+            {"t": "Pessoas", "d": "Trabalhadores autorizados, vigia, supervisor e equipe de resgate"},
+            {"t": "Riscos e medidas", "d": "Perigos, isolamentos, ventilação, equipamentos e EPIs"},
+            {"t": "Avaliação atmosférica", "d": "Resultados das medições iniciais e periódicas"}
+          ],
+          "fala": "A PET é emitida pelo supervisor de entrada antes de cada entrada. Ela identifica o espaço, o trabalho a ser feito, a data, o horário e a validade. Lista quem está autorizado a entrar, quem é o vigia, quem é o supervisor e qual a equipe de resgate. Registra os riscos e as medidas adotadas, como isolamentos, ventilação, equipamentos e EPIs. E traz os resultados da avaliação atmosférica. Todos os envolvidos devem conhecer o conteúdo da PET, que fica disponível no local.",
+          "dica": "Distribua um modelo de PET e preencha com a turma um caso simulado."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Ciclo da entrada",
+          "passos": [
+            {"t": "Preparar", "d": "Isolar, bloquear, ventilar e testar"},
+            {"t": "Emitir", "d": "Supervisor emite e assina a PET"},
+            {"t": "Entrar", "d": "Vigia controla entradas e saídas"},
+            {"t": "Monitorar", "d": "Atmosfera e condições durante o trabalho"},
+            {"t": "Encerrar", "d": "Saída de todos, encerramento e arquivo da PET"}
+          ],
+          "fala": "O ciclo da entrada tem cinco momentos. Preparar o espaço: isolar, bloquear, ventilar e testar a atmosfera. Emitir a PET, com assinatura do supervisor de entrada. Entrar, com o vigia controlando quem entra e quem sai. Monitorar a atmosfera e as condições durante todo o trabalho. E encerrar: confirmar a saída de todos, encerrar a PET e arquivá-la. Se as condições mudarem, a PET é cancelada e todos saem.",
+          "apoio": "Supervisor assinando a PET ao lado da boca de visita"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Cancelamento da PET",
+          "texto": "Qualquer mudança nas condições previstas cancela a permissão e exige nova avaliação.",
+          "itens": [
+            "Alarme do detector ou leitura fora dos limites",
+            "Falha na ventilação ou na comunicação",
+            "Saída do vigia sem substituto capacitado",
+            "Situação não prevista na PET",
+            "Término do prazo de validade"
+          ],
+          "fala": "A PET deve ser cancelada sempre que algo muda. Alarme do detector ou leitura fora dos limites. Falha na ventilação ou na comunicação. O vigia precisando sair sem um substituto capacitado. Qualquer situação que não estava prevista. E o fim do prazo de validade. Depois do cancelamento, uma nova entrada exige nova avaliação e nova permissão.",
+          "pergunta": "Em que situação real vocês acham que uma PET deveria ter sido cancelada e não foi?"
+        }
+      ]
+    },
+    {
+      "titulo": "Funções na entrada em espaço confinado",
+      "duracao": 60,
+      "gancho": "Toda entrada em espaço confinado é um trabalho em equipe. Cada pessoa tem um papel definido, e ninguém pode acumular funções que se atrapalham.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Quem faz o quê",
+          "cards": [
+            {"t": "Supervisor de entrada", "d": "Emite, verifica, cancela e encerra a PET"},
+            {"t": "Vigia", "d": "Permanece fora, controla entradas e saídas e aciona o resgate"},
+            {"t": "Trabalhador autorizado", "d": "Executa o trabalho seguindo a PET e os procedimentos"},
+            {"t": "Equipe de resgate", "d": "Capacitada, equipada e disponível durante toda a entrada"}
+          ],
+          "fala": "São quatro papéis. O supervisor de entrada emite a PET, verifica se as medidas foram adotadas, pode cancelar a permissão e encerra ao final. O vigia fica do lado de fora, controla quem entra e quem sai e aciona o resgate. O trabalhador autorizado executa o trabalho seguindo a PET. E a equipe de resgate, capacitada e equipada, fica disponível durante toda a entrada. O supervisor pode acumular a função de vigia, mas o vigia não pode acumular outras tarefas que o distraiam.",
+          "pergunta": "Quem exerce cada uma dessas funções nas entradas da nossa empresa?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Deveres do vigia",
+          "itens": [
+            "Manter a contagem de todos os trabalhadores dentro do espaço",
+            "Permanecer fora, junto à entrada, durante toda a atividade",
+            "Manter comunicação contínua com quem está dentro",
+            "Ordenar a evacuação diante de sinais de risco",
+            "Acionar o resgate e operar os equipamentos de resgate sem entrar"
+          ],
+          "destaque": "O vigia nunca entra no espaço confinado, nem para socorrer.",
+          "fala": "O vigia tem uma das funções mais importantes. Ele mantém a contagem de todos que estão dentro, permanece fora junto à entrada durante toda a atividade e mantém comunicação contínua. Se perceber qualquer sinal de risco, como alarme, mudança de comportamento ou falta de resposta, ordena a evacuação. Em emergência, aciona o resgate e opera os equipamentos de resgate pelo lado de fora. O vigia nunca entra no espaço, nem para socorrer, e não faz outras tarefas que o distraiam.",
+          "dica": "Pratique a comunicação vigia e entrante com sinais combinados de corda ou rádio."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Deveres do trabalhador autorizado",
+          "itens": [
+            "Conhecer os riscos e as medidas previstas na PET",
+            "Usar corretamente os equipamentos e EPIs",
+            "Manter comunicação com o vigia",
+            "Sair imediatamente quando ordenado ou ao perceber sinais de risco",
+            "Comunicar ao vigia e ao supervisor qualquer situação anormal"
+          ],
+          "destaque": "Tontura, dor de cabeça, cheiro diferente ou alarme: saia primeiro, explique depois.",
+          "fala": "O trabalhador autorizado precisa conhecer os riscos e as medidas da PET, usar corretamente os equipamentos e manter comunicação com o vigia. Deve sair imediatamente quando o vigia ou o supervisor mandar, ou quando perceber qualquer sinal de risco, como tontura, dor de cabeça, cheiro diferente ou alarme do detector. Primeiro sai, depois explica. E comunica qualquer situação anormal ao vigia e ao supervisor."
+        }
+      ]
+    },
+    {
+      "titulo": "Noções de resgate e primeiros socorros",
+      "duracao": 120,
+      "gancho": "Em muitos acidentes em espaço confinado, há mais de uma vítima. A segunda, e às vezes a terceira, são pessoas que entraram para ajudar sem proteção. Este módulo existe para que isso não aconteça.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Socorristas improvisados",
+          "valor": "2ª vítima",
+          "legenda": "é comum que quem entra para socorrer sem proteção também morra",
+          "itens": [
+            "A mesma atmosfera que derrubou a primeira vítima derruba quem entra atrás",
+            "O impulso de ajudar é humano, mas sem preparo multiplica as mortes",
+            "Ninguém entra para socorrer sem equipamento com suprimento de ar e capacitação"
+          ],
+          "fala": "Uma parte importante das mortes em espaços confinados é de pessoas que entraram para socorrer um colega. A mesma atmosfera que derrubou a primeira vítima derruba quem entra atrás dela sem proteção. O impulso de ajudar é humano e compreensível, mas sem preparo ele multiplica as mortes. Por isso a regra é clara: ninguém entra para socorrer sem equipamento com suprimento de ar e sem capacitação para o resgate.",
+          "apoio": "Equipe de resgate posicionando tripé sobre boca de visita"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Resgate: prioridades",
+          "passos": [
+            {"t": "Sem entrada", "d": "Retirar a vítima pelo lado de fora com tripé e guincho"},
+            {"t": "Acionar", "d": "Equipe de resgate, SAMU 192 e Bombeiros 193"},
+            {"t": "Com entrada", "d": "Somente equipe capacitada com suprimento de ar"},
+            {"t": "Atender", "d": "Primeiros socorros em local seguro"}
+          ],
+          "fala": "O resgate segue uma ordem de prioridade. A primeira opção é o resgate sem entrada, retirando a vítima pelo lado de fora, com tripé, guincho e cinturão com ponto de resgate, que o trabalhador já usa ao entrar. Ao mesmo tempo, aciona-se a equipe de resgate e o socorro externo. Se for necessário entrar, apenas a equipe capacitada entra, com suprimento de ar. E os primeiros socorros são prestados em local seguro, fora do espaço confinado.",
+          "dica": "Demonstre o resgate sem entrada com tripé e guincho."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Primeiros socorros",
+          "itens": [
+            "Levar a vítima para área ventilada e segura",
+            "Avaliar responsividade e respiração",
+            "Iniciar reanimação cardiopulmonar se não houver respiração normal",
+            "Informar ao socorro os gases detectados e o tempo de exposição",
+            "Encaminhar sempre ao atendimento médico, mesmo com melhora aparente"
+          ],
+          "destaque": "Algumas intoxicações pioram horas depois. Toda vítima vai para avaliação médica.",
+          "fala": "Depois de retirada, a vítima é levada para uma área ventilada e segura. Avalie se ela responde e se respira normalmente. Se não respirar, inicie a reanimação cardiopulmonar e use o desfibrilador quando disponível. Informe ao socorro quais gases o detector indicou e quanto tempo a pessoa ficou exposta. E encaminhe sempre ao atendimento médico, mesmo que ela pareça bem, porque algumas intoxicações pioram horas depois.",
+          "pergunta": "Onde ficam o tripé e o kit de resgate na nossa empresa?"
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática supervisionada",
+    "duracao": 180,
+    "descricao": "Em espaço confinado simulado ou estrutura de treinamento, cada participante executa os itens abaixo, acompanhado pelo instrutor.",
+    "itens": [
+      "Realizou o teste de resposta do detector e o zerou em ar limpo",
+      "Mediu a atmosfera de fora, na ordem correta e em vários níveis",
+      "Montou a ventilação com captação em ar limpo",
+      "Verificou o isolamento e o bloqueio de energias e fluidos",
+      "Preencheu a PET de uma entrada simulada",
+      "Atuou como vigia, com contagem e comunicação contínua",
+      "Participou da simulação de resgate sem entrada com tripé e guincho"
+    ]
+  },
+  "caso": {
+    "titulo": "A limpeza da caixa de passagem",
+    "relato": "Dois trabalhadores de uma empresa terceirizada foram designados para limpar uma caixa de passagem de efluentes com 4 metros de profundidade em uma indústria de alimentos. O detector disponível estava sem calibração havia meses, e a equipe decidiu não usar, porque a caixa estava aberta desde cedo e não havia cheiro. Não foi emitida PET. O primeiro trabalhador desceu pela escada e, ao mexer no lodo do fundo, caiu desacordado. O colega, que estava na borda, desceu imediatamente para socorrê-lo e também desmaiou. Um terceiro trabalhador viu a cena, chamou os bombeiros e não entrou. Os bombeiros retiraram as vítimas com equipamento autônomo. Uma delas não sobreviveu.",
+    "perguntas": [
+      "Por que a ausência de cheiro não indicava segurança?",
+      "Quais etapas da avaliação e do controle de riscos foram omitidas?",
+      "Que função deveria estar sendo exercida pelo trabalhador da borda?",
+      "Qual atitude do terceiro trabalhador estava correta e por quê?",
+      "Que responsabilidades tinham a contratante e a contratada?"
+    ],
+    "analise": "Ao revolver o lodo, o trabalhador liberou gases como o sulfeto de hidrogênio, que em altas concentrações paralisa o olfato e causa perda de consciência rápida; a ausência de cheiro não indicava segurança. Foram omitidos o detector calibrado e testado, a avaliação atmosférica antes e durante a entrada, a ventilação, a PET, o vigia e os recursos de resgate. O trabalhador da borda deveria atuar como vigia, permanecer fora e acionar o resgate, e não entrar. O terceiro trabalhador agiu corretamente ao chamar socorro especializado sem entrar. A contratante deve garantir que terceiros cumpram a NR-33 em suas instalações, e a contratada responde pela capacitação, pelos equipamentos e pelos procedimentos da sua equipe."
+  },
+  "dinamica": {
+    "titulo": "Entra ou não entra?",
+    "objetivo": "Treinar a tomada de decisão a partir das leituras do detector e das condições da entrada.",
+    "tempo": 20,
+    "passos": [
+      "Prepare cartões com cenários, cada um com leituras de oxigênio, inflamáveis e tóxicos e informações sobre vigia, ventilação e resgate.",
+      "Inclua cenários seguros e cenários com uma única condição impeditiva escondida, como detector sem teste ou vigia acumulando outra tarefa.",
+      "Em grupos, os participantes decidem se a entrada pode ser liberada e justificam.",
+      "Discuta cada cenário com a turma.",
+      "Feche reforçando que uma única condição fora do previsto impede a entrada."
+    ]
+  },
+  "dds": {
+    "titulo": "Não entre para socorrer",
+    "texto": "Pessoal, hoje eu preciso falar de uma coisa difícil. Se você estiver na borda de um tanque ou de uma caixa e vir um colega desmaiar lá dentro, tudo em você vai querer descer para ajudar. Não desça. A mesma atmosfera que derrubou o seu colega vai derrubar você em segundos, e aí são duas vítimas. O que salva é acionar o resgate, usar o tripé e o guincho pelo lado de fora e chamar a equipe com equipamento de ar. Por isso a gente só entra com PET, detector testado, vigia e resgate pronto. Não é burocracia. É o que garante que todo mundo volta para casa."
+  },
+  "prova": [
+    {"q": "Para ser considerado espaço confinado segundo a NR-33, o ambiente deve:", "o": ["Ter menos de 2 metros de altura", "Não ser projetado para ocupação humana contínua, ter meios limitados de entrada e saída e possibilidade de atmosfera perigosa", "Ser sempre subterrâneo", "Estar sempre fechado com tampa"], "c": 1, "com": "As três condições precisam estar presentes ao mesmo tempo."},
+    {"q": "A carga horária do treinamento inicial para trabalhadores autorizados e vigias é de:", "o": ["8 horas", "16 horas", "24 horas", "40 horas"], "c": 1, "com": "Autorizados e vigias: 16 horas; supervisores de entrada: 40 horas."},
+    {"q": "A atmosfera é considerada deficiente em oxigênio quando a concentração está:", "o": ["Abaixo de 19,5%", "Abaixo de 23%", "Acima de 20,9%", "Abaixo de 25%"], "c": 0, "com": "Abaixo de 19,5% de oxigênio há deficiência."},
+    {"q": "Na avaliação atmosférica, o primeiro parâmetro a ser medido é:", "o": ["Monóxido de carbono", "Sulfeto de hidrogênio", "Oxigênio", "Temperatura"], "c": 2, "com": "O oxigênio é medido primeiro porque sua falta afeta a leitura de outros sensores."},
+    {"q": "Para ventilar um espaço confinado, é proibido usar:", "o": ["Ar comprimido filtrado", "Ventilador elétrico certificado", "Oxigênio puro", "Exaustor com duto"], "c": 2, "com": "Oxigênio puro cria atmosfera enriquecida, com alto risco de incêndio."},
+    {"q": "A Permissão de Entrada e Trabalho é emitida por:", "o": ["Qualquer trabalhador autorizado", "O vigia", "O supervisor de entrada", "O fornecedor do equipamento"], "c": 2, "com": "O supervisor de entrada emite, verifica, cancela e encerra a PET."},
+    {"q": "Diante de um colega desacordado dentro do espaço confinado, o vigia deve:", "o": ["Entrar imediatamente para retirá-lo", "Acionar o resgate e usar os equipamentos de resgate pelo lado de fora, sem entrar", "Esperar o colega acordar", "Desligar a ventilação"], "c": 1, "com": "O vigia nunca entra; aciona o resgate e opera os equipamentos de fora."},
+    {"q": "Ausência de cheiro em um espaço confinado indica:", "o": ["Que a atmosfera é segura", "Nada; vários gases perigosos são inodoros ou paralisam o olfato", "Que o detector é dispensável", "Que não há oxigênio"], "c": 1, "com": "Os sentidos não avaliam a atmosfera; só o instrumento."},
+    {"q": "O detector de gases deve, antes de cada uso:", "o": ["Ser guardado na caixa", "Passar por teste de resposta com gás padrão", "Ser zerado dentro do espaço confinado", "Ter o alarme desligado"], "c": 1, "com": "O teste de resposta confirma que os sensores funcionam."},
+    {"q": "O treinamento periódico da NR-33 deve ser realizado:", "o": ["A cada 2 anos, com 4 horas", "Anualmente, com carga mínima de 8 horas", "A cada 5 anos", "Somente após acidente"], "c": 1, "com": "O periódico é anual, com carga mínima de 8 horas."}
+  ]
+}
