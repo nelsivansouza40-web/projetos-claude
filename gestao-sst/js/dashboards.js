@@ -12,8 +12,12 @@ const Paineis = {
     ['epi', 'EPI'], ['auditorias', 'Auditorias e desvios'], ['planos', 'Plano 5W2H'], ['riscos', 'Riscos'], ['emergencia', 'Extintores e hidrantes']
   ],
 
+  ANO_INICIAL: 2021,
+  ANO_FINAL: 2035,
+  /** Anos do seletor: sempre de 2021 a 2035, mais qualquer ano fora disso que tenha registro. */
   anos() {
     const s = new Set([String(new Date().getFullYear())]);
+    for (let a = this.ANO_INICIAL; a <= this.ANO_FINAL; a++) s.add(String(a));
     ['acidentes', 'treinamentos', 'movepi', 'auditorias', 'desvios', 'planos', 'dds', 'aso'].forEach((m) =>
       (App.data[m] || []).forEach((r) => { const d = r.data || r.dataFinal || r.dataInicial; const y = D.year(d); if (y) s.add(String(y)); }));
     return Array.from(s).sort().reverse();
