@@ -45,6 +45,8 @@ const LISTAS_PADRAO = {
   embalagemMaterial: { l: 'Material da embalagem', v: ['Papelão', 'Plástico', 'Vidro', 'Alumínio', 'Aço', 'Madeira', 'Outro'] },
   departamentos: { l: 'Departamentos (DDS)', v: [] },
   medidasDisciplinares: { l: 'Medidas disciplinares', v: ['Orientação', 'Advertência verbal', 'Advertência escrita', 'Suspensão'] },
+  locaisPreventiva: { l: 'Contratos / locais (controle de preventiva)', v: [] },
+  executantesPreventiva: { l: 'PMP / garantia / executantes (controle de preventiva)', v: [] },
   examesPcmso: { l: 'Exames do PCMSO', v: ['Exame clínico', 'Audiometria', 'Espirometria', 'Raio-X de tórax (OIT)', 'Hemograma', 'Acuidade visual', 'Eletrocardiograma', 'Eletroencefalograma', 'Glicemia', 'Exame toxicológico', 'Avaliação psicossocial'] },
   docsTerceiros: { l: 'Documentos de terceiros', v: ['ASO', 'Integração de segurança', 'Ficha de EPI', 'NR 10', 'NR 11', 'NR 12', 'NR 18', 'NR 33', 'NR 35', 'PGR da contratada', 'PCMSO da contratada', 'Seguro de vida', 'CND / FGTS'] },
   docsObrigTrabalhador: { l: 'Documentos obrigatórios de cada trabalhador terceiro', v: ['ASO', 'Integração de segurança'] },

@@ -55,6 +55,7 @@ const Lista = {
     tb.appendChild(button('Exportar CSV', '', () => this.exportarCSV(mod)));
     tb.appendChild(button('Imprimir lista', '', () => Reports.imprimirLista(mod, this.linhas(mod))));
     if (mod === 'movepi' || mod === 'colaboradores') tb.appendChild(button('Ficha de EPI', '', () => App.ir('fichaepi')));
+    if (mod === 'preventivas') tb.appendChild(button('Importar planilha (.xlsx)', '', () => Preventiva.importar()));
     main.appendChild(head);
 
     // filtros

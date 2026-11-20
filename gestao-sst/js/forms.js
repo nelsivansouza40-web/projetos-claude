@@ -272,6 +272,11 @@ const Forms = {
         form.appendChild(box);
       }
     }
+    if (mod === 'preventivas' && base.id) {
+      const b = button('Registrar revisão feita', 'btn-sm btn-primary', () => Preventiva.registrarRevisao(base));
+      const wrap = h('<div class="w4"></div>'); wrap.appendChild(b);
+      form.insertBefore(wrap, form.firstChild);
+    }
     if (mod === 'aso') {
       form.elements.medico.addEventListener('change', () => {
         const m = /CRM[\s:-]*([\w\/.-]+)/i.exec(form.elements.medico.value);

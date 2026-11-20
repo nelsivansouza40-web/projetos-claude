@@ -204,6 +204,7 @@ const Calc = {
       }
       case 'contratadas': case 'terceiros': case 'docsterceiros': Terceiros.derivar(mod, r, o); break;
       case 'campanhaspsico': o._respostas = Psico.respostas(r.id).length; break;
+      case 'preventivas': Preventiva.derivar(r, o); break;
       case 'cipa': {
         if (r.posse) {
           o._fimMandato = D.addDays(D.addMonths(r.posse, 12), -1);
@@ -239,7 +240,7 @@ const Calc = {
     const v = this.get(mod, r, k);
     if (v == null || v === '') return '';
     const c = k.startsWith('_') ? null : campoDe(mod, k);
-    const tipo = c ? c.t : (['_venc', '_troca', '_proxRecarga', '_proxTH', '_prox', '_fimMandato', '_fimEstab', '_ultimaManut'].includes(k) ? 'date' : '');
+    const tipo = c ? c.t : (['_venc', '_troca', '_proxData', '_proxRecarga', '_proxTH', '_prox', '_fimMandato', '_fimEstab', '_ultimaManut'].includes(k) ? 'date' : '');
     if (tipo === 'date') return D.br(v);
     if ((c && c.t === 'money') || ['_valor', '_total'].includes(k)) return fmtMoney(v);
     if (k === '_perc') return v + '%';
@@ -262,6 +263,7 @@ const Calc = {
       'trivial': 'good', 'baixo': 'good', 'moderado': 'warning', 'alto': 'serious', 'extremo': 'critical',
       'vigente': 'good', 'encerrado': 'neutral', 'estavel': 'warning', 'encerrada': 'neutral', 'nao se aplica': 'neutral',
       'apto': 'good', 'nao apto': 'critical', 'conforme': 'good', 'nao conforme': 'critical',
+      'vencida': 'critical', 'proxima': 'warning', 'sem dados': 'neutral', 'parada': 'critical', 'desatualizada': 'warning', 'atualizada': 'good', 'sem leitura': 'neutral',
       'nunca fez': 'critical', 'em dia': 'good', 'sem registro': 'warning', 'liberado': 'good', 'bloqueado': 'critical', 'atencao': 'warning',
       'documentos em dia': 'good', 'com pendencias': 'critical', 'sem trabalhadores': 'neutral', 'aberta': 'warning'
     };
@@ -289,7 +291,7 @@ const Calc = {
   },
 
   ehNumero(mod, k) {
-    if (['_qtdFuncao', '_trab', '_liberados', '_respostas', '_idade', '_diasPerdidos', '_qtd', '_entradas', '_saidas', '_estoque', '_valor', '_total', '_perc', '_nivel', '_naoConf'].includes(k)) return true;
+    if (['_proxRevisao', '_faltam', '_qtdFuncao', '_trab', '_liberados', '_respostas', '_idade', '_diasPerdidos', '_qtd', '_entradas', '_saidas', '_estoque', '_valor', '_total', '_perc', '_nivel', '_naoConf'].includes(k)) return true;
     const c = campoDe(mod, k);
     return !!(c && (c.t === 'num' || c.t === 'money'));
   },
@@ -385,6 +387,7 @@ const Calc = {
     Matriz.pendencias(add);
     Pcmso.pendencias(add);
     Terceiros.pendencias(add);
+    Preventiva.pendencias(add);
     P.sort((a, b) => (a.venc || '9999') < (b.venc || '9999') ? -1 : 1);
     return P;
   }

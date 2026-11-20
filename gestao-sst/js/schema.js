@@ -424,6 +424,33 @@ const MODULOS = [
     filtros: ['status', 'departamento', '_ano']
   },
   {
+    id: 'preventivas', nome: 'Controle de preventiva', grupo: 'Equipamentos', singular: 'veículo ou equipamento em preventiva', aba: 'CONTROLE_PREVENTIVA', chave: 'frota',
+    ajuda: 'Uma linha por veículo ou equipamento. A próxima revisão vence pelo uso (última revisão + intervalo, em km ou horas) ou pelo tempo (dias), o que vier primeiro. Use "Registrar revisão" ao fazer a manutenção, e "Importar planilha" para trazer o controle em Excel.',
+    campos: [
+      { k: 'frota', l: 'Frota / ID', t: 'text', req: 1 },
+      { k: 'modelo', l: 'Modelo', t: 'text', req: 1, w: 2 },
+      { k: 'placaSerie', l: 'Placa / nº de série', t: 'text' },
+      { k: 'local', l: 'Contrato / local', t: 'sel', lista: 'locaisPreventiva', w: 2 },
+      { k: 'unidade', l: 'Controle por', t: 'opt', opts: ['km', 'horas'], padrao: 'km' },
+      { k: 'parada', l: 'Máquina parada?', t: 'sn', padrao: 'Não' },
+      { k: 'leituraAtual', l: 'Leitura atual (km ou h)', t: 'num' },
+      { k: 'dataLeitura', l: 'Data da leitura atual', t: 'date' },
+      { k: 'ultimaRevisao', l: 'Última revisão (km ou h)', t: 'num' },
+      { k: 'dataUltima', l: 'Data da última revisão', t: 'date' },
+      { k: 'intervalo', l: 'Intervalo entre revisões (km ou h)', t: 'num', req: 1, hint: 'Ex.: 10000 km ou 250 h' },
+      { k: 'intervaloDias', l: 'Revisão por tempo (dias)', t: 'num', hint: 'Ex.: 180. Vale o que vencer primeiro' },
+      { k: 'dataProgramada', l: 'Revisão programada para', t: 'date' },
+      { k: 'executante', l: 'PMP / garantia / executante', t: 'sel', lista: 'executantesPreventiva' },
+      { k: 'emissaoSelo', l: 'Emissão do selo de inspeção', t: 'date' },
+      { k: 'validadeSelo', l: 'Validade do selo de inspeção', t: 'date' },
+      { k: 'servicos', l: 'Serviços e peças da próxima revisão', t: 'textarea', w: 4 },
+      { k: 'historico', l: 'Histórico de revisões', t: 'textarea', w: 4, hint: 'Uma revisão por linha. "Registrar revisão" preenche sozinho' },
+      { k: 'obs', l: 'Observações', t: 'textarea', w: 4 }
+    ],
+    colunas: ['frota', 'modelo', 'placaSerie', 'leituraAtual', 'ultimaRevisao', '_proxRevisao', '_faltam', '_proxData', 'parada', '_leitura', '_statusSelo', '_sitPrev'],
+    filtros: ['local', 'unidade', 'parada', '_leitura', '_statusSelo', '_sitPrev']
+  },
+  {
     id: 'matriz', nome: 'Treinamentos obrigatórios por função', grupo: 'Pessoas', singular: 'treinamento obrigatório', aba: 'MATRIZ_TREINAMENTOS', chave: 'funcao',
     ajuda: 'Uma linha para cada treinamento exigido em cada função. O sistema confere os treinamentos de cada colaborador e mostra, na tela Matriz de treinamentos, quem nunca fez ou está vencido.',
     campos: [
@@ -520,6 +547,7 @@ const ROTULOS_CALC = {
   _proxRecarga: 'Próxima recarga', _statusRecarga: 'Recarga', _proxTH: 'Próximo teste hidrostático',
   _statusTH: 'Teste hidrostático', _prox: 'Próximo teste', _status: 'Situação', _naoConf: 'Itens não conformes',
   _ultimaManut: 'Última manutenção', _fimMandato: 'Fim do mandato', _statusMandato: 'Mandato',
+  _proxRevisao: 'Próxima revisão', _faltam: 'Faltam (km/h)', _proxData: 'Revisão por tempo', _leitura: 'Leitura', _sitPrev: 'Situação da preventiva', _statusSelo: 'Selo de inspeção',
   _qtdFuncao: 'Colaboradores na função', _conformes: 'Em dia', _trab: 'Trabalhadores', _liberados: 'Liberados',
   _situacao: 'Situação dos documentos', _pendDocs: 'Pendências', _liberacao: 'Liberação', _respostas: 'Respostas',
   _fimEstab: 'Fim da estabilidade', _troca: 'Troca prevista', _statusTroca: 'Validade do EPI entregue', _statusEstab: 'Estabilidade', _ano: 'Ano', _mes: 'Mês'

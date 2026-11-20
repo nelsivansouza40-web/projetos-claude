@@ -9,7 +9,7 @@ const NAV = [
   ['Gestão', [['m:planos', 'Plano de ação 5W2H'], ['m:riscos', 'Riscos ambientais'], ['m:documentos', 'Documentos'], ['m:oss', 'Ordem de Serviço (OSS)'], ['m:atividades', 'Atividades por função'], ['m:quimicos', 'Produtos químicos'], ['psico', 'Riscos psicossociais (NR-01)'], ['esocial', 'Dados para o eSocial']]],
   ['Terceiros', [['liberacao', 'Liberação de acesso'], ['m:contratadas', 'Empresas contratadas'], ['m:terceiros', 'Trabalhadores terceiros'], ['m:docsterceiros', 'Documentos de terceiros']]],
   ['Emergência', [['m:extintores', 'Extintores'], ['m:hidrantes', 'Hidrantes']]],
-  ['Equipamentos', [['m:equipamentos', 'Máquinas e equipamentos'], ['m:manutencoes', 'Manutenções'], ['m:frota', 'Frota de veículos']]],
+  ['Equipamentos', [['m:equipamentos', 'Máquinas e equipamentos'], ['m:manutencoes', 'Manutenções'], ['m:frota', 'Frota de veículos'], ['m:preventivas', 'Controle de preventiva']]],
   ['CIPA', [['m:cipa', 'Mandato e estabilidade'], ['calcipa', 'Calendário eleitoral']]],
   ['Sistema', [['config', 'Configurações'], ['sobre', 'Como usar']]]
 ];
