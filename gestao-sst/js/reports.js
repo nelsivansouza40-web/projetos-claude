@@ -126,7 +126,8 @@ const Reports = {
       const q = Number(m.qtd);
       return '<tr><td class="c">' + esc(isFinite(q) && q < 10 && q >= 0 ? String(q).padStart(2, '0') : m.qtd) + '</td><td class="c">' + esc(e.unidade || 'UN') + '</td>' +
         '<td>' + esc((e.descricao || '') + (e.fabricante ? ' — ' + e.fabricante : '')) + '</td><td class="c">' + esc(e.ca || '-') + '</td>' +
-        '<td class="c"><b>' + D.br(m.data) + '</b></td><td class="c">' + esc(cod(m.motivoDev)) + '</td><td class="c">' + (m.devolucao ? D.br(m.devolucao) : '___/___/___') + '</td><td></td></tr>';
+        '<td class="c"><b>' + D.br(m.data) + '</b></td><td class="c">' + esc(cod(m.motivoDev)) + '</td><td class="c">' + (m.devolucao ? D.br(m.devolucao) : '___/___/___') + '</td>' +
+        '<td class="fc-rub">' + this.rubrica(Anexos.assinaturaInfo(m.id, cid)) + '</td></tr>';
     });
     // linhas em branco para anotações à mão, como no modelo impresso
     while (linhas.length < 11) linhas.push('<tr><td></td><td></td><td></td><td></td><td class="c">' + (movs.length ? '' : '___/___/___') + '</td><td></td><td class="c">___/___/___</td><td></td></tr>');
@@ -144,6 +145,12 @@ const Reports = {
       '<div class="fc-rodape"><div><b></b><span>Assinatura do responsável pelo Almoxarifado</span></div>' +
       '<div><b>' + esc(emp.responsavel || '') + '</b><span>Assinatura do responsável pelo SESMT</span></div></div>' +
       '<div class="fc-legenda">Legenda: Motivos da devolução – ' + Config.lista('motivosDevolucao').map((t) => esc(t.replace(' - ', ' – '))).join('; ') + '</div></div>';
+  },
+  /** Assinatura colhida na tela, com data, hora e código de verificação. */
+  rubrica(a) {
+    if (!a) return '';
+    const d = a.assinadoEm ? new Date(a.assinadoEm) : null;
+    return '<img src="' + a.url + '" alt="Assinatura">' + (d ? '<div class="fc-cod">' + d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + (a.codigo ? ' · ' + esc(a.codigo) : '') + '</div>' : '');
   },
   codMED(t) {
     if (!t) return '';
@@ -175,10 +182,16 @@ const Reports = {
     const html = () => this.fichaHTML(this.fichaColab, this.fichaCat, this.fichaAno === 'todos' ? '' : this.fichaAno);
     const bImp = button('Imprimir ficha', 'btn-primary', () => { if (this.fichaColab) this.imprimir(html()); });
     const bNova = button('+ Registrar entrega', '', () => Forms.abrir('movepi', null, { tipo: 'SAÍDA', destino: 'Funcionário', colab: this.fichaColab || '', _catEpi: this.fichaCat }));
-    tb.append(bNova, bImp);
+    const bAss = button('Colher assinaturas', '', () => {
+      if (!this.fichaColab) { toast('Escolha um colaborador.'); return; }
+      Anexos.assinarEntregas(this.fichaColab, this.fichaCat, null, () => this.paginaFicha());
+    });
+    tb.append(bNova, bAss, button('Conferir código', '', () => Anexos.telaConferir()), bImp);
     const mostrar = () => {
       const id = Forms.resolverRef('colab', inp.value);
       this.fichaColab = id || '';
+      const sem = id ? Anexos.entregasDoColab(id, this.fichaCat).filter((m) => !Anexos.assinatura(m.id, id)).length : 0;
+      bAss.textContent = sem ? 'Colher assinaturas (' + sem + ' sem assinatura)' : 'Colher assinaturas';
       prev.innerHTML = id ? '<div class="doc">' + html() + '</div>' : '<div class="muted">Escolha um colaborador para ver a ficha.</div>';
     };
     inp.addEventListener('change', mostrar);
@@ -243,6 +256,7 @@ const Reports = {
       '<tr><th>CPF</th><td>' + esc(c.cpf) + '</td><th>RG</th><td>' + esc(c.rg) + '</td><th>Situação</th><td>' + esc(c.status) + '</td></tr>' +
       '<tr><th>Função</th><td>' + esc(c.funcao) + '</td><th>Setor</th><td>' + esc(c.setor) + '</td><th>Sexo</th><td>' + esc(c.sexo) + '</td></tr>' +
       '<tr><th>Nascimento</th><td>' + D.br(c.nascimento) + (d._idade != null ? ' (' + d._idade + ' anos)' : '') + '</td><th>Admissão</th><td>' + D.br(c.admissao) + '</td><th>Tempo de empresa</th><td>' + esc(d._tempo || '') + '</td></tr></table>' +
+      Matriz.prontuario(c) +
       tab('Treinamentos', ['Treinamento', 'Norma', 'Conclusão', 'Vencimento', 'Situação'], ts.map((t) => { const v = Calc.vencTreino(t); return [t.treinamento, t.norma || '', D.br(t.dataFinal || t.dataInicial), D.br(v), v ? Calc.situacao(v).s : (t.status || '')]; })) +
       tab('ASO', ['Tipo', 'Emissão', 'Resultado', 'Vencimento', 'Situação'], asos.map((a) => { const v = Calc.vencASO(a); return [a.tipo || '', D.br(a.data), a.resultado || '', D.br(v), a.atualizado === 'Sim' ? 'SUBSTITUÍDO' : (v ? Calc.situacao(v).s : '')]; })) +
       tab('Entregas de EPI', ['Data', 'Qtd', 'EPI', 'CA', 'MED', 'Troca prevista', 'Situação'], movs.map((m) => { const e = Calc.epi(m.epi) || {}; const q = Calc.derivar('movepi', m); return [D.br(m.data), m.qtd, e.descricao || '', e.ca || '', m.med || '', D.br(q._troca), q._statusTroca || '']; })) +

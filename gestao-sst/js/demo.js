@@ -288,6 +288,68 @@ const Demo = {
       novo('cipa', { gestao: D.year(posse) + '/' + (D.year(posse) + 1), colab: c.id, representa: i < 3 ? 'Empregados (eleito)' : 'Empregador (indicado)', cargo: i % 3 === 2 ? 'Suplente' : 'Titular', funcaoCipa: i === 3 ? 'Presidente' : i === 0 ? 'Vice-presidente' : i === 4 ? 'Secretário' : 'Membro', posse, votos: i < 3 ? 40 - i * 7 : '', controlar: 'Sim' });
     });
 
+    /* ---------- Matriz de treinamentos por função ---------- */
+    [
+      ['Eletricista de manutenção', 'NR 10', 'Segurança em instalações e serviços em eletricidade', 24],
+      ['Eletricista de manutenção', 'NR 35', 'Trabalho em altura', 24],
+      ['Mecânico de manutenção', 'NR 35', 'Trabalho em altura', 24],
+      ['Mecânico de manutenção', 'NR 33', 'Espaço confinado', 12],
+      ['Soldador', 'NR 06', 'Uso, guarda e conservação de EPI', 12],
+      ['Soldador', 'NR 35', 'Trabalho em altura', 24],
+      ['Operador de máquinas', 'NR 12', 'Segurança no trabalho em máquinas e equipamentos', 12],
+      ['Operador de máquinas', 'NR 06', 'Uso, guarda e conservação de EPI', 12],
+      ['Operador de empilhadeira', 'NR 11', 'Operação de empilhadeira', 12],
+      ['Ajudante geral', 'NR 06', 'Uso, guarda e conservação de EPI', 12]
+    ].forEach(([funcao, norma, treinamento, validadeMeses]) => novo('matriz', { funcao, norma, treinamento, validadeMeses }));
+
+    /* ---------- PCMSO por função ---------- */
+    [
+      ['Soldador', [['Exame clínico', 12], ['Audiometria', 12], ['Espirometria', 24], ['Raio-X de tórax (OIT)', 12]]],
+      ['Operador de máquinas', [['Exame clínico', 12], ['Audiometria', 6]]],
+      ['Eletricista de manutenção', [['Exame clínico', 12], ['Eletrocardiograma', 12], ['Acuidade visual', 12]]],
+      ['Operador de empilhadeira', [['Exame clínico', 12], ['Acuidade visual', 12], ['Audiometria', 12]]],
+      ['Motorista', [['Exame clínico', 12], ['Exame toxicológico', 30]]]
+    ].forEach(([funcao, exames]) => exames.forEach(([exame, periodicidadeMeses]) => novo('pcmso', { funcao, exame, periodicidadeMeses, admissional: 'Sim', demissional: exame === 'Exame clínico' ? 'Sim' : 'Não' })));
+
+    /* ---------- Terceiros ---------- */
+    const contr = [
+      novo('contratadas', { nome: 'Montagens Exemplo Ltda (fictícia)', cnpj: '00.000.000/0000-01', status: 'Ativa', servico: 'Montagem de estruturas na expedição', inicio: dia(-120), fim: dia(150), contato: 'Encarregado da contratada', telefone: '(00) 0000-0001' }),
+      novo('contratadas', { nome: 'Limpeza Exemplo Serviços (fictícia)', cnpj: '00.000.000/0000-02', status: 'Ativa', servico: 'Limpeza e conservação', inicio: dia(-400), fim: dia(20), contato: 'Supervisora da contratada', telefone: '(00) 0000-0002' })
+    ];
+    const docEmp = (e, documento, emissao, validade) => novo('docsterceiros', { contratada: e.id, terceiro: '', documento, emissao: dia(emissao), validade: validade == null ? '' : dia(validade) });
+    docEmp(contr[0], 'PGR da contratada', -200, 530); docEmp(contr[0], 'PCMSO da contratada', -200, 165); docEmp(contr[0], 'Seguro de vida', -100, 265);
+    docEmp(contr[1], 'PGR da contratada', -300, 430); docEmp(contr[1], 'PCMSO da contratada', -370, -5);
+    const terc = [
+      [0, 'Montador A (fictício)', 'Montador', -60, 300, 10], [0, 'Montador B (fictício)', 'Montador', -60, 12, 10], [0, 'Soldador C (fictício)', 'Soldador', -400, -35, 10],
+      [1, 'Auxiliar de limpeza D (fictícia)', 'Auxiliar de limpeza', -90, 270, 0], [1, 'Auxiliar de limpeza E (fictício)', 'Auxiliar de limpeza', -90, 270, 0]
+    ];
+    terc.forEach(([e, nome, funcao, aso, asoVenc, nr35]) => {
+      const t = novo('terceiros', { contratada: contr[e].id, nome, funcao, status: 'Ativo', cpf: '' });
+      novo('docsterceiros', { contratada: contr[e].id, terceiro: t.id, documento: 'ASO', emissao: dia(aso), validade: dia(asoVenc) });
+      if (nome !== 'Montador B (fictício)') novo('docsterceiros', { contratada: contr[e].id, terceiro: t.id, documento: 'Integração de segurança', emissao: dia(-40), validade: dia(325) });
+      if (nr35) novo('docsterceiros', { contratada: contr[e].id, terceiro: t.id, documento: 'NR 35', emissao: dia(-200), validade: dia(530) });
+    });
+
+    /* ---------- Avaliação psicossocial (respostas anônimas fictícias) ---------- */
+    const camp = novo('campanhaspsico', { nome: 'Avaliação psicossocial ' + D.year(hoje) + ' (demonstração)', status: 'Aberta', inicio: dia(-20), fim: dia(10) });
+    // perfil de cada setor: tendência de risco por item (0 = baixo, 4 = alto), já na direção do risco
+    const perfil = {
+      'Produção': [3, 3, 3, 2, 2, 2, 1, 2, 2, 1, 1, 1, 0, 1, 3, 3, 2, 2, 2, 1],
+      'Manutenção': [2, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 2, 2, 1, 1, 2, 2],
+      'Logística': [1, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1],
+      'Administração': [2, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0]
+    };
+    const qtdSetor = { 'Produção': 14, 'Manutenção': 6, 'Logística': 5, 'Administração': 3 };
+    Object.entries(qtdSetor).forEach(([setor, n]) => {
+      for (let i = 0; i < n; i++) {
+        const respostas = Psico.ITENS.map((it, k) => {
+          const risco = Math.max(0, Math.min(4, perfil[setor][k] + int(-1, 1)));
+          return it[2] ? 4 - risco : risco; // afirmações positivas são marcadas ao contrário
+        });
+        recs.push({ id: uid(), emp: emp.id, mod: 'respostaspsico', campanha: camp.id, setor, respostas, criadoEm: dia(-int(1, 18)), atualizadoEm: dia(-int(1, 18)) + 'T00:00:00.000Z' });
+      }
+    });
+
     /* ---------- Configurações da empresa ---------- */
     const listas = {};
     Object.keys(LISTAS_PADRAO).forEach((k) => { listas[k] = LISTAS_PADRAO[k].v.slice(); });

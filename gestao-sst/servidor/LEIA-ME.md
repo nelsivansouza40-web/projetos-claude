@@ -74,6 +74,24 @@ duplicados):
 - Para refazer as abas de consulta à mão: menu **Gestão SST → Atualizar abas de
   consulta**, na própria planilha.
 
+## Aviso de vencimentos por e-mail (opcional)
+
+Toda segunda-feira às 7h, a planilha envia por e-mail a lista do que está
+vencido e do que vence nos próximos dias, de cada empresa conectada. O sistema
+manda a lista atualizada a cada sincronização (no máximo a cada 6 horas).
+
+1. No Apps Script, em **Configurações do projeto → Propriedades do script**,
+   adicione `EMAIL_AVISOS` com os e-mails que vão receber, separados por
+   vírgula (exemplo: `sesmt@empresa.com.br, gerente@empresa.com.br`).
+2. Abra a planilha e use o menu **Gestão SST → Agendar aviso toda
+   segunda-feira**. Na primeira vez, o Google pede autorização para enviar
+   e-mails em seu nome: aceite.
+3. Para testar na hora: **Gestão SST → Enviar aviso de vencimentos agora**.
+
+Se o código do servidor for de versão anterior a 2026-11-20, cole o código novo
+e reimplante (veja "Ao atualizar o código do servidor", no fim deste guia).
+Para parar os avisos, apague a propriedade `EMAIL_AVISOS`.
+
 ## Cuidados (LGPD)
 
 - Compartilhe a planilha só com quem precisa (SESMT e gestão), nunca com

@@ -17,7 +17,7 @@
  *     Quem pode acessar: Qualquer pessoa → copie o endereço que termina em /exec.
  */
 
-const VERSAO_SERVIDOR = '2026-10-11';
+const VERSAO_SERVIDOR = '2026-11-20';
 const ABA_DADOS = '_dados';
 const ABA_ESQUEMA = '_esquema';
 const CABECALHO = ['id', 'emp', 'mod', 'rev', 'atualizadoEm', 'excluido', 'json', 'recebidoEm'];
@@ -44,6 +44,7 @@ function doPost(e) {
       case 'empresas': return resposta(listarEmpresas());
       case 'enviar': return resposta(comTrava(() => enviar(body)));
       case 'receber': return resposta(comTrava(() => receber(body)));
+      case 'pendencias': return resposta(comTrava(() => guardarPendencias(body)));
       default: return resposta({ ok: false, erro: 'Ação desconhecida: ' + body.acao });
     }
   } catch (err) {
@@ -168,7 +169,7 @@ function enviar(body) {
   const esquema = body.esquema || lerEsquema();
   if (esquema) {
     // nomes de colaborador, EPI e máquina aparecem nas abas que os citam
-    const refs = { colaboradores: true, epis: true, equipamentos: true, _empresa: true };
+    const refs = { colaboradores: true, epis: true, equipamentos: true, contratadas: true, terceiros: true, _empresa: true };
     const afetados = Object.keys(tocados).some((m) => refs[m]) ? esquema.map((m) => m.id) : Object.keys(tocados);
     montarAbasDeConsulta(esquema, linhas, afetados);
   }
@@ -208,10 +209,12 @@ function montarAbasDeConsulta(esquema, linhas, modulos) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ler = (l) => { try { return JSON.parse(l[C.json]) || {}; } catch (e) { return {}; } };
   const ativos = linhas.filter((l) => !l[C.excluido]);
-  const nomes = { colab: {}, epi: {}, equip: {}, empresa: {} };
+  const nomes = { colab: {}, epi: {}, equip: {}, empresa: {}, contratada: {}, terceiro: {} };
   ativos.forEach((l) => {
     const m = l[C.mod];
     if (m === 'colaboradores') nomes.colab[l[C.id]] = ler(l).nome || '';
+    else if (m === 'contratadas') nomes.contratada[l[C.id]] = ler(l).nome || '';
+    else if (m === 'terceiros') nomes.terceiro[l[C.id]] = ler(l).nome || '';
     else if (m === 'epis') { const d = ler(l); nomes.epi[l[C.id]] = (d.descricao || '') + (d.ca ? ' (CA ' + d.ca + ')' : ''); }
     else if (m === 'equipamentos') nomes.equip[l[C.id]] = ler(l).nome || '';
     else if (m === '_empresa') nomes.empresa[l[C.id]] = ler(l).nome || '';
@@ -223,6 +226,8 @@ function montarAbasDeConsulta(esquema, linhas, modulos) {
       case 'colab': return nomes.colab[v] || '';
       case 'epi': return nomes.epi[v] || '';
       case 'equip': return nomes.equip[v] || '';
+      case 'contratada': return nomes.contratada[v] || '';
+      case 'terceiro': return nomes.terceiro[v] || '';
       case 'multicolab': return (Array.isArray(v) ? v : []).map((id) => nomes.colab[id] || '').filter(String).join(', ');
       case 'num': case 'money': return typeof v === 'number' ? String(v).replace('.', ',') : String(v);
       default: return Array.isArray(v) ? v.join(', ') : String(v);
@@ -249,9 +254,72 @@ function montarAbasDeConsulta(esquema, linhas, modulos) {
   });
 }
 
-/** Menu da planilha: refaz todas as abas de consulta. */
+/* ---------------- Aviso de vencimentos por e-mail ---------------- */
+
+const ABA_PENDENCIAS = '_pendencias';
+
+/** O sistema envia a lista de pendências de cada empresa; fica guardada para o aviso semanal. */
+function guardarPendencias(body) {
+  const emp = String(body.emp || '');
+  if (!emp) throw new Error('Empresa não informada.');
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(ABA_PENDENCIAS);
+  if (!sh) { sh = ss.insertSheet(ABA_PENDENCIAS); sh.getRange(1, 1, sh.getMaxRows(), 4).setNumberFormat('@'); sh.hideSheet(); }
+  let itens = Array.isArray(body.itens) ? body.itens : [];
+  let json = JSON.stringify(itens);
+  while (json.length > LIMITE_CELULA && itens.length) { itens = itens.slice(0, Math.floor(itens.length * 0.8)); json = JSON.stringify(itens); }
+  const linha = [emp, String(body.nome || ''), new Date().toISOString(), json];
+  const n = sh.getLastRow();
+  const ids = n ? sh.getRange(1, 1, n, 1).getValues().map((r) => String(r[0])) : [];
+  const i = ids.indexOf(emp);
+  sh.getRange(i >= 0 ? i + 1 : n + 1, 1, 1, 4).setValues([linha]);
+  return { ok: true, guardados: itens.length };
+}
+
+/** Envia o resumo de vencimentos para os e-mails da propriedade EMAIL_AVISOS. */
+function enviarAvisoSemanal() {
+  const destino = String(PropertiesService.getScriptProperties().getProperty('EMAIL_AVISOS') || '').trim();
+  if (!destino) throw new Error('Defina a propriedade EMAIL_AVISOS (e-mails separados por vírgula).');
+  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_PENDENCIAS);
+  if (!sh || !sh.getLastRow()) return;
+  const linhas = sh.getRange(1, 1, sh.getLastRow(), 4).getValues();
+  linhas.forEach((l) => {
+    let itens = [];
+    try { itens = JSON.parse(l[3]) || []; } catch (e) { itens = []; }
+    const vencidos = itens.filter((p) => p.s !== 'A VENCER');
+    const avencer = itens.filter((p) => p.s === 'A VENCER');
+    const tabela = (lista) => lista.length
+      ? '<table cellpadding="5" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:13px">' +
+        '<tr style="background:#0f4c81;color:#fff"><th align="left">Área</th><th align="left">Pendência</th><th align="left">Quem / local</th><th align="left">Vencimento</th><th align="left">Situação</th></tr>' +
+        lista.map((p) => '<tr style="border-bottom:1px solid #ddd"><td>' + esc_(p.area) + '</td><td>' + esc_(p.desc) + '</td><td>' + esc_(p.quem) + '</td><td>' + esc_(dataBR(p.venc)) + '</td><td><b>' + esc_(p.s) + '</b></td></tr>').join('') + '</table>'
+      : '<p>Nenhum item.</p>';
+    const atualizado = dataBR(String(l[2]).slice(0, 10));
+    const html = '<div style="font-family:Arial,sans-serif;font-size:14px"><h2 style="color:#0f4c81">Gestão SST — ' + esc_(l[1]) + '</h2>' +
+      '<p>Resumo semanal de vencimentos. Dados enviados pelo sistema em ' + atualizado + '.</p>' +
+      '<h3>Vencidos e pendentes (' + vencidos.length + ')</h3>' + tabela(vencidos) +
+      '<h3>A vencer nos próximos dias (' + avencer.length + ')</h3>' + tabela(avencer) +
+      '<p style="color:#777;font-size:12px">Mensagem automática do servidor da equipe do Gestão SST. Para parar, remova a propriedade EMAIL_AVISOS no Apps Script.</p></div>';
+    MailApp.sendEmail({ to: destino, subject: 'Gestão SST — ' + l[1] + ': ' + vencidos.length + ' vencido(s), ' + avencer.length + ' a vencer', htmlBody: html });
+  });
+}
+
+function esc_(v) {
+  return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/** Rode uma vez no editor do Apps Script: agenda o aviso toda segunda-feira às 7h. */
+function instalarAvisoSemanal() {
+  ScriptApp.getProjectTriggers().filter((t) => t.getHandlerFunction() === 'enviarAvisoSemanal').forEach((t) => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('enviarAvisoSemanal').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(7).create();
+}
+
+/** Menu da planilha. */
 function onOpen() {
-  SpreadsheetApp.getUi().createMenu('Gestão SST').addItem('Atualizar abas de consulta', 'atualizarAbasDeConsulta').addToUi();
+  SpreadsheetApp.getUi().createMenu('Gestão SST')
+    .addItem('Atualizar abas de consulta', 'atualizarAbasDeConsulta')
+    .addItem('Enviar aviso de vencimentos agora', 'enviarAvisoSemanal')
+    .addItem('Agendar aviso toda segunda-feira', 'instalarAvisoSemanal')
+    .addToUi();
 }
 
 function atualizarAbasDeConsulta() {

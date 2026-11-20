@@ -36,7 +36,7 @@ const LISTAS_PADRAO = {
   tiposDocumento: { l: 'Tipos de documento', v: ['PGR', 'PCMSO', 'LTCAT', 'Laudo de insalubridade', 'Laudo de periculosidade', 'AET', 'Procedimento', 'Licença', 'Alvará', 'AVCB'] },
   areasDocumento: { l: 'Áreas dos documentos', v: ['Segurança do Trabalho', 'Saúde Ocupacional', 'Meio Ambiente', 'RH'] },
   tiposExtintor: { l: 'Tipos de extintor (tipo + carga)', v: ['PQS ABC-4KG', 'PQS ABC-6KG', 'PQS BC-6KG', 'PQS BC-12KG', 'AP-10L', 'CO2-6KG', 'CO2-12KG'] },
-  tiposRisco: { l: 'Tipos de risco', v: ['ACIDENTE', 'QUÍMICO', 'FÍSICO', 'BIOLÓGICO', 'ERGONÔMICO'] },
+  tiposRisco: { l: 'Tipos de risco', v: ['ACIDENTE', 'QUÍMICO', 'FÍSICO', 'BIOLÓGICO', 'ERGONÔMICO', 'PSICOSSOCIAL'] },
   tiposVeiculo: { l: 'Tipos de veículo', v: ['Carro', 'Motocicleta', 'Caminhão', 'Ônibus', 'Micro-ônibus', 'Reboque', 'Utilitário', 'Empilhadeira', 'Outro'] },
   statusFrota: { l: 'Situação do serviço da frota', v: ['Realizado', 'Em aberto', 'Agendado', 'Cancelado'] },
   tiposManutFrota: { l: 'Tipos de manutenção da frota', v: ['Preditiva', 'Preventiva', 'Corretiva', 'Revisão', 'Troca de óleo', 'Pneus'] },
@@ -44,7 +44,11 @@ const LISTAS_PADRAO = {
   embalagemTipo: { l: 'Tipo de embalagem', v: ['Granel', 'Bombona', 'Balde', 'Lata', 'Frasco', 'Tambor', 'Caixa', 'Saco', 'Embalagem composta', 'Outro'] },
   embalagemMaterial: { l: 'Material da embalagem', v: ['Papelão', 'Plástico', 'Vidro', 'Alumínio', 'Aço', 'Madeira', 'Outro'] },
   departamentos: { l: 'Departamentos (DDS)', v: [] },
-  medidasDisciplinares: { l: 'Medidas disciplinares', v: ['Orientação', 'Advertência verbal', 'Advertência escrita', 'Suspensão'] }
+  medidasDisciplinares: { l: 'Medidas disciplinares', v: ['Orientação', 'Advertência verbal', 'Advertência escrita', 'Suspensão'] },
+  examesPcmso: { l: 'Exames do PCMSO', v: ['Exame clínico', 'Audiometria', 'Espirometria', 'Raio-X de tórax (OIT)', 'Hemograma', 'Acuidade visual', 'Eletrocardiograma', 'Eletroencefalograma', 'Glicemia', 'Exame toxicológico', 'Avaliação psicossocial'] },
+  docsTerceiros: { l: 'Documentos de terceiros', v: ['ASO', 'Integração de segurança', 'Ficha de EPI', 'NR 10', 'NR 11', 'NR 12', 'NR 18', 'NR 33', 'NR 35', 'PGR da contratada', 'PCMSO da contratada', 'Seguro de vida', 'CND / FGTS'] },
+  docsObrigTrabalhador: { l: 'Documentos obrigatórios de cada trabalhador terceiro', v: ['ASO', 'Integração de segurança'] },
+  docsObrigContratada: { l: 'Documentos obrigatórios da empresa contratada', v: ['PGR da contratada', 'PCMSO da contratada'] }
 };
 
 const PARAMS_PADRAO = {

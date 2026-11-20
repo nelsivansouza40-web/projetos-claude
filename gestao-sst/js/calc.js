@@ -40,6 +40,13 @@ const Calc = {
     const e = this.epi(id); if (!e) return '';
     return e.descricao + (e.fabricante ? ' — ' + e.fabricante : '') + (e.ca ? ' (CA ' + e.ca + ')' : '');
   },
+  nomeContratada(id) { const e = (App.data.contratadas || []).find((x) => x.id === id); return e ? e.nome : ''; },
+  nomeTerceiro(id) {
+    const t = (App.data.terceiros || []).find((x) => x.id === id);
+    if (!t) return '';
+    const emp = this.nomeContratada(t.contratada);
+    return t.nome + (emp ? ' — ' + emp : '');
+  },
   nomeEquip(id) { const e = this.indices().equip.get(id); return e ? e.nome + (e.modelo ? ' — ' + e.modelo : '') : ''; },
 
   situacao(venc) {
@@ -190,6 +197,13 @@ const Calc = {
         break;
       }
       case 'equipamentos': o._ultimaManut = this.indices().ultimaManut.get(r.id) || ''; break;
+      case 'matriz': {
+        const rs = Matriz.resumo(r);
+        o._qtdFuncao = rs.total; o._conformes = rs.total ? rs.ok + ' de ' + rs.total : '–';
+        break;
+      }
+      case 'contratadas': case 'terceiros': case 'docsterceiros': Terceiros.derivar(mod, r, o); break;
+      case 'campanhaspsico': o._respostas = Psico.respostas(r.id).length; break;
       case 'cipa': {
         if (r.posse) {
           o._fimMandato = D.addDays(D.addMonths(r.posse, 12), -1);
@@ -215,6 +229,8 @@ const Calc = {
     if (c && c.t === 'colab') return this.nomeColab(r[k]);
     if (c && c.t === 'epi') return this.nomeEpi(r[k]);
     if (c && c.t === 'equip') return this.nomeEquip(r[k]);
+    if (c && c.t === 'contratada') return this.nomeContratada(r[k]);
+    if (c && c.t === 'terceiro') return this.nomeTerceiro(r[k]);
     return r[k];
   },
 
@@ -245,7 +261,9 @@ const Calc = {
       'sem prazo': 'neutral', 'cancelado': 'neutral', 'realizado': 'good', 'agendado': 'neutral', 'em andamento': 'warning',
       'trivial': 'good', 'baixo': 'good', 'moderado': 'warning', 'alto': 'serious', 'extremo': 'critical',
       'vigente': 'good', 'encerrado': 'neutral', 'estavel': 'warning', 'encerrada': 'neutral', 'nao se aplica': 'neutral',
-      'apto': 'good', 'nao apto': 'critical', 'conforme': 'good', 'nao conforme': 'critical'
+      'apto': 'good', 'nao apto': 'critical', 'conforme': 'good', 'nao conforme': 'critical',
+      'nunca fez': 'critical', 'em dia': 'good', 'sem registro': 'warning', 'liberado': 'good', 'bloqueado': 'critical', 'atencao': 'warning',
+      'documentos em dia': 'good', 'com pendencias': 'critical', 'sem trabalhadores': 'neutral', 'aberta': 'warning'
     };
     return mapa[s] || '';
   },
@@ -271,7 +289,7 @@ const Calc = {
   },
 
   ehNumero(mod, k) {
-    if (['_idade', '_diasPerdidos', '_qtd', '_entradas', '_saidas', '_estoque', '_valor', '_total', '_perc', '_nivel', '_naoConf'].includes(k)) return true;
+    if (['_qtdFuncao', '_trab', '_liberados', '_respostas', '_idade', '_diasPerdidos', '_qtd', '_entradas', '_saidas', '_estoque', '_valor', '_total', '_perc', '_nivel', '_naoConf'].includes(k)) return true;
     const c = campoDe(mod, k);
     return !!(c && (c.t === 'num' || c.t === 'money'));
   },
@@ -364,6 +382,9 @@ const Calc = {
     (App.data.manutencoes || []).forEach((r) => {
       if (r.status === 'Agendada' && r.data && D.diff(D.today(), r.data) <= lim) add('Manutenção', (r.tipo || 'Manutenção') + ' — ' + this.nomeEquip(r.equip), r.responsavel || '', r.data, this.situacao(r.data), 'manutencoes', r.id);
     });
+    Matriz.pendencias(add);
+    Pcmso.pendencias(add);
+    Terceiros.pendencias(add);
     P.sort((a, b) => (a.venc || '9999') < (b.venc || '9999') ? -1 : 1);
     return P;
   }

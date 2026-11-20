@@ -14,21 +14,54 @@ const Anexos = {
   lista(ref, tipo) {
     const grupos = new Map();
     (App.data.anexos || []).forEach((a) => {
-      if (a.ref !== ref || (tipo && a.tipo !== tipo)) return;
-      const g = grupos.get(a.grupo) || { grupo: a.grupo, tipo: a.tipo, colab: a.colab || '', partes: a.partes, criadoEm: a.criadoEm || '', pedacos: [] };
+      if ((ref != null && a.ref !== ref) || (tipo && a.tipo !== tipo)) return;
+      const g = grupos.get(a.grupo) || { grupo: a.grupo, tipo: a.tipo, colab: a.colab || '', partes: a.partes, criadoEm: a.criadoEm || '', assinadoEm: a.assinadoEm || '', codigo: a.codigo || '', resumo: a.resumo || '', ref: a.ref, pedacos: [] };
       g.pedacos[a.parte] = a.dados;
       grupos.set(a.grupo, g);
     });
     return [...grupos.values()]
       .filter((g) => g.pedacos.filter((p) => p != null).length === g.partes) // ainda chegando da planilha: ignora
-      .map((g) => ({ grupo: g.grupo, tipo: g.tipo, colab: g.colab, criadoEm: g.criadoEm, url: g.pedacos.join('') }))
+      .map((g) => ({ grupo: g.grupo, tipo: g.tipo, colab: g.colab, criadoEm: g.criadoEm, assinadoEm: g.assinadoEm, codigo: g.codigo, resumo: g.resumo, ref: g.ref, url: g.pedacos.join('') }))
       .sort((a, b) => a.criadoEm.localeCompare(b.criadoEm));
   },
 
   assinatura(ref, colab) {
-    const l = this.lista(ref, 'assinatura').filter((a) => a.colab === colab);
-    return l.length ? l[l.length - 1].url : '';
+    const a = this.assinaturaInfo(ref, colab);
+    return a ? a.url : '';
   },
+  /** Assinatura com data, hora e código de verificação: { url, assinadoEm, codigo } */
+  assinaturaInfo(ref, colab) {
+    const l = this.lista(ref, 'assinatura').filter((a) => a.colab === colab);
+    return l.length ? l[l.length - 1] : null;
+  },
+
+  /** Código de verificação: os 12 primeiros caracteres do SHA-256 do que foi assinado. */
+  async codigo(texto) {
+    let hex = '';
+    try {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
+      hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) {
+      // navegador sem crypto.subtle: hash FNV-1a, mais simples, só para não ficar sem código
+      let h1 = 0x811c9dc5, h2 = 0x01000193;
+      for (let i = 0; i < texto.length; i++) { h1 = Math.imul(h1 ^ texto.charCodeAt(i), 16777619); h2 = Math.imul(h2 ^ texto.charCodeAt(i), 2246822519); }
+      hex = (h1 >>> 0).toString(16).padStart(8, '0') + (h2 >>> 0).toString(16).padStart(8, '0');
+    }
+    const c = hex.slice(0, 12).toUpperCase();
+    return c.slice(0, 4) + '-' + c.slice(4, 8) + '-' + c.slice(8, 12);
+  },
+  rotuloAssinatura(a) {
+    if (!a || !a.assinadoEm) return '';
+    const d = new Date(a.assinadoEm);
+    return 'Assinado em ' + d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + (a.codigo ? ' · cód. ' + a.codigo : '');
+  },
+  /** Procura uma assinatura pelo código de verificação. */
+  conferir(codigo) {
+    const c = String(codigo || '').toUpperCase().replace(/[^0-9A-F]/g, '');
+    if (c.length < 8) return null;
+    return this.lista(null, 'assinatura').find((a) => a.codigo && a.codigo.replace(/-/g, '').startsWith(c)) || null;
+  },
+
 
   async gravar(ref, tipo, url, extra) {
     const grupo = uid();
@@ -55,10 +88,66 @@ const Anexos = {
   excluirGrupo(grupo) { return this.excluirOnde((a) => a.grupo === grupo); },
   excluirDoRegistro(ref) { return this.excluirOnde((a) => a.ref === ref); },
 
-  async assinar(ref, colab, url) {
+  /** resumo: o que foi assinado (ex.: "EPI | CA | qtd | data"); entra no código de verificação. */
+  async assinar(ref, colab, url, resumo) {
     await this.excluirOnde((a) => a.ref === ref && a.tipo === 'assinatura' && a.colab === colab);
-    return this.gravar(ref, 'assinatura', url, { colab });
+    const assinadoEm = new Date().toISOString();
+    const codigo = await this.codigo([ref, colab, resumo || '', assinadoEm, url].join('|'));
+    return this.gravar(ref, 'assinatura', url, { colab, assinadoEm, codigo, resumo: resumo || '' });
   },
+
+  /* ---------------- Assinatura das entregas de EPI e uniforme ---------------- */
+  entregasDoColab(cid, cat) {
+    return (App.data.movepi || []).filter((m) => m.colab === cid && Calc.entregaColab(m) && (!cat || ((Calc.epi(m.epi) || {}).categoria === 'Uniforme' ? 'Uniforme' : 'EPI') === cat))
+      .sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+  },
+  resumoEntrega(m) {
+    const e = Calc.epi(m.epi) || {};
+    return [e.descricao || '', e.ca ? 'CA ' + e.ca : '', 'qtd ' + m.qtd, D.br(m.data)].filter(Boolean).join(' | ');
+  },
+  /** Tela para o colaborador assinar na tela uma ou mais entregas ainda sem assinatura. */
+  assinarEntregas(cid, cat, marcar, depois) {
+    const c = Calc.colab(cid);
+    if (!c) { toast('Escolha um colaborador.'); return; }
+    const pend = this.entregasDoColab(cid, cat).filter((m) => !this.assinatura(m.id, cid));
+    if (!pend.length) { toast('Todas as entregas de ' + c.nome + ' já estão assinadas.'); if (depois) depois(); return; }
+    const sel = new Set(marcar && marcar.length ? marcar : pend.map((m) => m.id));
+    const body = h('<div class="anx"><p><b>' + esc(c.nome) + '</b>' + (c.funcao ? ' · ' + esc(c.funcao) : '') + '</p>' +
+      '<p class="small">Marque as entregas que o colaborador está recebendo e peça que assine no quadro. A assinatura fica registrada com data, hora e um código de verificação.</p>' +
+      '<div class="check-list anx-entregas">' + pend.map((m) => '<label><input type="checkbox" value="' + m.id + '"' + (sel.has(m.id) ? ' checked' : '') + '> ' + esc(this.resumoEntrega(m)) + '</label>').join('') + '</div>' +
+      '<p class="small muted anx-termo">' + esc(String(Config.params.declaracaoEPI || '').slice(0, 400)) + '</p>' +
+      '<div class="anx-pad"><canvas aria-label="Quadro de assinatura de ' + esc(c.nome) + '"></canvas></div></div>');
+    let q = null;
+    Modal.open({
+      title: 'Assinatura da entrega', body,
+      foot: [button('Limpar quadro', '', () => q && q.limpar()), button('Cancelar', '', () => { Modal.close(); if (depois) depois(); }),
+        button('Confirmar assinatura', 'btn-primary', async () => {
+          const ids = $$('.anx-entregas input:checked', body).map((i) => i.value);
+          if (!ids.length) { toast('Marque ao menos uma entrega.'); return; }
+          if (!q || q.vazio()) { toast('Peça ao colaborador que assine no quadro.'); return; }
+          const img = q.imagem();
+          for (const id of ids) { const m = pend.find((x) => x.id === id); await this.assinar(id, cid, img, this.resumoEntrega(m)); }
+          Modal.close();
+          toast(ids.length + ' entrega(s) assinada(s)');
+          if (depois) depois(); else App.atualizarTela();
+        })]
+    });
+    q = this.quadro($('canvas', body));
+  },
+
+  /** Tela para conferir um código de verificação de assinatura. */
+  telaConferir() {
+    const body = h('<div><label class="field">Código de verificação<input type="text" placeholder="Ex.: 3F2A-9C1E-5B7D" autocomplete="off"></label><div class="anx-res" style="margin-top:10px"></div></div>');
+    const res = $('.anx-res', body), inp = $('input', body);
+    const ver = () => {
+      const a = this.conferir(inp.value);
+      if (!a) { res.innerHTML = '<span class="badge b-critical">Código não encontrado</span> <span class="small muted">Confira os caracteres ou se a assinatura foi feita nesta empresa.</span>'; return; }
+      const c = Calc.colab(a.colab);
+      res.innerHTML = '<span class="badge b-good">Assinatura encontrada</span><p><b>' + esc(c ? c.nome : '') + '</b><br>' + esc(a.resumo || '') + '<br>' + esc(this.rotuloAssinatura(a)) + '</p><img src="' + a.url + '" alt="Assinatura" style="max-height:80px;border:1px solid var(--line);border-radius:6px">';
+    };
+    Modal.open({ title: 'Conferir assinatura', body, small: true, foot: [button('Fechar', '', () => Modal.close()), button('Conferir', 'btn-primary', ver)] });
+  },
+
 
   atualizado() { App.versao++; App.marcarSalvo(); },
 
@@ -147,7 +236,7 @@ const Anexos = {
         $('[data-cancelar]', el).addEventListener('click', () => { pad.hidden = true; });
         $('[data-ok]', el).addEventListener('click', async () => {
           if (!q || q.vazio()) { toast('Desenhe a assinatura no quadro antes de confirmar.'); return; }
-          await this.assinar(r.id, cid, q.imagem()); toast('Assinatura registrada'); desenhar();
+          await this.assinar(r.id, cid, q.imagem(), 'DDS | ' + (r.tema || '') + ' | ' + D.br(r.data)); toast('Assinatura registrada'); desenhar();
         });
       });
       $$('[data-foto]', corpo).forEach((inp) => inp.addEventListener('change', async () => {

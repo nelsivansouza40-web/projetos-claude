@@ -13,6 +13,8 @@ const Forms = {
     }
     if (t === 'epi') return (App.data.epis || []).map((e) => ({ id: e.id, label: Calc.nomeEpi(e.id), alt: e.descricao, cat: e.categoria === 'Uniforme' ? 'Uniforme' : 'EPI' })).sort((a, b) => a.label.localeCompare(b.label));
     if (t === 'equip') return (App.data.equipamentos || []).map((e) => ({ id: e.id, label: Calc.nomeEquip(e.id), alt: e.nome })).sort((a, b) => a.label.localeCompare(b.label));
+    if (t === 'contratada') return (App.data.contratadas || []).map((e) => ({ id: e.id, label: e.nome, alt: e.cnpj || e.nome, inativo: e.status === 'Encerrada' })).sort((a, b) => a.label.localeCompare(b.label));
+    if (t === 'terceiro') return (App.data.terceiros || []).map((e) => ({ id: e.id, label: Calc.nomeTerceiro(e.id), alt: e.nome, inativo: e.status === 'Desligado' })).sort((a, b) => a.label.localeCompare(b.label));
     return [];
   },
 
@@ -54,7 +56,7 @@ const Forms = {
           '<label><input type="checkbox" value="' + esc(o) + '"' + (arr.includes(o) ? ' checked' : '') + '> ' + esc(o) + '</label>').join('') + '</div>';
         break;
       }
-      case 'colab': case 'epi': case 'equip': {
+      case 'colab': case 'epi': case 'equip': case 'contratada': case 'terceiro': {
         const dl = 'dl_' + c.k;
         // aberto pela Ficha de uniforme (ou de EPI): só oferece os itens daquela categoria
         const ops = this.opcoesRef(c.t).filter((o) => c.t !== 'epi' || !r._catEpi || o.cat === r._catEpi || o.id === v);
@@ -95,7 +97,7 @@ const Forms = {
       if (c.t === 'num' || c.t === 'money') {
         if (v === '') v = '';
         else { const n = toNum(v); if (n == null) erros.push(c.l + ': número inválido'); v = n; }
-      } else if (['colab', 'epi', 'equip'].includes(c.t)) {
+      } else if (['colab', 'epi', 'equip', 'contratada', 'terceiro'].includes(c.t)) {
         if (v) {
           const id = this.resolverRef(c.t, v);
           if (id) v = id;
@@ -216,6 +218,12 @@ const Forms = {
     if (!novo && m.imprimir) rodape.push(button('Imprimir', '', () => Reports.imprimirRegistro(mod, rec)));
     // DDS: grava o que foi alterado e abre a lista de presença para assinar na tela e anexar fotos
     if (mod === 'dds') rodape.push(button('Salvar e colher assinaturas', '', () => salvar(false, (salvo) => Anexos.telaDDS(salvo))));
+    // Entrega de EPI ou uniforme: grava e abre o quadro para o colaborador assinar na tela
+    if (mod === 'movepi') rodape.push(button('Salvar e colher assinatura', '', () => salvar(false, (salvo) => {
+      if (!Calc.entregaColab(salvo)) { Modal.close(); toast('Assinatura só para entregas a colaborador.'); return; }
+      const e = Calc.epi(salvo.epi) || {};
+      Anexos.assinarEntregas(salvo.colab, e.categoria === 'Uniforme' ? 'Uniforme' : 'EPI', [salvo.id]);
+    })));
     rodape.push(button('Cancelar', '', () => Modal.close()));
     if (novo) rodape.push(button('Salvar e incluir outro', '', () => salvar(true)));
     rodape.push(button('Salvar', 'btn-primary', () => salvar(false)));

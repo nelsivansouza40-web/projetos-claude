@@ -3,10 +3,11 @@
  */
 const NAV = [
   ['Início', [['painel', 'Painéis'], ['pendencias', 'Pendências e vencimentos']]],
-  ['Pessoas', [['m:colaboradores', 'Colaboradores'], ['prontuario', 'Pesquisa do colaborador'], ['m:treinamentos', 'Treinamentos'], ['m:aso', 'ASO'], ['m:dds', 'DDS'], ['m:advertencias', 'Advertências']]],
+  ['Pessoas', [['m:colaboradores', 'Colaboradores'], ['prontuario', 'Pesquisa do colaborador'], ['m:treinamentos', 'Treinamentos'], ['matrizview', 'Matriz de treinamentos'], ['m:aso', 'ASO'], ['pcmsoview', 'Programação de exames (PCMSO)'], ['m:dds', 'DDS'], ['m:advertencias', 'Advertências']]],
   ['EPI', [['m:epis', 'Cadastro de EPI'], ['m:movepi', 'Movimentação de EPI'], ['fichaepi', 'Ficha de EPI / uniforme']]],
   ['Ocorrências', [['m:acidentes', 'Acidentes'], ['m:desvios', 'Desvios e incidentes'], ['m:auditorias', 'Auditorias']]],
-  ['Gestão', [['m:planos', 'Plano de ação 5W2H'], ['m:riscos', 'Riscos ambientais'], ['m:documentos', 'Documentos'], ['m:oss', 'Ordem de Serviço (OSS)'], ['m:atividades', 'Atividades por função'], ['m:quimicos', 'Produtos químicos']]],
+  ['Gestão', [['m:planos', 'Plano de ação 5W2H'], ['m:riscos', 'Riscos ambientais'], ['m:documentos', 'Documentos'], ['m:oss', 'Ordem de Serviço (OSS)'], ['m:atividades', 'Atividades por função'], ['m:quimicos', 'Produtos químicos'], ['psico', 'Riscos psicossociais (NR-01)'], ['esocial', 'Dados para o eSocial']]],
+  ['Terceiros', [['liberacao', 'Liberação de acesso'], ['m:contratadas', 'Empresas contratadas'], ['m:terceiros', 'Trabalhadores terceiros'], ['m:docsterceiros', 'Documentos de terceiros']]],
   ['Emergência', [['m:extintores', 'Extintores'], ['m:hidrantes', 'Hidrantes']]],
   ['Equipamentos', [['m:equipamentos', 'Máquinas e equipamentos'], ['m:manutencoes', 'Manutenções'], ['m:frota', 'Frota de veículos']]],
   ['CIPA', [['m:cipa', 'Mandato e estabilidade'], ['calcipa', 'Calendário eleitoral']]],
@@ -164,6 +165,10 @@ const App = {
     } else if (r === 'painel') Paineis.render();
     else if (r === 'pendencias') Pendencias.render();
     else if (r === 'fichaepi') Reports.paginaFicha();
+    else {
+      const pag = { matrizview: Matriz, pcmsoview: Pcmso, liberacao: Terceiros, psico: Psico, esocial: ESocial }[r];
+      if (pag) pag.pagina();
+    }
   },
 
   ir(rota) { if (location.hash === '#/' + rota) this.navegar(); else location.hash = '#/' + rota; },
@@ -179,7 +184,9 @@ const App = {
     const pag = {
       painel: () => Paineis.render(), pendencias: () => Pendencias.render(), fichaepi: () => Reports.paginaFicha(),
       prontuario: () => Reports.paginaProntuario(), calcipa: () => Reports.paginaCalendarioCIPA(),
-      config: () => this.paginaConfig(), sobre: () => this.paginaSobre()
+      config: () => this.paginaConfig(), sobre: () => this.paginaSobre(),
+      matrizview: () => Matriz.pagina(), pcmsoview: () => Pcmso.pagina(), liberacao: () => Terceiros.pagina(),
+      psico: () => Psico.pagina(), esocial: () => ESocial.pagina()
     }[r];
     if (pag) pag(); else { this.rota = 'painel'; Paineis.render(); }
   },
@@ -407,7 +414,10 @@ const App = {
       '<div class="card"><h2>3. Trazer os dados da planilha</h2><p>Em <b>Configurações → Importar planilha Excel</b>, escolha o arquivo Gestão SST (.xlsx). O sistema lê as abas preenchidas (colaboradores, EPI e movimentações, acidentes, treinamentos, ASO, extintores etc.) e cria os colaboradores citados nas movimentações.</p></div>' +
       '<div class="card"><h2>4. Rotina sugerida</h2><ul><li>Cadastre colaboradores, EPIs e o conteúdo de <b>Atividades por função</b>.</li><li>Lance cada entrega em <b>Movimentação de EPI</b> e imprima a <b>Ficha de EPI</b> para assinatura.</li><li>Acompanhe <b>Pendências e vencimentos</b> (ASO, treinamentos, CA, extintores, documentos, CIPA).</li><li>Use os <b>Painéis</b> nas reuniões de CIPA e de resultados.</li></ul></div>' +
       '<div class="card"><h2>5. Trabalho em equipe</h2><p>Para vários computadores usarem o mesmo cadastro, conecte a empresa a uma planilha Google em <b>Configurações → Trabalho em equipe</b>. Nos outros computadores, use <b>Empresa → Entrar em empresa da equipe</b>. Cada um continua funcionando sem internet e sincroniza sozinho quando a conexão volta.</p></div>' +
-      '<div class="card"><h2>6. Indicadores</h2><p>Taxa de frequência = acidentes × 1.000.000 ÷ HHT. Taxa de gravidade = (dias perdidos + dias debitados) × 1.000.000 ÷ HHT, conforme a NBR 14280. O HHT é estimado por colaboradores ativos × jornada diária × dias trabalhados no mês × meses do período (ajuste em Configurações).</p></div>';
+      '<div class="card"><h2>6. Matriz de treinamentos e PCMSO por função</h2><p>Em <b>Treinamentos obrigatórios por função</b> (botão na tela Matriz de treinamentos), informe as NRs exigidas em cada função. O sistema confere os treinamentos de cada colaborador e aponta, nas Pendências, quem nunca fez ou está vencido. Da mesma forma, em <b>PCMSO — exames por função</b> informe os exames e a periodicidade; a <b>Programação de exames</b> mostra quem precisa fazer cada exame e quando.</p></div>' +
+      '<div class="card"><h2>7. Terceiros</h2><p>Cadastre as <b>empresas contratadas</b>, os <b>trabalhadores terceiros</b> e os <b>documentos</b> de cada um, com vencimento. A tela <b>Liberação de acesso</b> mostra quem está liberado, em atenção ou bloqueado, e imprime a lista para a portaria. Os documentos obrigatórios ficam em Configurações, nas listas de opções.</p></div>' +
+      '<div class="card"><h2>8. Riscos psicossociais, eSocial e assinaturas</h2><p>Em <b>Riscos psicossociais (NR-01)</b>, crie uma campanha e aplique o questionário anônimo no computador, no tablet ou em papel; os fatores moderados e altos podem ser levados ao inventário de riscos. Em <b>Dados para o eSocial</b>, os eventos S-2210, S-2220 e S-2240 saem conferidos para o setor de folha enviar. Nas entregas de EPI, use <b>Salvar e colher assinatura</b>: a assinatura fica com data, hora e código de verificação, impressos na ficha.</p></div>' +
+      '<div class="card"><h2>9. Indicadores</h2><p>Taxa de frequência = acidentes × 1.000.000 ÷ HHT. Taxa de gravidade = (dias perdidos + dias debitados) × 1.000.000 ÷ HHT, conforme a NBR 14280. O HHT é estimado por colaboradores ativos × jornada diária × dias trabalhados no mês × meses do período (ajuste em Configurações).</p></div>';
   }
 };
 

@@ -145,6 +145,7 @@ const Sync = {
       }
       cfg.ultimo = new Date().toISOString();
       cfg.erro = '';
+      await this.enviarPendencias(emp, cfg, manual);
       await DB.putRaw('sys', { key: 'sync:cfg:' + emp, value: cfg });
       if (App.emp && App.emp.id === emp && (mudou.rec || mudou.cfg || mudou.emp)) {
         if (mudou.cfg) await Config.carregar(emp);
@@ -164,6 +165,22 @@ const Sync = {
       // se algo foi alterado durante o envio, envia de novo
       if (this.pendentes(emp) && !cfg.erro) this.agendar(3000);
     }
+  },
+
+  /**
+   * Envia a lista de pendências desta empresa para o aviso semanal por e-mail
+   * (no máximo a cada 6 horas, ou sempre que a sincronização for manual).
+   * Servidor antigo, sem essa função: segue em frente sem erro.
+   */
+  async enviarPendencias(emp, cfg, manual) {
+    if (!App.emp || App.emp.id !== emp) return;
+    const ult = cfg.pendEnviadoEm ? Date.parse(cfg.pendEnviadoEm) : 0;
+    if (!manual && Date.now() - ult < 6 * 3600 * 1000) return;
+    const itens = Calc.pendencias().slice(0, 400).map((p) => ({ area: p.area, desc: p.desc, quem: p.quem, venc: p.venc || '', s: p.s.s }));
+    try {
+      await this.post({ acao: 'pendencias', emp, nome: App.emp.nome, itens }, cfg);
+      cfg.pendEnviadoEm = new Date().toISOString();
+    } catch (e) { /* servidor sem o aviso por e-mail: não impede a sincronização */ }
   },
 
   /** Aplica um registro vindo da planilha. Retorna true se mudou algo aqui. */

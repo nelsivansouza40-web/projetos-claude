@@ -16,10 +16,11 @@ cada registro **no momento em que é salvo**.
 | Área | Módulos |
 |---|---|
 | Início | Painéis (visão geral, acidentes, colaboradores, treinamentos, EPI, auditorias e desvios, 5W2H, riscos, extintores e hidrantes) · Pendências e vencimentos |
-| Pessoas | Colaboradores · Pesquisa do colaborador (prontuário) · Treinamentos · ASO · DDS com assinatura na tela, fotos e registro com lista de presença para impressão · Advertências |
-| EPI | Cadastro de EPI e uniforme com estoque, validade do CA e validade de uso (prazo de troca) · Movimentação com troca prevista e motivo da devolução · Ficha de controle individual de EPI e de uniforme (NR-06) para impressão |
+| Pessoas | Colaboradores · Pesquisa do colaborador (prontuário) · Treinamentos · Matriz de treinamentos por função · ASO · Programação de exames do PCMSO por função · DDS com assinatura na tela, fotos e registro com lista de presença para impressão · Advertências |
+| EPI | Assinatura do colaborador na tela, com data, hora e código de verificação · Cadastro de EPI e uniforme com estoque, validade do CA e validade de uso (prazo de troca) · Movimentação com troca prevista e motivo da devolução · Ficha de controle individual de EPI e de uniforme (NR-06) para impressão |
+| Terceiros | Empresas contratadas · Trabalhadores terceiros · Documentos com vencimento · Liberação de acesso (liberado, atenção, bloqueado) com lista para a portaria |
 | Ocorrências | Acidentes (TF, TG, pirâmide de Bird) · Desvios e incidentes · Auditorias |
-| Gestão | Plano 5W2H · Riscos com matriz 5×5 · Documentos · OSS · Atividades por função · Produtos químicos |
+| Gestão | Plano 5W2H · Riscos com matriz 5×5 · Documentos · OSS · Atividades por função · Produtos químicos · Riscos psicossociais (NR-01) com questionário anônimo · Dados para o eSocial SST (S-2210, S-2220, S-2240) |
 | Emergência | Extintores (recarga e teste hidrostático) · Hidrantes |
 | Equipamentos | Máquinas · Manutenções · Frota |
 | CIPA | Mandato e estabilidade · Calendário eleitoral (NR-05) |

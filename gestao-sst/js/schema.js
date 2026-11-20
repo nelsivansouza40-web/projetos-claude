@@ -422,6 +422,89 @@ const MODULOS = [
     ],
     colunas: ['data', 'tema', 'departamento', 'instrutor', 'status', '_qtd'],
     filtros: ['status', 'departamento', '_ano']
+  },
+  {
+    id: 'matriz', nome: 'Treinamentos obrigatórios por função', grupo: 'Pessoas', singular: 'treinamento obrigatório', aba: 'MATRIZ_TREINAMENTOS', chave: 'funcao',
+    ajuda: 'Uma linha para cada treinamento exigido em cada função. O sistema confere os treinamentos de cada colaborador e mostra, na tela Matriz de treinamentos, quem nunca fez ou está vencido.',
+    campos: [
+      { k: 'funcao', l: 'Função', t: 'sel', lista: 'funcoes', req: 1 },
+      { k: 'norma', l: 'Norma', t: 'sel', lista: 'normas', hint: 'O treinamento é reconhecido pela norma; em branco, pelo nome' },
+      { k: 'treinamento', l: 'Treinamento', t: 'text', req: 1, w: 2, hint: 'Ex.: Trabalho em altura' },
+      { k: 'validadeMeses', l: 'Reciclagem (meses)', t: 'num', hint: 'Usada quando o treinamento registrado não tem validade' },
+      { k: 'obs', l: 'Observações', t: 'textarea', w: 4 }
+    ],
+    colunas: ['funcao', 'norma', 'treinamento', 'validadeMeses', '_qtdFuncao', '_conformes'],
+    filtros: ['funcao', 'norma']
+  },
+  {
+    id: 'pcmso', nome: 'PCMSO — exames por função', grupo: 'Pessoas', singular: 'exame do PCMSO', aba: 'PCMSO', chave: 'funcao',
+    ajuda: 'Exames que o PCMSO exige em cada função e a periodicidade de cada um. A tela Programação de exames mostra quem precisa fazer cada exame e quando. O exame é reconhecido pelo nome escrito no campo "Exames realizados" do ASO.',
+    campos: [
+      { k: 'funcao', l: 'Função', t: 'sel', lista: 'funcoes', req: 1 },
+      { k: 'exame', l: 'Exame', t: 'sel', lista: 'examesPcmso', req: 1, w: 2 },
+      { k: 'periodicidadeMeses', l: 'Periodicidade (meses)', t: 'num', req: 1, hint: 'Ex.: 12 para anual, 6 para semestral' },
+      { k: 'admissional', l: 'Faz no admissional?', t: 'sn', padrao: 'Sim' },
+      { k: 'demissional', l: 'Faz no demissional?', t: 'sn', padrao: 'Não' },
+      { k: 'obs', l: 'Observações', t: 'textarea', w: 4 }
+    ],
+    colunas: ['funcao', 'exame', 'periodicidadeMeses', 'admissional', 'demissional'],
+    filtros: ['funcao', 'exame']
+  },
+  {
+    id: 'contratadas', nome: 'Empresas contratadas', grupo: 'Terceiros', singular: 'empresa contratada', fem: 1, aba: 'CONTRATADAS', chave: 'nome',
+    campos: [
+      { k: 'nome', l: 'Empresa', t: 'text', req: 1, w: 2 },
+      { k: 'cnpj', l: 'CNPJ', t: 'text' },
+      { k: 'status', l: 'Situação', t: 'opt', opts: ['Ativa', 'Suspensa', 'Encerrada'], padrao: 'Ativa' },
+      { k: 'servico', l: 'Serviço contratado', t: 'text', w: 2 },
+      { k: 'inicio', l: 'Início do contrato', t: 'date' },
+      { k: 'fim', l: 'Fim do contrato', t: 'date' },
+      { k: 'contato', l: 'Responsável na contratada', t: 'text', w: 2 },
+      { k: 'telefone', l: 'Telefone', t: 'text' },
+      { k: 'email', l: 'E-mail', t: 'text' },
+      { k: 'obs', l: 'Observações', t: 'textarea', w: 4 }
+    ],
+    colunas: ['nome', 'cnpj', 'servico', 'fim', 'status', '_trab', '_liberados', '_situacao'],
+    filtros: ['status', '_situacao']
+  },
+  {
+    id: 'terceiros', nome: 'Trabalhadores terceiros', grupo: 'Terceiros', singular: 'trabalhador terceiro', aba: 'TERCEIROS', chave: 'nome',
+    campos: [
+      { k: 'contratada', l: 'Empresa contratada', t: 'contratada', req: 1, w: 2 },
+      { k: 'nome', l: 'Nome', t: 'text', req: 1, w: 2 },
+      { k: 'cpf', l: 'CPF', t: 'text', mask: 'cpf' },
+      { k: 'funcao', l: 'Função', t: 'text' },
+      { k: 'status', l: 'Situação', t: 'opt', opts: ['Ativo', 'Desligado'], padrao: 'Ativo' },
+      { k: 'obs', l: 'Observações', t: 'textarea', w: 4 }
+    ],
+    colunas: ['nome', 'contratada', 'funcao', 'status', '_pendDocs', '_liberacao'],
+    filtros: ['contratada', 'status', '_liberacao']
+  },
+  {
+    id: 'docsterceiros', nome: 'Documentos de terceiros', grupo: 'Terceiros', singular: 'documento de terceiro', aba: 'DOCS_TERCEIROS', chave: 'documento',
+    ajuda: 'Deixe "Trabalhador" em branco para documentos da empresa (PGR, PCMSO, seguro de vida...). Os documentos obrigatórios ficam em Configurações, nas listas "Documentos obrigatórios".',
+    campos: [
+      { k: 'contratada', l: 'Empresa contratada', t: 'contratada', req: 1, w: 2 },
+      { k: 'terceiro', l: 'Trabalhador', t: 'terceiro', w: 2 },
+      { k: 'documento', l: 'Documento', t: 'sel', lista: 'docsTerceiros', req: 1, w: 2 },
+      { k: 'emissao', l: 'Emissão', t: 'date' },
+      { k: 'validade', l: 'Vencimento', t: 'date', hint: 'Em branco: sem vencimento' },
+      { k: 'obs', l: 'Observações', t: 'textarea', w: 4 }
+    ],
+    colunas: ['contratada', 'terceiro', 'documento', 'emissao', 'validade', '_statusVenc'],
+    filtros: ['contratada', 'documento', '_statusVenc']
+  },
+  {
+    id: 'campanhaspsico', nome: 'Campanhas de avaliação psicossocial', grupo: 'Gestão', singular: 'campanha', fem: 1, aba: 'CAMPANHAS_PSICO', chave: 'nome',
+    campos: [
+      { k: 'nome', l: 'Campanha', t: 'text', req: 1, w: 2, hint: 'Ex.: Avaliação psicossocial 2026' },
+      { k: 'status', l: 'Situação', t: 'opt', opts: ['Aberta', 'Encerrada'], padrao: 'Aberta' },
+      { k: 'inicio', l: 'Início', t: 'date', req: 1 },
+      { k: 'fim', l: 'Encerramento', t: 'date' },
+      { k: 'obs', l: 'Observações', t: 'textarea', w: 4 }
+    ],
+    colunas: ['nome', 'inicio', 'fim', 'status', '_respostas'],
+    filtros: ['status']
   }
 ];
 
@@ -437,6 +520,8 @@ const ROTULOS_CALC = {
   _proxRecarga: 'Próxima recarga', _statusRecarga: 'Recarga', _proxTH: 'Próximo teste hidrostático',
   _statusTH: 'Teste hidrostático', _prox: 'Próximo teste', _status: 'Situação', _naoConf: 'Itens não conformes',
   _ultimaManut: 'Última manutenção', _fimMandato: 'Fim do mandato', _statusMandato: 'Mandato',
+  _qtdFuncao: 'Colaboradores na função', _conformes: 'Em dia', _trab: 'Trabalhadores', _liberados: 'Liberados',
+  _situacao: 'Situação dos documentos', _pendDocs: 'Pendências', _liberacao: 'Liberação', _respostas: 'Respostas',
   _fimEstab: 'Fim da estabilidade', _troca: 'Troca prevista', _statusTroca: 'Validade do EPI entregue', _statusEstab: 'Estabilidade', _ano: 'Ano', _mes: 'Mês'
 };
 
