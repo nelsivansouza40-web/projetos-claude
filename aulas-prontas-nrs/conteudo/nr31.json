@@ -1,0 +1,302 @@
+{
+  "nr": "31",
+  "titulo": "Trabalho Rural: Aplicação de Agrotóxicos",
+  "chamada": "Ler o rótulo, vestir a proteção e cuidar da descontaminação: o veneno não escolhe quem atinge",
+  "icone": "FaTractor",
+  "carga": "20 horas (capacitação para trabalhadores expostos a agrotóxicos, distribuída em no máximo 8 horas diárias)",
+  "periodicidade": "A NR-31 exige capacitação com carga mínima de 20 horas, durante o expediente, para os trabalhadores expostos direta ou indiretamente a agrotóxicos. Recomenda-se reciclagem periódica e sempre que houver mudança de produtos ou métodos de aplicação, conforme o texto vigente.",
+  "publico": "Trabalhadores rurais que preparam, aplicam, armazenam, transportam agrotóxicos ou que circulam em áreas tratadas, e suas lideranças.",
+  "prerequisitos": "Avaliação de saúde com aptidão para a função. É vedada a manipulação de agrotóxicos por menores de 18 anos, maiores de 60 anos e gestantes, conforme a NR-31.",
+  "instrutor": "Profissional legalmente habilitado ou instrutor capacitado, sob responsabilidade de profissional habilitado, conforme a NR-31.",
+  "objetivos": [
+    "Conhecer as formas de exposição direta e indireta aos agrotóxicos",
+    "Reconhecer sinais e sintomas de intoxicação e aplicar os primeiros socorros",
+    "Interpretar rótulos, bulas e a sinalização de segurança",
+    "Aplicar medidas higiênicas durante e após o trabalho",
+    "Usar, limpar e conservar corretamente vestimentas e EPIs",
+    "Armazenar, transportar e destinar embalagens com segurança"
+  ],
+  "recursos": ["Projetor e apresentação", "Rótulos e bulas de produtos usados na propriedade", "Kit completo de vestimentas e EPIs para aplicação", "Pulverizador costal e água para simulação", "Lista de presença e provas impressas"],
+  "aprovacao": "Frequência integral, nota mínima de 7,0 na avaliação teórica e desempenho satisfatório no checklist prático.",
+  "referencias": ["NR-31 Segurança e Saúde no Trabalho na Agricultura, Pecuária, Silvicultura, Exploração Florestal e Aquicultura, texto vigente", "Lei 7.802/1989 e regulamentação de agrotóxicos", "Normas da ANVISA sobre classificação toxicológica e rotulagem", "NR-06 Equipamento de Proteção Individual"],
+  "caso_modulo": 4,
+  "modulos": [
+    {
+      "titulo": "Agrotóxicos e formas de exposição",
+      "duracao": 165,
+      "gancho": "O agrotóxico protege a lavoura, mas pode adoecer gravemente quem trabalha com ele. A maior parte das intoxicações acontece por falta de informação e de cuidado simples.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Vias de exposição",
+          "cards": [
+            {"t": "Pele", "d": "Principal via na aplicação: respingos, roupa molhada e névoa da pulverização"},
+            {"t": "Respiratória", "d": "Inalação de névoa, vapores e pós no preparo e na aplicação"},
+            {"t": "Oral", "d": "Comer, beber ou fumar com mãos contaminadas; desentupir bico com a boca"},
+            {"t": "Olhos", "d": "Respingos no preparo da calda e na aplicação"}
+          ],
+          "fala": "O agrotóxico entra no corpo por quatro vias. A pele é a principal na aplicação, por respingos, roupa molhada e névoa da pulverização. A via respiratória, pela inalação de névoa, vapores e pós. A via oral, ao comer, beber ou fumar com as mãos contaminadas ou, o que ainda é comum, ao desentupir o bico do pulverizador com a boca. E os olhos, por respingos no preparo da calda. Cada via exige uma proteção específica.",
+          "pergunta": "Em que momento do trabalho vocês sentem que ficam mais expostos?"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Exposição direta e indireta",
+          "esquerda": {"t": "Direta", "itens": ["Preparo da calda e abastecimento", "Aplicação com pulverizador costal ou tratorizado", "Limpeza de equipamentos e embalagens"]},
+          "direita": {"t": "Indireta", "itens": ["Entrada em área tratada antes do intervalo de reentrada", "Deriva da aplicação para áreas vizinhas", "Lavagem de roupas contaminadas em casa"]},
+          "fala": "A exposição direta acontece com quem prepara a calda, abastece, aplica e limpa equipamentos e embalagens. Mas há também a exposição indireta: quem entra na lavoura tratada antes do intervalo de reentrada, quem está em área vizinha atingida pela deriva e até a família que lava as roupas contaminadas em casa. Por isso a NR-31 exige capacitação também para os trabalhadores expostos indiretamente.",
+          "dica": "Pergunte quem lava as roupas de aplicação e onde isso é feito."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Classificação toxicológica no rótulo",
+          "cabecalho": ["Faixa", "Categoria"],
+          "linhas": [
+            ["Vermelha", "Categorias 1 e 2: extremamente e altamente tóxico"],
+            ["Amarela", "Categoria 3: moderadamente tóxico"],
+            ["Azul", "Categorias 4 e 5: pouco tóxico e improvável de causar dano agudo"],
+            ["Verde", "Produto não classificado quanto à toxicidade aguda"],
+            ["Atenção", "A classificação aguda não mostra os efeitos de longo prazo"]
+          ],
+          "fala": "O rótulo traz uma faixa colorida que indica a toxicidade aguda do produto, conforme a classificação da ANVISA. Vermelha para as categorias um e dois, extremamente e altamente tóxico. Amarela para a categoria três, moderadamente tóxico. Azul para as categorias quatro e cinco. E verde para produto não classificado. Atenção: essa faixa trata do efeito agudo. Mesmo um produto de faixa azul pode ter efeitos de longo prazo, por isso a proteção é sempre necessária.",
+          "dica": "Use rótulos reais da propriedade para identificar as faixas."
+        }
+      ]
+    },
+    {
+      "titulo": "Intoxicação e primeiros socorros",
+      "duracao": 165,
+      "gancho": "Reconhecer cedo os sinais de intoxicação e agir rápido pode salvar uma vida. E a informação mais importante para o médico está no rótulo.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Sinais e sintomas de intoxicação",
+          "cards": [
+            {"t": "Leves", "d": "Dor de cabeça, tontura, náusea, irritação nos olhos e na pele"},
+            {"t": "Moderados", "d": "Vômitos, suor excessivo, salivação, visão turva, tremores"},
+            {"t": "Graves", "d": "Falta de ar, convulsões, perda de consciência"},
+            {"t": "Crônicos", "d": "Efeitos que aparecem com o tempo, como alterações neurológicas e hormonais"}
+          ],
+          "fala": "A intoxicação aguda pode começar com sinais leves, como dor de cabeça, tontura, náusea e irritação nos olhos e na pele. Pode evoluir para vômitos, suor excessivo, salivação, visão turva e tremores. E, nos casos graves, falta de ar, convulsões e perda de consciência. Há também os efeitos crônicos, que aparecem com o tempo, como alterações neurológicas e hormonais. Qualquer sintoma durante ou depois da aplicação deve ser levado a sério.",
+          "pergunta": "Alguém já sentiu algum desses sintomas depois de aplicar?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Primeiros socorros",
+          "passos": [
+            {"t": "Afastar", "d": "Retirar a pessoa da área contaminada"},
+            {"t": "Descontaminar", "d": "Tirar a roupa contaminada e lavar a pele com água e sabão"},
+            {"t": "Olhos", "d": "Lavar com água corrente por vários minutos"},
+            {"t": "Acionar", "d": "SAMU 192 ou serviço de saúde e centro de informação toxicológica"},
+            {"t": "Levar o rótulo", "d": "Levar a embalagem, o rótulo ou a bula ao atendimento"}
+          ],
+          "fala": "Nos primeiros socorros, retire a pessoa da área contaminada. Tire a roupa contaminada e lave a pele com bastante água e sabão. Se atingiu os olhos, lave com água corrente por vários minutos. Acione o SAMU no 192 ou leve ao serviço de saúde, e o centro de informação toxicológica pode orientar. Sempre leve o rótulo ou a bula, que traz o princípio ativo e as orientações ao médico. Não provoque vômito, a não ser que o rótulo indique.",
+          "dica": "Mostre no rótulo a seção de primeiros socorros e o telefone de emergência."
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Nunca faça",
+          "texto": "Leite, cachaça ou remédio caseiro não tratam intoxicação por agrotóxico.",
+          "itens": [
+            "Dar leite, bebida alcoólica ou outros líquidos à vítima",
+            "Provocar vômito sem orientação do rótulo ou do médico",
+            "Esperar os sintomas passarem sozinhos",
+            "Ir ao atendimento sem levar o rótulo ou a bula"
+          ],
+          "fala": "Alguns costumes populares pioram a intoxicação. Não dê leite, cachaça ou outros líquidos à vítima, porque podem aumentar a absorção de alguns produtos. Não provoque vômito sem orientação do rótulo ou do médico. Não espere os sintomas passarem sozinhos. E nunca vá ao atendimento sem o rótulo ou a bula."
+        }
+      ]
+    },
+    {
+      "titulo": "Rotulagem, bula e sinalização",
+      "duracao": 165,
+      "gancho": "Toda a informação para usar o produto com segurança está no rótulo e na bula. O problema é que pouca gente lê.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "O que procurar no rótulo e na bula",
+          "itens": [
+            "Classificação toxicológica e pictogramas de perigo",
+            "Dose, modo de preparo e de aplicação",
+            "EPI e vestimentas recomendados",
+            "Intervalo de reentrada na área tratada",
+            "Período de carência entre a aplicação e a colheita",
+            "Primeiros socorros e telefone de emergência"
+          ],
+          "destaque": "A dose certa protege a lavoura; a dose a mais só aumenta o risco.",
+          "fala": "No rótulo e na bula estão a classificação toxicológica e os pictogramas, a dose e o modo de preparo e aplicação, o EPI recomendado, o intervalo de reentrada, que é o tempo que se deve esperar para entrar na área tratada sem proteção, o período de carência, que é o tempo entre a última aplicação e a colheita, e os primeiros socorros com o telefone de emergência. A aplicação também segue o receituário agronômico. Usar mais produto do que a dose não melhora o resultado e aumenta o risco.",
+          "pergunta": "Vocês conhecem o intervalo de reentrada dos produtos que aplicam?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Sinalização das áreas tratadas",
+          "itens": [
+            "Sinalizar as áreas tratadas durante o intervalo de reentrada",
+            "Informar os trabalhadores sobre as áreas e os prazos",
+            "Impedir o acesso de pessoas não protegidas",
+            "Sinalizar depósitos de agrotóxicos com indicação de perigo"
+          ],
+          "destaque": "Entrar na lavoura antes do intervalo de reentrada é exposição sem proteção.",
+          "fala": "As áreas tratadas devem ser sinalizadas durante o intervalo de reentrada, e os trabalhadores informados sobre as áreas e os prazos. Pessoas sem proteção não entram nessas áreas. E os depósitos de agrotóxicos também são sinalizados com indicação de perigo."
+        }
+      ]
+    },
+    {
+      "titulo": "Vestimentas e EPIs",
+      "duracao": 165,
+      "gancho": "O kit de proteção só funciona se estiver completo, bem vestido e limpo. E tirar o EPI na ordem errada pode contaminar quem acabou de se proteger.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Kit de proteção na aplicação",
+          "cards": [
+            {"t": "Corpo", "d": "Calça e jaleco hidrorrepelentes e avental conforme a aplicação"},
+            {"t": "Cabeça e rosto", "d": "Boné árabe e viseira facial"},
+            {"t": "Respiração", "d": "Respirador com filtro indicado no rótulo"},
+            {"t": "Mãos e pés", "d": "Luvas nitrílicas e botas impermeáveis"}
+          ],
+          "fala": "O kit de proteção para aplicação inclui calça e jaleco hidrorrepelentes e avental quando indicado, boné árabe e viseira facial, respirador com o filtro indicado no rótulo, luvas nitrílicas e botas impermeáveis. A NR-31 exige que o empregador forneça as vestimentas e os EPIs adequados, sem custo, e se responsabilize pela descontaminação. O EPI correto para cada produto está no rótulo e na bula.",
+          "dica": "Mostre o kit completo e explique a função de cada peça."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Ordem para vestir",
+          "passos": [
+            {"t": "Calça", "d": "Calça hidrorrepelente"},
+            {"t": "Botas", "d": "Calça por fora das botas"},
+            {"t": "Jaleco", "d": "Jaleco e avental, se indicado"},
+            {"t": "Respirador", "d": "Com teste de vedação"},
+            {"t": "Cabeça e rosto", "d": "Viseira e boné árabe"},
+            {"t": "Luvas", "d": "Por último, conforme a aplicação"}
+          ],
+          "fala": "A ordem para vestir é: calça, botas, com a calça por fora para que o produto não escorra para dentro, jaleco e avental quando indicado, respirador com teste de vedação, viseira e boné árabe e, por último, as luvas. Na aplicação em alvos altos, as luvas ficam por fora das mangas, e em alvos baixos, por dentro, para que o produto não escorra para as mãos.",
+          "dica": "Faça a demonstração completa com um voluntário."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Retirada e limpeza",
+          "itens": [
+            "Lavar as luvas vestidas antes de começar a retirada",
+            "Retirar na ordem: boné, viseira, jaleco, botas, calça, luvas e respirador por último",
+            "Lavar as vestimentas separadas das roupas da família, em local definido",
+            "Guardar o EPI limpo e seco, longe dos agrotóxicos",
+            "Trocar filtros e peças conforme o fabricante"
+          ],
+          "destaque": "Roupa de aplicação não vai para casa: a descontaminação é responsabilidade do empregador.",
+          "fala": "Para retirar, lave as luvas ainda vestidas. Depois retire o boné, a viseira, o jaleco, as botas, a calça, as luvas e, por último, o respirador. As vestimentas são lavadas separadas das roupas da família, em local definido pelo empregador, que é responsável pela descontaminação. O EPI limpo e seco fica guardado longe dos agrotóxicos. E filtros e peças são trocados conforme o fabricante."
+        }
+      ]
+    },
+    {
+      "titulo": "Preparo, aplicação e medidas higiênicas",
+      "duracao": 165,
+      "gancho": "A forma de preparar a calda e de aplicar define quanto produto chega à lavoura e quanto chega ao trabalhador.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Preparo da calda",
+          "itens": [
+            "Local ventilado, longe de casas, crianças, animais e fontes de água",
+            "Kit completo de proteção desde o preparo",
+            "Medidores e utensílios exclusivos, nunca os de cozinha",
+            "Abrir embalagens com cuidado, sem respingos",
+            "Tríplice lavagem das embalagens vazias no momento do preparo"
+          ],
+          "destaque": "Utensílio usado com agrotóxico nunca volta para a cozinha.",
+          "fala": "O preparo da calda é o momento de maior concentração do produto. Faça em local ventilado, longe de casas, crianças, animais e fontes de água, com o kit completo de proteção. Use medidores e utensílios exclusivos, nunca os de cozinha. Abra as embalagens com cuidado para evitar respingos. E faça a tríplice lavagem das embalagens vazias logo no preparo, despejando a água no tanque do pulverizador."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Aplicação segura",
+          "itens": [
+            "Aplicar nos horários mais frescos, com vento fraco e sem chuva prevista",
+            "Caminhar de forma que a névoa não venha na sua direção",
+            "Não desentupir bicos com a boca",
+            "Verificar vazamentos no pulverizador antes de usar",
+            "Não comer, beber ou fumar durante a aplicação"
+          ],
+          "destaque": "Bico entupido se limpa com escova e água, nunca com a boca.",
+          "fala": "Aplique nos horários mais frescos, com vento fraco e sem chuva prevista, para reduzir a deriva e a evaporação. Caminhe de forma que a névoa não venha na sua direção. Nunca desentupa bicos com a boca: use escova e água. Verifique vazamentos no pulverizador, especialmente no costal, que molha as costas do aplicador. E não coma, beba ou fume durante a aplicação.",
+          "pergunta": "O pulverizador costal que vocês usam tem algum vazamento?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Medidas higiênicas após o trabalho",
+          "passos": [
+            {"t": "Lavar o equipamento", "d": "Em local definido, longe de fontes de água"},
+            {"t": "Retirar o EPI", "d": "Na ordem correta"},
+            {"t": "Tomar banho", "d": "Com água e sabão, logo após a aplicação"},
+            {"t": "Trocar de roupa", "d": "Roupa limpa, sem contato com a contaminada"},
+            {"t": "Comer só depois", "d": "Alimentação apenas após a higiene"}
+          ],
+          "fala": "Após a aplicação, lave o equipamento em local definido, longe de fontes de água. Retire o EPI na ordem correta. Tome banho com água e sabão logo em seguida, e a NR-31 exige que o empregador ofereça condições para isso. Vista roupa limpa, sem contato com a contaminada. E só então coma, beba ou fume."
+        }
+      ]
+    },
+    {
+      "titulo": "Armazenamento, transporte e embalagens",
+      "duracao": 165,
+      "gancho": "Um depósito mal localizado ou uma embalagem reaproveitada podem intoxicar uma família inteira. Os cuidados vão até o destino final da embalagem.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Armazenamento",
+          "itens": [
+            "Edificação exclusiva, ventilada, coberta e com piso impermeável",
+            "Afastada de habitações, alimentos, rações, medicamentos e fontes de água, conforme a norma",
+            "Trancada, sinalizada e com acesso restrito a pessoas capacitadas",
+            "Produtos nas embalagens originais, sobre estrados, longe das paredes",
+            "Material para contenção de vazamentos disponível"
+          ],
+          "destaque": "Agrotóxico nunca é guardado dentro de casa ou junto com alimentos.",
+          "fala": "Os agrotóxicos são armazenados em edificação exclusiva, ventilada, coberta e com piso impermeável, afastada de habitações, alimentos, rações, medicamentos e fontes de água, nas distâncias previstas na norma. O depósito fica trancado, sinalizado e com acesso restrito a pessoas capacitadas. Os produtos permanecem nas embalagens originais, sobre estrados e afastados das paredes. E deve haver material para contenção de vazamentos.",
+          "pergunta": "Onde ficam guardados os agrotóxicos na propriedade?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Transporte e embalagens vazias",
+          "cards": [
+            {"t": "Transporte", "d": "Em compartimento separado de pessoas, alimentos e rações, com a carga presa"},
+            {"t": "Tríplice lavagem", "d": "Embalagens rígidas lavadas três vezes e perfuradas no fundo"},
+            {"t": "Devolução", "d": "Entregues no local indicado na nota fiscal, no prazo legal"},
+            {"t": "Proibido", "d": "Reutilizar, queimar ou enterrar embalagens"}
+          ],
+          "fala": "No transporte, os agrotóxicos ficam em compartimento separado de pessoas, alimentos e rações, com a carga presa. As embalagens rígidas vazias passam pela tríplice lavagem e são perfuradas no fundo para impedir o reaproveitamento. Depois são devolvidas no local indicado na nota fiscal, no prazo legal. É proibido reutilizar, queimar ou enterrar embalagens. Uma embalagem de agrotóxico usada para guardar água ou alimentos pode causar intoxicações graves."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática supervisionada",
+    "duracao": 180,
+    "descricao": "Com água no lugar do produto e kit completo de proteção, cada participante executa os itens abaixo com acompanhamento do instrutor.",
+    "itens": [
+      "Identificou no rótulo a classificação, a dose, o EPI, a reentrada e a carência",
+      "Vestiu o kit de proteção na ordem correta, com teste de vedação do respirador",
+      "Preparou a calda simulada com medidor exclusivo e sem respingos",
+      "Realizou a tríplice lavagem e a perfuração de embalagem vazia",
+      "Aplicou com pulverizador costal respeitando a direção do vento",
+      "Retirou o kit de proteção na ordem correta, lavando as luvas antes",
+      "Descreveu os primeiros socorros em caso de intoxicação"
+    ]
+  },
+  "caso": {
+    "titulo": "O bico entupido",
+    "relato": "Em uma propriedade de hortaliças, um trabalhador aplicava inseticida com pulverizador costal em um dia quente, por volta das 11 horas. Ele usava apenas boné e luvas, porque achava o jaleco muito quente. O pulverizador tinha um pequeno vazamento que molhava suas costas. Quando um dos bicos entupiu, ele o desentupiu soprando com a boca. No meio da tarde, teve vômitos, suor intenso e visão turva. Um colega deu leite para ele beber e o levou ao posto de saúde sem a embalagem do produto.",
+    "perguntas": ["Quais vias de exposição estavam presentes?", "Que erros de proteção e de aplicação aconteceram?", "Os primeiros socorros foram adequados?", "Que medidas o empregador deve adotar?"],
+    "analise": "Houve exposição pela pele, pelo vazamento nas costas e pela ausência de vestimenta, pela via oral, ao soprar o bico, e pela via respiratória, sem respirador. A aplicação no horário mais quente aumentou o desconforto e a absorção. O leite não é indicado e o rótulo deveria ter sido levado ao atendimento. O empregador deve fornecer o kit completo e adequado ao clima, manter os pulverizadores sem vazamentos, organizar a aplicação nos horários mais frescos, disponibilizar escovas para desentupir bicos, garantir local para banho e capacitar todos os trabalhadores conforme a NR-31."
+  },
+  "dinamica": {"titulo": "Sequência do kit", "objetivo": "Fixar a ordem de vestir e retirar o EPI.", "tempo": 20, "passos": ["Entregue cartões com cada peça do kit de proteção.", "Os grupos montam a ordem de vestir e, em seguida, a ordem de retirar.", "Discuta por que a calça vai por fora da bota e por que o respirador sai por último.", "Repita a sequência na prática."]},
+  "dds": {"titulo": "Proteção completa, sempre", "texto": "Pessoal, hoje tem aplicação. Antes de começar: kit completo, do boné árabe à bota, com respirador testado. Faz calor, eu sei, por isso a aplicação vai ser cedo, enquanto está fresco. Pulverizador com vazamento não sai para a lavoura. Bico entupido se limpa com a escova, nunca com a boca. E no fim, banho e roupa limpa antes de comer. Roupa de aplicação fica aqui, não vai para casa, para não contaminar a família."},
+  "prova": [
+    {"q": "A carga horária mínima da capacitação para trabalhadores expostos a agrotóxicos na NR-31 é de:", "o": ["8 horas", "16 horas", "20 horas", "40 horas"], "c": 2, "com": "Carga mínima de 20 horas, até 8 horas por dia."},
+    {"q": "A principal via de exposição na aplicação de agrotóxicos é:", "o": ["Auditiva", "A pele", "O cabelo", "As unhas"], "c": 1, "com": "Respingos e névoa atingem a pele."},
+    {"q": "Intervalo de reentrada é:", "o": ["O tempo entre aplicação e colheita", "O tempo a esperar para entrar na área tratada sem proteção", "O horário de almoço", "O tempo de preparo da calda"], "c": 1, "com": "O tempo entre aplicação e colheita é o período de carência."},
+    {"q": "Diante de intoxicação, deve-se levar ao atendimento:", "o": ["Um copo de leite", "O rótulo, a embalagem ou a bula do produto", "Nada", "Um pouco do produto em garrafa"], "c": 1, "com": "O rótulo traz o princípio ativo e orientações ao médico."},
+    {"q": "Dar leite à vítima de intoxicação por agrotóxico:", "o": ["É o tratamento correto", "Não é indicado e pode piorar a absorção de alguns produtos", "É obrigatório", "Substitui o atendimento médico"], "c": 1, "com": "Remédios caseiros não tratam intoxicação."},
+    {"q": "Bico de pulverizador entupido deve ser desentupido:", "o": ["Soprando com a boca", "Com escova e água, usando EPI", "Com o dedo sem luva", "Batendo no chão"], "c": 1, "com": "Soprar com a boca é exposição oral direta."},
+    {"q": "A descontaminação das vestimentas de aplicação é responsabilidade:", "o": ["Da família do trabalhador", "Do empregador", "Do vizinho", "Do fabricante do produto"], "c": 1, "com": "A NR-31 atribui ao empregador."},
+    {"q": "A tríplice lavagem é feita:", "o": ["Nas embalagens rígidas vazias, com a água despejada no tanque do pulverizador", "Nas roupas do trabalhador", "No trator", "No depósito"], "c": 0, "com": "Depois as embalagens são perfuradas e devolvidas."},
+    {"q": "As embalagens vazias de agrotóxicos devem ser:", "o": ["Queimadas", "Enterradas", "Devolvidas no local indicado na nota fiscal", "Usadas para guardar água"], "c": 2, "com": "A devolução é obrigatória por lei."},
+    {"q": "A manipulação de agrotóxicos é vedada pela NR-31 a:", "o": ["Trabalhadores capacitados", "Menores de 18 anos, maiores de 60 anos e gestantes", "Homens acima de 30 anos", "Ninguém"], "c": 1, "com": "A norma veda a manipulação por esses grupos."}
+  ]
+}

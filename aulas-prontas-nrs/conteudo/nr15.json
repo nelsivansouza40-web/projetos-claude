@@ -1,0 +1,169 @@
+{
+  "nr": "15",
+  "titulo": "Atividades e Operações Insalubres",
+  "chamada": "O adicional compensa, mas o objetivo é eliminar a exposição",
+  "icone": "FaBiohazard",
+  "carga": "4 horas (aula informativa para equipes de SST, RH e lideranças)",
+  "periodicidade": "A NR-15 não exige treinamento. Recomenda-se revisar o tema a cada 2 anos ou quando houver mudança nos processos, nas avaliações ou na norma.",
+  "publico": "Profissionais de SST, recursos humanos, departamento pessoal e lideranças.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Engenheiro de segurança do trabalho, médico do trabalho ou profissional de SST com experiência em caracterização de insalubridade.",
+  "objetivos": [
+    "Compreender o conceito de atividade insalubre e de limite de tolerância",
+    "Conhecer a organização dos anexos da NR-15",
+    "Entender os graus de insalubridade e os efeitos sobre o adicional",
+    "Identificar as formas de eliminação e neutralização da insalubridade"
+  ],
+  "recursos": ["Projetor e apresentação", "Cópia dos anexos da NR-15", "Exemplo de laudo de insalubridade", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-15 Atividades e Operações Insalubres, texto vigente, e seus anexos", "CLT, artigos 189 a 197", "NR-09 Agentes Físicos, Químicos e Biológicos", "Normas de Higiene Ocupacional da Fundacentro"],
+  "modulos": [
+    {
+      "titulo": "Conceitos fundamentais",
+      "duracao": 50,
+      "gancho": "Insalubre significa que faz mal à saúde. Quando o trabalho expõe a pessoa a agentes acima dos limites, a lei prevê um adicional. Mas o adicional não protege ninguém: o objetivo é eliminar a exposição.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Atividade insalubre",
+          "valor": "Acima",
+          "legenda": "exposição a agentes nocivos acima dos limites de tolerância ou nas situações previstas nos anexos da NR-15",
+          "itens": [
+            "Pode ser caracterizada por avaliação quantitativa, com medição",
+            "Ou por avaliação qualitativa, quando o anexo assim prevê",
+            "A caracterização é feita por perícia de médico do trabalho ou engenheiro de segurança"
+          ],
+          "fala": "Atividade insalubre é aquela que expõe o trabalhador a agentes nocivos à saúde acima dos limites de tolerância fixados na NR-15, ou nas situações em que os anexos preveem a caracterização sem medição. Alguns anexos exigem avaliação quantitativa, com medição do agente. Outros usam avaliação qualitativa, pela natureza da atividade. A caracterização é feita por perícia, a cargo de médico do trabalho ou engenheiro de segurança do trabalho, como determina a CLT.",
+          "pergunta": "Quais atividades da empresa são consideradas insalubres hoje?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Limite de tolerância",
+          "itens": [
+            "Concentração ou intensidade máxima ou mínima relacionada ao tempo de exposição",
+            "Abaixo do limite, a maioria dos trabalhadores não sofre dano durante a vida laboral",
+            "Não é linha que separa o seguro do perigoso para todas as pessoas",
+            "Abaixo do limite, a NR-09 ainda exige ações a partir do nível de ação"
+          ],
+          "destaque": "Estar abaixo do limite não dispensa o controle da exposição.",
+          "fala": "Limite de tolerância é a concentração ou intensidade máxima ou mínima, relacionada à natureza e ao tempo de exposição, que não causará dano à saúde da maioria dos trabalhadores durante a vida laboral. Repare na palavra maioria. Algumas pessoas são mais sensíveis. Por isso, mesmo abaixo do limite, a NR-09 exige ações preventivas a partir do nível de ação. O limite serve para caracterizar a insalubridade, não para dizer que a exposição está bem controlada."
+        }
+      ]
+    },
+    {
+      "titulo": "Os anexos da NR-15",
+      "duracao": 50,
+      "gancho": "A NR-15 é organizada em anexos, cada um tratando de um agente ou grupo de agentes. Vamos ver o que cada um cobre.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Agentes físicos",
+          "cabecalho": ["Anexo", "Agente"],
+          "linhas": [
+            ["1 e 2", "Ruído contínuo ou intermitente e ruído de impacto"],
+            ["3", "Calor"],
+            ["5 e 7", "Radiações ionizantes e não ionizantes"],
+            ["6", "Condições hiperbáricas"],
+            ["8, 9 e 10", "Vibração, frio e umidade"]
+          ],
+          "fala": "Os anexos de agentes físicos tratam do ruído contínuo ou intermitente e do ruído de impacto, do calor, das radiações ionizantes e não ionizantes, das condições hiperbáricas, da vibração, do frio e da umidade. O anexo 4, sobre iluminamento, foi revogado. Para o ruído contínuo, o limite de tolerância é de 85 decibéis A para uma jornada de 8 horas, e o tempo permitido diminui conforme o nível aumenta.",
+          "dica": "Projete a tabela do anexo 1 e mostre a relação entre nível de ruído e tempo de exposição permitido."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Agentes químicos e biológicos",
+          "cabecalho": ["Anexo", "Agente"],
+          "linhas": [
+            ["11", "Agentes químicos com limite de tolerância, avaliação quantitativa"],
+            ["12", "Poeiras minerais, como sílica e asbesto"],
+            ["13", "Agentes químicos com avaliação qualitativa, por atividade"],
+            ["13-A", "Benzeno"],
+            ["14", "Agentes biológicos, por atividade"]
+          ],
+          "fala": "Os anexos de agentes químicos tratam das substâncias com limite de tolerância, avaliadas por medição; das poeiras minerais, como sílica e asbesto; das atividades com agentes químicos caracterizadas de forma qualitativa, como manipulação de certos produtos; e do benzeno. O anexo 14 trata dos agentes biológicos, caracterizados por atividade, como trabalho em hospitais, com lixo urbano e com esgoto.",
+          "pergunta": "Quais anexos se aplicam às atividades da nossa empresa?"
+        }
+      ]
+    },
+    {
+      "titulo": "Graus e adicional de insalubridade",
+      "duracao": 55,
+      "gancho": "A insalubridade tem graus diferentes, e cada grau corresponde a um percentual de adicional. Vamos entender como isso funciona e quais são os limites.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Graus de insalubridade",
+          "cabecalho": ["Grau", "Adicional"],
+          "linhas": [
+            ["Máximo", "40%"],
+            ["Médio", "20%"],
+            ["Mínimo", "10%"],
+            ["Base de cálculo", "Definida pela legislação e pela jurisprudência trabalhista vigente"]
+          ],
+          "fala": "A NR-15 define três graus de insalubridade, cada um indicado nos anexos para o agente correspondente. Grau máximo, com adicional de quarenta por cento. Grau médio, com vinte por cento. E grau mínimo, com dez por cento. A base de cálculo segue a legislação e o entendimento da Justiça do Trabalho vigente. Essas informações são definidas no laudo técnico.",
+          "dica": "Oriente o RH a consultar o jurídico sobre a base de cálculo aplicada."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Regras importantes",
+          "itens": [
+            "Com mais de um agente insalubre, considera-se apenas o de grau mais elevado",
+            "Os adicionais de insalubridade não se somam entre si",
+            "Insalubridade e periculosidade não são acumuladas; o trabalhador opta por um",
+            "O adicional é devido enquanto durar a exposição caracterizada",
+            "O laudo deve ser revisado quando mudarem as condições"
+          ],
+          "destaque": "Pagar o adicional não dispensa a empresa de controlar a exposição.",
+          "fala": "Algumas regras precisam ficar claras. Se houver mais de um agente insalubre, considera-se apenas o de grau mais elevado; os adicionais não se somam. A CLT não permite acumular insalubridade e periculosidade: o trabalhador opta por um deles. O adicional é devido enquanto durar a exposição caracterizada. E o laudo deve ser revisado quando mudarem as condições. Acima de tudo, pagar o adicional não dispensa a empresa de controlar a exposição.",
+          "pergunta": "Quando foi a última revisão do laudo de insalubridade da empresa?"
+        }
+      ]
+    },
+    {
+      "titulo": "Eliminação e neutralização",
+      "duracao": 55,
+      "gancho": "A melhor notícia que um laudo pode trazer é que a insalubridade foi eliminada. Vamos ver como isso acontece.",
+      "slides": [
+        {
+          "tipo": "comparar",
+          "titulo": "Eliminar ou neutralizar",
+          "esquerda": {"t": "Medidas no ambiente", "itens": ["Manter a exposição dentro do limite de tolerância", "Eliminação, substituição e medidas de engenharia", "Protege todos os expostos de forma permanente"]},
+          "direita": {"t": "Equipamento de proteção", "itens": ["EPI que reduza a exposição a níveis abaixo do limite", "Exige seleção, treinamento, fiscalização do uso e reposição", "Precisa ser comprovado por avaliação técnica"]},
+          "fala": "A insalubridade pode ser eliminada ou neutralizada de duas formas. Com medidas que mantenham o ambiente dentro dos limites de tolerância, como substituição de produtos, enclausuramento e ventilação, que protegem todos de forma permanente. Ou com o uso de EPI que reduza a exposição a níveis abaixo do limite. Nesse segundo caso, a empresa precisa comprovar a seleção correta, o treinamento, a fiscalização do uso, a reposição e a eficácia do equipamento.",
+          "dica": "Explique que a simples entrega do EPI, sem comprovação da eficácia e do uso, não neutraliza a insalubridade."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Do laudo à ação",
+          "passos": [
+            {"t": "Avaliar", "d": "Laudo técnico com medições e enquadramento"},
+            {"t": "Priorizar", "d": "Incluir as exposições no plano de ação do PGR"},
+            {"t": "Controlar", "d": "Implantar medidas pela hierarquia de controle"},
+            {"t": "Reavaliar", "d": "Novo laudo para confirmar a eliminação"}
+          ],
+          "fala": "O laudo de insalubridade não deve ser só um documento para a folha de pagamento. Ele indica onde estão as exposições mais graves e deve alimentar o plano de ação do PGR. As medidas seguem a hierarquia de controle. E, após a implantação, uma nova avaliação confirma se a exposição foi eliminada ou neutralizada. Assim, o laudo vira ferramenta de prevenção."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "O adicional que virou rotina",
+    "relato": "Uma fundição paga adicional de insalubridade em grau médio a todos os trabalhadores do setor de moldagem há quinze anos, por exposição ao ruído e à sílica. O laudo é renovado a cada dois anos com as mesmas conclusões. Nesse período, nenhuma medida de controle na fonte foi implantada, e os protetores auriculares e respiradores são entregues sem controle de uso nem teste de vedação. Recentemente, três trabalhadores foram diagnosticados com perda auditiva induzida por ruído e um com silicose.",
+    "perguntas": ["Qual foi o erro de gestão ao tratar o laudo apenas como base do adicional?", "A entrega de EPI sem controle neutralizava a insalubridade?", "Que medidas de controle deveriam ter sido priorizadas?", "Qual a relação entre a NR-15, a NR-09 e o PGR neste caso?"],
+    "analise": "A empresa tratou a insalubridade como custo de folha, sem usar o laudo para prevenção. A entrega de EPI sem seleção adequada, treinamento, teste de vedação e fiscalização não comprova a neutralização. Deveriam ter sido priorizadas medidas na fonte, como enclausuramento e manutenção dos equipamentos ruidosos, umidificação e exaustão para a sílica, além do programa de proteção respiratória e auditiva. O laudo da NR-15 deveria alimentar a avaliação da NR-09 e o plano de ação do PGR, e o PCMSO deveria ter detectado as alterações precocemente."
+  },
+  "dinamica": {"titulo": "Qual anexo?", "objetivo": "Relacionar atividades aos anexos da NR-15.", "tempo": 15, "passos": ["Leia atividades como operação de prensa ruidosa, limpeza de esgoto, trabalho em câmara fria e soldagem com fumos metálicos.", "Os grupos indicam o anexo aplicável e se a avaliação é quantitativa ou qualitativa.", "O instrutor confere e comenta.", "Feche reforçando que o objetivo é eliminar a exposição."]},
+  "dds": {"titulo": "Adicional não protege", "texto": "Pessoal, receber adicional de insalubridade não quer dizer que está tudo bem. Quer dizer que existe uma exposição que precisa ser controlada. O dinheiro a mais no salário não devolve a audição nem limpa o pulmão. Então usem corretamente os protetores e respiradores, façam o teste de vedação e avisem quando a exaustão ou o enclausuramento estiverem com problema. O melhor dia vai ser aquele em que o laudo disser que a insalubridade foi eliminada."},
+  "prova": [
+    {"q": "Atividade insalubre é aquela que:", "o": ["Envolve risco de explosão", "Expõe o trabalhador a agentes nocivos acima dos limites de tolerância ou nas situações previstas nos anexos", "É realizada à noite", "Exige esforço físico"], "c": 1, "com": "É a definição adotada pela NR-15 e pela CLT."},
+    {"q": "A caracterização da insalubridade é feita por:", "o": ["Qualquer trabalhador", "Perícia de médico do trabalho ou engenheiro de segurança do trabalho", "Sindicato", "Departamento pessoal"], "c": 1, "com": "A CLT define os profissionais habilitados para a perícia."},
+    {"q": "O limite de tolerância para ruído contínuo em jornada de 8 horas é:", "o": ["75 dB(A)", "80 dB(A)", "85 dB(A)", "90 dB(A)"], "c": 2, "com": "Anexo 1 da NR-15."},
+    {"q": "O adicional de insalubridade em grau máximo é de:", "o": ["10%", "20%", "30%", "40%"], "c": 3, "com": "Máximo 40%, médio 20% e mínimo 10%."},
+    {"q": "Com exposição a dois agentes insalubres, o adicional:", "o": ["É somado", "Considera apenas o de grau mais elevado", "É dobrado", "Não é devido"], "c": 1, "com": "Os adicionais não se acumulam."},
+    {"q": "Insalubridade e periculosidade:", "o": ["São sempre acumuladas", "Não são acumuladas; o trabalhador opta por um adicional", "São proibidas", "Somam 70%"], "c": 1, "com": "A CLT prevê a opção entre os adicionais."},
+    {"q": "O anexo da NR-15 que trata dos agentes biológicos é o:", "o": ["Anexo 3", "Anexo 11", "Anexo 14", "Anexo 1"], "c": 2, "com": "O anexo 14 trata dos agentes biológicos."},
+    {"q": "A insalubridade pode ser neutralizada por EPI quando:", "o": ["O EPI for apenas entregue", "O EPI reduzir a exposição abaixo do limite, com seleção, treinamento e uso comprovados", "O trabalhador assinar um termo", "Nunca"], "c": 1, "com": "A eficácia e o uso precisam ser comprovados."},
+    {"q": "Estar abaixo do limite de tolerância significa que:", "o": ["Nenhuma ação é necessária", "Pode ser necessário adotar medidas a partir do nível de ação, conforme a NR-09", "O risco não existe", "O EPI deve ser retirado"], "c": 1, "com": "A NR-09 exige ações preventivas a partir do nível de ação."},
+    {"q": "O laudo de insalubridade deve ser usado também para:", "o": ["Definir férias", "Alimentar o plano de ação do PGR", "Calcular o vale-transporte", "Nada além da folha"], "c": 1, "com": "Ele indica as exposições a serem controladas."}
+  ]
+}

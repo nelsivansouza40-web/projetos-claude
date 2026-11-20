@@ -1,0 +1,208 @@
+{
+  "nr": "07",
+  "titulo": "Programa de Controle Médico de Saúde Ocupacional",
+  "chamada": "Acompanhar a saúde para descobrir cedo o que o trabalho está causando",
+  "icone": "FaStethoscope",
+  "carga": "4 horas (carga sugerida para lideranças, RH e equipes de SST)",
+  "periodicidade": "A NR-07 não exige treinamento específico. Recomenda-se reciclagem a cada 2 anos ou quando houver mudança no PCMSO ou na norma.",
+  "publico": "Lideranças, profissionais de recursos humanos e de SST, membros da CIPA.",
+  "prerequisitos": "Não há. Recomenda-se ter em mãos o PCMSO e o inventário de riscos da empresa.",
+  "instrutor": "Médico do trabalho, enfermeiro do trabalho ou profissional de SST com experiência na gestão do PCMSO.",
+  "objetivos": [
+    "Explicar o objetivo do PCMSO e sua ligação com o PGR",
+    "Identificar os tipos de exame ocupacional e quando cada um é realizado",
+    "Interpretar o Atestado de Saúde Ocupacional",
+    "Compreender o papel das lideranças no controle da saúde ocupacional"
+  ],
+  "recursos": ["Projetor e apresentação", "Modelo de ASO", "Cópia do PCMSO da empresa ou modelo", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-07 Programa de Controle Médico de Saúde Ocupacional, texto vigente", "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais", "CLT, artigo 168"],
+  "modulos": [
+    {
+      "titulo": "Objetivos do PCMSO",
+      "duracao": 50,
+      "gancho": "O PCMSO não é uma pasta de exames. É o programa que observa a saúde dos trabalhadores para perceber, o quanto antes, os efeitos que o trabalho pode estar causando.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Para que serve o PCMSO",
+          "cards": [
+            {"t": "Proteger", "d": "Preservar a saúde dos empregados em relação aos riscos ocupacionais"},
+            {"t": "Rastrear", "d": "Detectar precocemente agravos relacionados ao trabalho"},
+            {"t": "Avaliar", "d": "Verificar a aptidão para a função e para atividades específicas"},
+            {"t": "Retroalimentar", "d": "Informar o PGR quando a saúde indicar falhas no controle dos riscos"}
+          ],
+          "fala": "O PCMSO tem como objetivo proteger e preservar a saúde dos empregados em relação aos riscos do trabalho. Ele rastreia e detecta cedo problemas de saúde relacionados ao trabalho, avalia se o trabalhador está apto para a sua função e devolve informações para a gestão de riscos. Se os exames mostram que trabalhadores de um setor estão perdendo audição, isso indica que o controle do ruído falhou, e o PGR precisa ser revisto.",
+          "pergunta": "Que problemas de saúde relacionados ao trabalho são mais comuns na nossa atividade?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "PGR e PCMSO trabalham juntos",
+          "passos": [
+            {"t": "PGR", "d": "Identifica perigos e avalia riscos"},
+            {"t": "PCMSO", "d": "Define exames conforme os riscos de cada função"},
+            {"t": "Exames", "d": "Acompanham a saúde dos expostos"},
+            {"t": "Resultados", "d": "Indicam se o controle está funcionando"}
+          ],
+          "fala": "O PCMSO é elaborado a partir do inventário de riscos do PGR. O PGR diz a quais riscos cada grupo de trabalhadores está exposto. Com isso, o médico responsável define os exames de cada função. Os exames acompanham a saúde de quem está exposto. E os resultados voltam para a gestão de riscos, indicando se as medidas de controle estão funcionando. Por isso, um PCMSO feito sem olhar o PGR é um programa sem base.",
+          "dica": "Mostre um trecho do PCMSO da empresa ligando função, risco e exame."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Responsabilidades",
+          "itens": [
+            "Empregador: garantir a elaboração e a implementação do PCMSO e custear os exames",
+            "Médico responsável: elaborar o programa, coordenar exames e emitir o relatório analítico",
+            "Lideranças: liberar os trabalhadores para os exames nos prazos",
+            "Trabalhador: submeter-se aos exames previstos"
+          ],
+          "destaque": "Os exames ocupacionais não podem ter custo para o trabalhador.",
+          "fala": "Cada um tem seu papel. O empregador garante a elaboração e a implementação do PCMSO e custeia todos os exames, sem nenhum custo para o trabalhador. O médico responsável elabora o programa, coordena os exames e emite o relatório analítico. As lideranças liberam os trabalhadores para os exames dentro dos prazos. E o trabalhador deve se submeter aos exames previstos, o que é uma obrigação prevista na NR-01."
+        }
+      ]
+    },
+    {
+      "titulo": "Exames ocupacionais",
+      "duracao": 50,
+      "gancho": "Cada momento da vida profissional do trabalhador na empresa tem um exame correspondente. Vamos conhecer cada um deles.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Tipos de exame",
+          "cabecalho": ["Exame", "Quando realizar"],
+          "linhas": [
+            ["Admissional", "Antes de o empregado assumir suas atividades"],
+            ["Periódico", "Na periodicidade definida no PCMSO, conforme os riscos e os anexos da norma"],
+            ["Retorno ao trabalho", "No primeiro dia de volta, após afastamento igual ou superior a 30 dias por doença ou acidente"],
+            ["Mudança de risco", "Antes da mudança de função ou de risco ocupacional"],
+            ["Demissional", "Em até 10 dias contados do término do contrato, salvo dispensa prevista na norma"]
+          ],
+          "fala": "A NR-07 prevê cinco exames. O admissional, feito antes de o empregado assumir as atividades. O periódico, na frequência definida no PCMSO conforme os riscos. O de retorno ao trabalho, no primeiro dia de volta após afastamento de trinta dias ou mais por doença ou acidente. O de mudança de risco, antes de a pessoa mudar para uma função com riscos diferentes. E o demissional, em até dez dias do fim do contrato, que pode ser dispensado se o último exame ocupacional for recente, conforme os prazos da norma.",
+          "pergunta": "Como a liderança fica sabendo que um trabalhador precisa de exame de retorno?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Exames complementares",
+          "cards": [
+            {"t": "Audiometria", "d": "Para expostos a ruído, conforme o anexo específico da norma"},
+            {"t": "Espirometria e raio-X", "d": "Para expostos a poeiras minerais, conforme os critérios da norma"},
+            {"t": "Indicadores biológicos", "d": "Para expostos a determinados agentes químicos"},
+            {"t": "Atividades críticas", "d": "Avaliações específicas para altura, espaço confinado e eletricidade"}
+          ],
+          "fala": "Além da avaliação clínica, o PCMSO inclui exames complementares conforme os riscos. Audiometria para quem está exposto a ruído. Espirometria e radiografia de tórax para expostos a poeiras minerais. Indicadores biológicos para determinados agentes químicos. E avaliações específicas para atividades críticas, como trabalho em altura, espaço confinado e eletricidade, nas quais um mal súbito pode ser fatal. Quem define os exames é o médico responsável.",
+          "dica": "Relacione os exames complementares aos riscos reais da empresa."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "O Atestado de Saúde Ocupacional",
+          "itens": [
+            "Identificação da empresa e do empregado",
+            "Riscos ocupacionais a que o empregado está exposto",
+            "Exames realizados e respectivas datas",
+            "Definição de apto ou inapto para a função",
+            "Nome e registro do médico, com assinatura"
+          ],
+          "destaque": "O ASO informa aptidão, não diagnósticos. O sigilo médico é preservado.",
+          "fala": "Cada exame clínico gera um ASO, o Atestado de Saúde Ocupacional. Ele identifica a empresa e o empregado, informa os riscos ocupacionais, os exames realizados com as datas, a conclusão de apto ou inapto para a função e o nome e registro do médico. O ASO informa a aptidão, e não o diagnóstico. As informações médicas são sigilosas, e a liderança não precisa nem deve ter acesso a elas.",
+          "pergunta": "Por que a liderança não deve ter acesso ao diagnóstico do trabalhador?"
+        }
+      ]
+    },
+    {
+      "titulo": "Gestão e indicadores de saúde",
+      "duracao": 50,
+      "gancho": "Os exames geram informações valiosas. Mas elas só servem para prevenção se forem analisadas em conjunto.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Relatório analítico",
+          "itens": [
+            "Elaborado anualmente pelo médico responsável",
+            "Número de exames realizados, por tipo",
+            "Número e percentual de resultados alterados",
+            "Comparação com anos anteriores",
+            "Ações recomendadas para a gestão de riscos"
+          ],
+          "destaque": "O relatório mostra tendências que um exame isolado não revela.",
+          "fala": "Anualmente, o médico responsável elabora o relatório analítico do PCMSO. Ele reúne o número de exames realizados por tipo, quantos tiveram resultados alterados, a comparação com os anos anteriores e as ações recomendadas. Esse relatório deve ser discutido com os responsáveis pela segurança e com a CIPA. É ele que mostra tendências, como um aumento de alterações auditivas em determinado setor, que um exame isolado não revela.",
+          "dica": "Se houver relatório analítico da empresa, apresente os principais números."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Quando um agravo é identificado",
+          "passos": [
+            {"t": "Informar", "d": "Comunicar o trabalhador sobre o resultado"},
+            {"t": "Afastar", "d": "Afastar da exposição quando indicado"},
+            {"t": "Comunicar", "d": "Emitir CAT quando houver suspeita de doença ocupacional"},
+            {"t": "Corrigir", "d": "Reavaliar os riscos e as medidas no PGR"}
+          ],
+          "fala": "Quando os exames identificam um agravo relacionado ao trabalho, o médico informa o trabalhador, indica o afastamento da exposição ou do trabalho quando necessário, orienta a emissão da CAT quando houver suspeita de doença ocupacional e indica a necessidade de reavaliar os riscos e as medidas de controle no PGR. O caso individual vira uma ação de prevenção coletiva.",
+          "pergunta": "Que mudanças já foram feitas na empresa por causa de resultados de exames?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "O papel das lideranças",
+          "cards": [
+            {"t": "Prazos", "d": "Liberar os trabalhadores para os exames na data marcada"},
+            {"t": "Retorno", "d": "Não permitir o retorno ao trabalho sem o ASO de retorno"},
+            {"t": "Mudança de função", "d": "Avisar o RH e o SESMT antes de mudar alguém de atividade"},
+            {"t": "Restrições", "d": "Respeitar as restrições médicas e as adaptações indicadas"}
+          ],
+          "fala": "A liderança faz diferença no PCMSO. Liberando os trabalhadores para os exames na data marcada. Não permitindo que alguém volte de um afastamento longo sem o ASO de retorno. Avisando o RH e o SESMT antes de mudar alguém de atividade, para que seja feito o exame de mudança de risco. E respeitando as restrições médicas e as adaptações indicadas. Muitos agravamentos de lesão acontecem porque alguém voltou para a mesma tarefa antes da hora."
+        }
+      ]
+    },
+    {
+      "titulo": "Primeiros socorros e situações especiais",
+      "duracao": 60,
+      "gancho": "A NR-07 também trata do que a empresa precisa ter para atender um trabalhador que passa mal ou se acidenta. E traz cuidados específicos para alguns grupos e riscos.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Primeiros socorros",
+          "itens": [
+            "Material de primeiros socorros compatível com os riscos da atividade",
+            "Guardado em local adequado e sob responsabilidade de pessoa treinada",
+            "Procedimentos de atendimento e de remoção definidos",
+            "Contatos de emergência visíveis e atualizados"
+          ],
+          "destaque": "Saber quem chamar e para onde levar economiza minutos decisivos.",
+          "fala": "Todo estabelecimento deve ter material de primeiros socorros compatível com os riscos da atividade, guardado em local adequado e sob responsabilidade de pessoa treinada. Também é preciso ter procedimentos definidos para atendimento e remoção e os contatos de emergência visíveis. Em uma emergência, saber quem chamar e para onde levar economiza minutos que podem salvar uma vida.",
+          "pergunta": "Onde fica o material de primeiros socorros do seu setor e quem é o responsável?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Anexos da NR-07",
+          "cards": [
+            {"t": "Indicadores biológicos", "d": "Monitoramento da exposição a agentes químicos específicos"},
+            {"t": "Ruído", "d": "Diretrizes para avaliação e acompanhamento da audição"},
+            {"t": "Poeiras minerais", "d": "Controle radiológico e espirometria dos expostos"},
+            {"t": "Condições hiperbáricas e câncer ocupacional", "d": "Critérios para situações e agentes específicos"}
+          ],
+          "fala": "A NR-07 tem anexos que detalham o acompanhamento de alguns riscos. Há anexo com os indicadores biológicos para agentes químicos, anexo sobre avaliação da audição dos expostos a ruído, anexo sobre controle radiológico e espirometria dos expostos a poeiras minerais e anexos para condições hiperbáricas e para agentes cancerígenos. O médico responsável aplica esses anexos conforme os riscos presentes no PGR.",
+          "dica": "Detalhe apenas os anexos aplicáveis aos riscos da empresa."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "As audiometrias que ninguém leu",
+    "relato": "Uma metalúrgica realizava audiometrias anuais em todos os trabalhadores da estamparia desde a sua fundação. Os exames eram arquivados no prontuário de cada empregado e o relatório analítico apenas listava o número de exames realizados. Após uma ação trabalhista, uma perícia comparou as audiometrias dos últimos seis anos e identificou que 40% dos operadores da estamparia apresentavam piora progressiva compatível com perda auditiva induzida por ruído. O PGR indicava como medida de controle apenas o fornecimento de protetor auricular.",
+    "perguntas": ["Qual falha de gestão impediu a detecção precoce do problema?", "Como o relatório analítico deveria ter sido usado?", "Que ações o médico responsável deveria ter indicado?", "Que medidas de controle do ruído deveriam constar do PGR?"],
+    "analise": "Os exames eram feitos, mas não eram analisados de forma coletiva e comparativa. O relatório analítico deveria apresentar os resultados alterados e sua evolução, e ser discutido com a gestão de riscos e a CIPA. Diante das alterações, o médico deveria indicar a investigação dos casos, a emissão de CAT quando cabível e a revisão das medidas de controle. O PGR deveria prever medidas na fonte e no meio, como enclausuramento, manutenção e redução do ruído das prensas, com o protetor auricular como complemento e com verificação da efetividade."
+  },
+  "dinamica": {"titulo": "Qual exame?", "objetivo": "Fixar os tipos de exame ocupacional.", "tempo": 15, "passos": ["Leia situações curtas, como trabalhador que volta após 45 dias de afastamento por cirurgia ou operador transferido para a pintura.", "Os participantes indicam qual exame é necessário e quando.", "O instrutor confirma e comenta.", "Feche destacando o papel da liderança em avisar o RH e o SESMT."]},
+  "dds": {"titulo": "Exame não é burocracia", "texto": "Pessoal, quando chega a convocação para o exame periódico, tem gente que acha perda de tempo. Mas é nesse exame que a gente descobre, por exemplo, que a audição está começando a cair, quando ainda dá para agir. Então compareçam no dia marcado e falem com o médico sobre qualquer sintoma, mesmo que pareça pequeno. E quem voltar de um afastamento longo só retorna para a área depois do exame de retorno. É a nossa saúde que está sendo acompanhada."},
+  "prova": [
+    {"q": "O PCMSO é elaborado com base:", "o": ["No faturamento da empresa", "Nos riscos identificados no PGR", "Na idade dos trabalhadores", "No número de máquinas"], "c": 1, "com": "O PCMSO parte do inventário de riscos do PGR."},
+    {"q": "O exame admissional deve ser realizado:", "o": ["Após 30 dias de trabalho", "Antes de o empregado assumir suas atividades", "No fim do período de experiência", "Somente se o trabalhador pedir"], "c": 1, "com": "É feito antes do início das atividades."},
+    {"q": "O exame de retorno ao trabalho é exigido após afastamento igual ou superior a:", "o": ["7 dias", "15 dias", "30 dias", "90 dias"], "c": 2, "com": "Afastamento de 30 dias ou mais por doença ou acidente."},
+    {"q": "O exame de mudança de risco ocupacional deve ser realizado:", "o": ["Depois da mudança", "Antes da mudança de função ou de risco", "Apenas no periódico seguinte", "Não existe esse exame"], "c": 1, "com": "Deve ocorrer antes da mudança."},
+    {"q": "O ASO deve informar:", "o": ["O diagnóstico da doença", "A aptidão ou inaptidão para a função", "O salário do empregado", "O histórico familiar"], "c": 1, "com": "O ASO informa aptidão; o diagnóstico é sigiloso."},
+    {"q": "Os custos dos exames ocupacionais são de responsabilidade:", "o": ["Do trabalhador", "Do empregador", "Do sindicato", "Do SUS"], "c": 1, "com": "Os exames não podem gerar custo ao trabalhador."},
+    {"q": "O relatório analítico do PCMSO é elaborado:", "o": ["Mensalmente", "Anualmente", "A cada 5 anos", "Apenas após acidente"], "c": 1, "com": "É anual e elaborado pelo médico responsável."},
+    {"q": "Audiometria é um exame complementar indicado para expostos a:", "o": ["Calor", "Ruído", "Radiação solar", "Frio"], "c": 1, "com": "A NR-07 prevê o acompanhamento audiológico dos expostos a ruído."},
+    {"q": "Ao identificar suspeita de doença ocupacional, deve-se:", "o": ["Arquivar o exame", "Orientar a emissão de CAT e reavaliar os riscos no PGR", "Demitir o trabalhador", "Ignorar até piorar"], "c": 1, "com": "O caso individual deve gerar ação preventiva coletiva."},
+    {"q": "Sobre o material de primeiros socorros:", "o": ["É opcional", "Deve ser compatível com os riscos e ficar sob responsabilidade de pessoa treinada", "Só é exigido em hospitais", "Pode ficar trancado sem acesso"], "c": 1, "com": "A NR-07 exige material adequado e pessoa treinada."}
+  ]
+}

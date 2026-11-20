@@ -1,0 +1,159 @@
+{
+  "nr": "03",
+  "titulo": "Embargo e Interdição",
+  "chamada": "Quem controla o risco grave e iminente não para a operação por decisão da fiscalização",
+  "icone": "FaBan",
+  "carga": "2 horas (aula informativa para lideranças e equipes de SST)",
+  "periodicidade": "A NR-03 não exige treinamento. Recomenda-se incluir o tema na formação de lideranças e revisá-lo quando houver mudança na norma.",
+  "publico": "Gestores, lideranças operacionais, profissionais de SST e membros da CIPA.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho com conhecimento das normas regulamentadoras e da rotina de fiscalização.",
+  "objetivos": [
+    "Diferenciar embargo e interdição e entender quando cada um é aplicado",
+    "Reconhecer o conceito de grave e iminente risco usado pela fiscalização",
+    "Conhecer o procedimento, os efeitos e o caminho para o levantamento da medida",
+    "Identificar práticas de gestão que evitam embargos e interdições"
+  ],
+  "recursos": ["Projetor e apresentação", "Exemplo de termo de embargo ou interdição", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-03 Embargo e Interdição, texto vigente", "CLT, artigo 161", "NR-28 Fiscalização e Penalidades", "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais"],
+  "modulos": [
+    {
+      "titulo": "Conceitos e fundamentos",
+      "duracao": 30,
+      "gancho": "Uma obra parada ou uma máquina lacrada pela fiscalização custa caro. Mas, antes disso, representa um risco que poderia ter matado alguém. Vamos entender o que é embargo e interdição.",
+      "slides": [
+        {
+          "tipo": "comparar",
+          "titulo": "Embargo e interdição",
+          "esquerda": {"t": "Embargo", "itens": ["Paralisação total ou parcial de uma obra", "Aplica-se a obras de construção, demolição e reforma", "Impede a continuidade dos trabalhos no local"]},
+          "direita": {"t": "Interdição", "itens": ["Paralisação total ou parcial de estabelecimento, setor, máquina ou atividade", "Aplica-se a qualquer atividade econômica", "Impede o uso do que foi interditado"]},
+          "fala": "A NR-03 trata de duas medidas de urgência. O embargo é a paralisação total ou parcial de uma obra, seja construção, demolição ou reforma. A interdição é a paralisação total ou parcial de um estabelecimento, de um setor, de uma máquina, de um equipamento ou de uma atividade. As duas têm o mesmo objetivo: impedir que trabalhadores continuem expostos a uma situação que pode causar acidente grave ou doença de imediato.",
+          "pergunta": "Vocês conhecem algum caso de embargo ou interdição em empresas da região?"
+        },
+        {
+          "tipo": "numero",
+          "titulo": "Grave e iminente risco",
+          "valor": "Risco",
+          "legenda": "condição ou situação de trabalho que pode causar acidente ou doença com lesão grave à integridade física do trabalhador",
+          "itens": [
+            "A avaliação considera a consequência possível e a probabilidade de ocorrer",
+            "A fiscalização usa critérios técnicos previstos na própria NR-03",
+            "As medidas de controle existentes entram na avaliação"
+          ],
+          "fala": "O ponto central da NR-03 é o grave e iminente risco: toda condição ou situação de trabalho que pode causar acidente ou doença com lesão grave à integridade física do trabalhador. A norma traz critérios técnicos para essa avaliação, que consideram a consequência possível, a probabilidade de acontecer e as medidas de controle que já existem. Ou seja, a decisão não depende de opinião, mas de uma análise de risco.",
+          "dica": "Mostre a tabela de avaliação de risco prevista no texto vigente da NR-03."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Exemplos de situações que levam à medida",
+          "cards": [
+            {"t": "Altura", "d": "Periferia de laje sem proteção e trabalhadores sem sistema contra quedas"},
+            {"t": "Máquinas", "d": "Prensa sem proteção na zona de perigo em operação"},
+            {"t": "Eletricidade", "d": "Painéis energizados abertos e partes vivas acessíveis"},
+            {"t": "Escavação", "d": "Vala profunda sem escoramento com trabalhadores no interior"}
+          ],
+          "fala": "Alguns cenários aparecem com frequência nos termos de embargo e interdição. Periferia de laje sem proteção, com trabalhadores expostos à queda. Prensa operando sem proteção na zona de perigo. Painéis elétricos abertos, com partes energizadas acessíveis. E valas profundas sem escoramento, com gente trabalhando dentro. Em todos eles, o acidente pode acontecer a qualquer momento e a consequência é grave.",
+          "pergunta": "Alguma dessas situações existe hoje na nossa empresa?"
+        }
+      ]
+    },
+    {
+      "titulo": "Procedimento e efeitos",
+      "duracao": 30,
+      "gancho": "Quando o auditor fiscal identifica o grave e iminente risco, a medida é imediata. Vamos ver o que acontece a partir daí.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Como funciona",
+          "passos": [
+            {"t": "Constatação", "d": "Auditor fiscal identifica o grave e iminente risco"},
+            {"t": "Termo", "d": "Emissão do termo com a área ou atividade atingida e as medidas exigidas"},
+            {"t": "Paralisação", "d": "A empresa interrompe a atividade imediatamente"},
+            {"t": "Adequação", "d": "A empresa corrige e comprova as medidas"},
+            {"t": "Levantamento", "d": "Pedido de suspensão analisado pela fiscalização"}
+          ],
+          "fala": "O embargo e a interdição são aplicados pelo auditor fiscal do trabalho. Ele constata o grave e iminente risco e emite o termo, indicando o que foi paralisado e as medidas necessárias. A empresa deve interromper a atividade na hora. Depois, faz as adequações e solicita o levantamento da medida, comprovando o que foi feito. A fiscalização analisa e, estando tudo corrigido, suspende o embargo ou a interdição.",
+          "dica": "Se possível, mostre um termo real com os dados da empresa ocultados."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Efeitos para a empresa",
+          "itens": [
+            "Proibição de continuar a atividade embargada ou interditada",
+            "Salários dos trabalhadores atingidos continuam sendo pagos",
+            "Descumprir a medida é infração grave e pode gerar responsabilização",
+            "Possibilidade de autuação pelas irregularidades encontradas",
+            "Recurso administrativo não suspende a paralisação"
+          ],
+          "destaque": "Durante a paralisação, os trabalhadores recebem salário como se estivessem trabalhando.",
+          "fala": "Os efeitos são imediatos. A atividade não pode continuar. Os trabalhadores atingidos continuam recebendo salário normalmente, como determina a CLT. Desrespeitar o embargo ou a interdição é infração grave e pode levar a responsabilização nas esferas administrativa, civil e penal. Além disso, a empresa pode ser autuada pelas irregularidades encontradas. E o recurso administrativo não suspende a paralisação: primeiro se corrige, depois se discute.",
+          "pergunta": "Quanto custaria um dia de paralisação do nosso setor mais crítico?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Durante a paralisação",
+          "texto": "Só podem ser feitos os trabalhos necessários para corrigir a situação, com segurança.",
+          "itens": [
+            "Atividades de adequação autorizadas e com medidas de controle",
+            "Nenhuma produção na área ou máquina atingida",
+            "Registro das correções com fotos, documentos e responsáveis"
+          ],
+          "fala": "Durante o embargo ou a interdição, apenas os trabalhos necessários para corrigir a situação podem ser realizados, e eles próprios precisam ser feitos com segurança. Nenhuma produção acontece na área ou máquina atingida. E vale registrar todas as correções, com fotos, documentos e responsáveis, porque é isso que vai sustentar o pedido de levantamento."
+        }
+      ]
+    },
+    {
+      "titulo": "Como evitar",
+      "duracao": 30,
+      "gancho": "O embargo e a interdição só chegam quando a gestão de riscos falhou. Vamos ver o que a empresa pode fazer para nunca precisar deles.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Gestão que previne",
+          "cards": [
+            {"t": "PGR vivo", "d": "Inventário atualizado e plano de ação cumprido no prazo"},
+            {"t": "Inspeções", "d": "Rotinas de inspeção com foco nos riscos graves"},
+            {"t": "Direito de recusa", "d": "Trabalhadores apoiados ao parar atividades inseguras"},
+            {"t": "Lideranças", "d": "Supervisores capacitados para reconhecer e interromper riscos graves"}
+          ],
+          "fala": "A melhor proteção contra embargos e interdições é uma gestão de riscos que funciona. Um PGR atualizado, com o plano de ação cumprido. Inspeções frequentes, olhando principalmente para os riscos que podem matar. Trabalhadores que se sentem seguros para exercer o direito de recusa. E lideranças capacitadas para reconhecer um risco grave e parar a atividade antes que a fiscalização ou um acidente façam isso.",
+          "pergunta": "Quem, na nossa empresa, tem autoridade para parar uma atividade insegura?"
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Autoavaliação rápida",
+          "cabecalho": ["Pergunta", "Se a resposta for não"],
+          "linhas": [
+            ["As bordas e aberturas estão protegidas?", "Risco de embargo em obras e de interdição em áreas industriais"],
+            ["As máquinas têm proteções e dispositivos funcionando?", "Risco de interdição da máquina"],
+            ["Os painéis elétricos estão fechados e sinalizados?", "Risco de interdição de instalações"],
+            ["Os espaços confinados têm PET e monitoramento?", "Risco de interdição da atividade"]
+          ],
+          "fala": "Uma autoavaliação simples já mostra onde estão os pontos fracos. As bordas e aberturas estão protegidas? As máquinas têm proteções funcionando? Os painéis elétricos estão fechados? Os espaços confinados são acessados com permissão e monitoramento? Cada não nessa lista é uma situação que pode levar à paralisação e, pior, a um acidente grave.",
+          "dica": "Peça à turma que responda à tabela pensando no próprio setor."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A obra parada na semana da entrega",
+    "relato": "Uma construtora estava a duas semanas da entrega de um prédio comercial. Para acelerar o acabamento da fachada, a equipe retirou parte dos guarda-corpos da periferia das lajes e passou a trabalhar com cinturões sem ponto de ancoragem definido. Em uma fiscalização de rotina, o auditor fiscal constatou trabalhadores na borda do sexto pavimento sem proteção contra quedas e embargou a execução da fachada e os serviços na periferia de todos os pavimentos. A obra ficou parada por nove dias até a recomposição das proteções e a instalação de linhas de vida projetadas.",
+    "perguntas": ["Que condição caracterizou o grave e iminente risco?", "Que decisão de gestão levou à situação?", "Quais foram os efeitos do embargo para a empresa e para os trabalhadores?", "O que a empresa precisou comprovar para o levantamento?", "Como a obra poderia ter cumprido o prazo sem retirar as proteções?"],
+    "analise": "A exposição de trabalhadores à queda na periferia sem proteção coletiva e sem ancoragem configurou grave e iminente risco. A decisão de retirar guarda-corpos para ganhar velocidade não teve análise de risco nem medida substituta. O embargo paralisou a atividade, os salários continuaram sendo pagos e o atraso foi maior do que o tempo que se pretendia ganhar. Para o levantamento, a empresa comprovou a recomposição das proteções e a instalação de sistemas de ancoragem projetados. O planejamento da fachada com balancins ou plataformas e linhas de vida instaladas antes do serviço teria evitado o problema."
+  },
+  "dinamica": {"titulo": "Embarga ou não embarga?", "objetivo": "Exercitar o reconhecimento do grave e iminente risco.", "tempo": 15, "passos": ["Projete 8 fotos de situações de trabalho, algumas com risco grave e outras com desvios leves.", "Em duplas, os participantes decidem se a situação justificaria embargo ou interdição.", "Cada dupla justifica com base na consequência possível e na probabilidade.", "O instrutor comenta cada caso.", "Feche reforçando que a empresa deve agir antes da fiscalização."]},
+  "dds": {"titulo": "Quem para primeiro somos nós", "texto": "Pessoal, uma reflexão rápida. Quando um auditor fiscal interdita uma máquina ou embarga uma obra, é porque viu uma situação que pode matar alguém a qualquer momento. A pergunta é: por que nós não paramos antes? Ninguém aqui precisa esperar a fiscalização para interromper uma atividade com risco grave. Se você vê uma borda sem proteção, uma máquina sem proteção ou um painel aberto, para, avisa e só volta quando estiver corrigido. Quem para primeiro somos nós."},
+  "prova": [
+    {"q": "O embargo se aplica a:", "o": ["Máquinas e equipamentos", "Obras", "Somente escritórios", "Veículos"], "c": 1, "com": "Embargo é a paralisação de obra; interdição atinge estabelecimento, setor, máquina ou atividade."},
+    {"q": "A interdição pode atingir:", "o": ["Somente o estabelecimento inteiro", "Estabelecimento, setor, máquina, equipamento ou atividade", "Apenas obras", "Somente atividades noturnas"], "c": 1, "com": "A interdição pode ser total ou parcial."},
+    {"q": "Grave e iminente risco é:", "o": ["Qualquer desvio de procedimento", "Condição que pode causar acidente ou doença com lesão grave ao trabalhador", "Falta de documento", "Atraso no pagamento de salários"], "c": 1, "com": "É a definição adotada pela NR-03."},
+    {"q": "Quem aplica o embargo ou a interdição?", "o": ["O técnico de segurança da empresa", "O auditor fiscal do trabalho", "O sindicato", "A CIPA"], "c": 1, "com": "A medida é aplicada pela autoridade de fiscalização do trabalho."},
+    {"q": "Durante a paralisação, os trabalhadores atingidos:", "o": ["Ficam sem salário", "Recebem salário normalmente", "São demitidos", "Recebem metade do salário"], "c": 1, "com": "A CLT garante o pagamento dos salários durante a paralisação."},
+    {"q": "Desrespeitar um embargo ou interdição:", "o": ["É permitido se houver urgência", "Pode gerar responsabilização administrativa, civil e penal", "Não tem consequência", "Só gera advertência verbal"], "c": 1, "com": "O descumprimento é grave e gera responsabilização."},
+    {"q": "O recurso administrativo contra a medida:", "o": ["Suspende a paralisação imediatamente", "Não suspende a paralisação", "Dispensa as correções", "Anula a fiscalização"], "c": 1, "com": "A atividade permanece paralisada enquanto o recurso é analisado."},
+    {"q": "Durante o embargo, podem ser realizados:", "o": ["Todos os trabalhos normais", "Somente os trabalhos necessários para corrigir a situação, com segurança", "Trabalhos em horário noturno", "Nenhum trabalho, nem as correções"], "c": 1, "com": "As adequações são permitidas para eliminar o risco."},
+    {"q": "A avaliação do grave e iminente risco considera:", "o": ["Apenas a opinião do fiscal", "A consequência possível, a probabilidade e as medidas de controle existentes", "O porte da empresa", "O número de empregados"], "c": 1, "com": "A NR-03 traz critérios técnicos de avaliação."},
+    {"q": "A melhor forma de evitar embargos e interdições é:", "o": ["Esconder as áreas de risco", "Manter uma gestão de riscos eficaz, com PGR atualizado e inspeções", "Contratar seguro", "Evitar a entrada de fiscais"], "c": 1, "com": "A prevenção depende de gestão de riscos efetiva."}
+  ]
+}

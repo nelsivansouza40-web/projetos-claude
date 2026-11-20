@@ -1,0 +1,154 @@
+{
+  "nr": "23",
+  "titulo": "Proteção contra Incêndios",
+  "chamada": "Prevenir o fogo, combater o princípio e sair com segurança",
+  "icone": "FaFireExtinguisher",
+  "carga": "4 horas (treinamento de prevenção e combate a princípio de incêndio para trabalhadores)",
+  "periodicidade": "A NR-23 exige que os trabalhadores recebam informações sobre os equipamentos de combate, os procedimentos de abandono e os dispositivos de alarme. Brigadas de incêndio seguem a legislação estadual e as instruções técnicas do Corpo de Bombeiros, com carga e periodicidade próprias.",
+  "publico": "Todos os trabalhadores e lideranças. Para brigadistas, use como complemento ao curso exigido pelo Corpo de Bombeiros.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Bombeiro civil, profissional de segurança do trabalho ou instrutor habilitado conforme a legislação estadual.",
+  "objetivos": [
+    "Compreender como o fogo começa e se propaga",
+    "Prevenir incêndios no dia a dia de trabalho",
+    "Identificar classes de incêndio e escolher o extintor correto",
+    "Conhecer as saídas de emergência, os alarmes e o procedimento de abandono"
+  ],
+  "recursos": ["Projetor e apresentação", "Extintores de água, pó e CO2 para a prática", "Área segura e preparada para fogo controlado", "Planta de emergência da empresa", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na prática com extintores.",
+  "referencias": ["NR-23 Proteção contra Incêndios, texto vigente", "Legislação estadual e instruções técnicas do Corpo de Bombeiros", "ABNT NBR 14276 Brigada de incêndio", "NR-20 Inflamáveis e Combustíveis"],
+  "modulos": [
+    {
+      "titulo": "O fogo e a prevenção",
+      "duracao": 50,
+      "gancho": "A maioria dos incêndios começa pequena e por um motivo evitável: uma tomada sobrecarregada, um cigarro, uma faísca de solda. Vamos entender o fogo para evitá-lo.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Os elementos do fogo",
+          "cards": [
+            {"t": "Combustível", "d": "Material que queima: papel, madeira, plásticos, líquidos e gases"},
+            {"t": "Comburente", "d": "Oxigênio presente no ar"},
+            {"t": "Calor", "d": "Energia que inicia a queima: chama, faísca ou superfície quente"},
+            {"t": "Reação em cadeia", "d": "Processo que mantém o fogo se propagando"}
+          ],
+          "fala": "Para existir fogo, são necessários quatro elementos: combustível, que é o material que queima; comburente, o oxigênio do ar; calor, que inicia a queima; e a reação em cadeia, que mantém o fogo. Retirando qualquer um deles, o fogo apaga. É nisso que se baseiam os métodos de extinção: resfriamento retira o calor, abafamento retira o oxigênio, isolamento retira o combustível e alguns agentes químicos interrompem a reação em cadeia.",
+          "pergunta": "Que materiais combustíveis existem em grande quantidade no seu setor?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Prevenção no dia a dia",
+          "itens": [
+            "Não sobrecarregar tomadas nem usar extensões e benjamins improvisados",
+            "Manter organização e limpeza, sem acúmulo de papel, panos e resíduos",
+            "Fumar apenas em locais permitidos",
+            "Trabalho a quente somente com permissão e observador",
+            "Armazenar inflamáveis em locais apropriados e em pequena quantidade"
+          ],
+          "destaque": "Equipamento que esquenta, cheira a queimado ou solta faísca deve ser desligado e comunicado.",
+          "fala": "A prevenção está nos hábitos. Não sobrecarregar tomadas nem usar extensões e benjamins improvisados. Manter o local organizado, sem acúmulo de papel, panos e resíduos. Fumar apenas nos locais permitidos. Fazer solda e corte somente com permissão e observador. Armazenar inflamáveis em locais apropriados e em pequena quantidade. E desligar e comunicar qualquer equipamento que esquente, cheire a queimado ou solte faísca."
+        }
+      ]
+    },
+    {
+      "titulo": "Classes de incêndio e extintores",
+      "duracao": 50,
+      "gancho": "Usar o extintor errado pode espalhar o fogo ou causar um choque elétrico. Escolher certo depende de saber o que está queimando.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Classes de incêndio",
+          "cabecalho": ["Classe", "O que queima e como apagar"],
+          "linhas": [
+            ["A", "Sólidos como madeira, papel e tecido; queimam em profundidade e deixam resíduo. Água e pó ABC"],
+            ["B", "Líquidos e gases inflamáveis. Pó químico, espuma e CO2"],
+            ["C", "Equipamentos elétricos energizados. CO2 e pó químico; nunca água"],
+            ["D", "Metais combustíveis, como magnésio. Pó especial"],
+            ["K", "Óleos e gorduras de cozinha. Agente classe K"]
+          ],
+          "fala": "Os incêndios são classificados pelo material que queima. Classe A, sólidos como madeira, papel e tecido, apagados com água ou pó ABC. Classe B, líquidos e gases inflamáveis, com pó químico, espuma ou gás carbônico. Classe C, equipamentos elétricos energizados, com gás carbônico ou pó químico, nunca com água. Classe D, metais combustíveis, com pó especial. E classe K, óleos e gorduras de cozinha, com agente específico.",
+          "dica": "Mostre o rótulo de cada extintor da empresa e localize as classes indicadas."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Como usar o extintor",
+          "passos": [
+            {"t": "Retirar", "d": "Tirar do suporte e verificar o manômetro"},
+            {"t": "Romper o lacre", "d": "Puxar a trava de segurança"},
+            {"t": "Posicionar", "d": "A favor do vento, a distância segura, com rota de fuga às costas"},
+            {"t": "Direcionar", "d": "Apontar para a base das chamas"},
+            {"t": "Varrer", "d": "Apertar o gatilho e fazer movimentos de varredura"}
+          ],
+          "fala": "Para usar o extintor, retire do suporte e confira o manômetro, quando houver. Rompa o lacre puxando a trava. Posicione-se a favor do vento, a uma distância segura, com a rota de fuga às suas costas. Aponte o jato para a base das chamas, onde está o combustível, e não para a fumaça. Aperte o gatilho e faça movimentos de varredura. O extintor portátil dura poucos segundos, por isso o uso correto faz diferença.",
+          "pergunta": "Onde fica o extintor mais próximo do seu posto de trabalho?"
+        }
+      ]
+    },
+    {
+      "titulo": "Saídas, alarmes e abandono",
+      "duracao": 50,
+      "gancho": "Em um incêndio, a fumaça mata mais do que o fogo. Sair rápido e pelo caminho certo é a principal medida de proteção.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Exigências da NR-23",
+          "itens": [
+            "Saídas suficientes para a rápida retirada das pessoas",
+            "Saídas e rotas sinalizadas e sempre desobstruídas",
+            "Portas de saída que abram no sentido da fuga e não fiquem trancadas durante o expediente",
+            "Equipamentos de combate a incêndio conforme a legislação estadual",
+            "Informação aos trabalhadores sobre equipamentos, alarmes e abandono"
+          ],
+          "destaque": "Saída de emergência trancada ou bloqueada é risco grave para todos.",
+          "fala": "A NR-23 exige saídas suficientes para a rápida retirada das pessoas, sinalizadas e desobstruídas. As portas de saída devem abrir no sentido da fuga e não podem ficar trancadas durante o expediente. Os equipamentos de combate seguem a legislação estadual e as instruções do Corpo de Bombeiros. E os trabalhadores devem ser informados sobre o uso dos equipamentos, os alarmes e os procedimentos de abandono.",
+          "pergunta": "Já viram uma saída de emergência trancada ou com material na frente?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Abandono do local",
+          "passos": [
+            {"t": "Alarme", "d": "Ao ouvir, interromper o trabalho"},
+            {"t": "Desligar", "d": "Desligar máquinas, se for seguro e rápido"},
+            {"t": "Sair", "d": "Seguir a rota sinalizada, sem correr e sem usar elevador"},
+            {"t": "Fumaça", "d": "Abaixar-se e cobrir nariz e boca"},
+            {"t": "Ponto de encontro", "d": "Permanecer até a contagem e a liberação"}
+          ],
+          "fala": "Ao ouvir o alarme, interrompa o trabalho. Se for seguro e rápido, desligue as máquinas. Siga a rota sinalizada até a saída, sem correr e sem usar elevador. Se houver fumaça, abaixe-se, porque o ar perto do chão é mais limpo, e cubra o nariz e a boca. Antes de abrir uma porta, toque nela com o dorso da mão: se estiver quente, procure outra rota. E vá para o ponto de encontro, onde é feita a contagem, sem voltar para buscar objetos.",
+          "dica": "Mostre a planta de emergência da empresa, as rotas e o ponto de encontro."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática com extintores",
+    "duracao": 60,
+    "descricao": "Em área preparada e com fogo controlado, cada participante opera extintores sob supervisão do instrutor.",
+    "itens": [
+      "Identificou a classe de incêndio e escolheu o extintor correto",
+      "Retirou o extintor do suporte, verificou o manômetro e rompeu o lacre",
+      "Posicionou-se a favor do vento e com rota de fuga livre",
+      "Direcionou o jato para a base das chamas com movimento de varredura",
+      "Descreveu o procedimento de abandono e o ponto de encontro"
+    ]
+  },
+  "caso": {
+    "titulo": "A saída usada como depósito",
+    "relato": "Em uma confecção, a porta de emergência do fundo do galpão passou a ser usada para guardar rolos de tecido, e ficava trancada para evitar furtos. Um curto-circuito em uma extensão sob uma mesa de corte iniciou um incêndio no fim da tarde. A costureira mais próxima tentou usar um extintor de água em um equipamento energizado. Os trabalhadores do fundo precisaram atravessar o galpão em meio à fumaça até a porta principal. Duas pessoas foram atendidas por inalação de fumaça.",
+    "perguntas": ["Quais exigências da NR-23 foram descumpridas?", "O que causou o início do incêndio?", "Qual foi o erro no uso do extintor?", "Que medidas a empresa deve adotar?"],
+    "analise": "A saída de emergência estava obstruída e trancada durante o expediente, contrariando a NR-23. A extensão improvisada sob a mesa, com acúmulo de tecido, foi a fonte de ignição. O extintor de água em equipamento energizado expôs a trabalhadora a choque elétrico; o correto seria desligar a energia e usar CO2 ou pó químico. A empresa deve desobstruir e destrancar a saída, adotar dispositivo antipânico, eliminar extensões improvisadas, revisar a instalação elétrica, treinar todos no uso de extintores e realizar simulados de abandono."
+  },
+  "dinamica": {"titulo": "Qual extintor?", "objetivo": "Fixar a escolha do agente extintor.", "tempo": 15, "passos": ["Leia situações como fogo em lixeira de papel, em painel elétrico, em óleo de fritadeira e em tambor de solvente.", "Os participantes levantam cartões com o tipo de extintor adequado.", "O instrutor confirma e explica o porquê.", "Feche com a localização dos extintores da empresa."]},
+  "dds": {"titulo": "Saída livre, sempre", "texto": "Pessoal, olhem agora para a saída de emergência mais próxima de vocês. Ela está livre? Está destrancada? Tem caixa, palete ou carrinho na frente? Em um incêndio, a fumaça escurece tudo em poucos minutos, e a saída precisa estar lá, livre, quando a gente precisar. Então ninguém deixa material na frente de porta de emergência, extintor ou hidrante. E se ouvirem o alarme, parem o que estão fazendo e sigam para o ponto de encontro, sem voltar para buscar nada."},
+  "prova": [
+    {"q": "Os elementos necessários para o fogo são:", "o": ["Água, ar e terra", "Combustível, comburente, calor e reação em cadeia", "Apenas calor", "Fumaça e oxigênio"], "c": 1, "com": "Retirando um deles, o fogo se extingue."},
+    {"q": "O método de extinção por abafamento retira:", "o": ["O calor", "O oxigênio", "O combustível", "A luz"], "c": 1, "com": "O abafamento impede o contato com o oxigênio."},
+    {"q": "Fogo em equipamento elétrico energizado é de classe:", "o": ["A", "B", "C", "D"], "c": 2, "com": "Classe C envolve equipamentos energizados."},
+    {"q": "Em equipamento elétrico energizado, não se deve usar extintor de:", "o": ["CO2", "Pó químico", "Água", "Pó ABC"], "c": 2, "com": "A água conduz eletricidade."},
+    {"q": "O jato do extintor deve ser direcionado:", "o": ["Para a fumaça", "Para a base das chamas", "Para o teto", "Para o lado oposto ao fogo"], "c": 1, "com": "A base das chamas é onde está o combustível."},
+    {"q": "As saídas de emergência devem:", "o": ["Ficar trancadas para evitar furtos", "Estar sinalizadas, desobstruídas e destrancadas durante o expediente", "Ser usadas como depósito", "Abrir para dentro"], "c": 1, "com": "Exigência da NR-23."},
+    {"q": "Em ambiente com fumaça, deve-se:", "o": ["Ficar em pé e correr", "Abaixar-se e cobrir nariz e boca", "Usar o elevador", "Voltar para buscar objetos"], "c": 1, "com": "O ar próximo ao chão é mais respirável."},
+    {"q": "Durante o abandono, o elevador:", "o": ["É a melhor opção", "Não deve ser usado", "Só pode ser usado por chefes", "Deve ser usado sempre"], "c": 1, "com": "O elevador pode parar ou levar até o fogo."},
+    {"q": "Os extintores e brigadas seguem também:", "o": ["Apenas a NR-23", "A legislação estadual e as instruções técnicas do Corpo de Bombeiros", "Somente o regimento interno", "Nenhuma regra"], "c": 1, "com": "A NR-23 remete à legislação estadual."},
+    {"q": "Fogo em óleo de cozinha é de classe:", "o": ["A", "B", "C", "K"], "c": 3, "com": "Óleos e gorduras de cozinha são classe K."}
+  ]
+}

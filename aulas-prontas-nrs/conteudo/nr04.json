@@ -1,0 +1,138 @@
+{
+  "nr": "04",
+  "titulo": "Serviços Especializados em Segurança e Medicina do Trabalho",
+  "chamada": "A equipe técnica que transforma a prevenção em rotina da empresa",
+  "icone": "FaUserDoctor",
+  "carga": "2 horas (aula informativa para gestores e equipes de SST)",
+  "periodicidade": "A NR-04 não exige treinamento. Recomenda-se revisar o tema quando houver mudança no número de empregados, no grau de risco ou na norma.",
+  "publico": "Gestores, profissionais de recursos humanos e de SST, membros da CIPA.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho com conhecimento da NR-04 e da gestão de SST.",
+  "objetivos": [
+    "Explicar o papel do SESMT na empresa",
+    "Dimensionar o SESMT a partir do grau de risco e do número de empregados",
+    "Conhecer as competências dos profissionais que compõem o SESMT",
+    "Identificar as modalidades de SESMT previstas na norma"
+  ],
+  "recursos": ["Projetor e apresentação", "Cópia dos quadros de grau de risco e dimensionamento da NR-04", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-04 Serviços Especializados em Segurança e Medicina do Trabalho, texto vigente", "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais", "NR-05 Comissão Interna de Prevenção de Acidentes e de Assédio"],
+  "modulos": [
+    {
+      "titulo": "O que é o SESMT",
+      "duracao": 30,
+      "gancho": "A NR-04 define quando a empresa precisa ter uma equipe própria de segurança e medicina do trabalho e qual o tamanho dessa equipe. Vamos entender quem são esses profissionais.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Profissionais do SESMT",
+          "cards": [
+            {"t": "Engenheiro de segurança", "d": "Engenheiro ou arquiteto com especialização em engenharia de segurança do trabalho"},
+            {"t": "Médico do trabalho", "d": "Médico com especialização ou residência em medicina do trabalho"},
+            {"t": "Técnico de segurança", "d": "Técnico com registro profissional na área de segurança do trabalho"},
+            {"t": "Enfermagem do trabalho", "d": "Enfermeiro do trabalho e técnico ou auxiliar de enfermagem do trabalho"}
+          ],
+          "fala": "O SESMT é formado por profissionais especializados. O engenheiro de segurança do trabalho, que é engenheiro ou arquiteto com especialização. O médico do trabalho. O técnico de segurança do trabalho, com registro profissional. E a equipe de enfermagem do trabalho, com enfermeiro e técnico ou auxiliar de enfermagem do trabalho. Cada um tem formação e atribuições próprias, e juntos formam a equipe técnica de prevenção da empresa.",
+          "pergunta": "Quais desses profissionais existem hoje na nossa empresa?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Competências do SESMT",
+          "itens": [
+            "Elaborar ou participar da elaboração do inventário de riscos do PGR",
+            "Acompanhar a implementação do plano de ação e das medidas de prevenção",
+            "Analisar acidentes e doenças relacionados ao trabalho",
+            "Apoiar a CIPA e promover ações de capacitação e conscientização",
+            "Registrar e manter atualizados os dados de acidentes e doenças"
+          ],
+          "destaque": "O SESMT assessora a empresa. A responsabilidade pela segurança continua sendo do empregador.",
+          "fala": "O SESMT tem competências técnicas definidas na norma. Elaborar ou participar do inventário de riscos do PGR. Acompanhar a implementação das medidas de prevenção. Analisar acidentes e doenças do trabalho. Apoiar a CIPA e promover capacitação e conscientização. E manter os registros de acidentes e doenças atualizados. Um ponto importante: o SESMT assessora, mas a responsabilidade pela segurança continua sendo do empregador e de toda a linha de liderança.",
+          "dica": "Comente que os profissionais do SESMT não devem ser desviados para atividades alheias às suas funções."
+        }
+      ]
+    },
+    {
+      "titulo": "Dimensionamento",
+      "duracao": 30,
+      "gancho": "Quantos profissionais de SST a empresa precisa ter? A resposta depende de duas informações: o grau de risco e o número de empregados.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Como dimensionar",
+          "passos": [
+            {"t": "CNAE", "d": "Identificar a atividade econômica principal do estabelecimento"},
+            {"t": "Grau de risco", "d": "Consultar o grau de risco de 1 a 4 no quadro da norma"},
+            {"t": "Empregados", "d": "Contar o número de empregados do estabelecimento"},
+            {"t": "Quadro de dimensionamento", "d": "Cruzar grau de risco e número de empregados"}
+          ],
+          "fala": "O dimensionamento segue quatro passos. Identificar a atividade econômica principal pelo código CNAE. Consultar no quadro da NR-04 o grau de risco dessa atividade, que vai de um a quatro. Contar o número de empregados do estabelecimento. E cruzar essas informações no quadro de dimensionamento, que indica quantos profissionais de cada tipo são necessários e se a atuação é em tempo integral ou parcial.",
+          "dica": "Faça o dimensionamento da própria empresa junto com a turma usando os quadros da norma."
+        },
+        {
+          "tipo": "numero",
+          "titulo": "Grau de risco",
+          "valor": "1 a 4",
+          "legenda": "classificação da atividade econômica conforme a gravidade dos riscos",
+          "itens": [
+            "Grau 1 e 2: atividades de menor risco, como comércio e serviços administrativos",
+            "Grau 3 e 4: atividades de maior risco, como indústria, construção e mineração",
+            "Quanto maior o grau de risco, menor o número de empregados que já exige SESMT"
+          ],
+          "fala": "O grau de risco classifica a atividade econômica de um a quatro. Graus um e dois correspondem a atividades de menor risco, como comércio e serviços administrativos. Graus três e quatro, a atividades de maior risco, como indústria, construção e mineração. Quanto maior o grau de risco, menor é o número de empregados a partir do qual a empresa já precisa constituir o SESMT."
+        }
+      ]
+    },
+    {
+      "titulo": "Modalidades e registro",
+      "duracao": 30,
+      "gancho": "Nem toda empresa precisa ter um SESMT próprio dentro de cada estabelecimento. A norma prevê modalidades diferentes conforme a realidade da organização.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Modalidades de SESMT",
+          "cards": [
+            {"t": "Individual", "d": "Constituído pela organização para atender ao seu estabelecimento"},
+            {"t": "Regionalizado", "d": "Atende a vários estabelecimentos da mesma organização em uma região"},
+            {"t": "Estadual", "d": "Atende aos estabelecimentos da organização em um mesmo estado"},
+            {"t": "Compartilhado", "d": "Constituído em conjunto por organizações de um mesmo setor ou local, conforme a norma"}
+          ],
+          "fala": "A NR-04 prevê modalidades de SESMT. O individual, constituído pela organização para atender ao seu estabelecimento. O regionalizado e o estadual, que atendem a vários estabelecimentos da mesma empresa em uma região ou estado. E o compartilhado, constituído em conjunto por empresas de um mesmo setor, polo ou local, como em condomínios industriais. Cada modalidade tem regras próprias de dimensionamento e de deslocamento dos profissionais, definidas no texto da norma.",
+          "dica": "Detalhe apenas as modalidades que fazem sentido para a realidade da turma."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Obrigações formais",
+          "itens": [
+            "Registrar o SESMT no sistema indicado pelo Ministério do Trabalho",
+            "Manter a relação dos profissionais com formação e registro",
+            "Atualizar o registro quando houver mudança na equipe ou no dimensionamento",
+            "Garantir aos profissionais condições para exercer suas atividades"
+          ],
+          "destaque": "Empresas abaixo do dimensionamento continuam obrigadas a gerenciar os riscos pelo PGR.",
+          "fala": "O SESMT precisa ser registrado no sistema indicado pelo Ministério do Trabalho, com a relação dos profissionais, sua formação e seu registro. Esse cadastro deve ser atualizado sempre que a equipe ou o dimensionamento mudar. E a empresa deve garantir condições para que esses profissionais trabalhem. Lembrando: a empresa que não precisa de SESMT continua obrigada a gerenciar seus riscos pelo PGR, com apoio de profissionais ou serviços contratados.",
+          "pergunta": "Como a empresa atende à gestão de SST nos estabelecimentos sem SESMT?"
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "O técnico que cuidava de tudo",
+    "relato": "Uma indústria de grau de risco 3 cresceu de 90 para 260 empregados em dois anos. A equipe de SST continuou formada por um único técnico de segurança, que também era responsável pela portaria, pelo controle de frota e pela compra de uniformes. O PGR não era revisado havia dois anos, e três acidentes com afastamento ocorreram no último semestre sem análise formal. Durante uma fiscalização, o auditor verificou que a empresa estava abaixo do dimensionamento exigido pela NR-04.",
+    "perguntas": ["Que mudança deveria ter levado à revisão do dimensionamento?", "Que problema existe em atribuir outras funções ao técnico de segurança?", "Quais competências do SESMT não estavam sendo cumpridas?", "Como a empresa deve se adequar?"],
+    "analise": "O aumento do número de empregados exigia revisão do dimensionamento pelo quadro da NR-04. O desvio de função do técnico comprometia as atividades de prevenção, que a norma reserva aos profissionais do SESMT. Revisão do PGR, análise de acidentes e acompanhamento das medidas não estavam sendo feitos. A adequação exige completar a equipe conforme o quadro, registrar o SESMT, liberar os profissionais de atividades alheias e retomar a gestão de riscos com prioridade para a análise dos acidentes."
+  },
+  "dinamica": {"titulo": "Dimensione o SESMT", "objetivo": "Aplicar os quadros da NR-04.", "tempo": 15, "passos": ["Entregue a cada grupo três empresas fictícias com CNAE e número de empregados.", "Os grupos consultam o grau de risco e o quadro de dimensionamento.", "Cada grupo apresenta a composição do SESMT de cada empresa.", "O instrutor confere e comenta as diferenças."]},
+  "dds": {"titulo": "O SESMT é parceiro", "texto": "Pessoal, a equipe de segurança e medicina do trabalho está aqui para ajudar vocês a trabalharem sem se machucar. Ela avalia riscos, propõe melhorias, analisa acidentes e acompanha a saúde de todos. Mas ela não está em todos os lugares ao mesmo tempo. Por isso, quando vocês perceberem um risco, uma dor que não passa ou uma situação estranha, procurem o SESMT. Quanto antes a gente souber, mais fácil é resolver."},
+  "prova": [
+    {"q": "O dimensionamento do SESMT depende de:", "o": ["Faturamento da empresa", "Grau de risco da atividade e número de empregados", "Número de máquinas", "Localização da empresa"], "c": 1, "com": "A NR-04 cruza grau de risco e número de empregados."},
+    {"q": "O grau de risco é obtido a partir:", "o": ["Do número de acidentes", "Da atividade econômica principal (CNAE)", "Do porte da empresa", "Da opinião do técnico"], "c": 1, "com": "Cada CNAE tem grau de risco definido no quadro da norma."},
+    {"q": "O grau de risco varia de:", "o": ["1 a 3", "1 a 4", "1 a 5", "1 a 10"], "c": 1, "com": "São quatro graus de risco."},
+    {"q": "Faz parte do SESMT:", "o": ["Advogado trabalhista", "Técnico de segurança do trabalho", "Contador", "Gerente de produção"], "c": 1, "com": "O SESMT reúne profissionais especializados em SST."},
+    {"q": "É competência do SESMT:", "o": ["Controlar o estoque de matéria-prima", "Participar da elaboração do inventário de riscos do PGR", "Definir salários", "Cuidar da portaria"], "c": 1, "com": "O SESMT atua na gestão de riscos ocupacionais."},
+    {"q": "A responsabilidade pela segurança dos trabalhadores é:", "o": ["Exclusiva do SESMT", "Do empregador, com assessoria do SESMT", "Somente da CIPA", "Do próprio trabalhador apenas"], "c": 1, "com": "O SESMT assessora, mas a responsabilidade é do empregador."},
+    {"q": "O SESMT compartilhado é aquele:", "o": ["Que atende só à diretoria", "Constituído em conjunto por organizações, conforme regras da norma", "Formado apenas por estagiários", "Que atende só aos terceiros"], "c": 1, "com": "É uma das modalidades previstas na NR-04."},
+    {"q": "O SESMT deve ser:", "o": ["Mantido em segredo", "Registrado no sistema indicado pelo Ministério do Trabalho", "Registrado só no sindicato", "Dispensado de registro"], "c": 1, "com": "O registro é obrigatório e deve ser mantido atualizado."},
+    {"q": "Empresas que não atingem o dimensionamento do SESMT:", "o": ["Ficam dispensadas de gerenciar riscos", "Continuam obrigadas a gerenciar riscos pelo PGR", "Não precisam de CIPA nem de PCMSO", "Não podem ser fiscalizadas"], "c": 1, "com": "A obrigação de gerenciar riscos vale para todas as organizações abrangidas pela NR-01."},
+    {"q": "Quanto maior o grau de risco:", "o": ["Maior o número de empregados necessário para exigir SESMT", "Menor o número de empregados a partir do qual o SESMT é exigido", "Menor a importância do SESMT", "Não há relação"], "c": 1, "com": "Atividades de maior risco exigem SESMT com menos empregados."}
+  ]
+}

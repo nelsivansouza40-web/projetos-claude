@@ -62,7 +62,7 @@ def new_doc(d, titulo_doc):
         h.paragraph_format.space_before = Pt(14 if name != "Title" else 0)
         h.paragraph_format.space_after = Pt(6)
     hp = sec.header.paragraphs[0]
-    r = hp.add_run(f"PREVENÇÃO ATIVA  ·  NR-{d['nr']} {d['titulo']}  ·  {titulo_doc}")
+    r = hp.add_run(f"PREVENÇÃO ATIVA  ·  NR-{d['nr']} {d.get('titulo_curto', d['titulo'])}  ·  {titulo_doc}")
     r.font.size = Pt(8.5)
     r.font.color.rgb = SLATE
     fp = sec.footer.paragraphs[0]

@@ -1,0 +1,217 @@
+{
+  "nr": "11",
+  "titulo_curto": "Movimentação e Armazenagem de Materiais",
+  "titulo": "Transporte, Movimentação, Armazenagem e Manuseio de Materiais",
+  "chamada": "Carga dentro da capacidade, operador habilitado e ninguém no caminho",
+  "icone": "FaTruckRampBox",
+  "carga": "8 horas (carga sugerida para operadores de empilhadeira e equipamentos de movimentação)",
+  "periodicidade": "A NR-11 exige que o operador de equipamento motorizado seja habilitado e porte cartão de identificação com validade de 1 ano, revalidado após exame de saúde. Recomenda-se reciclagem anual, junto com a revalidação do cartão, e sempre que houver troca de equipamento ou acidente.",
+  "publico": "Operadores de empilhadeira, paleteira elétrica, pontes rolantes e demais equipamentos de movimentação, e trabalhadores de armazéns.",
+  "prerequisitos": "Exame de saúde com aptidão para a função. Para circular em vias públicas, habilitação de trânsito compatível.",
+  "instrutor": "Profissional qualificado na operação dos equipamentos, sob responsabilidade de profissional de segurança do trabalho.",
+  "objetivos": [
+    "Conhecer os requisitos da NR-11 para equipamentos e operadores",
+    "Realizar a inspeção pré-operacional da empilhadeira",
+    "Operar respeitando capacidade, estabilidade e regras de circulação",
+    "Armazenar materiais de forma estável e segura",
+    "Aplicar técnicas seguras de movimentação manual de cargas"
+  ],
+  "recursos": ["Projetor e apresentação", "Empilhadeira disponível para a prática em área isolada", "Paletes e cargas de treino", "Checklist pré-operacional impresso", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e desempenho satisfatório em todos os itens do checklist prático.",
+  "referencias": ["NR-11 Transporte, Movimentação, Armazenagem e Manuseio de Materiais, texto vigente", "NR-12 Segurança no Trabalho em Máquinas e Equipamentos", "NR-17 Ergonomia", "CLT, artigos 182, 183 e 198", "Manual do fabricante do equipamento"],
+  "modulos": [
+    {
+      "titulo": "Requisitos da NR-11",
+      "duracao": 75,
+      "gancho": "A empilhadeira é uma das máquinas que mais matam no ambiente industrial, por atropelamento, tombamento e queda de carga. A NR-11 define quem pode operar e em que condições.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Requisitos para o operador",
+          "itens": [
+            "Ser habilitado e capacitado para o equipamento que opera",
+            "Portar cartão de identificação com nome e fotografia, em local visível",
+            "Cartão com validade de 1 ano, revalidado após exame de saúde completo",
+            "Operar apenas os equipamentos para os quais foi autorizado"
+          ],
+          "destaque": "Sem cartão de identificação válido, ninguém opera equipamento motorizado.",
+          "fala": "A NR-11 exige que o operador de equipamento de transporte motorizado seja habilitado e só opere se, durante o horário de trabalho, portar um cartão de identificação com nome e fotografia, em local visível. Esse cartão tem validade de um ano e, para revalidar, o trabalhador passa por exame de saúde completo. E cada operador só opera os equipamentos para os quais foi capacitado e autorizado. Pegar a empilhadeira do colega porque sabe dirigir não é permitido.",
+          "pergunta": "Como é controlado hoje quem pode operar cada equipamento?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Requisitos para o equipamento",
+          "cards": [
+            {"t": "Capacidade", "d": "Carga máxima de trabalho indicada em local visível"},
+            {"t": "Sinalização", "d": "Sinal de advertência sonora e luminoso, conforme o equipamento"},
+            {"t": "Manutenção", "d": "Inspeção e manutenção periódica, com peças em perfeito estado"},
+            {"t": "Gases", "d": "Em ambientes fechados, controle dos gases de motores a combustão"}
+          ],
+          "fala": "O equipamento também tem requisitos. A carga máxima de trabalho deve estar indicada em local visível. Deve haver sinal de advertência sonora, a buzina, e sinalização luminosa conforme o equipamento. A manutenção deve ser periódica, com freios, direção, garfos e correntes em perfeito estado. E em ambientes fechados, equipamentos com motor a combustão exigem controle dos gases de escape, porque o monóxido de carbono intoxica.",
+          "dica": "Mostre a placa de capacidade de uma empilhadeira da empresa."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Inspeção pré-operacional",
+          "passos": [
+            {"t": "Estrutura", "d": "Garfos, correntes, torre e proteção do operador"},
+            {"t": "Rodas e freios", "d": "Pneus, freio de serviço e de estacionamento"},
+            {"t": "Comandos", "d": "Direção, elevação, inclinação e buzina"},
+            {"t": "Fluidos", "d": "Vazamentos, nível de óleo e combustível ou bateria"},
+            {"t": "Registro", "d": "Preencher o checklist e comunicar defeitos"}
+          ],
+          "fala": "Antes de cada turno, o operador faz a inspeção pré-operacional. Verifica a estrutura: garfos sem trincas, correntes, torre e a proteção sobre o operador. Rodas e pneus, freio de serviço e de estacionamento. Os comandos de direção, elevação e inclinação e a buzina. Vazamentos e níveis de óleo, combustível ou carga da bateria. E registra no checklist. Encontrou defeito que afeta a segurança, a máquina não sai da garagem.",
+          "dica": "Distribua o checklist e faça a inspeção com a turma na parte prática."
+        }
+      ]
+    },
+    {
+      "titulo": "Estabilidade e operação segura",
+      "duracao": 75,
+      "gancho": "A empilhadeira tomba com mais facilidade do que parece. Entender o centro de gravidade é a diferença entre operar com segurança e virar com a máquina.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Centro de carga",
+          "valor": "Capacidade",
+          "legenda": "vale para a distância de centro de carga indicada na placa; carga mais longa ou mais alta reduz a capacidade real",
+          "itens": [
+            "Carga com o centro mais afastado do mastro reduz a capacidade",
+            "Elevação alta reduz a estabilidade, principalmente em curvas",
+            "Consulte sempre o diagrama de capacidade do fabricante"
+          ],
+          "fala": "A capacidade indicada na placa vale para uma determinada distância de centro de carga e uma determinada altura. Se a carga for mais comprida e o centro ficar mais longe do mastro, a capacidade real diminui. Se a carga for elevada muito alto, a estabilidade cai, principalmente em curvas. Por isso o operador consulta o diagrama de capacidade do fabricante, e não apenas o número grande da placa.",
+          "pergunta": "Que cargas da nossa empresa ficam com o centro afastado do mastro?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Regras de operação",
+          "itens": [
+            "Transitar com a carga baixa e o mastro inclinado para trás",
+            "Com carga que bloqueia a visão, trafegar de ré ou com sinaleiro",
+            "Em rampas, carga voltada para o lado mais alto",
+            "Reduzir a velocidade em curvas, cruzamentos e pisos molhados",
+            "Nunca elevar ou transportar pessoas nos garfos"
+          ],
+          "destaque": "Cinto de segurança afivelado: em um tombamento, ele mantém o operador dentro da proteção.",
+          "fala": "Algumas regras evitam a maior parte dos acidentes. Transitar com a carga baixa e o mastro inclinado para trás. Se a carga bloquear a visão, trafegar de ré ou com o apoio de um sinaleiro. Em rampas, manter a carga voltada para o lado mais alto. Reduzir a velocidade em curvas, cruzamentos e pisos molhados. E nunca elevar ou transportar pessoas nos garfos. O cinto de segurança deve estar afivelado: em um tombamento, ele impede que o operador seja esmagado pela proteção.",
+          "dica": "Explique que, em um tombamento, o operador não deve pular, e sim se segurar e se inclinar para o lado oposto à queda."
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Pedestres e empilhadeiras",
+          "texto": "Pedestre e empilhadeira não devem dividir o mesmo espaço sem separação.",
+          "itens": [
+            "Rotas de pedestres separadas e sinalizadas",
+            "Cruzamentos com sinalização e redução de velocidade",
+            "Pedestres longe da área de manobra e de carga elevada",
+            "Contato visual antes de cruzar o caminho da máquina"
+          ],
+          "fala": "O atropelamento é um dos acidentes mais graves com empilhadeiras. Por isso, as rotas de pedestres devem ser separadas e sinalizadas. Nos cruzamentos, sinalização e velocidade reduzida. Pedestres ficam longe da área de manobra e nunca embaixo de carga elevada. E antes de cruzar o caminho de uma máquina, o pedestre busca contato visual com o operador. A empilhadeira tem pontos cegos e o operador nem sempre vê quem está perto.",
+          "pergunta": "Onde, no nosso armazém, pedestres e empilhadeiras se cruzam?"
+        }
+      ]
+    },
+    {
+      "titulo": "Armazenagem de materiais",
+      "duracao": 75,
+      "gancho": "Uma pilha mal feita pode desabar sobre alguém horas depois de montada. A armazenagem segura começa no jeito de empilhar.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Regras de armazenagem",
+          "itens": [
+            "Carga não pode ultrapassar a capacidade do piso e das estruturas",
+            "Pilhas estáveis, sem prejudicar iluminação, ventilação e circulação",
+            "Materiais afastados das paredes laterais do prédio",
+            "Equipamentos de combate a incêndio e saídas sempre livres",
+            "Estruturas porta-paletes inspecionadas e com capacidade indicada"
+          ],
+          "destaque": "Longarina amassada ou coluna torta é sinal para descarregar e avaliar a estrutura.",
+          "fala": "A NR-11 define regras para a armazenagem. O peso armazenado não pode ultrapassar a capacidade do piso e das estruturas. As pilhas devem ser estáveis e não podem prejudicar iluminação, ventilação e circulação. Os materiais ficam afastados das paredes laterais do prédio. Extintores, hidrantes e saídas de emergência sempre livres. E as estruturas porta-paletes devem ser inspecionadas, com a capacidade indicada. Uma coluna amassada por empilhadeira pode levar ao desabamento de toda a estrutura.",
+          "dica": "Mostre a placa de capacidade de um porta-paletes da empresa."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Paletes e cargas",
+          "cards": [
+            {"t": "Palete íntegro", "d": "Sem tábuas quebradas, pregos soltos ou deformações"},
+            {"t": "Carga amarrada", "d": "Filme, fitas ou cintas para evitar deslizamento"},
+            {"t": "Peso distribuído", "d": "Itens mais pesados embaixo e carga centralizada"},
+            {"t": "Altura limitada", "d": "Respeitar o limite de empilhamento da embalagem"}
+          ],
+          "fala": "A carga também precisa estar preparada. O palete deve estar íntegro, sem tábuas quebradas ou pregos soltos. A carga deve estar estabilizada com filme, fitas ou cintas. O peso deve ficar distribuído, com os itens mais pesados embaixo e a carga centralizada no palete. E a altura de empilhamento deve respeitar o limite indicado na embalagem.",
+          "pergunta": "Já viram uma pilha desabar? O que causou?"
+        }
+      ]
+    },
+    {
+      "titulo": "Movimentação manual de cargas",
+      "duracao": 75,
+      "gancho": "Nem tudo é movido por máquinas. O levantamento manual de cargas é uma das principais causas de lesões na coluna.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Técnica de levantamento",
+          "passos": [
+            {"t": "Avaliar", "d": "Peso, formato, pegas e trajeto"},
+            {"t": "Aproximar", "d": "Pés afastados, carga próxima ao corpo"},
+            {"t": "Flexionar", "d": "Dobrar os joelhos, costas alinhadas"},
+            {"t": "Levantar", "d": "Força das pernas, sem tranco"},
+            {"t": "Girar com os pés", "d": "Nunca torcer o tronco com carga"}
+          ],
+          "fala": "Antes de levantar, avalie a carga: peso, formato, onde segurar e o trajeto. Aproxime-se, com os pés afastados e a carga perto do corpo. Dobre os joelhos e mantenha as costas alinhadas. Levante usando a força das pernas, sem tranco. E para mudar de direção, gire com os pés, nunca torcendo o tronco com a carga nas mãos. Se a carga for pesada ou desajeitada, peça ajuda ou use um equipamento.",
+          "dica": "Faça a demonstração com uma caixa e peça que alguns participantes repitam."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Limites e alternativas",
+          "itens": [
+            "A CLT limita a 60 kg o peso que um empregado pode remover individualmente",
+            "Para mulheres e menores, os limites legais são menores",
+            "A NR-17 exige avaliar o levantamento conforme as condições da tarefa",
+            "Usar carrinhos, paleteiras e talhas sempre que possível",
+            "Dividir cargas e trabalhar em dupla com cargas grandes"
+          ],
+          "destaque": "O limite legal não é meta. A avaliação ergonômica define o que é seguro.",
+          "fala": "A CLT limita a sessenta quilos o peso que um empregado pode remover individualmente, com limites menores para mulheres e menores de idade. Mas esse limite legal não é uma meta. A NR-17 exige avaliar o levantamento conforme a frequência, a distância, a postura e as condições da tarefa. Sempre que possível, use carrinhos, paleteiras e talhas, divida as cargas e trabalhe em dupla com volumes grandes.",
+          "pergunta": "Que carga da nossa rotina poderia ser movida com equipamento em vez de manualmente?"
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática com empilhadeira",
+    "duracao": 150,
+    "descricao": "Em área isolada e sinalizada, cada participante executa os itens abaixo com a supervisão do instrutor.",
+    "itens": [
+      "Realizou a inspeção pré-operacional completa",
+      "Ajustou o banco e afivelou o cinto de segurança",
+      "Levantou e transportou palete com carga baixa e mastro inclinado para trás",
+      "Empilhou e retirou palete em estrutura ou pilha com precisão",
+      "Transitou em percurso com curvas e cruzamento respeitando a velocidade",
+      "Estacionou com garfos no chão, freio acionado e chave retirada",
+      "Demonstrou a técnica de levantamento manual de carga"
+    ]
+  },
+  "caso": {
+    "titulo": "A curva com a carga alta",
+    "relato": "No fim do turno, um operador de empilhadeira precisava levar um palete de bobinas até a expedição. Para não ter de baixar e erguer de novo, ele saiu do porta-paletes com a carga elevada a cerca de 2 metros. Ao fazer uma curva em velocidade, a empilhadeira tombou lateralmente. O operador estava sem o cinto de segurança, tentou pular e foi atingido pela proteção. Um auxiliar que caminhava pelo corredor, fora da faixa de pedestres, teve as pernas atingidas pelas bobinas.",
+    "perguntas": ["Que regras de operação foram descumpridas?", "Por que a carga elevada favoreceu o tombamento?", "Qual o papel do cinto de segurança neste acidente?", "Que falha existia na separação entre pedestres e máquinas?", "Que medidas a empresa deve adotar?"],
+    "analise": "O operador transitou com a carga elevada e fez a curva em velocidade, o que deslocou o centro de gravidade e provocou o tombamento lateral. Sem o cinto, ele foi projetado e atingido pela proteção, que deveria protegê-lo. O auxiliar estava fora da rota de pedestres, o que indica falha de separação física ou de disciplina na circulação. A empresa deve reforçar o treinamento, exigir o cinto com dispositivo de intertravamento quando possível, limitar velocidade, separar fisicamente as rotas e analisar a pressão de fim de turno."
+  },
+  "dinamica": {"titulo": "O que está errado na foto?", "objetivo": "Reconhecer erros de operação e armazenagem.", "tempo": 15, "passos": ["Projete imagens com erros comuns, como pessoa sobre os garfos, carga elevada em deslocamento, extintor bloqueado por paletes e porta-paletes amassado.", "Os participantes apontam os erros e a regra correspondente.", "O instrutor comenta as consequências possíveis.", "Feche com as regras que mais se aplicam ao armazém da empresa."]},
+  "dds": {"titulo": "Carga baixa, cinto afivelado", "texto": "Pessoal, dois hábitos salvam vidas na empilhadeira. Primeiro: carga baixa no deslocamento. Elevou para pegar ou deixar o palete, baixou antes de andar. Carga alta em curva é tombamento. Segundo: cinto afivelado, sempre. Se a máquina tombar, não pule. Segure firme no volante e incline o corpo para o lado contrário. Quem pula costuma ser esmagado pela própria proteção. E quem anda a pé, faixa de pedestre e contato visual com o operador antes de cruzar."},
+  "prova": [
+    {"q": "O operador de equipamento motorizado deve portar:", "o": ["Apenas a carteira de trabalho", "Cartão de identificação com nome e fotografia, em local visível", "Somente o crachá da portaria", "Nenhum documento"], "c": 1, "com": "A NR-11 exige o cartão de identificação do operador."},
+    {"q": "O cartão de identificação do operador tem validade de:", "o": ["6 meses", "1 ano", "2 anos", "5 anos"], "c": 1, "com": "Validade de 1 ano, revalidado após exame de saúde."},
+    {"q": "A capacidade de carga da empilhadeira:", "o": ["Vale para qualquer carga e altura", "Vale para o centro de carga indicado e diminui com cargas mais longas ou elevadas", "Pode ser ultrapassada em 20%", "Só importa em rampas"], "c": 1, "com": "O diagrama de capacidade do fabricante deve ser respeitado."},
+    {"q": "Durante o deslocamento, a carga deve estar:", "o": ["Elevada para melhorar a visão", "Baixa, com o mastro inclinado para trás", "Inclinada para frente", "Na altura máxima"], "c": 1, "com": "Carga baixa mantém a estabilidade."},
+    {"q": "Quando a carga bloqueia a visão, o operador deve:", "o": ["Andar mais rápido", "Trafegar de ré ou com sinaleiro", "Elevar a carga", "Buzinar sem parar e seguir"], "c": 1, "com": "Visão bloqueada exige marcha à ré ou orientação."},
+    {"q": "Transportar pessoas nos garfos da empilhadeira:", "o": ["É permitido em baixa velocidade", "É proibido", "É permitido com capacete", "É permitido por curtas distâncias"], "c": 1, "com": "Os garfos não são plataforma para pessoas."},
+    {"q": "Em caso de tombamento lateral, o operador deve:", "o": ["Pular imediatamente", "Permanecer com o cinto, segurar firme e inclinar-se para o lado oposto", "Soltar o volante", "Acelerar"], "c": 1, "com": "Pular é a principal causa de esmagamento pela proteção."},
+    {"q": "Na armazenagem, os materiais devem:", "o": ["Bloquear extintores se for temporário", "Ficar estáveis, sem prejudicar circulação, iluminação e equipamentos de incêndio", "Ser empilhados até o teto", "Ficar encostados nas paredes laterais"], "c": 1, "com": "A NR-11 exige armazenagem estável e passagens livres."},
+    {"q": "O limite de peso que um empregado pode remover individualmente, pela CLT, é de:", "o": ["25 kg", "40 kg", "60 kg", "80 kg"], "c": 2, "com": "A CLT fixa 60 kg, com limites menores para mulheres e menores."},
+    {"q": "Ao levantar uma carga manualmente, deve-se:", "o": ["Curvar as costas e manter as pernas esticadas", "Dobrar os joelhos, manter as costas alinhadas e a carga próxima ao corpo", "Girar o tronco com a carga", "Levantar com um tranco rápido"], "c": 1, "com": "A força deve vir das pernas, com a carga perto do corpo."}
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "nr": "13",
+  "titulo": "Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos",
+  "chamada": "Pressão sob controle: dispositivos funcionando, inspeção em dia e operação capacitada",
+  "icone": "FaGaugeHigh",
+  "carga": "8 horas (curso introdutório para lideranças, manutenção e operadores de vasos de pressão)",
+  "periodicidade": "Este kit não substitui os cursos de segurança na operação de caldeiras e de unidades de processo previstos no Anexo I da NR-13, que têm carga horária e estágio prático próprios. Recomenda-se reciclagem a cada 2 anos ou quando houver mudança nos equipamentos ou na norma.",
+  "publico": "Lideranças, equipes de manutenção e utilidades, operadores de vasos de pressão e profissionais de SST.",
+  "prerequisitos": "Não há. Para operar caldeiras, é obrigatório o curso específico previsto no Anexo I da NR-13.",
+  "instrutor": "Profissional habilitado ou instrutor com experiência comprovada em equipamentos sob pressão, sob responsabilidade de profissional habilitado.",
+  "objetivos": [
+    "Reconhecer os equipamentos abrangidos pela NR-13 e seus riscos",
+    "Identificar os dispositivos de segurança obrigatórios",
+    "Conhecer a documentação e as inspeções de segurança exigidas",
+    "Reconhecer situações de risco grave e iminente em equipamentos sob pressão",
+    "Agir de forma segura na operação e na manutenção"
+  ],
+  "recursos": ["Projetor e apresentação", "Fotos ou visita aos equipamentos da empresa", "Exemplo de placa de identificação e de registro de segurança", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-13 Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos de Armazenamento, texto vigente", "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais", "Códigos de projeto e normas técnicas aplicáveis aos equipamentos"],
+  "modulos": [
+    {
+      "titulo": "Equipamentos sob pressão e seus riscos",
+      "duracao": 90,
+      "gancho": "Um vaso de pressão armazena uma quantidade enorme de energia. Quando ele falha, a liberação é instantânea, com explosão, projeção de fragmentos e vazamento de fluidos. A NR-13 existe para que isso não aconteça.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Equipamentos abrangidos",
+          "cards": [
+            {"t": "Caldeiras", "d": "Equipamentos que produzem e acumulam vapor sob pressão superior à atmosférica"},
+            {"t": "Vasos de pressão", "d": "Reservatórios que contêm fluido sob pressão, como compressores, autoclaves e reatores"},
+            {"t": "Tubulações", "d": "Tubulações interligadas a caldeiras ou vasos abrangidos pela norma"},
+            {"t": "Tanques metálicos", "d": "Tanques de armazenamento de fluidos com características definidas na norma"}
+          ],
+          "fala": "A NR-13 abrange caldeiras, que produzem e acumulam vapor sob pressão; vasos de pressão, como reservatórios de ar comprimido, autoclaves e reatores; tubulações ligadas a esses equipamentos; e tanques metálicos de armazenamento com as características definidas na norma. Nem todo equipamento se enquadra: a norma tem critérios de pressão, volume e tipo de fluido para definir o que está abrangido.",
+          "pergunta": "Quais equipamentos sob pressão existem na nossa empresa?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Riscos dos equipamentos sob pressão",
+          "cards": [
+            {"t": "Explosão", "d": "Ruptura do equipamento com onda de pressão e projeção de fragmentos"},
+            {"t": "Vazamento", "d": "Liberação de vapor, gases ou produtos quentes, tóxicos ou inflamáveis"},
+            {"t": "Queimaduras", "d": "Contato com superfícies quentes e vapor"},
+            {"t": "Incêndio", "d": "Fluidos inflamáveis e combustíveis da caldeira"}
+          ],
+          "fala": "Os principais riscos são a explosão, com onda de pressão e projeção de fragmentos que atingem pessoas a grande distância; o vazamento de vapor, gases e produtos que podem ser quentes, tóxicos ou inflamáveis; as queimaduras por contato com superfícies quentes e vapor; e o incêndio, principalmente nas caldeiras, que usam combustível. Um vaso de ar comprimido aparentemente simples pode causar uma explosão fatal se sua parede estiver corroída."
+        },
+        {
+          "tipo": "numero",
+          "titulo": "PMTA",
+          "valor": "PMTA",
+          "legenda": "pressão máxima de trabalho admissível: o maior valor de pressão que o equipamento pode operar com segurança",
+          "itens": [
+            "Definida pelo código de projeto e pela condição atual do equipamento",
+            "Indicada na placa de identificação",
+            "A válvula de segurança deve atuar em pressão não superior à PMTA, conforme a norma"
+          ],
+          "fala": "Um conceito fundamental é a PMTA, a pressão máxima de trabalho admissível. É o maior valor de pressão compatível com o projeto, os materiais e a condição atual do equipamento. Ela fica indicada na placa de identificação, e a válvula de segurança é ajustada para atuar antes que esse valor seja ultrapassado, nos termos da norma. Operar acima da PMTA é operar sem margem de segurança.",
+          "dica": "Mostre a placa de identificação de um equipamento da empresa e localize a PMTA."
+        }
+      ]
+    },
+    {
+      "titulo": "Dispositivos de segurança",
+      "duracao": 90,
+      "gancho": "Os dispositivos de segurança são a última barreira antes de uma explosão. Eles precisam estar instalados, calibrados e funcionando o tempo todo.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Dispositivos obrigatórios nas caldeiras",
+          "cards": [
+            {"t": "Válvula de segurança", "d": "Alivia a pressão quando ela atinge o valor de ajuste"},
+            {"t": "Indicador de pressão", "d": "Manômetro visível ao operador"},
+            {"t": "Sistema de alimentação de água", "d": "Garante o nível de água mesmo em falhas"},
+            {"t": "Controle e indicação de nível", "d": "Indica o nível de água e atua em caso de nível baixo"}
+          ],
+          "fala": "As caldeiras devem ter, entre outros dispositivos, válvula de segurança, que alivia a pressão quando ela atinge o valor de ajuste; indicador de pressão visível ao operador; sistema de alimentação de água capaz de manter o nível; e sistema de indicação e controle de nível, que evita a operação com nível baixo de água, uma das causas clássicas de explosão de caldeira. O texto da norma detalha os dispositivos para cada caso.",
+          "pergunta": "Quem verifica e quando são testados os dispositivos dos nossos equipamentos?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Nunca bloquear ou alterar",
+          "texto": "Bloquear, travar ou alterar o ajuste de uma válvula de segurança é risco grave e iminente.",
+          "itens": [
+            "Válvula de segurança travada, removida ou com ajuste acima do permitido",
+            "Manômetro quebrado, ilegível ou fora de calibração",
+            "Controle de nível desativado ou com defeito",
+            "Operação acima da PMTA"
+          ],
+          "fala": "Alguns comportamentos transformam um equipamento seguro em uma bomba. Travar uma válvula de segurança que abre com frequência, aumentar o ajuste para não perder pressão, operar com o manômetro quebrado, desativar o controle de nível ou operar acima da PMTA. A NR-13 caracteriza essas situações como risco grave e iminente. Se uma válvula de segurança está atuando com frequência, o problema está no processo e precisa ser investigado."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Vasos de pressão",
+          "itens": [
+            "Válvula ou dispositivo de segurança com ajuste adequado",
+            "Instrumento indicador de pressão de operação",
+            "Placa de identificação com os dados do equipamento",
+            "Dispositivos para evitar o bloqueio inadvertido da válvula de segurança",
+            "Instalação com acesso para operação, inspeção e manutenção"
+          ],
+          "destaque": "Um compressor de ar comum também pode ser um vaso de pressão abrangido pela NR-13.",
+          "fala": "Os vasos de pressão também têm requisitos. Válvula ou dispositivo de segurança, indicador de pressão, placa de identificação, meios que impeçam o bloqueio inadvertido da válvula de segurança e instalação com acesso adequado para operação, inspeção e manutenção. Lembre que o reservatório de um compressor de ar comum pode ser um vaso de pressão abrangido pela norma.",
+          "dica": "Mostre o reservatório de ar comprimido da empresa e verifique os itens com a turma."
+        }
+      ]
+    },
+    {
+      "titulo": "Documentação e inspeção de segurança",
+      "duracao": 90,
+      "gancho": "A segurança de um equipamento sob pressão depende do que não se vê: a espessura da parede, a corrosão interna, as soldas. Por isso a inspeção e a documentação são obrigatórias.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Documentação obrigatória",
+          "cabecalho": ["Documento", "Conteúdo"],
+          "linhas": [
+            ["Prontuário", "Dados de projeto, materiais, procedimentos de fabricação e PMTA"],
+            ["Registro de segurança", "Ocorrências importantes, inspeções e intervenções"],
+            ["Projeto de instalação", "Localização e condições de instalação"],
+            ["Relatórios de inspeção", "Resultados, recomendações e data da próxima inspeção"],
+            ["Certificados", "Calibração dos dispositivos de segurança"]
+          ],
+          "fala": "Cada equipamento abrangido precisa de documentação. O prontuário, com os dados de projeto, materiais e PMTA. O registro de segurança, onde se anotam as ocorrências importantes, inspeções e intervenções. O projeto de instalação. Os relatórios de inspeção, com resultados, recomendações e a data da próxima inspeção. E os certificados de calibração dos dispositivos de segurança. Essa documentação deve estar disponível no estabelecimento."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Inspeções de segurança",
+          "passos": [
+            {"t": "Inicial", "d": "Antes de o equipamento entrar em funcionamento"},
+            {"t": "Periódica", "d": "Exames externo e interno nos prazos da norma"},
+            {"t": "Extraordinária", "d": "Após danos, reparos, mudança de local ou longo tempo parado"}
+          ],
+          "fala": "As inspeções de segurança são feitas sob responsabilidade de profissional habilitado. A inspeção inicial acontece antes de o equipamento entrar em funcionamento. A periódica inclui exames externos e internos, em prazos definidos pela norma conforme o tipo e a categoria do equipamento. E a extraordinária é exigida em situações como danos, reparos ou alterações, mudança de local ou retorno após longo tempo parado.",
+          "dica": "Mostre o último relatório de inspeção de um equipamento da empresa."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Responsabilidades",
+          "itens": [
+            "Empregador: manter os equipamentos, a documentação e as inspeções em dia",
+            "Profissional habilitado: realizar ou supervisionar inspeções e definir condições de operação",
+            "Operador: operar conforme o procedimento e registrar ocorrências",
+            "Manutenção: intervir somente com autorização, procedimento e bloqueio"
+          ],
+          "destaque": "Reparos e alterações em equipamentos sob pressão exigem projeto e responsável habilitado.",
+          "fala": "O empregador mantém os equipamentos, a documentação e as inspeções em dia. O profissional habilitado realiza ou supervisiona as inspeções e define as condições de operação. O operador segue o procedimento e registra as ocorrências. E a manutenção só intervém com autorização, procedimento e bloqueio das energias. Soldar ou alterar um vaso de pressão sem projeto e sem responsável habilitado é proibido."
+        }
+      ]
+    },
+    {
+      "titulo": "Operação segura",
+      "duracao": 90,
+      "gancho": "A maior parte das ocorrências com caldeiras e vasos começa com um desvio de operação que alguém percebeu e não comunicou.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Rotina do operador",
+          "itens": [
+            "Seguir o manual de operação disponível no local",
+            "Acompanhar pressão, temperatura e nível nos intervalos definidos",
+            "Testar os dispositivos conforme o procedimento",
+            "Registrar ocorrências no livro ou sistema de registro",
+            "Comunicar imediatamente qualquer anormalidade"
+          ],
+          "destaque": "Em caldeiras, o operador deve ter concluído o curso específico do Anexo I da NR-13.",
+          "fala": "A operação segura segue o manual de operação, que deve estar disponível no local. O operador acompanha pressão, temperatura e nível nos intervalos definidos, testa os dispositivos conforme o procedimento, registra as ocorrências e comunica qualquer anormalidade. Para caldeiras e unidades de processo, a NR-13 exige que o operador tenha concluído o curso de segurança na operação previsto no Anexo I, com estágio prático.",
+          "pergunta": "Onde fica o manual de operação dos nossos equipamentos?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Sinais de alerta",
+          "cards": [
+            {"t": "Pressão anormal", "d": "Variações sem explicação ou atuação frequente da válvula"},
+            {"t": "Vazamentos", "d": "Vapor, ar ou fluido saindo por conexões, soldas ou flanges"},
+            {"t": "Deformações", "d": "Abaulamentos, trincas, corrosão e pintura empolada"},
+            {"t": "Ruídos", "d": "Batidas, vibração e ruídos diferentes do normal"}
+          ],
+          "fala": "Alguns sinais indicam que algo está errado. Pressão variando sem explicação ou válvula de segurança atuando com frequência. Vazamentos em conexões, soldas e flanges. Deformações, trincas, corrosão e pintura empolada, que podem indicar perda de espessura ou superaquecimento. E ruídos, batidas e vibração diferentes do normal. Diante desses sinais, comunique e siga o procedimento, que pode incluir a parada do equipamento."
+        }
+      ]
+    },
+    {
+      "titulo": "Instalação e emergência",
+      "duracao": 90,
+      "gancho": "Onde o equipamento está instalado define quantas pessoas estarão expostas se algo der errado. E a resposta à emergência precisa estar planejada.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Condições de instalação",
+          "itens": [
+            "Caldeiras instaladas em casa de caldeiras ou área própria, conforme a norma",
+            "Saídas de emergência desobstruídas e sinalizadas",
+            "Ventilação e iluminação adequadas, inclusive de emergência",
+            "Afastamento de áreas de circulação intensa e de outros riscos",
+            "Acesso seguro aos dispositivos, válvulas e instrumentos"
+          ],
+          "destaque": "Casa de caldeiras não é depósito. Mantenha a área livre e com acesso restrito.",
+          "fala": "As caldeiras devem ser instaladas em casa de caldeiras ou em área própria, conforme a norma, com saídas de emergência desobstruídas, ventilação e iluminação adequadas, inclusive de emergência, e afastadas de áreas de circulação intensa. Os dispositivos, válvulas e instrumentos devem ter acesso seguro. E a casa de caldeiras não é depósito: acesso restrito e área livre."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Resposta a emergências",
+          "passos": [
+            {"t": "Identificar", "d": "Reconhecer o desvio grave"},
+            {"t": "Agir", "d": "Executar a parada de emergência prevista no procedimento"},
+            {"t": "Isolar", "d": "Afastar as pessoas e isolar a área"},
+            {"t": "Acionar", "d": "Brigada, manutenção e responsáveis"},
+            {"t": "Registrar", "d": "Anotar a ocorrência no registro de segurança"}
+          ],
+          "fala": "Em uma emergência, o operador identifica o desvio grave, executa a parada de emergência conforme o procedimento, afasta as pessoas e isola a área, aciona a brigada, a manutenção e os responsáveis e, depois, registra a ocorrência no registro de segurança. Esse roteiro precisa estar treinado antes, porque em uma situação real não há tempo para consultar o manual.",
+          "dica": "Simule com a turma uma situação de pressão subindo sem controle e discuta as ações."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A válvula que abria toda hora",
+    "relato": "Em uma lavanderia industrial, a válvula de segurança da caldeira abria várias vezes por dia, liberando vapor com barulho e incomodando os vizinhos. Um funcionário da manutenção, sem orientação de profissional habilitado, apertou a mola da válvula para aumentar a pressão de abertura. Dias depois, o controle de nível falhou durante a madrugada, a pressão subiu acima da PMTA e a caldeira sofreu uma ruptura em uma de suas partes, com projeção de vapor e fragmentos na casa de caldeiras. O operador conseguiu sair a tempo, mas o equipamento foi destruído.",
+    "perguntas": ["Qual era a causa provável das aberturas frequentes da válvula?", "Por que a alteração no ajuste foi uma decisão grave?", "Quais dispositivos falharam e em que sequência?", "Quem deveria ter sido acionado quando o problema começou?", "Que medidas evitariam a repetição?"],
+    "analise": "As aberturas frequentes indicavam problema no controle de pressão ou no processo, que precisava ser investigado. Ao alterar o ajuste da válvula sem profissional habilitado, a última barreira foi eliminada, situação caracterizada como risco grave e iminente. A falha do controle de nível somou-se à válvula desajustada e permitiu a sobrepressão. O profissional habilitado e a gestão deveriam ter sido acionados no início. A prevenção exige procedimento de manutenção dos dispositivos, calibração certificada, lacre e registro das intervenções, além de investigação das causas de atuação da válvula."
+  },
+  "dinamica": {"titulo": "Opera ou para?", "objetivo": "Treinar a decisão diante de anomalias em equipamentos sob pressão.", "tempo": 20, "passos": ["Leia situações como manômetro com vidro quebrado, pequeno vazamento de vapor em flange, válvula de segurança com lacre rompido e corrosão visível no costado de um vaso.", "Os grupos decidem se o equipamento continua operando, opera com restrição ou deve parar.", "Cada grupo justifica com base nos riscos e na norma.", "O instrutor comenta e relaciona com o risco grave e iminente."]},
+  "dds": {"titulo": "Válvula de segurança não se mexe", "texto": "Pessoal, a válvula de segurança é a última barreira entre uma caldeira ou um vaso de pressão e uma explosão. Ela pode fazer barulho, pode soltar vapor, pode incomodar. Mas, se ela está abrindo, é porque algo está errado no processo. A regra é: ninguém trava, ninguém aperta mola, ninguém tira a válvula. Avise a supervisão e a manutenção responsável. E se o manômetro estiver quebrado ou o nível não estiver aparecendo, o equipamento não opera até corrigir."},
+  "prova": [
+    {"q": "A NR-13 abrange:", "o": ["Somente caldeiras", "Caldeiras, vasos de pressão, tubulações e tanques metálicos, conforme os critérios da norma", "Apenas tanques plásticos", "Somente compressores portáteis"], "c": 1, "com": "Esses são os equipamentos abrangidos, observados os critérios da norma."},
+    {"q": "PMTA significa:", "o": ["Pressão mínima de teste aceitável", "Pressão máxima de trabalho admissível", "Potência máxima térmica admitida", "Pressão média de trabalho anual"], "c": 1, "com": "É o maior valor de pressão compatível com o projeto e a condição do equipamento."},
+    {"q": "A válvula de segurança serve para:", "o": ["Aumentar a pressão", "Aliviar a pressão quando atinge o valor de ajuste", "Medir a temperatura", "Controlar o nível de água"], "c": 1, "com": "É o dispositivo que evita a sobrepressão."},
+    {"q": "Travar ou alterar o ajuste da válvula de segurança é:", "o": ["Permitido para reduzir o ruído", "Situação de risco grave e iminente", "Rotina de manutenção", "Responsabilidade do operador"], "c": 1, "com": "A NR-13 caracteriza essa condição como risco grave e iminente."},
+    {"q": "O registro de segurança contém:", "o": ["A folha de pagamento", "Ocorrências importantes, inspeções e intervenções no equipamento", "A lista de compras", "Apenas a data de fabricação"], "c": 1, "com": "É o histórico de segurança do equipamento."},
+    {"q": "A inspeção de segurança inicial é feita:", "o": ["Depois do primeiro ano de uso", "Antes de o equipamento entrar em funcionamento", "Apenas após acidente", "Nunca"], "c": 1, "com": "Ela antecede a entrada em operação."},
+    {"q": "A inspeção extraordinária é exigida, por exemplo:", "o": ["Todo mês", "Após danos, reparos ou longo período parado", "Somente em feriados", "Quando muda o operador"], "c": 1, "com": "Situações que podem alterar a integridade do equipamento exigem inspeção extraordinária."},
+    {"q": "Para operar caldeiras, o operador deve:", "o": ["Apenas ter experiência", "Ter concluído o curso de segurança na operação previsto no Anexo I da NR-13", "Ser engenheiro", "Ter mais de 30 anos"], "c": 1, "com": "A NR-13 exige o curso específico com estágio prático."},
+    {"q": "Atuação frequente da válvula de segurança indica:", "o": ["Que tudo está normal", "Problema no processo ou no controle, que deve ser investigado", "Que a válvula deve ser removida", "Que a pressão está baixa"], "c": 1, "com": "A causa da sobrepressão deve ser identificada."},
+    {"q": "Reparos com solda em vaso de pressão devem ser feitos:", "o": ["Por qualquer soldador", "Com projeto e sob responsabilidade de profissional habilitado", "Sem documentação", "Com o equipamento pressurizado"], "c": 1, "com": "Intervenções exigem projeto, procedimento e responsável habilitado."}
+  ]
+}

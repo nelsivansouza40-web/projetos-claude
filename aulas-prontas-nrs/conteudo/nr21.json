@@ -1,0 +1,135 @@
+{
+  "nr": "21",
+  "titulo": "Trabalhos a Céu Aberto",
+  "chamada": "Sol, chuva, calor e raios também são riscos ocupacionais",
+  "icone": "FaSun",
+  "carga": "2 horas (aula informativa para trabalhadores e lideranças de atividades externas)",
+  "periodicidade": "A NR-21 não exige treinamento específico. Recomenda-se orientação anual, antes do período de maior calor ou de chuvas, e na integração de novos trabalhadores.",
+  "publico": "Trabalhadores que atuam a céu aberto, como construção, agricultura, manutenção de redes, limpeza urbana e obras viárias, e suas lideranças.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho ou de saúde ocupacional.",
+  "objetivos": [
+    "Conhecer as exigências da NR-21 para trabalhos a céu aberto",
+    "Reconhecer os riscos do sol, do calor, da chuva e das descargas atmosféricas",
+    "Aplicar medidas de proteção contra radiação solar e sobrecarga térmica",
+    "Agir com segurança diante de tempestades e mal-estar pelo calor"
+  ],
+  "recursos": ["Projetor e apresentação", "Exemplos de EPIs e vestimentas para trabalho externo", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-21 Trabalhos a Céu Aberto, texto vigente", "NR-09, anexo de calor", "NR-24 Condições Sanitárias e de Conforto", "NR-31, quando aplicável ao trabalho rural"],
+  "modulos": [
+    {
+      "titulo": "Exigências da NR-21",
+      "duracao": 30,
+      "gancho": "Quem trabalha ao ar livre está exposto a riscos que mudam a cada hora do dia. A NR-21 trata das proteções mínimas para esses trabalhadores.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "O que a NR-21 exige",
+          "cards": [
+            {"t": "Abrigos", "d": "Abrigos, ainda que rústicos, contra intempéries"},
+            {"t": "Proteção contra insolação", "d": "Medidas contra insolação excessiva, calor, frio, umidade e ventos"},
+            {"t": "Água e alimentação", "d": "Água potável e condições para refeições"},
+            {"t": "Moradia", "d": "Condições sanitárias quando houver alojamento no local"}
+          ],
+          "fala": "A NR-21 exige que, nos trabalhos a céu aberto, haja abrigos, ainda que rústicos, capazes de proteger os trabalhadores contra intempéries. Exige medidas especiais contra insolação excessiva, calor, frio, umidade e ventos inconvenientes. E, quando os trabalhadores moram no local de trabalho, a norma trata das condições das moradias. A NR-24 complementa com água potável, instalações sanitárias e locais para refeição.",
+          "pergunta": "Onde os trabalhadores das frentes externas se abrigam hoje?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Riscos do trabalho externo",
+          "cards": [
+            {"t": "Radiação solar", "d": "Queimaduras de pele, envelhecimento precoce, câncer de pele e lesões nos olhos"},
+            {"t": "Calor", "d": "Desidratação, câimbras, exaustão e intermação"},
+            {"t": "Chuva e frio", "d": "Hipotermia, pisos escorregadios e risco elétrico"},
+            {"t": "Descargas atmosféricas", "d": "Raios em áreas abertas, estruturas altas e máquinas"}
+          ],
+          "fala": "Os principais riscos são a radiação solar, que causa queimaduras, envelhecimento da pele, câncer de pele e lesões nos olhos; o calor, que leva à desidratação, câimbras, exaustão e intermação; a chuva e o frio, que trazem hipotermia, pisos escorregadios e aumento do risco elétrico; e as descargas atmosféricas. O Brasil está entre os países com maior incidência de raios no mundo.",
+          "pergunta": "Quais desses riscos aparecem nas nossas atividades externas?"
+        }
+      ]
+    },
+    {
+      "titulo": "Sol e calor",
+      "duracao": 30,
+      "gancho": "O câncer de pele é o tipo de câncer mais frequente no Brasil, e quem trabalha ao sol tem risco aumentado. A proteção é simples, mas precisa ser diária.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Proteção contra a radiação solar",
+          "itens": [
+            "Planejar as tarefas mais pesadas para os horários de menor radiação",
+            "Usar sombreamento e coberturas nas frentes de trabalho",
+            "Vestimentas de mangas longas e chapéu ou touca árabe",
+            "Óculos com proteção contra radiação ultravioleta",
+            "Protetor solar, reaplicado conforme a orientação do fabricante"
+          ],
+          "destaque": "A radiação ultravioleta atinge a pele mesmo em dias nublados.",
+          "fala": "A proteção contra a radiação solar começa no planejamento: deixar as tarefas mais pesadas para os horários de menor radiação, geralmente no início da manhã e no fim da tarde. Usar sombreamento nas frentes de trabalho. Vestir mangas longas e chapéu ou touca árabe, que protege nuca e orelhas. Usar óculos com proteção ultravioleta. E aplicar protetor solar, reaplicando conforme orientação. Lembre que a radiação atravessa as nuvens.",
+          "dica": "Mostre exemplos de vestimentas com proteção UV fornecidas pela empresa."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Prevenção da sobrecarga térmica",
+          "itens": [
+            "Água fresca disponível perto das frentes de trabalho",
+            "Beber água com frequência, antes de sentir sede",
+            "Pausas em local sombreado conforme a intensidade do calor",
+            "Aclimatação gradual para trabalhadores novos ou que retornam",
+            "Observar colegas: confusão, tontura e pele quente e seca são sinais de alerta"
+          ],
+          "destaque": "Quando a sede aparece, o corpo já começou a desidratar.",
+          "fala": "Para prevenir a sobrecarga térmica, a água fresca deve estar disponível perto das frentes de trabalho, e o trabalhador deve beber com frequência, antes de sentir sede. As pausas em local sombreado devem ser ajustadas à intensidade do calor, conforme o anexo da NR-09. Trabalhadores novos ou que voltam de férias precisam de aclimatação gradual. E cada um deve observar os colegas: confusão, tontura e pele quente e seca são sinais de alerta."
+        }
+      ]
+    },
+    {
+      "titulo": "Chuva, raios e emergências",
+      "duracao": 30,
+      "gancho": "Quando o céu fecha, o trabalho externo precisa de uma decisão rápida: parar e se abrigar. Vamos ver quando e como.",
+      "slides": [
+        {
+          "tipo": "alerta",
+          "titulo": "Tempestade com raios",
+          "texto": "Ouviu trovão? O raio pode atingir a sua área. Pare e procure abrigo seguro.",
+          "itens": [
+            "Interromper trabalhos em altura, em estruturas metálicas e com máquinas",
+            "Abrigar-se em edificação ou veículo fechado com carroceria metálica",
+            "Não ficar sob árvores isoladas, postes ou em campos abertos",
+            "Afastar-se de cercas, trilhos, redes elétricas e da água",
+            "Retornar somente após o fim da tempestade"
+          ],
+          "fala": "Se você ouviu trovão, o raio pode atingir a sua área. Interrompa os trabalhos em altura, em estruturas metálicas e com máquinas. Abrigue-se em uma edificação ou em veículo fechado com carroceria metálica. Não fique sob árvores isoladas, postes ou em campo aberto, e afaste-se de cercas, trilhos, redes elétricas e da água. Retorne somente depois que a tempestade passar. A análise de risco das atividades externas deve prever esse critério de parada.",
+          "pergunta": "Quem decide a parada por tempestade nas nossas frentes de trabalho?"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Mal-estar pelo calor",
+          "esquerda": {"t": "Exaustão pelo calor", "itens": ["Suor intenso, fraqueza, tontura e náusea", "Levar à sombra, afrouxar roupas e oferecer água", "Resfriar o corpo e observar"]},
+          "direita": {"t": "Intermação", "itens": ["Confusão, fala arrastada, desmaio, pele quente", "Emergência: acionar SAMU 192", "Resfriar o corpo imediatamente enquanto aguarda"]},
+          "fala": "É importante diferenciar a exaustão pelo calor da intermação. Na exaustão, a pessoa sua muito, sente fraqueza, tontura e náusea: leve para a sombra, afrouxe as roupas, ofereça água e resfrie o corpo. Na intermação, há confusão mental, fala arrastada, desmaio e pele muito quente: é uma emergência. Acione o SAMU no 192 e resfrie o corpo imediatamente com água e ventilação enquanto o socorro chega."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A última vala do dia",
+    "relato": "Uma equipe de manutenção de rede de água trabalhava em uma vala às 14 horas, em um dia de forte calor. Para terminar o serviço antes de uma tempestade prevista, a equipe dispensou a pausa da tarde. A única água disponível estava no caminhão, quente, a 300 metros da frente. Um dos trabalhadores, contratado havia uma semana, começou a falar de forma confusa e desmaiou. A equipe o colocou no caminhão e seguiu para o hospital, onde foi diagnosticado com intermação.",
+    "perguntas": ["Que fatores aumentaram o risco de sobrecarga térmica?", "Por que o trabalhador recém-contratado estava mais vulnerável?", "O atendimento inicial foi adequado?", "Que medidas deveriam estar previstas para essa frente de trabalho?"],
+    "analise": "O trabalho no horário de maior calor, sem pausa e sem água fresca próxima, elevou o risco. O trabalhador novo não estava aclimatado. A remoção rápida foi positiva, mas o resfriamento imediato do corpo e o acionamento do socorro deveriam ter ocorrido no local. A frente de trabalho deveria ter água fresca próxima, sombreamento, pausas definidas conforme o calor, aclimatação de novos trabalhadores, orientação sobre sinais de alerta e critério de parada para tempestades que não gerasse pressa."
+  },
+  "dinamica": {"titulo": "Previsão do tempo da equipe", "objetivo": "Planejar medidas conforme as condições climáticas.", "tempo": 15, "passos": ["Apresente três cenários de previsão do tempo, como calor intenso, chuva com raios à tarde e frio com vento.", "Os grupos planejam horários, pausas, EPIs e critérios de parada para cada cenário.", "Os grupos apresentam e a turma comenta.", "Feche reforçando que o clima deve constar da análise de risco diária."]},
+  "dds": {"titulo": "Água, sombra e chapéu", "texto": "Pessoal, hoje vai fazer calor. Então três combinados. Água: bebam um copo a cada vinte ou trinta minutos, mesmo sem sede. Sombra: as pausas são na sombra, e ninguém pula a pausa para terminar mais cedo. Proteção: manga longa, chapéu ou touca e protetor solar. E fiquem de olho no colega do lado. Se alguém ficar confuso, tonto ou parar de suar, chamem ajuda na hora. E se ouvir trovão, todo mundo para e procura abrigo."},
+  "prova": [
+    {"q": "A NR-21 exige, nos trabalhos a céu aberto:", "o": ["Ar-condicionado em todas as frentes", "Abrigos, ainda que rústicos, contra intempéries", "Trabalho apenas à noite", "Nenhuma medida específica"], "c": 1, "com": "A norma exige abrigos contra intempéries."},
+    {"q": "A radiação solar pode causar:", "o": ["Apenas bronzeado", "Queimaduras, câncer de pele e lesões nos olhos", "Perda auditiva", "Nenhum efeito"], "c": 1, "com": "A exposição solar prolongada traz riscos à pele e aos olhos."},
+    {"q": "A radiação ultravioleta em dias nublados:", "o": ["Não existe", "Continua atingindo a pele", "É sempre mais fraca que à noite", "Só afeta crianças"], "c": 1, "com": "A radiação atravessa as nuvens."},
+    {"q": "Para prevenir a desidratação, deve-se:", "o": ["Beber água só quando sentir sede", "Beber água com frequência, antes de sentir sede", "Evitar água durante o trabalho", "Beber apenas refrigerante"], "c": 1, "com": "A sede indica que a desidratação já começou."},
+    {"q": "Aclimatação é:", "o": ["O uso de ar-condicionado", "A adaptação gradual do trabalhador ao calor", "A troca de uniforme", "Uma pausa para almoço"], "c": 1, "com": "Trabalhadores novos precisam de adaptação gradual."},
+    {"q": "Ao ouvir trovões durante trabalho externo, deve-se:", "o": ["Continuar até a chuva começar", "Parar e procurar abrigo seguro", "Abrigar-se sob uma árvore isolada", "Subir em uma estrutura metálica"], "c": 1, "com": "O raio pode atingir a área antes da chuva."},
+    {"q": "É um abrigo adequado durante tempestade com raios:", "o": ["Árvore isolada", "Edificação ou veículo fechado com carroceria metálica", "Poste de iluminação", "Campo aberto"], "c": 1, "com": "Essas estruturas oferecem proteção contra descargas."},
+    {"q": "Confusão mental, desmaio e pele muito quente indicam:", "o": ["Cansaço normal", "Intermação, uma emergência médica", "Fome", "Sono"], "c": 1, "com": "Exige socorro e resfriamento imediatos."},
+    {"q": "Uma vestimenta adequada para trabalho ao sol é:", "o": ["Regata e bermuda", "Manga longa e chapéu ou touca árabe", "Roupa preta sintética", "Sem camisa"], "c": 1, "com": "Cobrem a pele e protegem nuca e orelhas."},
+    {"q": "As tarefas mais pesadas devem ser planejadas preferencialmente:", "o": ["No horário de maior radiação", "Nos horários de menor radiação e calor", "Sempre ao meio-dia", "Sem planejamento"], "c": 1, "com": "Reduz a exposição ao calor e ao sol."}
+  ]
+}

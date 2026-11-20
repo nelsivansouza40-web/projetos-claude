@@ -1,0 +1,167 @@
+{
+  "nr": "19",
+  "titulo": "Explosivos",
+  "chamada": "Explosivo não admite improviso: área controlada, pessoal habilitado e procedimento rigoroso",
+  "icone": "FaBomb",
+  "carga": "4 horas (aula informativa para trabalhadores e lideranças de atividades com explosivos)",
+  "periodicidade": "A NR-19 exige capacitação dos trabalhadores envolvidos conforme a atividade e seus anexos. Recomenda-se reciclagem anual e sempre que houver mudança de produto, processo ou local. Este kit não substitui a habilitação exigida pelos órgãos competentes, como o blaster.",
+  "publico": "Trabalhadores e lideranças de atividades de fabricação, armazenamento, transporte interno e uso de explosivos, como mineração, pedreiras e fábricas de fogos.",
+  "prerequisitos": "Avaliação de saúde compatível com a função e autorização da empresa para atuar em área com explosivos.",
+  "instrutor": "Profissional legalmente habilitado e com experiência em atividades com explosivos, sob responsabilidade técnica da empresa.",
+  "objetivos": [
+    "Reconhecer os riscos das atividades com explosivos",
+    "Conhecer os requisitos de armazenamento e as áreas de segurança",
+    "Aplicar as regras de manuseio e transporte interno",
+    "Agir de forma segura em emergências e em situações anormais"
+  ],
+  "recursos": ["Projetor e apresentação", "Planta das áreas de armazenamento e de risco da empresa", "Procedimentos operacionais da empresa", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-19 Explosivos, texto vigente, e seus anexos", "Regulamento de Produtos Controlados do Exército Brasileiro", "NR-16 Atividades e Operações Perigosas", "NR-22 Mineração, quando aplicável"],
+  "modulos": [
+    {
+      "titulo": "Riscos e regulamentação",
+      "duracao": 50,
+      "gancho": "Um acidente com explosivo não dá segunda chance. Por isso, as atividades com esses produtos têm controle da NR-19 e também do Exército. Vamos entender esse conjunto de regras.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Riscos das atividades com explosivos",
+          "cards": [
+            {"t": "Detonação acidental", "d": "Por impacto, atrito, calor, faísca ou eletricidade estática"},
+            {"t": "Onda de choque", "d": "Pressão que causa lesões graves e destrói estruturas"},
+            {"t": "Projeção de fragmentos", "d": "Pedras e estilhaços lançados a grande distância"},
+            {"t": "Incêndio e gases", "d": "Fogo e gases tóxicos gerados na queima ou detonação"}
+          ],
+          "fala": "Os explosivos podem detonar de forma acidental por impacto, atrito, calor, faísca ou eletricidade estática. A detonação gera uma onda de choque que causa lesões graves e destrói estruturas, além de projetar fragmentos e pedras a grandes distâncias. Também pode haver incêndio e liberação de gases tóxicos. Por isso, cada etapa, do armazenamento ao uso, segue regras rigorosas.",
+          "pergunta": "Em que etapas da nossa atividade há contato com explosivos?"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Quem regula",
+          "esquerda": {"t": "NR-19", "itens": ["Segurança e saúde dos trabalhadores", "Depósitos, manuseio, transporte interno e capacitação", "Anexos para atividades específicas"]},
+          "direita": {"t": "Exército Brasileiro", "itens": ["Controle de produtos controlados", "Registro, licenças e autorizações", "Requisitos de depósitos e distâncias"]},
+          "fala": "As atividades com explosivos seguem a NR-19, que trata da segurança e saúde dos trabalhadores em depósitos, manuseio, transporte interno e capacitação, com anexos para atividades específicas, como fogos de artifício. E seguem também o Regulamento de Produtos Controlados do Exército Brasileiro, que exige registro, licenças e define requisitos de depósitos e distâncias. As duas regulamentações se somam.",
+          "dica": "Mostre os registros e licenças da empresa junto ao órgão competente."
+        }
+      ]
+    },
+    {
+      "titulo": "Armazenamento",
+      "duracao": 50,
+      "gancho": "O depósito de explosivos concentra a maior quantidade de energia da operação. A forma como ele é construído, localizado e controlado define a segurança de todo o entorno.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Requisitos dos depósitos",
+          "itens": [
+            "Construção e localização conforme a regulamentação, respeitando distâncias de segurança",
+            "Proteção contra descargas atmosféricas, calor e umidade",
+            "Separação entre produtos incompatíveis, como explosivos e acessórios iniciadores",
+            "Acesso restrito, controle de entrada e de estoque",
+            "Sinalização de perigo e proibições"
+          ],
+          "destaque": "Explosivos e acessórios iniciadores não ficam juntos.",
+          "fala": "Os depósitos devem ser construídos e localizados conforme a regulamentação, respeitando as distâncias de segurança em relação a edificações, vias e outros depósitos. Precisam de proteção contra descargas atmosféricas, calor e umidade. Produtos incompatíveis, como explosivos e acessórios iniciadores, ficam separados. O acesso é restrito, com controle de entrada e de estoque. E a sinalização indica o perigo e as proibições.",
+          "pergunta": "Quem tem acesso ao depósito da empresa e como é feito o controle?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Proibições na área de explosivos",
+          "texto": "Nenhuma fonte de ignição entra na área de explosivos.",
+          "itens": [
+            "Fumar, acender fogo ou portar isqueiros e fósforos",
+            "Ferramentas que produzam faíscas, exceto as permitidas",
+            "Equipamentos eletrônicos não autorizados",
+            "Acúmulo de materiais combustíveis e vegetação seca",
+            "Pessoas não autorizadas"
+          ],
+          "fala": "Na área de explosivos, nenhuma fonte de ignição é admitida. É proibido fumar, acender fogo e portar isqueiros e fósforos. Ferramentas que produzam faíscas só podem ser usadas se forem as permitidas para o local. Equipamentos eletrônicos não autorizados ficam fora. Materiais combustíveis e vegetação seca são removidos. E apenas pessoas autorizadas entram."
+        }
+      ]
+    },
+    {
+      "titulo": "Manuseio e transporte interno",
+      "duracao": 55,
+      "gancho": "A maioria dos acidentes com explosivos acontece no manuseio. Pequenos descuidos, como deixar cair uma caixa ou misturar produtos, podem ter consequências graves.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Regras de manuseio",
+          "itens": [
+            "Somente trabalhadores capacitados e autorizados",
+            "Quantidades limitadas ao necessário para a tarefa",
+            "Nada de impactos, quedas, arrastes ou atritos nas embalagens",
+            "Ferramentas e recipientes adequados ao produto",
+            "Seguir o procedimento operacional sem adaptações"
+          ],
+          "destaque": "Pegou mais do que precisa? Mais gente fica exposta se algo der errado.",
+          "fala": "Somente trabalhadores capacitados e autorizados manuseiam explosivos. A quantidade fica limitada ao necessário para a tarefa, porque cada quilo a mais aumenta as consequências de um acidente. As embalagens não podem sofrer impactos, quedas, arrastes ou atritos. Usam-se ferramentas e recipientes adequados ao produto. E o procedimento operacional é seguido sem adaptações.",
+          "dica": "Relacione cada regra a um procedimento operacional da empresa."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Transporte interno",
+          "cards": [
+            {"t": "Veículo adequado", "d": "Em boas condições, com proteção da carga e equipamentos de emergência"},
+            {"t": "Separação", "d": "Explosivos e iniciadores em compartimentos separados, conforme a regulamentação"},
+            {"t": "Condução", "d": "Motorista capacitado, velocidade reduzida e rota definida"},
+            {"t": "Pessoas", "d": "Sem passageiros não autorizados durante o transporte"}
+          ],
+          "fala": "No transporte interno, o veículo deve estar em boas condições, com proteção da carga e equipamentos de emergência. Explosivos e iniciadores seguem separados, conforme a regulamentação. O motorista é capacitado, dirige em velocidade reduzida e segue a rota definida. E não há passageiros não autorizados durante o transporte."
+        }
+      ]
+    },
+    {
+      "titulo": "Emergências e situações anormais",
+      "duracao": 55,
+      "gancho": "Um incêndio perto do depósito, uma embalagem danificada, um produto deteriorado. Cada situação anormal tem uma resposta definida, e improvisar não é uma delas.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Em caso de incêndio na área",
+          "passos": [
+            {"t": "Alarme", "d": "Acionar o alarme e a brigada"},
+            {"t": "Evacuar", "d": "Afastar todos para a distância de segurança"},
+            {"t": "Não combater", "d": "Não combater fogo que atinja explosivos"},
+            {"t": "Isolar", "d": "Impedir o acesso à área"},
+            {"t": "Informar", "d": "Passar ao socorro a quantidade e o tipo de produto"}
+          ],
+          "fala": "Em um incêndio na área de explosivos, aciona-se o alarme e a brigada e todos são afastados para a distância de segurança prevista no plano de emergência. Fogo que atinja explosivos não deve ser combatido pelos trabalhadores. A área é isolada, e o socorro recebe as informações sobre a quantidade e o tipo de produto armazenado. O plano de emergência deve estar treinado antes.",
+          "pergunta": "Qual é o ponto de encontro e a distância de segurança previstos no nosso plano?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Produtos danificados ou vencidos",
+          "itens": [
+            "Não manusear produto com embalagem danificada, vazamento ou alteração",
+            "Isolar e sinalizar o local e comunicar o responsável",
+            "Destruição somente por profissional habilitado, conforme a regulamentação",
+            "Registrar a ocorrência e a destinação"
+          ],
+          "destaque": "Produto deteriorado pode ser mais sensível. Não tente resolver sozinho.",
+          "fala": "Produtos com embalagem danificada, vazamento, alteração de aspecto ou vencidos não devem ser manuseados. Isole e sinalize o local e comunique o responsável. A destruição só pode ser feita por profissional habilitado, conforme a regulamentação. E tudo deve ser registrado. Um produto deteriorado pode ficar mais sensível a impacto e calor, por isso ninguém tenta resolver sozinho."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "O carregamento com pressa",
+    "relato": "Em uma pedreira, a equipe precisava concluir o carregamento de uma frente de lavra antes do horário programado para a detonação. Para ganhar tempo, um trabalhador levou no mesmo veículo e no mesmo compartimento caixas de explosivo e acessórios iniciadores, e transportou mais material do que o necessário. Durante o descarregamento, uma caixa caiu da carroceria. Não houve detonação, mas o responsável técnico paralisou a atividade e abriu uma investigação.",
+    "perguntas": ["Quais regras de transporte e manuseio foram descumpridas?", "Por que a quantidade transportada importa?", "Qual o papel da pressão pelo horário?", "Que medidas devem ser adotadas?"],
+    "analise": "O transporte de explosivos e iniciadores no mesmo compartimento descumpriu a regra de separação, e a quantidade acima do necessário aumentou as consequências possíveis. A queda da caixa caracterizou impacto em embalagem de explosivo, situação que o procedimento busca evitar. A pressão pelo horário levou ao atalho. A empresa deve reforçar o procedimento, revisar o planejamento das detonações para não gerar pressa, usar veículo com compartimentos separados e investigar o quase acidente com os envolvidos."
+  },
+  "dinamica": {"titulo": "Certo ou errado?", "objetivo": "Fixar as regras de armazenamento e manuseio.", "tempo": 15, "passos": ["Leia afirmações como fumar a 100 metros do depósito é permitido ou explosivos e iniciadores podem ficar na mesma prateleira se forem poucos.", "Os participantes respondem certo ou errado.", "O instrutor explica a regra e a razão de cada uma.", "Feche com as regras mais importantes para a operação da empresa."]},
+  "dds": {"titulo": "Sem atalho com explosivo", "texto": "Pessoal, com explosivo não existe jeitinho. Cada regra do procedimento existe porque alguém, em algum lugar, se machucou quando ela não foi seguida. Separar explosivo de iniciador, pegar só o necessário, não deixar cair, não levar celular ou isqueiro para a área, tudo isso faz diferença. Se o horário estiver apertado, avisem. A detonação pode esperar. Ninguém aqui precisa correr risco para cumprir cronograma."},
+  "prova": [
+    {"q": "Além da NR-19, as atividades com explosivos são reguladas:", "o": ["Pela ANVISA", "Pelo Exército Brasileiro, no Regulamento de Produtos Controlados", "Pelo INMETRO apenas", "Por nenhum outro órgão"], "c": 1, "com": "O Exército controla os produtos controlados."},
+    {"q": "Uma causa de detonação acidental é:", "o": ["Armazenamento ventilado", "Impacto, atrito, calor ou faísca", "Sinalização correta", "Controle de estoque"], "c": 1, "com": "Esses estímulos podem iniciar o explosivo."},
+    {"q": "Explosivos e acessórios iniciadores devem:", "o": ["Ficar sempre juntos", "Ser armazenados e transportados separados", "Ser misturados para economizar espaço", "Ficar no mesmo compartimento do veículo"], "c": 1, "com": "A separação reduz o risco de iniciação acidental."},
+    {"q": "Na área de explosivos é proibido:", "o": ["Usar sinalização", "Fumar e portar fontes de ignição", "Controlar o acesso", "Manter extintores"], "c": 1, "com": "Fontes de ignição são proibidas."},
+    {"q": "A quantidade de explosivo manuseada deve ser:", "o": ["A maior possível", "Limitada ao necessário para a tarefa", "Indiferente", "Sempre o estoque total"], "c": 1, "com": "Menos produto significa menor consequência em caso de acidente."},
+    {"q": "Diante de embalagem de explosivo danificada, o trabalhador deve:", "o": ["Reembalar por conta própria", "Não manusear, isolar e comunicar o responsável", "Jogar fora no lixo comum", "Queimar no local"], "c": 1, "com": "A destinação é feita por profissional habilitado."},
+    {"q": "Em incêndio que atinja explosivos, os trabalhadores devem:", "o": ["Combater com extintores", "Evacuar para a distância de segurança e isolar a área", "Retirar os explosivos", "Jogar água"], "c": 1, "com": "Não se combate fogo que atinja explosivos."},
+    {"q": "A destruição de explosivos vencidos deve ser feita:", "o": ["Por qualquer trabalhador", "Por profissional habilitado, conforme a regulamentação", "No lixo comum", "Enterrando no terreno"], "c": 1, "com": "É atividade controlada e de alto risco."},
+    {"q": "No transporte interno de explosivos:", "o": ["Passageiros são permitidos", "O motorista é capacitado, a rota é definida e não há passageiros não autorizados", "A velocidade não importa", "O veículo pode ter qualquer condição"], "c": 1, "com": "São regras básicas do transporte interno."},
+    {"q": "O adicional relacionado às atividades com explosivos é o de:", "o": ["Insalubridade", "Periculosidade", "Transferência", "Noturno"], "c": 1, "com": "Explosivos estão no anexo 1 da NR-16."}
+  ]
+}

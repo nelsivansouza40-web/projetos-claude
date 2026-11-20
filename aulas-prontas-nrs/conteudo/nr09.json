@@ -1,0 +1,177 @@
+{
+  "nr": "09",
+  "titulo": "Agentes Físicos, Químicos e Biológicos",
+  "chamada": "O que não se vê também adoece: avaliar a exposição para controlar a tempo",
+  "icone": "FaFlask",
+  "carga": "4 horas (carga sugerida para equipes de SST, lideranças e CIPA)",
+  "periodicidade": "A NR-09 não fixa treinamento. Recomenda-se reciclagem a cada 2 anos ou quando houver mudança nos processos, nos agentes presentes ou na norma.",
+  "publico": "Profissionais de SST, lideranças de áreas com exposição a agentes ambientais e membros da CIPA.",
+  "prerequisitos": "Não há. Recomenda-se ter em mãos o inventário de riscos do PGR.",
+  "instrutor": "Profissional de segurança do trabalho ou higienista ocupacional com experiência em avaliação de agentes ambientais.",
+  "objetivos": [
+    "Reconhecer os agentes físicos, químicos e biológicos presentes no trabalho",
+    "Compreender as etapas de avaliação das exposições previstas na NR-09",
+    "Interpretar limites de exposição e nível de ação",
+    "Aplicar a hierarquia de medidas de controle para agentes ambientais"
+  ],
+  "recursos": ["Projetor e apresentação", "Exemplos de laudos ou relatórios de avaliação ambiental", "Fichas com dados de segurança de produtos químicos", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-09 Avaliação e Controle das Exposições Ocupacionais a Agentes Físicos, Químicos e Biológicos, texto vigente", "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais", "NR-15 Atividades e Operações Insalubres", "Normas de Higiene Ocupacional da Fundacentro"],
+  "modulos": [
+    {
+      "titulo": "Agentes ambientais e a NR-09",
+      "duracao": 50,
+      "gancho": "Ruído, poeira, vapores, calor, vírus. Muitos agentes do ambiente de trabalho agem em silêncio por anos até aparecer a doença. A NR-09 organiza como avaliar e controlar essas exposições.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Os três grupos de agentes",
+          "cards": [
+            {"t": "Físicos", "d": "Ruído, vibração, calor, frio, radiações, pressões anormais e umidade"},
+            {"t": "Químicos", "d": "Poeiras, fumos, névoas, neblinas, gases e vapores"},
+            {"t": "Biológicos", "d": "Bactérias, fungos, vírus, parasitas e outros microrganismos"},
+            {"t": "Vias de entrada", "d": "Respiratória, pele, digestiva e, para alguns agentes, a audição e o corpo todo"}
+          ],
+          "fala": "A NR-09 trata de três grupos de agentes. Os físicos, como ruído, vibração, calor, frio, radiações e pressões anormais. Os químicos, que podem estar no ar como poeiras, fumos, névoas, gases e vapores, ou em contato com a pele. E os biológicos, como bactérias, fungos e vírus. Para entender o risco, precisamos saber também por onde o agente entra no corpo: pela respiração, pela pele ou pela boca, no caso de mãos contaminadas.",
+          "pergunta": "Que agentes físicos, químicos ou biológicos existem no seu setor?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "A NR-09 dentro do GRO",
+          "passos": [
+            {"t": "Identificar", "d": "Reconhecer agentes, fontes e trabalhadores expostos"},
+            {"t": "Avaliar", "d": "Avaliação preliminar e, quando necessário, quantitativa"},
+            {"t": "Controlar", "d": "Implementar medidas de prevenção"},
+            {"t": "Monitorar", "d": "Acompanhar a exposição e a efetividade do controle"}
+          ],
+          "fala": "A NR-09 complementa o Gerenciamento de Riscos Ocupacionais da NR-01. Primeiro identificamos os agentes, suas fontes e quem está exposto. Depois avaliamos a exposição, de forma preliminar e, quando necessário, com medições. Em seguida implementamos as medidas de controle. E monitoramos para saber se a exposição continua controlada. Os resultados entram no inventário de riscos e no plano de ação do PGR."
+        }
+      ]
+    },
+    {
+      "titulo": "Avaliação das exposições",
+      "duracao": 50,
+      "gancho": "Para controlar uma exposição, é preciso saber quanto ela representa. É aqui que entram a avaliação qualitativa, as medições e os limites de exposição.",
+      "slides": [
+        {
+          "tipo": "comparar",
+          "titulo": "Avaliação preliminar e quantitativa",
+          "esquerda": {"t": "Preliminar", "itens": ["Observação do processo e das tarefas", "Informações de produtos e fichas de segurança", "Relatos dos trabalhadores e histórico"]},
+          "direita": {"t": "Quantitativa", "itens": ["Medição com equipamentos e metodologia técnica", "Grupos de exposição similar", "Comparação com limites e nível de ação"]},
+          "fala": "A avaliação começa de forma preliminar, observando o processo, as tarefas, as informações dos produtos e as fichas com dados de segurança, além dos relatos dos trabalhadores. Quando isso não basta para concluir se a exposição está controlada, partimos para a avaliação quantitativa, com medições feitas por metodologia técnica, como as normas de higiene ocupacional da Fundacentro. Os trabalhadores com exposição parecida são organizados em grupos, e os resultados são comparados com os limites de exposição e com o nível de ação.",
+          "dica": "Mostre um relatório de dosimetria de ruído e explique como ler o resultado."
+        },
+        {
+          "tipo": "numero",
+          "titulo": "Nível de ação",
+          "valor": "Ação",
+          "legenda": "valor a partir do qual devem ser adotadas medidas preventivas para que a exposição não ultrapasse o limite",
+          "itens": [
+            "Para agentes químicos, corresponde à metade do limite de exposição",
+            "Para ruído, corresponde à dose de 0,5, ou 50%",
+            "Ao atingir o nível de ação, iniciam-se monitoramento e medidas preventivas"
+          ],
+          "fala": "Um conceito central da NR-09 é o nível de ação. É o valor a partir do qual devem ser adotadas ações preventivas para evitar que a exposição ultrapasse o limite. Para agentes químicos, o nível de ação é a metade do limite de exposição. Para ruído, é a dose de meio, ou cinquenta por cento. Ao atingir o nível de ação, a empresa já deve monitorar periodicamente e adotar medidas, sem esperar o limite ser ultrapassado."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "De onde vêm os limites",
+          "cabecalho": ["Fonte", "Uso"],
+          "linhas": [
+            ["Anexos da NR-09", "Vibração e calor, com critérios e níveis de ação próprios"],
+            ["NR-15", "Limites de tolerância de ruído, agentes químicos e outros"],
+            ["Referências técnicas", "Na ausência de limite legal, valores reconhecidos internacionalmente"],
+            ["Fundacentro", "Metodologias de avaliação das normas de higiene ocupacional"]
+          ],
+          "fala": "Os limites usados na avaliação vêm de fontes definidas. Os anexos da própria NR-09 tratam de vibração e calor, com critérios e níveis de ação próprios. A NR-15 traz os limites de tolerância de ruído, agentes químicos e outros. Quando não há limite na legislação brasileira, usam-se referências técnicas reconhecidas. E as normas de higiene ocupacional da Fundacentro trazem as metodologias de medição."
+        }
+      ]
+    },
+    {
+      "titulo": "Medidas de controle",
+      "duracao": 55,
+      "gancho": "Medir sem controlar não protege ninguém. Vamos ver como escolher as medidas que realmente reduzem a exposição.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Hierarquia de controle para agentes ambientais",
+          "cabecalho": ["Nível", "Exemplos"],
+          "linhas": [
+            ["Eliminação e substituição", "Trocar solvente por produto à base de água, eliminar o jateamento com areia"],
+            ["Engenharia", "Enclausuramento, ventilação local exaustora, umidificação, isolamento de vibração"],
+            ["Administrativas", "Redução do tempo de exposição, rodízio, procedimentos, pausas e hidratação no calor"],
+            ["Proteção individual", "Protetor auricular, respirador e luvas, com seleção e treinamento"]
+          ],
+          "fala": "Para agentes ambientais, a hierarquia de controle é a mesma da NR-01. Primeiro eliminar ou substituir, como trocar um solvente por um produto à base de água. Depois medidas de engenharia, como enclausurar a fonte de ruído, instalar exaustão junto à fonte de vapores ou umidificar processos com poeira. Em seguida, medidas administrativas, como reduzir o tempo de exposição, fazer rodízio e organizar pausas e hidratação no calor. E, por fim, o EPI selecionado para o agente.",
+          "pergunta": "Que agente da nossa empresa poderia ser eliminado ou substituído?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Anexos da NR-09",
+          "cards": [
+            {"t": "Vibração", "d": "Vibrações de mãos e braços e de corpo inteiro, com níveis de ação e limites"},
+            {"t": "Benzeno em postos", "d": "Medidas de prevenção em postos revendedores de combustíveis"},
+            {"t": "Calor", "d": "Avaliação pelo IBUTG, nível de ação e medidas de prevenção"},
+            {"t": "Aplicação", "d": "Cada anexo traz critérios técnicos e medidas específicas"}
+          ],
+          "fala": "A NR-09 tem anexos para situações específicas. Um trata das vibrações de mãos e braços e de corpo inteiro, com níveis de ação e limites de exposição. Outro trata da exposição ao benzeno em postos revendedores de combustíveis. E outro trata do calor, com avaliação pelo índice IBUTG, nível de ação e medidas como hidratação, pausas e aclimatação. Cada anexo traz critérios técnicos que devem ser seguidos.",
+          "dica": "Detalhe apenas os anexos aplicáveis às atividades da turma."
+        }
+      ]
+    },
+    {
+      "titulo": "Agentes biológicos e emergências",
+      "duracao": 55,
+      "gancho": "Os agentes biológicos estão em hospitais, mas também em estações de tratamento de esgoto, frigoríficos, coleta de lixo e laboratórios. E alguns agentes exigem preparo para emergências.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Controle de agentes biológicos",
+          "itens": [
+            "Identificar as atividades com exposição e as fontes de contaminação",
+            "Adotar barreiras físicas, higienização e controle de resíduos",
+            "Garantir lavatórios, vestiários e separação de roupas",
+            "Vacinação quando houver vacina disponível para o agente",
+            "Procedimentos para acidentes com material biológico"
+          ],
+          "destaque": "Higiene das mãos e vacinação são medidas simples que evitam muitas infecções.",
+          "fala": "Para os agentes biológicos, a avaliação costuma ser qualitativa, com foco nas atividades e nas fontes de contaminação. As medidas incluem barreiras físicas, higienização e controle de resíduos, instalações para lavagem e troca de roupa, vacinação quando houver vacina eficaz e procedimentos para acidentes com material biológico, como cortes e respingos. Medidas simples, como lavar as mãos, evitam muitas infecções.",
+          "pergunta": "Quais atividades da nossa empresa envolvem contato com agentes biológicos?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Exposição acidental e emergências",
+          "itens": [
+            "Prever no PGR situações de vazamento, derramamento e liberação de agentes",
+            "Definir procedimentos, responsáveis e recursos de resposta",
+            "Disponibilizar equipamentos de emergência, como chuveiro e lava-olhos",
+            "Treinar os trabalhadores para agir e para abandonar a área"
+          ],
+          "destaque": "Em um vazamento, saber o que fazer nos primeiros minutos evita intoxicações graves.",
+          "fala": "A empresa também precisa se preparar para exposições acidentais, como vazamentos e derramamentos de produtos químicos. O PGR deve prever essas situações, com procedimentos, responsáveis e recursos de resposta. Chuveiros de emergência e lava-olhos devem estar disponíveis e funcionando onde houver risco. E os trabalhadores precisam saber o que fazer e como abandonar a área.",
+          "dica": "Mostre a localização dos chuveiros e lava-olhos da empresa."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A cabine de pintura sem exaustão",
+    "relato": "Em uma fábrica de móveis, a cabine de pintura teve o exaustor queimado e, para não parar a produção, os pintores passaram a trabalhar com a porta aberta e um ventilador comum direcionado para fora. Eles usavam máscara descartável para poeira. Após três semanas, dois pintores relataram dor de cabeça e tontura no fim do turno. Uma avaliação quantitativa indicou concentração de solventes acima do limite de exposição na área da cabine e acima do nível de ação no setor vizinho de montagem.",
+    "perguntas": ["Que medida de engenharia deixou de funcionar?", "A máscara usada era adequada? Por quê?", "Que trabalhadores além dos pintores foram expostos?", "Que medidas deveriam ser adotadas imediatamente e a médio prazo?"],
+    "analise": "A ventilação local exaustora era a principal medida de controle e deixou de funcionar sem que a atividade fosse interrompida. A máscara para partículas não retém vapores orgânicos. O ventilador espalhou os vapores para o setor de montagem, expondo outros trabalhadores. A pintura deveria ser suspensa até o conserto do exaustor; a médio prazo, cabe prever manutenção preventiva do sistema, alarme de falha, avaliação de produtos com menor teor de solventes, respirador com filtro químico adequado e monitoramento periódico."
+  },
+  "dinamica": {"titulo": "Do agente ao controle", "objetivo": "Exercitar a escolha de medidas pela hierarquia.", "tempo": 20, "passos": ["Entregue a cada grupo um cartão com um agente e uma atividade, como ruído de serra, poeira de cimento, calor em forno ou vírus em coleta de lixo.", "O grupo propõe uma medida em cada nível da hierarquia.", "Os grupos apresentam e a turma avalia se a medida é viável.", "Feche destacando que o EPI vem por último."]},
+  "dds": {"titulo": "O cheiro não é o termômetro", "texto": "Pessoal, tem gente que acha que, se não está sentindo cheiro, não tem perigo. Mas muitos produtos químicos são perigosos antes de qualquer cheiro aparecer, e outros a gente para de sentir depois de alguns minutos. O mesmo vale para o ruído: a gente se acostuma, mas o ouvido continua sendo lesado. Por isso, mantenha a exaustão funcionando, avise quando ela parar e use a proteção indicada para cada produto. E se sentir dor de cabeça, tontura ou irritação, saia da área e comunique."},
+  "prova": [
+    {"q": "São agentes físicos:", "o": ["Poeiras e fumos", "Ruído, vibração e calor", "Bactérias e vírus", "Gases e vapores"], "c": 1, "com": "Ruído, vibração, calor, frio e radiações são agentes físicos."},
+    {"q": "Poeiras, fumos, gases e vapores são agentes:", "o": ["Físicos", "Químicos", "Biológicos", "Ergonômicos"], "c": 1, "com": "São formas de agentes químicos."},
+    {"q": "A NR-09 complementa:", "o": ["A NR-12", "O Gerenciamento de Riscos Ocupacionais da NR-01", "A NR-35", "A NR-24"], "c": 1, "com": "A NR-09 detalha a avaliação e o controle dos agentes dentro do GRO."},
+    {"q": "Para agentes químicos, o nível de ação corresponde a:", "o": ["O dobro do limite", "Metade do limite de exposição", "Ao próprio limite", "Um décimo do limite"], "c": 1, "com": "O nível de ação é metade do limite de exposição."},
+    {"q": "Para ruído, o nível de ação corresponde à dose de:", "o": ["0,1", "0,5", "1,0", "2,0"], "c": 1, "com": "Dose de 0,5, ou 50%."},
+    {"q": "A primeira medida da hierarquia de controle é:", "o": ["Fornecer EPI", "Eliminar ou substituir o agente", "Reduzir o tempo de exposição", "Sinalizar a área"], "c": 1, "com": "Eliminação e substituição vêm antes das demais medidas."},
+    {"q": "A ventilação local exaustora é uma medida:", "o": ["Administrativa", "De engenharia", "De proteção individual", "Médica"], "c": 1, "com": "Atua no meio, captando o contaminante junto à fonte."},
+    {"q": "O calor é avaliado na NR-09 pelo índice:", "o": ["dB(A)", "IBUTG", "ppm", "m/s²"], "c": 1, "com": "O anexo de calor usa o IBUTG."},
+    {"q": "A avaliação quantitativa é necessária quando:", "o": ["Sempre, mesmo sem dúvida", "A avaliação preliminar não permite concluir se a exposição está controlada", "Nunca", "Somente após acidente"], "c": 1, "com": "A medição é usada quando a análise preliminar não basta."},
+    {"q": "Máscara descartável para poeira protege contra vapores de solventes?", "o": ["Sim, sempre", "Não; é preciso filtro químico adequado", "Sim, se for trocada a cada hora", "Sim, se o local for ventilado"], "c": 1, "com": "Filtros para partículas não retêm vapores."}
+  ]
+}

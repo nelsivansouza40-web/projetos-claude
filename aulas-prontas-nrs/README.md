@@ -6,16 +6,46 @@ documentos do treinamento.
 
 ## Normas disponíveis
 
-| Norma | Tema | Carga horária do kit | Slides |
+| Norma | Tema | Carga do kit | Slides |
 |---|---|---|---|
-| NR-01 | GRO e PGR | 4 h (sugerida) | 26 |
-| NR-05 | CIPA | 20 h (grau de risco 4; reduzir para 8, 12 ou 16 h) | 37 |
-| NR-06 | Equipamento de Proteção Individual | 4 h (sugerida) | 23 |
-| NR-10 | Segurança em Instalações e Serviços em Eletricidade | 40 h (curso básico) | 39 |
-| NR-12 | Segurança no Trabalho em Máquinas e Equipamentos | 8 h (sugerida) | 30 |
-| NR-18 | Indústria da Construção | 4 h (treinamento inicial) | 25 |
-| NR-33 | Espaços Confinados | 16 h (autorizados e vigias) | 31 |
-| NR-35 | Trabalho em Altura | 8 h (inicial) | 34 |
+| NR-01 | GRO e PGR | 4 h | 26 |
+| NR-03 | Embargo e Interdição | 2 h | 16 |
+| NR-04 | Serviços Especializados em Segurança e Medicina do Trabalho | 2 h | 14 |
+| NR-05 | CIPA | 20 h | 37 |
+| NR-06 | Equipamento de Proteção Individual | 4 h | 23 |
+| NR-07 | Programa de Controle Médico de Saúde Ocupacional | 4 h | 20 |
+| NR-08 | Edificações | 2 h | 14 |
+| NR-09 | Agentes Físicos, Químicos e Biológicos | 4 h | 18 |
+| NR-10 | Segurança em Instalações e Serviços em Eletricidade | 40 h | 39 |
+| NR-11 | Movimentação e Armazenagem de Materiais | 8 h | 20 |
+| NR-12 | Segurança no Trabalho em Máquinas e Equipamentos | 8 h | 30 |
+| NR-13 | Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos | 8 h | 23 |
+| NR-14 | Fornos | 2 h | 14 |
+| NR-15 | Atividades e Operações Insalubres | 4 h | 17 |
+| NR-16 | Atividades e Operações Perigosas | 2 h | 14 |
+| NR-17 | Ergonomia | 4 h | 20 |
+| NR-18 | Segurança e Saúde no Trabalho na Indústria da Construção | 4 h | 25 |
+| NR-19 | Explosivos | 4 h | 17 |
+| NR-20 | Inflamáveis e Combustíveis | 8 h | 20 |
+| NR-21 | Trabalhos a Céu Aberto | 2 h | 14 |
+| NR-22 | Segurança e Saúde Ocupacional na Mineração | 8 h | 22 |
+| NR-23 | Proteção contra Incêndios | 4 h | 15 |
+| NR-24 | Condições Sanitárias e de Conforto nos Locais de Trabalho | 2 h | 14 |
+| NR-25 | Resíduos Industriais | 2 h | 14 |
+| NR-26 | Sinalização e Identificação de Segurança | 4 h | 18 |
+| NR-28 | Fiscalização e Penalidades | 2 h | 14 |
+| NR-29 | Segurança e Saúde no Trabalho Portuário | 8 h | 21 |
+| NR-30 | Segurança e Saúde no Trabalho Aquaviário | 8 h | 20 |
+| NR-31 | Trabalho Rural: Aplicação de Agrotóxicos | 20 h | 28 |
+| NR-32 | Segurança e Saúde no Trabalho em Serviços de Saúde | 4 h | 19 |
+| NR-33 | Segurança e Saúde nos Trabalhos em Espaços Confinados | 16 h | 31 |
+| NR-34 | Indústria da Construção, Montagem e Reparação Naval | 8 h | 21 |
+| NR-35 | Trabalho em Altura | 8 h | 34 |
+| NR-36 | Frigoríficos | 4 h | 18 |
+| NR-37 | Segurança e Saúde em Plataformas de Petróleo | 8 h | 21 |
+| NR-38 | Atividades de Limpeza Urbana e Manejo de Resíduos Sólidos | 4 h | 19 |
+
+As cargas sugeridas e as observações de cada norma estão no plano de aula do kit. A NR-02 e a NR-27 foram revogadas e não têm kit.
 
 ## O que tem em cada kit
 
@@ -38,7 +68,7 @@ Pasta `kits/NR-XX - Tema/`, com os arquivos editáveis e cópias em `PDF/`:
 - O material apoia o instrutor habilitado. A validade do certificado depende
   da qualificação do instrutor, do responsável técnico e do cumprimento da
   carga horária, incluindo a parte prática.
-- Nos cursos longos (NR-05, NR-10 e NR-33), os slides cobrem todo o conteúdo
+- Nos cursos longos (NR-05, NR-10, NR-31 e NR-33), os slides cobrem todo o conteúdo
   programático; o tempo restante é preenchido com exemplos da empresa, leitura
   da norma, exercícios, dinâmica, estudo de caso e prática. O roteiro do
   instrutor explica como distribuir esse tempo.

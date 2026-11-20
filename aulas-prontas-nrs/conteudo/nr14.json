@@ -1,0 +1,134 @@
+{
+  "nr": "14",
+  "titulo": "Fornos",
+  "chamada": "Calor, chama e gases controlados desde a instalação até a operação",
+  "icone": "FaFire",
+  "carga": "2 horas (aula informativa para operadores, manutenção e lideranças)",
+  "periodicidade": "A NR-14 não exige treinamento específico. Recomenda-se reciclagem anual para operadores de fornos e sempre que houver mudança no equipamento ou no combustível.",
+  "publico": "Operadores de fornos industriais, equipes de manutenção, lideranças e profissionais de SST.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho ou técnico com experiência na operação de fornos industriais.",
+  "objetivos": [
+    "Conhecer os requisitos de construção e instalação de fornos",
+    "Identificar os riscos de calor, queimaduras, gases e explosão",
+    "Aplicar práticas seguras de operação e de manutenção",
+    "Agir de forma segura em situações de emergência"
+  ],
+  "recursos": ["Projetor e apresentação", "Vestimentas e EPIs de proteção térmica para demonstração", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-14 Fornos, texto vigente", "NR-09 Agentes Físicos, Químicos e Biológicos, anexo de calor", "NR-20 Inflamáveis e Combustíveis", "NR-23 Proteção contra Incêndios"],
+  "modulos": [
+    {
+      "titulo": "Construção e instalação",
+      "duracao": 30,
+      "gancho": "Um forno industrial trabalha com temperaturas que derretem metais e com combustíveis que podem explodir. A segurança começa no projeto e na instalação.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Requisitos da NR-14",
+          "cards": [
+            {"t": "Construção sólida", "d": "Fornos construídos solidamente, revestidos com material refratário"},
+            {"t": "Isolamento térmico", "d": "Calor radiante não deve ultrapassar os limites de tolerância"},
+            {"t": "Local adequado", "d": "Instalados em locais que ofereçam segurança e conforto"},
+            {"t": "Gases", "d": "Proteção contra gases, fumaças e poeiras liberados pelo forno"}
+          ],
+          "fala": "A NR-14 é curta, mas trata de pontos essenciais. Os fornos devem ser construídos solidamente e revestidos com material refratário, de forma que o calor radiante não ultrapasse os limites de tolerância. Devem ser instalados em locais que ofereçam segurança e conforto aos trabalhadores, com proteção contra gases, fumaças e poeiras. Também é exigido que os fornos tenham chaminé suficientemente dimensionada para a livre saída dos gases queimados.",
+          "pergunta": "Que tipos de forno existem na nossa empresa e que combustível usam?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Combustíveis e queimadores",
+          "itens": [
+            "Instalações de combustível gasoso ou líquido com proteção contra explosão e retrocesso de chama",
+            "Escadas e plataformas de acesso seguras",
+            "Dispositivos de controle da chama e de corte de combustível",
+            "Ventilação para remover gases antes da ignição"
+          ],
+          "destaque": "A purga antes do acendimento evita explosões por acúmulo de combustível.",
+          "fala": "Fornos que usam combustível gasoso ou líquido devem ter sistemas de proteção que evitem explosão por falha da chama e retrocesso de chamas. Escadas e plataformas de acesso precisam ser seguras. Dispositivos de controle da chama cortam o combustível se a chama apagar. E antes do acendimento, a câmara deve ser ventilada, a chamada purga, para remover combustível acumulado. Muitas explosões de fornos acontecem no reacendimento sem purga.",
+          "dica": "Mostre os dispositivos de segurança do queimador de um forno da empresa."
+        }
+      ]
+    },
+    {
+      "titulo": "Riscos e operação segura",
+      "duracao": 30,
+      "gancho": "Na operação do forno, o trabalhador fica exposto a calor intenso, superfícies quentes, gases e, às vezes, metal fundido. Vamos ver como se proteger.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Riscos na operação",
+          "cards": [
+            {"t": "Calor", "d": "Sobrecarga térmica, desidratação e exaustão"},
+            {"t": "Queimaduras", "d": "Superfícies quentes, chamas, peças e metal fundido"},
+            {"t": "Gases", "d": "Monóxido de carbono e outros gases da combustão"},
+            {"t": "Explosão", "d": "Acúmulo de combustível e contato de água com metal fundido"}
+          ],
+          "fala": "Os riscos na operação de fornos incluem o calor, que pode causar sobrecarga térmica e desidratação; as queimaduras por superfícies quentes, chamas, peças e metal fundido; os gases da combustão, como o monóxido de carbono; e a explosão, seja por acúmulo de combustível, seja pelo contato de água ou umidade com metal fundido, que gera vapor de forma explosiva.",
+          "pergunta": "Quais desses riscos aparecem com mais frequência no nosso processo?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Práticas seguras",
+          "itens": [
+            "Seguir o procedimento de acendimento, com purga e verificação da chama",
+            "Hidratação frequente, pausas e aclimatação em ambientes quentes",
+            "Vestimentas e EPIs de proteção térmica adequados à tarefa",
+            "Ferramentas e materiais secos em contato com metal fundido",
+            "Manutenção somente com o forno resfriado, bloqueado e liberado"
+          ],
+          "destaque": "Nunca leve ferramenta molhada ou úmida até metal fundido.",
+          "fala": "Para operar com segurança, siga o procedimento de acendimento com purga e verificação da chama. Em ambientes quentes, hidrate-se com frequência, respeite as pausas e o período de aclimatação para quem está começando. Use vestimentas e EPIs de proteção térmica adequados à tarefa. Mantenha ferramentas e materiais secos quando houver metal fundido. E faça manutenção somente com o forno resfriado, com as fontes de energia e de combustível bloqueadas e com liberação formal.",
+          "dica": "Relacione as pausas e a hidratação com o anexo de calor da NR-09."
+        }
+      ]
+    },
+    {
+      "titulo": "Emergências",
+      "duracao": 30,
+      "gancho": "Vazamento de gás, chama que apaga, queimadura grave. Saber o que fazer nos primeiros minutos reduz muito as consequências.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Vazamento ou falha de chama",
+          "passos": [
+            {"t": "Cortar", "d": "Fechar o suprimento de combustível"},
+            {"t": "Afastar", "d": "Retirar as pessoas e eliminar fontes de ignição"},
+            {"t": "Ventilar", "d": "Manter a ventilação para dispersar gases"},
+            {"t": "Acionar", "d": "Brigada e manutenção responsável"},
+            {"t": "Reacender só com purga", "d": "Seguir o procedimento completo"}
+          ],
+          "fala": "Em um vazamento de combustível ou falha de chama, corte o suprimento de combustível, afaste as pessoas e elimine fontes de ignição, mantenha a ventilação para dispersar os gases e acione a brigada e a manutenção responsável. O reacendimento só acontece depois da purga completa e seguindo o procedimento. Tentar reacender rapidamente com a câmara cheia de gás é uma das principais causas de explosão."
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Queimaduras e calor",
+          "esquerda": {"t": "Queimadura", "itens": ["Resfriar com água corrente em temperatura ambiente", "Cobrir com pano limpo e úmido", "Não aplicar pomadas nem estourar bolhas", "Encaminhar ao atendimento médico"]},
+          "direita": {"t": "Mal-estar pelo calor", "itens": ["Levar a pessoa para local fresco e ventilado", "Afrouxar roupas e oferecer água se estiver consciente", "Resfriar o corpo com água e ventilação", "Acionar o socorro se houver confusão ou desmaio"]},
+          "fala": "Em queimaduras, resfrie com água corrente em temperatura ambiente, cubra com pano limpo e úmido, não aplique pomadas nem estoure bolhas e encaminhe ao atendimento médico. Em mal-estar pelo calor, leve a pessoa para local fresco e ventilado, afrouxe as roupas, ofereça água se ela estiver consciente e resfrie o corpo. Se houver confusão mental ou desmaio, acione o socorro imediatamente, porque pode ser intermação, uma emergência grave.",
+          "pergunta": "Onde fica o ponto de hidratação mais próximo dos fornos?"
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "O reacendimento apressado",
+    "relato": "Em uma indústria cerâmica, a chama de um forno a gás apagou durante a madrugada por uma oscilação no suprimento. O operador, preocupado com a perda da carga de peças, reabriu o gás e tentou reacender imediatamente com um maçarico manual, sem aguardar a purga. Houve uma explosão na câmara que arremessou a porta de inspeção. O operador sofreu queimaduras no rosto e nos braços. O dispositivo de corte automático de gás estava com defeito havia semanas.",
+    "perguntas": ["Qual etapa do procedimento foi omitida?", "Por que o dispositivo de corte com defeito agravou a situação?", "Que pressão influenciou a decisão do operador?", "Que medidas devem ser adotadas?"],
+    "analise": "O reacendimento sem purga permitiu a ignição do gás acumulado na câmara. O dispositivo de corte com defeito deveria ter interrompido o suprimento ao apagar a chama e já exigia a parada do forno até o conserto. A preocupação com a perda da produção pesou mais do que o procedimento. São necessárias manutenção imediata dos dispositivos de segurança, proibição de operar com eles inoperantes, procedimento de reacendimento com purga obrigatória e orientação clara de que a perda de carga não justifica pular etapas."
+  },
+  "dinamica": {"titulo": "Linha do tempo do acendimento", "objetivo": "Fixar a sequência segura de acendimento do forno.", "tempo": 15, "passos": ["Entregue cartões com as etapas do acendimento do forno da empresa, embaralhadas.", "Os grupos montam a sequência correta.", "Discuta o que acontece se a purga ou a verificação da chama forem omitidas.", "Compare com o procedimento oficial."]},
+  "dds": {"titulo": "Apagou? Purga primeiro", "texto": "Pessoal, se a chama do forno apagar, a vontade é reacender rápido para não perder a carga. Mas, enquanto a chama estava apagada, o gás pode ter se acumulado lá dentro. Reacender sem purga é pedir uma explosão. Então a regra é: corta o gás, ventila, espera o tempo da purga e só depois segue o procedimento de acendimento. E se o dispositivo de segurança da chama estiver com defeito, o forno não opera. Nenhuma carga vale mais do que a sua vida."},
+  "prova": [
+    {"q": "A NR-14 exige que os fornos sejam:", "o": ["Construídos com qualquer material", "Construídos solidamente e revestidos com material refratário", "Instalados em áreas de circulação", "Mantidos sem chaminé"], "c": 1, "com": "A norma exige construção sólida e revestimento refratário."},
+    {"q": "A purga antes do acendimento serve para:", "o": ["Aquecer o forno mais rápido", "Remover combustível acumulado na câmara", "Economizar gás", "Limpar as peças"], "c": 1, "com": "Evita a ignição de gás acumulado."},
+    {"q": "O contato de água com metal fundido pode causar:", "o": ["Resfriamento seguro", "Explosão por formação súbita de vapor", "Nada", "Apenas fumaça"], "c": 1, "com": "A água vaporiza instantaneamente e de forma explosiva."},
+    {"q": "Um gás perigoso gerado na combustão é:", "o": ["Oxigênio", "Monóxido de carbono", "Nitrogênio", "Hélio"], "c": 1, "com": "O monóxido de carbono é tóxico e inodoro."},
+    {"q": "Em caso de falha de chama, a primeira ação é:", "o": ["Reacender imediatamente", "Cortar o suprimento de combustível", "Abrir mais o gás", "Desligar a ventilação"], "c": 1, "com": "Cortar o combustível impede o acúmulo de gás."},
+    {"q": "Em ambientes quentes, é medida importante:", "o": ["Evitar beber água", "Hidratação frequente, pausas e aclimatação", "Trabalhar sem pausas para terminar logo", "Usar roupas sintéticas"], "c": 1, "com": "Essas medidas previnem a sobrecarga térmica."},
+    {"q": "A manutenção do forno deve ser feita:", "o": ["Com o forno em operação", "Com o forno resfriado, bloqueado e liberado", "Durante o acendimento", "Sem procedimento"], "c": 1, "com": "A intervenção exige forno frio e energias bloqueadas."},
+    {"q": "Em uma queimadura, deve-se:", "o": ["Aplicar manteiga", "Resfriar com água corrente em temperatura ambiente", "Estourar as bolhas", "Usar gelo diretamente"], "c": 1, "com": "Água corrente em temperatura ambiente é o cuidado indicado."},
+    {"q": "Operar o forno com o dispositivo de controle de chama com defeito é:", "o": ["Aceitável por pouco tempo", "Inaceitável; o forno deve parar até o conserto", "Normal", "Permitido com supervisão"], "c": 1, "com": "O dispositivo é essencial para evitar explosões."},
+    {"q": "Confusão mental e desmaio em ambiente quente indicam:", "o": ["Cansaço normal", "Possível intermação, que exige socorro imediato", "Fome", "Falta de atenção"], "c": 1, "com": "É uma emergência médica."}
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "nr": "36",
+  "titulo_curto": "Frigoríficos",
+  "titulo": "Segurança e Saúde no Trabalho em Empresas de Abate e Processamento de Carnes e Derivados",
+  "chamada": "Faca afiada, pausa respeitada e frio sob controle",
+  "icone": "FaDrumstickBite",
+  "carga": "4 horas (carga sugerida para trabalhadores de frigoríficos; confira no texto vigente a capacitação exigida pela NR-36)",
+  "periodicidade": "A NR-36 exige informação e capacitação dos trabalhadores sobre os riscos e as medidas de prevenção, na admissão e periodicamente, conforme o texto vigente. Recomenda-se reciclagem anual e sempre que houver mudança no processo.",
+  "publico": "Trabalhadores de abate, desossa, cortes, embalagem, câmaras frias e manutenção de frigoríficos, e suas lideranças.",
+  "prerequisitos": "Avaliação de saúde com aptidão para a função.",
+  "instrutor": "Profissional de segurança do trabalho ou ergonomista com experiência em frigoríficos.",
+  "objetivos": [
+    "Reconhecer os principais riscos das atividades em frigoríficos",
+    "Aplicar as regras de pausas, rodízio e organização do trabalho da NR-36",
+    "Usar facas e ferramentas cortantes com segurança",
+    "Proteger-se no trabalho em ambientes frios",
+    "Agir em emergências como vazamento de amônia"
+  ],
+  "recursos": ["Projetor e apresentação", "Facas, chairas e luvas de malha de aço para demonstração", "Vestimentas térmicas", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na prática.",
+  "referencias": ["NR-36 Segurança e Saúde no Trabalho em Empresas de Abate e Processamento de Carnes e Derivados, texto vigente", "NR-17 Ergonomia", "NR-12 Máquinas e Equipamentos", "CLT, artigo 253, sobre trabalho em ambientes frios"],
+  "modulos": [
+    {
+      "titulo": "Riscos no frigorífico",
+      "duracao": 45,
+      "gancho": "Movimentos repetitivos, facas, frio, umidade e ritmo intenso. O frigorífico concentra riscos que, juntos, estão entre os que mais afastam trabalhadores no Brasil.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos",
+          "cards": [
+            {"t": "Ergonômicos", "d": "Repetição, força, posturas e ritmo intenso"},
+            {"t": "Cortes", "d": "Facas, serras e máquinas de corte"},
+            {"t": "Frio e umidade", "d": "Câmaras frias, salas climatizadas e pisos molhados"},
+            {"t": "Químicos e biológicos", "d": "Amônia da refrigeração, produtos de limpeza e zoonoses"}
+          ],
+          "fala": "Os principais riscos no frigorífico são os ergonômicos, pela repetição de movimentos, força, posturas e ritmo intenso; os cortes com facas, serras e máquinas; o frio e a umidade das câmaras e salas climatizadas, além de pisos molhados e escorregadios; e os riscos químicos e biológicos, como a amônia do sistema de refrigeração, os produtos de limpeza e as doenças transmitidas por animais. A NR-36 trata de todos esses riscos.",
+          "pergunta": "Qual desses riscos você sente mais no seu posto?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Postos de trabalho",
+          "itens": [
+            "Altura das bancadas e plataformas adequada à tarefa e ao trabalhador",
+            "Possibilidade de alternar as posturas sentado e em pé quando a tarefa permitir",
+            "Ferramentas e produtos dentro da área de alcance",
+            "Pisos antiderrapantes e drenagem eficiente",
+            "Assentos para descanso nas pausas"
+          ],
+          "destaque": "Plataforma ajustável faz a diferença para quem é mais baixo ou mais alto que a média.",
+          "fala": "A NR-36 exige postos de trabalho adequados. A altura das bancadas e plataformas deve ser ajustada à tarefa e ao trabalhador. Quando a tarefa permitir, deve ser possível alternar as posturas sentado e em pé. Ferramentas e produtos ficam dentro da área de alcance. Os pisos são antiderrapantes e com drenagem eficiente. E há assentos para descanso durante as pausas."
+        }
+      ]
+    },
+    {
+      "titulo": "Pausas, rodízio e organização do trabalho",
+      "duracao": 45,
+      "gancho": "Em atividades repetitivas, o corpo precisa de tempo para se recuperar. As pausas da NR-36 não são favor: são medida de prevenção obrigatória.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "Pausas psicofisiológicas",
+          "valor": "60 min",
+          "legenda": "de pausas distribuídas ao longo de jornadas de até 9 horas e 10 minutos, conforme a tabela da NR-36",
+          "itens": [
+            "A duração total depende da jornada, conforme a tabela da norma",
+            "As pausas são distribuídas ao longo da jornada, e não juntadas no fim",
+            "Durante a pausa, o trabalhador sai do posto e descansa em local adequado"
+          ],
+          "fala": "Nas atividades com exigência de repetitividade ou sobrecarga, a NR-36 exige pausas psicofisiológicas. A duração total depende da jornada, conforme a tabela da norma, chegando a sessenta minutos em jornadas de até nove horas e dez minutos. As pausas são distribuídas ao longo da jornada, e não acumuladas no fim do turno, e o trabalhador sai do posto e descansa em local adequado, com assentos. Em ambientes frios, também se aplica o intervalo de recuperação térmica previsto na CLT.",
+          "dica": "Mostre a tabela de pausas do texto vigente e a escala de pausas do setor."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Organização do trabalho",
+          "cards": [
+            {"t": "Rodízio", "d": "Alternância entre tarefas com exigências diferentes"},
+            {"t": "Ritmo", "d": "Velocidade da linha compatível com o número de trabalhadores"},
+            {"t": "Novos trabalhadores", "d": "Adaptação gradual ao ritmo da linha"},
+            {"t": "Participação", "d": "Trabalhadores ouvidos nas mudanças de processo"}
+          ],
+          "fala": "A organização do trabalho também previne lesões. O rodízio alterna tarefas com exigências musculares diferentes. A velocidade da linha deve ser compatível com o número de trabalhadores. Os novos trabalhadores passam por adaptação gradual ao ritmo. E os trabalhadores são ouvidos quando há mudanças no processo. Aumentar a velocidade da linha sem reforçar a equipe é uma das principais causas de adoecimento.",
+          "pergunta": "Como funciona o rodízio no seu setor?"
+        }
+      ]
+    },
+    {
+      "titulo": "Facas, ferramentas e máquinas",
+      "duracao": 45,
+      "gancho": "Uma faca sem fio exige mais força, mais repetição e escorrega mais. A afiação é medida de segurança e de ergonomia ao mesmo tempo.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Uso seguro de facas",
+          "itens": [
+            "Faca afiada e adequada ao tipo de corte",
+            "Afiação programada e chairação durante a jornada, conforme orientação",
+            "Luva de malha de aço na mão que segura o produto",
+            "Corte sempre afastando a lâmina do corpo",
+            "Faca guardada na bainha ou no suporte, nunca solta na bancada"
+          ],
+          "destaque": "Faca cega exige mais força e escorrega mais: é risco de corte e de lesão por esforço.",
+          "fala": "A faca deve estar afiada e ser adequada ao tipo de corte. A NR-36 exige que a afiação seja programada e que o trabalhador seja orientado sobre a chairação durante a jornada. A luva de malha de aço protege a mão que segura o produto. O corte é feito afastando a lâmina do corpo. E a faca é guardada na bainha ou no suporte, nunca solta sobre a bancada. Faca cega exige mais força, aumenta o risco de lesão por esforço e escorrega mais.",
+          "dica": "Demonstre a chairação e o uso da luva de malha de aço."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Máquinas e equipamentos",
+          "itens": [
+            "Serras, moedores e máquinas com proteções e dispositivos de parada",
+            "Limpeza e higienização somente com a máquina parada e bloqueada",
+            "Nunca empurrar o produto com as mãos em zonas de perigo",
+            "Ganchos, nórias e esteiras com proteção contra arraste"
+          ],
+          "destaque": "Limpeza com a máquina em movimento é causa frequente de amputações.",
+          "fala": "Serras, moedores, cortadores e outras máquinas devem ter proteções e dispositivos de parada, conforme a NR-12. A limpeza e a higienização só são feitas com a máquina parada e bloqueada, porque a limpeza com a máquina em movimento é causa frequente de amputações. Nunca se empurra o produto com as mãos nas zonas de perigo, e as nórias e esteiras têm proteção contra arraste."
+        }
+      ]
+    },
+    {
+      "titulo": "Frio, amônia e emergências",
+      "duracao": 45,
+      "gancho": "O frio constante cansa o corpo e reduz a destreza das mãos. E um vazamento de amônia pode transformar a sala de produção em uma área de evacuação em segundos.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Trabalho em ambiente frio",
+          "itens": [
+            "Vestimentas térmicas adequadas, inclusive luvas, gorro e calçados",
+            "Vestimentas secas e trocadas quando molhadas",
+            "Intervalos para recuperação térmica conforme a legislação",
+            "Portas das câmaras com dispositivo de abertura pelo lado de dentro",
+            "Comunicação e controle de quem está nas câmaras"
+          ],
+          "destaque": "Toda câmara fria deve permitir a abertura da porta pelo lado de dentro.",
+          "fala": "No ambiente frio, as vestimentas térmicas devem ser adequadas, incluindo luvas, gorro e calçados, e trocadas quando molhadas. São obrigatórios os intervalos para recuperação térmica, conforme a CLT e a NR-36. As portas das câmaras frias devem ter dispositivo de abertura pelo lado de dentro. E deve haver comunicação e controle de quem está nas câmaras.",
+          "pergunta": "As portas das câmaras frias da empresa abrem pelo lado de dentro?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Vazamento de amônia",
+          "passos": [
+            {"t": "Perceber", "d": "Cheiro forte e irritação nos olhos e na garganta"},
+            {"t": "Alarme", "d": "Acionar o alarme e avisar os colegas"},
+            {"t": "Sair", "d": "Abandonar pela rota de fuga, contra o vento"},
+            {"t": "Ponto de encontro", "d": "Aguardar a contagem e a liberação"},
+            {"t": "Atender", "d": "Lavar olhos e pele atingidos e buscar atendimento"}
+          ],
+          "fala": "A amônia usada na refrigeração é tóxica. Ao perceber cheiro forte e irritação nos olhos e na garganta, acione o alarme e avise os colegas. Abandone a área pela rota de fuga, preferencialmente contra o vento. Vá para o ponto de encontro e aguarde a contagem e a liberação. Quem foi atingido lava olhos e pele com água em abundância e busca atendimento. Somente a equipe treinada e equipada atua no controle do vazamento."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática de segurança no posto",
+    "duracao": 30,
+    "descricao": "Os participantes praticam técnicas de segurança e alongamento com acompanhamento do instrutor.",
+    "itens": [
+      "Demonstrou a chairação e o uso da luva de malha de aço",
+      "Realizou corte simulado afastando a lâmina do corpo",
+      "Ajustou a altura da plataforma ao próprio corpo",
+      "Executou os exercícios de alongamento recomendados para as pausas",
+      "Descreveu a rota de fuga e o ponto de encontro em caso de vazamento de amônia"
+    ]
+  },
+  "caso": {
+    "titulo": "A desossa acelerada",
+    "relato": "Em um frigorífico de aves, a linha de desossa teve a velocidade aumentada para atender a um pico de pedidos, sem aumento de pessoal. As pausas passaram a ser concedidas apenas no final do turno, juntas, para não parar a linha. As facas eram afiadas uma vez por semana. Em três meses, o ambulatório registrou aumento expressivo de queixas de dor nos punhos e ombros, e duas trabalhadoras sofreram cortes nas mãos.",
+    "perguntas": ["Que exigências da NR-36 foram descumpridas?", "Qual a relação entre a afiação das facas e as lesões?", "Por que juntar as pausas no fim do turno anula seu efeito?", "Que medidas a empresa deve adotar?"],
+    "analise": "A distribuição das pausas ao longo da jornada é exigência da NR-36, porque elas servem para recuperação durante a atividade repetitiva; concentradas no fim, perdem a função. O aumento do ritmo sem reforço de pessoal elevou a repetição. Facas sem fio exigem mais força e escorregam, aumentando lesões e cortes. A empresa deve redistribuir as pausas, ajustar a velocidade da linha ao efetivo, implantar afiação programada e orientação de chairação, reforçar o rodízio e revisar a análise ergonômica."
+  },
+  "dinamica": {"titulo": "Pausa ativa", "objetivo": "Ensinar exercícios de alongamento para as pausas.", "tempo": 15, "passos": ["Demonstre uma sequência de alongamentos para punhos, antebraços, ombros e pescoço.", "Todos os participantes executam a sequência.", "Discuta como incluir os exercícios nas pausas sem substituir o descanso.", "Reforce que alongamento não substitui pausas e rodízio."]},
+  "dds": {"titulo": "Faca afiada é faca segura", "texto": "Pessoal, faca cega é a que mais machuca. Ela escorrega no produto e obriga a fazer mais força, e é aí que vêm os cortes e as dores no punho. Então chairem a faca nas pausas, como foi ensinado, e peçam a troca quando o fio não voltar. Luva de malha na mão que segura a carne, corte sempre para longe do corpo e faca na bainha quando não estiver usando. E aproveitem as pausas: saiam do posto e descansem de verdade."},
+  "prova": [
+    {"q": "As pausas psicofisiológicas da NR-36 devem ser:", "o": ["Acumuladas no fim do turno", "Distribuídas ao longo da jornada", "Opcionais", "Feitas no próprio posto, trabalhando"], "c": 1, "com": "A distribuição permite a recuperação durante a atividade."},
+    {"q": "Para jornadas de até 9 horas e 10 minutos, o tempo total de pausas na NR-36 chega a:", "o": ["10 minutos", "20 minutos", "45 minutos", "60 minutos"], "c": 3, "com": "Conforme a tabela da norma."},
+    {"q": "Faca sem fio:", "o": ["É mais segura", "Exige mais força, escorrega mais e aumenta o risco de lesões", "Não faz diferença", "É obrigatória"], "c": 1, "com": "A afiação é medida de segurança e ergonomia."},
+    {"q": "A luva de malha de aço deve ser usada:", "o": ["Na mão que segura a faca, sempre", "Na mão que segura o produto", "Só na limpeza", "Nunca"], "c": 1, "com": "Protege a mão mais exposta à lâmina."},
+    {"q": "O corte deve ser feito:", "o": ["Em direção ao corpo", "Afastando a lâmina do corpo", "Sem olhar", "Com a faca na horizontal sobre a mão"], "c": 1, "com": "Reduz o risco de cortes no próprio corpo."},
+    {"q": "A limpeza de máquinas deve ser feita:", "o": ["Com a máquina em movimento", "Com a máquina parada e bloqueada", "Durante a produção", "Por qualquer pessoa"], "c": 1, "com": "Evita amputações."},
+    {"q": "As portas das câmaras frias devem:", "o": ["Abrir só por fora", "Permitir a abertura pelo lado de dentro", "Ficar sempre trancadas", "Não ter maçaneta"], "c": 1, "com": "Evita que alguém fique preso no frio."},
+    {"q": "Vestimentas térmicas molhadas devem ser:", "o": ["Usadas até secar no corpo", "Trocadas", "Mantidas para aquecer", "Retiradas e o trabalho continuar sem elas"], "c": 1, "com": "Roupa molhada perde a proteção térmica."},
+    {"q": "Ao perceber vazamento de amônia, deve-se:", "o": ["Tentar fechar a válvula sem proteção", "Acionar o alarme e sair pela rota de fuga", "Continuar trabalhando", "Abrir as câmaras frias"], "c": 1, "com": "Somente equipe treinada e equipada atua no controle."},
+    {"q": "O rodízio de tarefas serve para:", "o": ["Aumentar a velocidade da linha", "Alternar exigências musculares e reduzir a sobrecarga", "Substituir as pausas", "Reduzir o número de trabalhadores"], "c": 1, "com": "O rodízio complementa as pausas."}
+  ]
+}

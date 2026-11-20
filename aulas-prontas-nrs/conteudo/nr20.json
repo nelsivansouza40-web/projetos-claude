@@ -1,0 +1,206 @@
+{
+  "nr": "20",
+  "titulo": "Inflamáveis e Combustíveis",
+  "chamada": "Controlar vapores e fontes de ignição antes que eles se encontrem",
+  "icone": "FaFireFlameCurved",
+  "carga": "8 horas (curso básico, conforme o Anexo II da NR-20)",
+  "periodicidade": "A NR-20 define cursos e cargas horárias conforme a classe da instalação e a atividade do trabalhador, de iniciação a avançado, com reciclagens periódicas previstas no Anexo II. Este kit atende ao curso básico; confirme no texto vigente o curso exigido para cada função.",
+  "publico": "Trabalhadores que atuam em instalações com inflamáveis e combustíveis nas atividades previstas para o curso básico.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Instrutores com proficiência no assunto, sob responsabilidade de profissional habilitado ou qualificado em segurança do trabalho, conforme a NR-20.",
+  "objetivos": [
+    "Conhecer as características, propriedades e perigos dos inflamáveis e combustíveis",
+    "Aplicar medidas de controle coletivo e individual",
+    "Identificar e controlar fontes de ignição",
+    "Conhecer a proteção contra incêndio com inflamáveis",
+    "Agir em situações de emergência com inflamáveis"
+  ],
+  "recursos": ["Projetor e apresentação", "Fichas com dados de segurança dos produtos da empresa", "Extintores para a prática", "Kit de contenção de vazamentos", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na prática.",
+  "referencias": ["NR-20 Segurança e Saúde no Trabalho com Inflamáveis e Combustíveis, texto vigente, e seus anexos", "NR-10 Eletricidade, para áreas classificadas", "NR-23 Proteção contra Incêndios", "NR-26 Sinalização de Segurança"],
+  "modulos": [
+    {
+      "titulo": "Inflamáveis: características, propriedades e perigos",
+      "duracao": 90,
+      "gancho": "Não é o líquido que pega fogo, é o vapor que ele libera. Entender isso muda a forma de olhar um tanque, uma bombona ou um vazamento.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Definições da NR-20",
+          "cabecalho": ["Produto", "Critério"],
+          "linhas": [
+            ["Líquido inflamável", "Ponto de fulgor igual ou inferior a 60 °C"],
+            ["Líquido combustível", "Ponto de fulgor superior a 60 °C e igual ou inferior a 93 °C"],
+            ["Gás inflamável", "Gás que inflama com o ar a 20 °C e pressão padrão"],
+            ["Exemplos", "Gasolina, etanol e solventes são inflamáveis; óleo diesel é combustível"]
+          ],
+          "fala": "A NR-20 define os produtos pelo ponto de fulgor, a menor temperatura em que o líquido libera vapor suficiente para formar uma mistura que pega fogo na presença de uma chama. Líquido inflamável tem ponto de fulgor igual ou inferior a sessenta graus. Líquido combustível, acima de sessenta e até noventa e três graus. E gás inflamável é aquele que inflama com o ar em condições normais. Gasolina, etanol e muitos solventes são inflamáveis; o óleo diesel é combustível.",
+          "pergunta": "Quais inflamáveis e combustíveis usamos na empresa?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Propriedades importantes",
+          "cards": [
+            {"t": "Ponto de fulgor", "d": "Temperatura mínima em que o vapor pega fogo com uma fonte de ignição"},
+            {"t": "Faixa de inflamabilidade", "d": "Entre o limite inferior e o superior de inflamabilidade no ar"},
+            {"t": "Densidade do vapor", "d": "Vapores mais pesados que o ar se acumulam em pontos baixos"},
+            {"t": "Autoignição", "d": "Temperatura em que o produto inflama sem chama, por contato com superfície quente"}
+          ],
+          "fala": "Algumas propriedades ajudam a entender o perigo. O ponto de fulgor. A faixa de inflamabilidade, entre o limite inferior e o superior: abaixo do inferior a mistura é pobre demais, acima do superior é rica demais, e entre os dois ela queima ou explode. A densidade do vapor: a maioria dos vapores de inflamáveis é mais pesada que o ar e se acumula em valas, poços e pontos baixos. E a temperatura de autoignição, em que o produto pega fogo sem chama, só pelo contato com uma superfície quente.",
+          "dica": "Consulte com a turma a ficha com dados de segurança de um produto da empresa e localize essas propriedades."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Perigos e riscos",
+          "itens": [
+            "Incêndio e explosão de vapores, inclusive em recipientes vazios",
+            "Intoxicação por inalação e irritação da pele e dos olhos",
+            "Queimaduras e ferimentos por onda de pressão",
+            "Contaminação do solo e da água em vazamentos"
+          ],
+          "destaque": "Tambor vazio pode ser mais perigoso que cheio: está repleto de vapor.",
+          "fala": "Os perigos incluem incêndio e explosão de vapores, inclusive em recipientes aparentemente vazios, que ficam cheios de vapor e por isso podem explodir com uma faísca de solda ou de esmeril. Há também intoxicação por inalação, irritação da pele e dos olhos, queimaduras e ferimentos por onda de pressão, além da contaminação ambiental em vazamentos.",
+          "pergunta": "Alguém já viu solda ou corte em tambor ou tanque que tinha contido inflamável?"
+        }
+      ]
+    },
+    {
+      "titulo": "Controle coletivo e individual",
+      "duracao": 90,
+      "gancho": "Para haver fogo, o combustível precisa encontrar oxigênio e uma fonte de ignição. O controle dos inflamáveis trabalha para que esse encontro não aconteça.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Medidas de controle coletivo",
+          "cards": [
+            {"t": "Contenção", "d": "Recipientes adequados, bacias de contenção e diques"},
+            {"t": "Ventilação", "d": "Ventilação natural ou exaustão para dispersar vapores"},
+            {"t": "Inspeção e manutenção", "d": "Tanques, tubulações, válvulas e mangueiras em bom estado"},
+            {"t": "Quantidade mínima", "d": "Manter nos postos de trabalho apenas o necessário"}
+          ],
+          "fala": "As medidas de controle coletivo começam pela contenção: recipientes adequados, fechados e identificados, bacias de contenção e diques que retêm o produto em caso de vazamento. A ventilação dispersa os vapores. Tanques, tubulações, válvulas e mangueiras são inspecionados e mantidos para evitar vazamentos. E nos postos de trabalho fica apenas a quantidade necessária para a jornada, porque estoque perto das pessoas aumenta as consequências de um incêndio.",
+          "dica": "Mostre as bacias de contenção e os recipientes usados na empresa."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Controle individual",
+          "itens": [
+            "Luvas compatíveis com o produto, conforme a ficha com dados de segurança",
+            "Óculos ou protetor facial contra respingos",
+            "Proteção respiratória quando a ventilação não for suficiente",
+            "Vestimentas adequadas, evitando tecidos sintéticos que acumulam estática",
+            "Higiene: não comer, beber ou fumar com mãos contaminadas"
+          ],
+          "destaque": "A ficha com dados de segurança diz qual EPI usar para cada produto.",
+          "fala": "O controle individual complementa o coletivo. Luvas compatíveis com o produto, conforme a ficha com dados de segurança, porque nem toda luva resiste a solventes. Óculos ou protetor facial contra respingos. Proteção respiratória quando a ventilação não for suficiente. Vestimentas adequadas, evitando tecidos sintéticos que acumulam eletricidade estática. E higiene: lavar as mãos antes de comer, beber ou fumar, sempre fora da área.",
+          "pergunta": "Onde ficam as fichas com dados de segurança dos produtos do seu setor?"
+        }
+      ]
+    },
+    {
+      "titulo": "Fontes de ignição",
+      "duracao": 90,
+      "gancho": "Uma faísca invisível de eletricidade estática já é suficiente para inflamar vapores de gasolina. Conhecer as fontes de ignição é o primeiro passo para controlá-las.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Fontes de ignição",
+          "cards": [
+            {"t": "Chamas e calor", "d": "Cigarros, maçaricos, fornos e superfícies quentes"},
+            {"t": "Faíscas mecânicas", "d": "Esmerilhamento, corte, impacto de ferramentas e solda"},
+            {"t": "Eletricidade", "d": "Equipamentos elétricos comuns, interruptores e celulares em áreas classificadas"},
+            {"t": "Eletricidade estática", "d": "Transferência de líquidos, atrito de roupas e escoamento em tubulações"}
+          ],
+          "fala": "As fontes de ignição são variadas. Chamas e calor, como cigarros, maçaricos e superfícies quentes. Faíscas mecânicas de esmerilhamento, corte, solda e impacto de ferramentas. Equipamentos elétricos comuns, que geram faíscas ao ligar e desligar e não podem ser usados em áreas classificadas. E a eletricidade estática, gerada na transferência de líquidos, no escoamento em tubulações e até no atrito das roupas.",
+          "pergunta": "Que fontes de ignição existem perto das áreas com inflamáveis da empresa?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Como controlar",
+          "itens": [
+            "Áreas classificadas com equipamentos elétricos certificados",
+            "Aterramento e interligação de recipientes na transferência de líquidos",
+            "Permissão de trabalho para trabalhos a quente, com medição de gases",
+            "Proibição de fumar e de portar fontes de ignição nas áreas de risco",
+            "Ferramentas adequadas e controle de veículos nas áreas classificadas"
+          ],
+          "destaque": "Antes de transferir inflamável, aterre e interligue os recipientes.",
+          "fala": "O controle das fontes de ignição inclui definir as áreas classificadas, onde só entram equipamentos elétricos certificados. Na transferência de líquidos, os recipientes são aterrados e interligados para descarregar a eletricidade estática. Trabalhos a quente, como solda e corte, exigem permissão de trabalho, com medição de gases e proteção do entorno. É proibido fumar e portar fontes de ignição nas áreas de risco. E veículos e ferramentas são controlados nessas áreas.",
+          "dica": "Demonstre o aterramento de um tambor durante a transferência, se houver estrutura na empresa."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Trabalho a quente",
+          "passos": [
+            {"t": "Analisar", "d": "Análise de risco e permissão de trabalho"},
+            {"t": "Preparar", "d": "Remover inflamáveis, limpar e proteger o entorno"},
+            {"t": "Medir", "d": "Verificar a atmosfera com detector de gases"},
+            {"t": "Vigiar", "d": "Observador com extintor durante o serviço"},
+            {"t": "Acompanhar", "d": "Inspeção do local após o término"}
+          ],
+          "fala": "O trabalho a quente em área com inflamáveis segue etapas. Análise de risco e permissão de trabalho. Preparação do local, removendo inflamáveis, limpando e protegendo o entorno contra faíscas. Medição da atmosfera com detector de gases antes e durante o serviço. Um observador com extintor acompanha a atividade. E, ao final, o local é inspecionado por um período, porque brasas e faíscas podem iniciar um incêndio depois que todos saíram."
+        }
+      ]
+    },
+    {
+      "titulo": "Incêndio e emergências com inflamáveis",
+      "duracao": 60,
+      "gancho": "Um vazamento de inflamável é uma emergência mesmo antes do fogo. As primeiras ações definem se ele vai virar um incêndio.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Vazamento de inflamável",
+          "passos": [
+            {"t": "Alertar", "d": "Acionar o alarme e a brigada"},
+            {"t": "Eliminar ignição", "d": "Desligar equipamentos e afastar fontes"},
+            {"t": "Isolar", "d": "Afastar pessoas e isolar a área"},
+            {"t": "Conter", "d": "Usar o kit de contenção, se for seguro"},
+            {"t": "Comunicar", "d": "Informar o produto e a quantidade"}
+          ],
+          "fala": "Em um vazamento, acione o alarme e a brigada. Elimine as fontes de ignição, desligando equipamentos a partir de um ponto seguro e afastando veículos. Afaste as pessoas e isole a área, lembrando que os vapores se espalham pelo chão. Se for seguro e você estiver treinado, use o kit de contenção para evitar que o produto se espalhe ou chegue a ralos. E informe à brigada o produto e a quantidade.",
+          "pergunta": "Onde fica o kit de contenção mais próximo e quem sabe usá-lo?"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Combate ao fogo em inflamáveis",
+          "esquerda": {"t": "Faça", "itens": ["Use pó químico, espuma ou CO2, conforme o caso", "Combata de costas para o vento, com rota de fuga livre", "Corte o suprimento do produto, se possível"]},
+          "direita": {"t": "Não faça", "itens": ["Jogar jato de água em líquido inflamável em chamas", "Combater fogo grande ou em tanque sem preparo", "Permanecer em área com risco de explosão"]},
+          "fala": "No fogo em líquidos inflamáveis, use pó químico, espuma ou gás carbônico, conforme o caso. Combata de costas para o vento, com a rota de fuga livre, e corte o suprimento do produto se possível. Não jogue jato de água sobre líquido inflamável em chamas, porque o produto flutua e o fogo se espalha. Não tente combater fogo grande ou em tanques sem equipe preparada. E saia da área se houver risco de explosão.",
+          "dica": "Use a prática com extintores para fixar o combate a princípio de incêndio em inflamáveis."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática de emergência com inflamáveis",
+    "duracao": 120,
+    "descricao": "Em área de treinamento preparada e com equipe de segurança, os participantes praticam as ações de resposta.",
+    "itens": [
+      "Localizou na ficha com dados de segurança o ponto de fulgor, os perigos e o EPI indicado",
+      "Identificou fontes de ignição em uma área simulada",
+      "Executou a contenção de um vazamento simulado com o kit",
+      "Operou extintor adequado em princípio de incêndio de líquido inflamável",
+      "Descreveu as ações de alarme, isolamento e comunicação"
+    ]
+  },
+  "caso": {
+    "titulo": "O tambor vazio",
+    "relato": "Na manutenção de uma indústria, um soldador recebeu a tarefa de cortar um tambor metálico vazio de solvente para transformá-lo em recipiente de sucata. O tambor estava sem tampa havia dias e parecia vazio. Sem permissão de trabalho e sem medição de gases, ele iniciou o corte com maçarico. O tambor explodiu, arremessando a tampa inferior e causando queimaduras e fraturas no soldador.",
+    "perguntas": ["Por que o tambor vazio explodiu?", "Que etapas do trabalho a quente foram omitidas?", "Como o tambor deveria ter sido preparado?", "Que medidas a empresa deve adotar para evitar a repetição?"],
+    "analise": "O tambor continha vapores de solvente dentro da faixa de inflamabilidade, e a chama do maçarico provocou a ignição. Foram omitidas a análise de risco, a permissão de trabalho, a medição de gases e a preparação do recipiente. O tambor deveria ter sido descontaminado por procedimento adequado e liberado após medição, ou simplesmente destinado sem corte. A empresa deve proibir trabalho a quente em recipientes que contiveram inflamáveis sem procedimento específico, exigir permissão de trabalho e treinar a manutenção."
+  },
+  "dinamica": {"titulo": "Triângulo do fogo na prática", "objetivo": "Identificar como cada medida de controle atua sobre o combustível, o oxigênio ou a ignição.", "tempo": 15, "passos": ["Liste no quadro medidas como bacia de contenção, aterramento, ventilação, proibição de fumar e tampa no recipiente.", "Os participantes indicam sobre qual lado do triângulo do fogo cada medida atua.", "Discuta quais medidas atuam em mais de um lado.", "Relacione com as medidas existentes na empresa."]},
+  "dds": {"titulo": "O perigo é o vapor", "texto": "Pessoal, lembrem: quem pega fogo é o vapor. Por isso recipiente de inflamável fica sempre fechado, inclusive o vazio. Tambor vazio de solvente não se corta nem se solda sem procedimento, porque está cheio de vapor. Na hora de transferir produto, aterre e interligue os recipientes. E na área de inflamáveis não entra cigarro, isqueiro ou celular comum. Viu vazamento? Afaste as fontes de ignição, isole e chame a brigada."},
+  "prova": [
+    {"q": "Pela NR-20, líquido inflamável é aquele com ponto de fulgor:", "o": ["Acima de 93 °C", "Igual ou inferior a 60 °C", "Entre 60 °C e 93 °C", "Igual a 0 °C"], "c": 1, "com": "Inflamáveis têm ponto de fulgor igual ou inferior a 60 °C."},
+    {"q": "Líquido combustível tem ponto de fulgor:", "o": ["Igual ou inferior a 60 °C", "Superior a 60 °C e igual ou inferior a 93 °C", "Acima de 200 °C", "Abaixo de 0 °C"], "c": 1, "com": "É a faixa definida para combustíveis."},
+    {"q": "Ponto de fulgor é:", "o": ["A temperatura de ebulição", "A menor temperatura em que o líquido libera vapor suficiente para inflamar com uma fonte de ignição", "A temperatura de congelamento", "A temperatura do ambiente"], "c": 1, "com": "É a definição técnica do ponto de fulgor."},
+    {"q": "A maioria dos vapores de inflamáveis:", "o": ["Sobe rapidamente", "É mais pesada que o ar e se acumula em pontos baixos", "Não se move", "Desaparece em segundos"], "c": 1, "com": "Por isso valas e poços são locais de risco."},
+    {"q": "Um tambor vazio que continha solvente:", "o": ["Não oferece risco", "Pode explodir por conter vapores", "Pode ser cortado com maçarico livremente", "É sempre seguro após um dia"], "c": 1, "com": "O vapor remanescente pode estar na faixa de inflamabilidade."},
+    {"q": "Na transferência de líquidos inflamáveis, deve-se:", "o": ["Usar recipientes plásticos sem aterramento", "Aterrar e interligar os recipientes", "Agitar o produto", "Transferir perto de chamas"], "c": 1, "com": "O aterramento descarrega a eletricidade estática."},
+    {"q": "Trabalhos a quente em áreas com inflamáveis exigem:", "o": ["Apenas experiência do soldador", "Permissão de trabalho, medição de gases e observador com extintor", "Somente óculos de solda", "Nenhuma preparação"], "c": 1, "com": "São etapas obrigatórias de controle."},
+    {"q": "Em fogo de líquido inflamável, não se deve:", "o": ["Usar pó químico", "Jogar jato de água sobre o líquido em chamas", "Cortar o suprimento", "Acionar a brigada"], "c": 1, "com": "A água espalha o líquido inflamável."},
+    {"q": "Em vazamento de inflamável, uma das primeiras ações é:", "o": ["Ligar equipamentos para ventilar", "Eliminar fontes de ignição e isolar a área", "Varrer o produto", "Acender a luz do local"], "c": 1, "com": "Evitar a ignição é prioridade."},
+    {"q": "O EPI adequado para manusear um produto inflamável deve ser consultado:", "o": ["Na nota fiscal", "Na ficha com dados de segurança do produto", "No contracheque", "Em qualquer catálogo"], "c": 1, "com": "A FDS indica as medidas de proteção."}
+  ]
+}

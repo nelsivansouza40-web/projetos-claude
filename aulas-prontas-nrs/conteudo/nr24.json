@@ -1,0 +1,140 @@
+{
+  "nr": "24",
+  "titulo": "Condições Sanitárias e de Conforto nos Locais de Trabalho",
+  "chamada": "Banheiro limpo, água potável e lugar digno para comer também são segurança",
+  "icone": "FaRestroom",
+  "carga": "2 horas (aula informativa para gestores, facilities, lideranças e CIPA)",
+  "periodicidade": "A NR-24 não exige treinamento. Recomenda-se revisar o tema em mudanças de efetivo, de layout ou de turnos.",
+  "publico": "Gestores, equipes de facilities e manutenção, lideranças, membros da CIPA e profissionais de SST.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho com conhecimento da NR-24.",
+  "objetivos": [
+    "Conhecer as exigências da NR-24 para instalações sanitárias, vestiários e refeitórios",
+    "Compreender o dimensionamento das instalações conforme o número de trabalhadores",
+    "Reconhecer requisitos de água potável, alojamentos e trabalho externo",
+    "Aplicar um roteiro de verificação das condições sanitárias"
+  ],
+  "recursos": ["Projetor e apresentação", "Checklist de condições sanitárias", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-24 Condições Sanitárias e de Conforto nos Locais de Trabalho, texto vigente, e seus anexos", "NR-18 e NR-31, para canteiros de obras e trabalho rural", "Legislação sanitária local"],
+  "modulos": [
+    {
+      "titulo": "Instalações sanitárias e vestiários",
+      "duracao": 30,
+      "gancho": "Condições sanitárias ruins causam doenças, constrangimento e afetam a dignidade das pessoas. A NR-24 define o mínimo que toda empresa precisa oferecer.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Instalações sanitárias",
+          "cards": [
+            {"t": "Composição", "d": "Bacia sanitária, lavatório e, quando exigido, mictório e chuveiro"},
+            {"t": "Dimensionamento", "d": "Quantidade conforme o número de trabalhadores, pela tabela da norma"},
+            {"t": "Separação", "d": "Separadas por sexo, com privacidade"},
+            {"t": "Limpeza", "d": "Higienização frequente, papel, sabonete e meio de secagem das mãos"}
+          ],
+          "fala": "As instalações sanitárias devem ter bacia sanitária, lavatório e, quando exigido, mictório e chuveiro. A quantidade é dimensionada conforme o número de trabalhadores, de acordo com a tabela da NR-24. As instalações são separadas por sexo e garantem privacidade. E devem ser mantidas limpas, com papel higiênico, sabonete e meio de secagem das mãos. O chuveiro é exigido em atividades com exposição a sujidade, calor ou substâncias que exijam higienização.",
+          "pergunta": "As instalações sanitárias atendem bem a todos os turnos?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Vestiários",
+          "itens": [
+            "Exigidos quando a atividade exige troca de roupa ou uso de uniforme especial",
+            "Armários individuais para guarda de roupas e pertences",
+            "Separação entre roupas limpas e de trabalho em atividades com contaminação",
+            "Assentos e espaço suficiente para a troca",
+            "Localização próxima às instalações sanitárias"
+          ],
+          "destaque": "Em atividades com contaminantes, a roupa de trabalho não vai para casa.",
+          "fala": "O vestiário é exigido quando a atividade requer troca de roupa ou uso de uniforme. Deve ter armários individuais, assentos e espaço suficiente. Em atividades com exposição a contaminantes, como produtos químicos ou agentes biológicos, as roupas limpas e as de trabalho devem ficar separadas, para que a contaminação não chegue à casa do trabalhador."
+        }
+      ]
+    },
+    {
+      "titulo": "Refeições, água e alojamento",
+      "duracao": 30,
+      "gancho": "Comer no posto de trabalho, ao lado de produtos químicos ou de poeira, é uma via de contaminação. A NR-24 define onde e como as refeições devem acontecer.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Locais para refeições",
+          "cards": [
+            {"t": "Local adequado", "d": "Separado das áreas de trabalho, limpo e ventilado"},
+            {"t": "Estrutura", "d": "Mesas, assentos, lavatório e meio de conservar e aquecer a refeição, conforme a norma"},
+            {"t": "Água potável", "d": "Disponível no local de refeição"},
+            {"t": "Proibição", "d": "Não fazer refeições nos postos com exposição a contaminantes"}
+          ],
+          "fala": "As refeições devem acontecer em local adequado, separado das áreas de trabalho, limpo e ventilado, com mesas, assentos e lavatório próximo. Quando os trabalhadores trazem a refeição, a norma exige meios para conservar e aquecer os alimentos, conforme o número de pessoas. Deve haver água potável. E é proibido fazer refeições nos postos de trabalho com exposição a contaminantes.",
+          "pergunta": "Há trabalhadores que fazem refeições no próprio posto?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Água potável e alojamentos",
+          "itens": [
+            "Água potável e fresca em quantidade suficiente, por bebedouros ou outro meio higiênico",
+            "Proibido o uso de copos coletivos",
+            "Reservatórios limpos e com controle de potabilidade",
+            "Alojamentos, quando houver, com camas, armários, ventilação e instalações sanitárias",
+            "Trabalho externo e itinerante com instalações móveis ou acesso a sanitários"
+          ],
+          "destaque": "Copo coletivo é proibido pela NR-24.",
+          "fala": "A empresa deve fornecer água potável e fresca em quantidade suficiente, por bebedouros ou outro meio higiênico, sendo proibido o uso de copos coletivos. Os reservatórios devem ser limpos periodicamente, com controle de potabilidade. Quando houver alojamento, ele precisa de camas, armários, ventilação e instalações sanitárias adequadas. E nas atividades externas e itinerantes, a norma prevê instalações móveis ou garantia de acesso a sanitários.",
+          "dica": "Comente os anexos da NR-24 aplicáveis a atividades específicas, como trabalho externo."
+        }
+      ]
+    },
+    {
+      "titulo": "Verificação das condições",
+      "duracao": 30,
+      "gancho": "Ninguém precisa de medição técnica para saber se um banheiro está sujo ou se falta água. Basta verificar com regularidade.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Roteiro de verificação",
+          "cabecalho": ["Item", "O que verificar"],
+          "linhas": [
+            ["Sanitários", "Quantidade, limpeza, papel, sabonete, secagem das mãos e funcionamento"],
+            ["Vestiários", "Armários individuais, separação de roupas, limpeza e assentos"],
+            ["Refeitório", "Limpeza, mesas e assentos suficientes, lavatório e aquecimento"],
+            ["Água", "Bebedouros funcionando, limpos e sem copos coletivos"],
+            ["Turnos", "Condições iguais para todos os turnos e para terceiros"]
+          ],
+          "fala": "Um roteiro simples ajuda a manter as condições. Nos sanitários, quantidade, limpeza, papel, sabonete e funcionamento. Nos vestiários, armários, separação de roupas e limpeza. No refeitório, limpeza, lugares suficientes, lavatório e aquecimento. Na água, bebedouros funcionando e sem copos coletivos. E atenção aos turnos da noite e aos terceiros, que muitas vezes encontram condições piores.",
+          "dica": "Entregue o checklist para a CIPA incluir nas inspeções mensais."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Responsabilidades de todos",
+          "itens": [
+            "Empresa: fornecer, manter e higienizar as instalações",
+            "Lideranças: comunicar falhas e garantir acesso durante o trabalho",
+            "Trabalhadores: usar corretamente e ajudar a conservar",
+            "CIPA: incluir as condições sanitárias nas inspeções"
+          ],
+          "destaque": "Restringir o acesso ao banheiro durante a jornada é inaceitável.",
+          "fala": "A empresa fornece, mantém e higieniza as instalações. As lideranças comunicam falhas e garantem que todos tenham acesso aos sanitários durante a jornada, sem restrições indevidas. Os trabalhadores usam corretamente e ajudam a conservar. E a CIPA inclui as condições sanitárias nas inspeções."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "O turno da noite",
+    "relato": "Em um centro de distribuição, o refeitório era fechado às 22 horas, quando terminava o contrato da empresa de alimentação. Os 80 trabalhadores do turno da noite passaram a fazer as refeições em pé, nas docas, ao lado das empilhadeiras, sem lavatório próximo e sem micro-ondas. Dois dos quatro banheiros ficavam trancados à noite para economizar limpeza. A CIPA recebeu várias queixas, mas o assunto não avançou.",
+    "perguntas": ["Quais exigências da NR-24 foram descumpridas?", "Que riscos as refeições nas docas trazem?", "Como a CIPA deveria encaminhar o problema?", "Que solução a empresa pode adotar?"],
+    "analise": "Os trabalhadores do turno da noite ficaram sem local adequado para refeições, sem meios de aquecer e sem lavatório, e o número de sanitários disponíveis ficou abaixo do dimensionamento. Comer nas docas expõe a atropelamentos, gases de escape e poeira. A CIPA deveria registrar em ata, propor medidas com prazo e acompanhar. A empresa deve manter o refeitório acessível em todos os turnos, garantir equipamentos para aquecimento, manter todos os sanitários abertos e ajustar a limpeza à operação."
+  },
+  "dinamica": {"titulo": "Inspeção sanitária", "objetivo": "Aplicar o roteiro de verificação.", "tempo": 15, "passos": ["Divida a turma em grupos e designe sanitários, vestiários, refeitório e bebedouros.", "Os grupos aplicam o checklist por 10 minutos.", "Cada grupo apresenta os achados.", "Encaminhe os registros à CIPA e a facilities."]},
+  "dds": {"titulo": "Cuidar do que é de todos", "texto": "Pessoal, banheiro, vestiário, refeitório e bebedouro são de todo mundo. A empresa tem a obrigação de manter tudo limpo e funcionando, mas a gente também ajuda: descarta o lixo no lugar, não deixa a pia molhada, avisa quando falta papel ou sabonete e não usa copo dos outros no bebedouro. E não esqueçam: comida só no refeitório, nunca no posto de trabalho com produto ou poeira."},
+  "prova": [
+    {"q": "A quantidade de instalações sanitárias é definida:", "o": ["Pela preferência do gestor", "Conforme o número de trabalhadores, pela tabela da NR-24", "Pelo tamanho do terreno", "Pelo faturamento"], "c": 1, "com": "O dimensionamento segue a norma."},
+    {"q": "As instalações sanitárias devem ser:", "o": ["Coletivas para todos", "Separadas por sexo, com privacidade", "Sem lavatório", "Trancadas durante o expediente"], "c": 1, "com": "Separação e privacidade são exigências da norma."},
+    {"q": "O vestiário é exigido quando:", "o": ["Nunca", "A atividade exige troca de roupa ou uso de uniforme", "Somente em escritórios", "Há mais de mil empregados"], "c": 1, "com": "É exigido conforme a atividade."},
+    {"q": "Em atividades com contaminantes, as roupas de trabalho devem:", "o": ["Ser levadas para casa", "Ficar separadas das roupas limpas", "Ser guardadas no refeitório", "Ser usadas fora do trabalho"], "c": 1, "com": "A separação evita levar contaminação para casa."},
+    {"q": "O uso de copos coletivos nos bebedouros é:", "o": ["Permitido", "Proibido", "Obrigatório", "Opcional"], "c": 1, "com": "A NR-24 proíbe copos coletivos."},
+    {"q": "Fazer refeições em postos com exposição a contaminantes é:", "o": ["Permitido no intervalo", "Proibido", "Recomendado", "Permitido com luva"], "c": 1, "com": "As refeições devem ocorrer em local adequado."},
+    {"q": "Quando os trabalhadores trazem a refeição, a empresa deve:", "o": ["Não fazer nada", "Oferecer meios para conservar e aquecer, conforme a norma", "Proibir a refeição", "Cobrar pelo uso"], "c": 1, "com": "A NR-24 exige esses meios."},
+    {"q": "Os reservatórios de água devem:", "o": ["Ficar abertos", "Ser limpos periodicamente, com controle de potabilidade", "Ser limpos apenas a cada 10 anos", "Ficar sem tampa"], "c": 1, "com": "A potabilidade deve ser garantida."},
+    {"q": "As condições sanitárias devem ser:", "o": ["Melhores apenas no turno do dia", "Iguais para todos os turnos e para terceiros", "Reservadas aos empregados próprios", "Exclusivas para gestores"], "c": 1, "com": "Todos os trabalhadores têm direito às mesmas condições."},
+    {"q": "Restringir o acesso dos trabalhadores aos sanitários durante a jornada é:", "o": ["Boa prática de produtividade", "Inaceitável", "Obrigatório", "Permitido em horários de pico"], "c": 1, "com": "O acesso deve ser garantido."}
+  ]
+}

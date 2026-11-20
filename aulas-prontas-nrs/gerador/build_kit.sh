@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 SOFFICE=${SOFFICE:-soffice}
 for json in "$@"; do
-  nome=$(python3 -c "import json,sys;d=json.load(open(sys.argv[1]));print(f\"NR-{d['nr']} - {d['titulo']}\")" "$json")
+  nome=$(python3 -c "import json,sys;d=json.load(open(sys.argv[1]));print(f\"NR-{d['nr']} - {d['titulo']}\".replace(':', ' -'))" "$json")
   out="../kits/$nome"
   mkdir -p "$out/PDF"
   node build_pptx.js "$json" "$out/01-Apresentacao.pptx"

@@ -1,0 +1,214 @@
+{
+  "nr": "29",
+  "titulo": "Segurança e Saúde no Trabalho Portuário",
+  "chamada": "No cais e a bordo, a carga suspensa e a borda do navio não perdoam distração",
+  "icone": "FaAnchor",
+  "carga": "8 horas (treinamento de SST para trabalhadores portuários; não substitui as qualificações exigidas para cada função)",
+  "periodicidade": "A NR-29 e a legislação portuária exigem capacitação conforme a função, além de treinamentos específicos para operação de equipamentos, cargas perigosas e espaços confinados. Recomenda-se reciclagem anual.",
+  "publico": "Trabalhadores portuários avulsos e com vínculo, em atividades de capatazia, estiva, conferência, conserto e vigilância, e suas lideranças.",
+  "prerequisitos": "Avaliação de saúde com aptidão para a função.",
+  "instrutor": "Profissional de segurança do trabalho com experiência em operações portuárias.",
+  "objetivos": [
+    "Conhecer a organização da SST no trabalho portuário",
+    "Reconhecer os principais riscos das operações no cais e a bordo",
+    "Aplicar regras seguras na movimentação de cargas e na circulação",
+    "Identificar cuidados com cargas perigosas e porões",
+    "Agir em emergências portuárias"
+  ],
+  "recursos": ["Projetor e apresentação", "Fotos e vídeos de operações do próprio porto", "EPIs e colete salva-vidas para demonstração", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-29 Segurança e Saúde no Trabalho Portuário, texto vigente", "NR-33 Espaços Confinados", "NR-35 Trabalho em Altura", "Normas da Autoridade Marítima e regulamentação de cargas perigosas"],
+  "modulos": [
+    {
+      "titulo": "Organização da SST no porto",
+      "duracao": 90,
+      "gancho": "O porto reúne muitas empresas, funções e trabalhadores avulsos no mesmo espaço. Por isso a NR-29 define responsabilidades e estruturas próprias.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Quem é quem",
+          "cards": [
+            {"t": "Operador portuário", "d": "Responsável pela operação e pelas condições de segurança da sua área"},
+            {"t": "OGMO", "d": "Órgão gestor de mão de obra, que gerencia o trabalho avulso e sua capacitação"},
+            {"t": "SESSTP", "d": "Serviço especializado em segurança e saúde do trabalhador portuário"},
+            {"t": "CPATP", "d": "Comissão de prevenção de acidentes no trabalho portuário"}
+          ],
+          "fala": "No porto, a NR-29 distribui responsabilidades. O operador portuário responde pela operação e pelas condições de segurança da sua área. O órgão gestor de mão de obra gerencia o trabalho avulso, incluindo a capacitação. O SESSTP é o serviço especializado em segurança e saúde do trabalhador portuário. E a CPATP é a comissão de prevenção de acidentes, com participação dos trabalhadores. Todos precisam atuar em conjunto, porque as operações envolvem várias equipes.",
+          "pergunta": "Quem são os membros da CPATP na sua área?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos",
+          "cards": [
+            {"t": "Cargas suspensas", "d": "Queda de carga, impacto e prensamento"},
+            {"t": "Quedas", "d": "No porão, de pilhas de contêineres, da prancha e na água"},
+            {"t": "Veículos e equipamentos", "d": "Atropelamento por caminhões, empilhadeiras e reach stackers"},
+            {"t": "Atmosfera e produtos", "d": "Porões com gases, fumigação e cargas perigosas"}
+          ],
+          "fala": "Os principais riscos são a queda de cargas suspensas, com impacto e prensamento; as quedas no porão, de pilhas de contêineres, da prancha de acesso e na água; o atropelamento por caminhões, empilhadeiras e equipamentos de grande porte; e a atmosfera dos porões, que pode ter gases de fumigação ou falta de oxigênio, além das cargas perigosas. Ruído, poeira e calor completam o quadro."
+        }
+      ]
+    },
+    {
+      "titulo": "Movimentação de cargas",
+      "duracao": 90,
+      "gancho": "Em uma operação de embarque, centenas de toneladas passam sobre a cabeça dos trabalhadores. A regra mais importante do porto é simples: ninguém sob carga suspensa.",
+      "slides": [
+        {
+          "tipo": "alerta",
+          "titulo": "Carga suspensa",
+          "texto": "Ninguém permanece ou circula sob carga suspensa, em nenhuma hipótese.",
+          "itens": [
+            "Guiar a carga com cabos-guia, nunca com as mãos sob ela",
+            "Afastar-se da área de giro e de descida da carga",
+            "Aguardar a carga parar e estabilizar antes de se aproximar",
+            "Não subir na carga em movimentação"
+          ],
+          "fala": "A regra de ouro do porto é: ninguém permanece ou circula sob carga suspensa. A carga é guiada com cabos-guia, nunca com as mãos embaixo dela. Os trabalhadores se afastam da área de giro e de descida, aguardam a carga parar e estabilizar antes de se aproximar e nunca sobem na carga em movimentação. Uma lingada que se solta não dá tempo de reação.",
+          "pergunta": "Em que momento da operação as pessoas mais se aproximam da carga suspensa?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Operação segura de içamento",
+          "passos": [
+            {"t": "Inspecionar", "d": "Acessórios de içamento, lingas e cabos"},
+            {"t": "Amarrar", "d": "Lingamento correto e capacidade respeitada"},
+            {"t": "Sinalizar", "d": "Sinaleiro com comunicação clara com o operador"},
+            {"t": "Içar", "d": "Movimento controlado, sem pessoas na área"},
+            {"t": "Liberar", "d": "Soltar a carga somente após apoio estável"}
+          ],
+          "fala": "A operação de içamento começa pela inspeção dos acessórios, como lingas, cintas, cabos e manilhas, retirando o que estiver danificado. O lingamento é feito corretamente, respeitando a capacidade. O sinaleiro mantém comunicação clara com o operador do guindaste, por gestos padronizados ou rádio. O içamento é controlado, sem pessoas na área. E a carga só é liberada após apoio estável.",
+          "dica": "Demonstre os sinais padronizados usados no porto."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Contêineres",
+          "itens": [
+            "Trabalho no topo de contêineres com proteção contra quedas",
+            "Peação e despeação seguindo procedimento e com proteção",
+            "Distância segura de equipamentos de movimentação em operação",
+            "Atenção a portas e cargas que podem se deslocar ao abrir"
+          ],
+          "destaque": "Abrir um contêiner pode liberar carga solta ou gases de fumigação.",
+          "fala": "Nas operações com contêineres, o trabalho no topo exige proteção contra quedas, conforme a NR-35. A peação e a despeação seguem procedimento e usam proteção. Os trabalhadores mantêm distância dos equipamentos em operação. E, ao abrir um contêiner, cuidado: a carga pode estar solta e cair, e o interior pode conter gases de fumigação."
+        }
+      ]
+    },
+    {
+      "titulo": "Circulação e acesso a bordo",
+      "duracao": 90,
+      "gancho": "No cais, caminhões, empilhadeiras e pessoas dividem o espaço. E o acesso ao navio é um dos pontos com mais quedas.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Circulação no cais",
+          "itens": [
+            "Usar as rotas de pedestres e as faixas sinalizadas",
+            "Vestimenta de alta visibilidade em toda a área operacional",
+            "Contato visual com operadores antes de cruzar",
+            "Respeitar os limites de velocidade e a sinalização",
+            "Manter distância da borda do cais"
+          ],
+          "destaque": "Se você não está sendo visto, você está em risco.",
+          "fala": "No cais, use as rotas de pedestres e as faixas sinalizadas. Vista roupa de alta visibilidade em toda a área operacional. Faça contato visual com o operador antes de cruzar o caminho de um equipamento. Respeite os limites de velocidade e a sinalização. E mantenha distância da borda do cais, onde há risco de queda na água."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Acesso a bordo",
+          "cards": [
+            {"t": "Prancha ou escada de portaló", "d": "Bem fixada, com corrimão e rede de proteção sob o acesso"},
+            {"t": "Iluminação", "d": "Acesso iluminado em operações noturnas"},
+            {"t": "Mãos livres", "d": "Ferramentas e materiais içados, não carregados na escada"},
+            {"t": "Colete salva-vidas", "d": "Quando houver risco de queda na água"}
+          ],
+          "fala": "O acesso a bordo deve ser feito por prancha ou escada de portaló bem fixada, com corrimão e rede de proteção sob o acesso. Em operações noturnas, o acesso deve estar iluminado. Mantenha as mãos livres na escada: ferramentas e materiais são içados. E use colete salva-vidas quando houver risco de queda na água.",
+          "pergunta": "As escadas de acesso aos navios que vocês usam têm rede de proteção?"
+        }
+      ]
+    },
+    {
+      "titulo": "Porões e cargas perigosas",
+      "duracao": 90,
+      "gancho": "O porão do navio pode ser um espaço confinado, e algumas cargas liberam gases tóxicos ou inflamáveis. Entrar sem avaliação já matou muitos trabalhadores portuários.",
+      "slides": [
+        {
+          "tipo": "alerta",
+          "titulo": "Entrada em porões",
+          "texto": "Porão fechado, fumigado ou com carga que consome oxigênio só se acessa após avaliação da atmosfera.",
+          "itens": [
+            "Verificar se houve fumigação e se o porão foi ventilado e liberado",
+            "Medir oxigênio, gases tóxicos e inflamáveis antes da entrada",
+            "Seguir os procedimentos da NR-33 quando o porão for espaço confinado",
+            "Nunca descer para socorrer um colega desacordado sem proteção respiratória adequada"
+          ],
+          "fala": "Porões fechados, fumigados ou com cargas que consomem oxigênio, como grãos, madeira e sucata, podem ter atmosfera perigosa. Antes da entrada, verifique se houve fumigação e se o porão foi ventilado e liberado, e meça oxigênio, gases tóxicos e inflamáveis. Quando o porão for espaço confinado, seguem-se os procedimentos da NR-33. E ninguém desce para socorrer um colega desacordado sem proteção respiratória adequada.",
+          "dica": "Relacione com o kit de NR-33 e com o plano de resgate do porto."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Cargas perigosas",
+          "itens": [
+            "Identificar a carga pela documentação e pela rotulagem de transporte",
+            "Seguir as instruções específicas de manuseio e segregação",
+            "Usar o EPI indicado para o produto",
+            "Comunicar imediatamente vazamentos ou embalagens danificadas",
+            "Manter as áreas de cargas perigosas sinalizadas e com acesso restrito"
+          ],
+          "destaque": "Embalagem danificada com carga perigosa: afaste-se, isole e comunique.",
+          "fala": "As cargas perigosas são identificadas pela documentação e pela rotulagem de transporte, com os símbolos de risco. O manuseio e a segregação seguem instruções específicas, com o EPI indicado. Vazamentos e embalagens danificadas são comunicados imediatamente, com isolamento da área. E as áreas de cargas perigosas ficam sinalizadas e com acesso restrito."
+        }
+      ]
+    },
+    {
+      "titulo": "Emergências portuárias",
+      "duracao": 90,
+      "gancho": "Incêndio a bordo, vazamento de produto químico, pessoa na água. O porto precisa de planos que funcionem para todas as empresas ao mesmo tempo.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Planos de emergência",
+          "cards": [
+            {"t": "Plano de controle de emergência", "d": "Ações de cada operador para os cenários de emergência"},
+            {"t": "Plano de ajuda mútua", "d": "Integração entre empresas e órgãos públicos para emergências maiores"},
+            {"t": "Recursos", "d": "Boias, coletes, equipamentos de combate e de contenção"},
+            {"t": "Simulados", "d": "Exercícios periódicos com os trabalhadores"}
+          ],
+          "fala": "O trabalho portuário exige planos de emergência. O plano de controle de emergência define as ações de cada operador para os cenários previstos. O plano de ajuda mútua integra as empresas do porto e os órgãos públicos para emergências maiores. Os recursos, como boias, coletes, equipamentos de combate a incêndio e de contenção, ficam disponíveis. E os simulados periódicos treinam os trabalhadores.",
+          "pergunta": "Onde ficam as boias salva-vidas mais próximas do seu local de trabalho?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Pessoa na água",
+          "passos": [
+            {"t": "Alertar", "d": "Gritar homem ao mar e acionar o alarme"},
+            {"t": "Manter contato visual", "d": "Apontar e não perder a vítima de vista"},
+            {"t": "Lançar", "d": "Jogar a boia salva-vidas"},
+            {"t": "Acionar resgate", "d": "Equipe treinada e embarcação de apoio"},
+            {"t": "Não pular", "d": "Ninguém pula na água sem preparo"}
+          ],
+          "fala": "Se alguém cair na água, alerte gritando e acione o alarme. Mantenha contato visual com a vítima, apontando para ela. Lance a boia salva-vidas. Acione a equipe de resgate e a embarcação de apoio. E não pule na água para socorrer sem preparo: correntes, frio e o casco dos navios tornam o resgate perigoso."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A lingada que escorregou",
+    "relato": "Durante o descarregamento de bobinas de aço em um terminal, um trabalhador da capatazia se posicionou sob a área de descida da carga para orientar o assentamento da bobina no caminhão. O sinaleiro estava atendendo ao rádio e o operador do guindaste continuou a manobra. Uma das cintas, com desgaste não identificado na inspeção, se rompeu e a bobina tombou sobre a carroceria, atingindo a perna do trabalhador.",
+    "perguntas": ["Que regra de ouro foi descumprida?", "Que falhas existiram na comunicação entre sinaleiro e operador?", "Como a inspeção dos acessórios deveria ter sido feita?", "Que medidas evitam a repetição?"],
+    "analise": "O trabalhador permaneceu sob a carga suspensa, contrariando a principal regra das operações de içamento. O sinaleiro deixou de acompanhar a manobra, e o operador continuou sem o sinal adequado. A cinta desgastada deveria ter sido identificada e retirada de uso na inspeção. As medidas incluem uso de cabos-guia, proibição de permanência na área de descida, interrupção da manobra sempre que o sinaleiro perder o controle visual, inspeção documentada dos acessórios e capacitação dos envolvidos."
+  },
+  "dinamica": {"titulo": "Sinais de comando", "objetivo": "Praticar a comunicação entre sinaleiro e operador.", "tempo": 20, "passos": ["Ensine os sinais padronizados usados no porto.", "Em duplas, um participante faz o sinal e o outro executa o movimento correspondente com as mãos.", "Inclua o sinal de parada de emergência.", "Discuta os riscos de sinais ambíguos."]},
+  "dds": {"titulo": "Debaixo da carga, nunca", "texto": "Pessoal, no porto a gente lida com cargas enormes passando por cima da nossa cabeça o tempo todo. Por isso a regra é uma só: debaixo da carga, nunca. Use o cabo-guia, espere a carga parar e estabilizar e só então chegue perto. E se o sinaleiro perder o contato com o operador, a manobra para. Nenhum navio sai mais cedo porque alguém arriscou a vida."},
+  "prova": [
+    {"q": "A comissão de prevenção de acidentes no trabalho portuário é a:", "o": ["CIPA comum", "CPATP", "CIPAMIN", "CIPLAT"], "c": 1, "com": "A NR-29 prevê a CPATP."},
+    {"q": "A regra mais importante nas operações de içamento é:", "o": ["Trabalhar rápido", "Ninguém permanece ou circula sob carga suspensa", "Guiar a carga com as mãos sob ela", "Subir na carga para equilibrar"], "c": 1, "com": "É a regra de ouro das operações com cargas suspensas."},
+    {"q": "A carga suspensa deve ser guiada:", "o": ["Com as mãos sob a carga", "Com cabos-guia", "Com o pé", "Não precisa ser guiada"], "c": 1, "com": "Cabos-guia mantêm o trabalhador afastado."},
+    {"q": "Acessórios de içamento com desgaste devem ser:", "o": ["Usados até romper", "Retirados de uso", "Pintados", "Usados apenas à noite"], "c": 1, "com": "A inspeção identifica e retira acessórios danificados."},
+    {"q": "Em área operacional do porto, deve-se usar:", "o": ["Roupa escura", "Vestimenta de alta visibilidade", "Chinelo", "Fone de ouvido com música"], "c": 1, "com": "A visibilidade reduz o risco de atropelamento."},
+    {"q": "O acesso a bordo deve ter:", "o": ["Escada solta", "Prancha ou escada de portaló fixada, com corrimão e rede de proteção", "Apenas uma corda", "Nenhuma proteção"], "c": 1, "com": "São requisitos para evitar quedas."},
+    {"q": "Antes de entrar em porão fumigado, deve-se:", "o": ["Entrar rapidamente", "Verificar a liberação e medir a atmosfera", "Usar máscara de pano", "Abrir e entrar logo"], "c": 1, "com": "Fumigação e cargas podem gerar atmosfera perigosa."},
+    {"q": "Diante de embalagem danificada com carga perigosa:", "o": ["Recolher com as mãos", "Afastar-se, isolar e comunicar", "Ignorar", "Lavar com água"], "c": 1, "com": "É o procedimento seguro inicial."},
+    {"q": "Ao ver alguém cair na água, deve-se:", "o": ["Pular imediatamente", "Alertar, manter contato visual, lançar a boia e acionar o resgate", "Ir buscar ajuda sem avisar", "Esperar a vítima nadar"], "c": 1, "com": "Pular sem preparo pode gerar mais vítimas."},
+    {"q": "O plano de ajuda mútua serve para:", "o": ["Dividir custos de EPI", "Integrar empresas e órgãos públicos em emergências maiores", "Organizar férias", "Substituir o PGR"], "c": 1, "com": "Ele coordena a resposta conjunta."}
+  ]
+}

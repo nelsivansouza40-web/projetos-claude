@@ -1,0 +1,135 @@
+{
+  "nr": "25",
+  "titulo": "Resíduos Industriais",
+  "chamada": "Resíduo bem segregado e armazenado não vira acidente nem contaminação",
+  "icone": "FaRecycle",
+  "carga": "2 horas (aula informativa para trabalhadores que manuseiam resíduos, lideranças e equipes de SST e meio ambiente)",
+  "periodicidade": "A NR-25 exige que os trabalhadores envolvidos sejam capacitados sobre os riscos e as medidas de controle dos resíduos. Recomenda-se reciclagem anual e quando houver mudança nos resíduos gerados.",
+  "publico": "Trabalhadores que coletam, manuseiam e armazenam resíduos, lideranças e equipes de SST e meio ambiente.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho ou de meio ambiente com conhecimento em gestão de resíduos.",
+  "objetivos": [
+    "Conhecer as exigências da NR-25 para resíduos industriais",
+    "Identificar as classes de resíduos e seus riscos",
+    "Aplicar práticas seguras de segregação, acondicionamento e armazenamento",
+    "Usar a proteção adequada no manuseio de resíduos"
+  ],
+  "recursos": ["Projetor e apresentação", "Exemplos de recipientes e etiquetas de identificação de resíduos", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-25 Resíduos Industriais, texto vigente", "ABNT NBR 10004 Resíduos sólidos: classificação", "Política Nacional de Resíduos Sólidos, Lei 12.305/2010", "Legislação ambiental aplicável"],
+  "modulos": [
+    {
+      "titulo": "Resíduos e seus riscos",
+      "duracao": 30,
+      "gancho": "Resíduo não é só lixo. Pode ser inflamável, tóxico, corrosivo ou cortante. E quem manuseia é o trabalhador.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "O que a NR-25 exige",
+          "cards": [
+            {"t": "Gerenciamento", "d": "Resíduos gerenciados de forma a evitar riscos aos trabalhadores"},
+            {"t": "Destinação", "d": "Tratamento e destinação conforme a legislação ambiental"},
+            {"t": "Proibições", "d": "Não lançar resíduos de forma que causem riscos ou poluição"},
+            {"t": "Capacitação", "d": "Trabalhadores informados sobre riscos e medidas de controle"}
+          ],
+          "fala": "A NR-25 exige que os resíduos industriais sejam gerenciados de forma a evitar riscos à segurança e à saúde dos trabalhadores, com tratamento e destinação conforme a legislação ambiental. É proibido lançar resíduos no ambiente de forma que causem risco ou poluição. E os trabalhadores envolvidos devem ser capacitados sobre os riscos e as medidas de controle. A NR-25 se soma às exigências ambientais.",
+          "pergunta": "Que resíduos o seu setor gera?"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Classes de resíduos",
+          "esquerda": {"t": "Classe I: perigosos", "itens": ["Inflamáveis, corrosivos, reativos, tóxicos ou patogênicos", "Exemplos: borras de tinta, óleo usado, solventes, embalagens contaminadas"]},
+          "direita": {"t": "Classe II: não perigosos", "itens": ["Não inertes ou inertes, conforme a norma técnica", "Exemplos: papel, plástico e metal limpos, restos de alimentos"]},
+          "fala": "A norma técnica NBR 10004 classifica os resíduos em duas classes. Classe I, perigosos, que apresentam inflamabilidade, corrosividade, reatividade, toxicidade ou patogenicidade, como borras de tinta, óleo usado, solventes e embalagens contaminadas. E classe II, não perigosos, divididos em não inertes e inertes, como papel, plástico e metal limpos e restos de alimentos. A classificação define como o resíduo deve ser manuseado e destinado.",
+          "dica": "Mostre o inventário de resíduos da empresa, se houver."
+        }
+      ]
+    },
+    {
+      "titulo": "Manuseio e armazenamento",
+      "duracao": 30,
+      "gancho": "Misturar resíduos incompatíveis pode gerar gases tóxicos ou incêndio. A segregação na origem é o primeiro cuidado.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Do posto à destinação",
+          "passos": [
+            {"t": "Segregar", "d": "Separar na origem, sem misturar incompatíveis"},
+            {"t": "Acondicionar", "d": "Recipientes adequados, fechados e íntegros"},
+            {"t": "Identificar", "d": "Etiqueta com tipo de resíduo e riscos"},
+            {"t": "Armazenar", "d": "Área coberta, sinalizada, com contenção"},
+            {"t": "Destinar", "d": "Transporte e destinação por empresa licenciada"}
+          ],
+          "fala": "O caminho seguro do resíduo começa com a segregação na origem, sem misturar resíduos incompatíveis. Depois, o acondicionamento em recipientes adequados, fechados e íntegros. A identificação com etiqueta indicando o tipo de resíduo e seus riscos. O armazenamento temporário em área coberta, sinalizada e com contenção para vazamentos. E a destinação por empresa licenciada, com documentação.",
+          "pergunta": "Os recipientes de resíduos do seu setor estão identificados?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Nunca faça",
+          "texto": "Resíduo perigoso não vai para o lixo comum, para o ralo nem para a fogueira.",
+          "itens": [
+            "Misturar resíduos incompatíveis, como ácidos e bases ou oxidantes e inflamáveis",
+            "Descartar produtos químicos na rede de esgoto ou no solo",
+            "Queimar resíduos a céu aberto",
+            "Reutilizar embalagens de produtos perigosos para outros fins",
+            "Compactar ou apertar sacos com material cortante usando as mãos"
+          ],
+          "fala": "Alguns erros são graves. Misturar resíduos incompatíveis, como ácidos com bases ou oxidantes com inflamáveis, pode gerar calor, gases tóxicos e incêndio. Descartar produtos químicos no esgoto ou no solo contamina o ambiente. Queimar resíduos a céu aberto libera fumaça tóxica. Reutilizar embalagens de produtos perigosos, por exemplo para água, causa intoxicações. E apertar sacos de lixo com as mãos expõe a cortes e perfurações."
+        }
+      ]
+    },
+    {
+      "titulo": "Proteção do trabalhador",
+      "duracao": 30,
+      "gancho": "Quem coleta e manuseia resíduos precisa de proteção adequada aos riscos de cada tipo de resíduo.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Medidas de proteção",
+          "itens": [
+            "Luvas adequadas ao risco: química, corte ou biológica",
+            "Óculos ou protetor facial no manuseio de líquidos",
+            "Calçado de segurança e vestimenta adequada",
+            "Proteção respiratória em resíduos com vapores ou poeiras",
+            "Higienização das mãos e troca de roupa ao final da atividade"
+          ],
+          "destaque": "O EPI é definido pelo tipo de resíduo, conforme a ficha com dados de segurança do produto que o originou.",
+          "fala": "O EPI depende do resíduo. Luvas adequadas ao risco, químico, de corte ou biológico. Óculos ou protetor facial no manuseio de líquidos. Calçado de segurança e vestimenta adequada. Proteção respiratória quando houver vapores ou poeiras. E higienização das mãos e troca de roupa ao final da atividade. A ficha com dados de segurança do produto que originou o resíduo ajuda a definir a proteção."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Vazamento de resíduo perigoso",
+          "passos": [
+            {"t": "Isolar", "d": "Afastar as pessoas e sinalizar"},
+            {"t": "Proteger", "d": "Usar o EPI indicado"},
+            {"t": "Conter", "d": "Usar o kit de contenção e evitar que chegue a ralos"},
+            {"t": "Recolher", "d": "Destinar o material contaminado como resíduo perigoso"},
+            {"t": "Comunicar", "d": "Registrar e informar o responsável"}
+          ],
+          "fala": "Em um vazamento de resíduo perigoso, isole a área e afaste as pessoas. Use o EPI indicado. Contenha o vazamento com o kit de contenção, evitando que o produto chegue a ralos e canaletas. Recolha o material e destine como resíduo perigoso, inclusive o absorvente usado. E registre e comunique o responsável.",
+          "pergunta": "Onde fica o kit de contenção do seu setor?"
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A bombona misturada",
+    "relato": "Em uma indústria metalúrgica, um auxiliar de limpeza recebeu a tarefa de juntar os restos de produtos químicos de várias bombonas parcialmente cheias em um único tambor, para liberar espaço no depósito de resíduos. As bombonas não estavam identificadas. Ao misturar o conteúdo de duas delas, houve forte aquecimento e liberação de gases irritantes. O auxiliar, que usava apenas luvas de látex, teve irritação nos olhos e nas vias respiratórias e foi atendido no ambulatório.",
+    "perguntas": ["Qual foi a causa da reação?", "Que falhas de gestão de resíduos contribuíram?", "O EPI usado era adequado?", "Que medidas a empresa deve adotar?"],
+    "analise": "A mistura de resíduos incompatíveis provocou reação química com aquecimento e liberação de gases. As bombonas não estavam identificadas e não havia procedimento de segregação, o que impediu avaliar a compatibilidade. Luvas de látex não protegem contra a maioria dos produtos químicos, e faltaram proteção para os olhos e respiratória. A empresa deve identificar todos os recipientes, proibir a mistura de resíduos sem avaliação técnica, definir procedimento e EPI para cada tipo e capacitar quem manuseia resíduos."
+  },
+  "dinamica": {"titulo": "Onde vai cada resíduo?", "objetivo": "Fixar a segregação de resíduos.", "tempo": 15, "passos": ["Prepare cartões com resíduos da empresa, como estopa com óleo, papelão, lâmpadas, pilhas, restos de tinta e cavaco metálico.", "Os participantes indicam a classe e o recipiente correto.", "Discuta os riscos de cada erro de segregação.", "Mostre os recipientes reais da empresa."]},
+  "dds": {"titulo": "Resíduo também tem endereço", "texto": "Pessoal, cada resíduo tem o seu lugar. Estopa com óleo não vai no lixo comum, resto de tinta não vai no ralo, lâmpada não vai no reciclável. Quando a gente mistura, cria risco de incêndio, de gás tóxico e de contaminação. Então, antes de jogar fora, olhe a identificação do recipiente. Se não souber onde descartar, pergunte. E nunca use embalagem de produto químico para guardar água ou outra coisa."},
+  "prova": [
+    {"q": "A NR-25 exige que os resíduos industriais sejam gerenciados:", "o": ["Sem nenhum controle", "De forma a evitar riscos aos trabalhadores e conforme a legislação ambiental", "Apenas para reduzir custos", "Somente pela prefeitura"], "c": 1, "com": "É o objetivo da norma."},
+    {"q": "Resíduos classe I, pela NBR 10004, são:", "o": ["Não perigosos", "Perigosos", "Recicláveis apenas", "Orgânicos"], "c": 1, "com": "Classe I são os perigosos."},
+    {"q": "É exemplo de resíduo perigoso:", "o": ["Papelão limpo", "Borra de tinta com solvente", "Restos de alimentos", "Garrafa plástica limpa"], "c": 1, "com": "Contém substâncias inflamáveis e tóxicas."},
+    {"q": "A segregação dos resíduos deve ocorrer:", "o": ["Somente no aterro", "Na origem, sem misturar incompatíveis", "Nunca", "Após a destinação"], "c": 1, "com": "Separar na origem evita reações e contaminação."},
+    {"q": "Misturar resíduos incompatíveis pode causar:", "o": ["Nada", "Aquecimento, gases tóxicos e incêndio", "Redução do volume", "Melhoria da destinação"], "c": 1, "com": "Reações químicas perigosas podem ocorrer."},
+    {"q": "Os recipientes de resíduos devem estar:", "o": ["Abertos e sem identificação", "Fechados, íntegros e identificados", "Empilhados sem controle", "No posto de trabalho indefinidamente"], "c": 1, "com": "Identificação e integridade evitam acidentes."},
+    {"q": "Descartar produtos químicos no ralo é:", "o": ["Permitido em pequenas quantidades", "Proibido", "Recomendado", "Obrigatório"], "c": 1, "com": "Contamina a água e o solo."},
+    {"q": "Reutilizar embalagem de produto perigoso para guardar água é:", "o": ["Econômico e seguro", "Perigoso e proibido", "Permitido após enxaguar", "Recomendado"], "c": 1, "com": "Pode causar intoxicações."},
+    {"q": "A destinação de resíduos perigosos deve ser feita por:", "o": ["Qualquer pessoa", "Empresa licenciada, com documentação", "Coleta comum", "Queima no pátio"], "c": 1, "com": "Exigência da legislação ambiental."},
+    {"q": "Em vazamento de resíduo perigoso, deve-se:", "o": ["Lavar com mangueira até o ralo", "Isolar, usar EPI, conter com kit e destinar o material", "Cobrir com terra e esquecer", "Varrer a seco"], "c": 1, "com": "Contenção e destinação adequada evitam a contaminação."}
+  ]
+}

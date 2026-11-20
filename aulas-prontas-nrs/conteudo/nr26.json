@@ -1,0 +1,189 @@
+{
+  "nr": "26",
+  "titulo": "Sinalização e Identificação de Segurança",
+  "chamada": "Ler o rótulo e a ficha antes de usar o produto: a informação é a primeira proteção",
+  "icone": "FaTriangleExclamation",
+  "carga": "4 horas (treinamento em sinalização, rotulagem preventiva e ficha com dados de segurança)",
+  "periodicidade": "A NR-26 exige que os trabalhadores sejam treinados para compreender a rotulagem preventiva e a ficha com dados de segurança dos produtos químicos que utilizam. Recomenda-se reciclagem anual e sempre que um novo produto químico for introduzido.",
+  "publico": "Trabalhadores que utilizam, armazenam ou transportam produtos químicos e todos os que circulam em áreas sinalizadas.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho com conhecimento do GHS e das normas de sinalização.",
+  "objetivos": [
+    "Interpretar as cores e os sinais de segurança",
+    "Compreender o sistema de classificação e rotulagem de produtos químicos",
+    "Ler um rótulo de produto químico e identificar perigos e precauções",
+    "Localizar informações essenciais na ficha com dados de segurança"
+  ],
+  "recursos": ["Projetor e apresentação", "Rótulos e fichas com dados de segurança de produtos usados na empresa", "Placas de sinalização para demonstração", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-26 Sinalização e Identificação de Segurança, texto vigente", "ABNT NBR 14725 Produtos químicos: informações sobre segurança, saúde e meio ambiente", "Sistema Globalmente Harmonizado de Classificação e Rotulagem de Produtos Químicos, GHS", "Normas técnicas oficiais de cores e sinalização de segurança"],
+  "modulos": [
+    {
+      "titulo": "Cores e sinais de segurança",
+      "duracao": 50,
+      "gancho": "Uma placa bem posicionada transmite uma mensagem em menos de um segundo, sem precisar de palavras. Mas só funciona se todos souberem ler.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Significado das cores",
+          "cards": [
+            {"t": "Vermelho", "d": "Proibição, parada e equipamentos de combate a incêndio"},
+            {"t": "Amarelo", "d": "Atenção, cuidado e advertência de perigo"},
+            {"t": "Azul", "d": "Obrigação, como uso obrigatório de EPI"},
+            {"t": "Verde", "d": "Condição segura, saídas de emergência e primeiros socorros"}
+          ],
+          "fala": "A NR-26 determina que as cores de segurança sigam as normas técnicas oficiais. As principais são o vermelho, que indica proibição, parada e equipamentos de combate a incêndio; o amarelo, que indica atenção e advertência de perigo; o azul, que indica obrigação, como o uso de EPI; e o verde, que indica condição segura, saídas de emergência e primeiros socorros. As cores não substituem as medidas de prevenção, mas alertam e orientam.",
+          "pergunta": "Que placas de sinalização vocês encontram no caminho até o posto de trabalho?"
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Tipos de sinal",
+          "cabecalho": ["Sinal", "Forma e uso"],
+          "linhas": [
+            ["Proibição", "Círculo vermelho com barra, como proibido fumar"],
+            ["Alerta", "Triângulo amarelo, como risco de choque elétrico"],
+            ["Obrigação", "Círculo azul, como uso obrigatório de protetor auricular"],
+            ["Emergência", "Retângulo ou quadrado verde, como saída de emergência"],
+            ["Combate a incêndio", "Vermelho, indicando extintores, hidrantes e alarmes"]
+          ],
+          "fala": "Além das cores, a forma do sinal tem significado. Proibição é um círculo vermelho com barra. Alerta é um triângulo amarelo. Obrigação é um círculo azul. Emergência e rotas de fuga são retângulos ou quadrados verdes. E equipamentos de combate a incêndio são indicados em vermelho. A sinalização deve estar em local visível, em bom estado e sem obstruções.",
+          "dica": "Mostre placas reais e peça à turma que diga o significado de cada uma."
+        }
+      ]
+    },
+    {
+      "titulo": "Classificação e rotulagem de produtos químicos",
+      "duracao": 50,
+      "gancho": "O rótulo do produto químico é uma ficha de segurança resumida. Em poucos segundos, ele diz se o produto pega fogo, intoxica ou queima a pele.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Elementos do rótulo",
+          "itens": [
+            "Identificação do produto e do fornecedor, com telefone de emergência",
+            "Pictogramas de perigo",
+            "Palavra de advertência: Perigo ou Atenção",
+            "Frases de perigo, que descrevem a natureza do perigo",
+            "Frases de precaução, com medidas de prevenção, resposta, armazenamento e descarte"
+          ],
+          "destaque": "Perigo indica as categorias mais graves; Atenção, as menos graves.",
+          "fala": "A NR-26 determina que os produtos químicos sejam classificados e rotulados conforme o Sistema Globalmente Harmonizado, o GHS, e a NBR 14725. O rótulo traz a identificação do produto e do fornecedor, com telefone de emergência; os pictogramas de perigo; a palavra de advertência, Perigo para as categorias mais graves e Atenção para as menos graves; as frases de perigo; e as frases de precaução, que dizem como prevenir, como agir em caso de exposição, como armazenar e como descartar.",
+          "dica": "Distribua rótulos de produtos da empresa e localize cada elemento com a turma."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Pictogramas do GHS",
+          "cabecalho": ["Pictograma", "Perigo"],
+          "linhas": [
+            ["Chama", "Inflamáveis e autoaquecíveis"],
+            ["Chama sobre círculo", "Oxidantes, que intensificam o fogo"],
+            ["Bomba explodindo e cilindro", "Explosivos e gases sob pressão"],
+            ["Corrosão e caveira", "Corrosivos para pele, olhos e metais; toxicidade aguda grave"],
+            ["Exclamação, perigo à saúde e meio ambiente", "Irritantes e sensibilizantes; efeitos crônicos graves, como câncer; danos ao meio aquático"]
+          ],
+          "fala": "O GHS usa nove pictogramas. A chama indica inflamáveis. A chama sobre um círculo indica oxidantes, que intensificam o fogo. A bomba explodindo indica explosivos, e o cilindro indica gases sob pressão. O símbolo de corrosão indica produtos que queimam a pele, os olhos e corroem metais. A caveira indica toxicidade aguda grave. O ponto de exclamação indica irritantes e efeitos menos graves. A silhueta com estrela no peito indica perigos graves à saúde, como câncer e efeitos respiratórios. E a árvore com peixe indica perigo ao meio ambiente aquático.",
+          "pergunta": "Qual pictograma aparece com mais frequência nos produtos do seu setor?"
+        }
+      ]
+    },
+    {
+      "titulo": "Ficha com dados de segurança",
+      "duracao": 55,
+      "gancho": "Se o rótulo é o resumo, a ficha com dados de segurança é o manual completo do produto químico. Saber onde procurar a informação certa economiza tempo em uma emergência.",
+      "slides": [
+        {
+          "tipo": "numero",
+          "titulo": "A ficha com dados de segurança",
+          "valor": "16",
+          "legenda": "seções padronizadas com informações de segurança, saúde e meio ambiente de cada produto químico",
+          "itens": [
+            "Fornecida pelo fabricante ou fornecedor",
+            "Deve estar disponível aos trabalhadores, em português",
+            "Atualizada quando houver novas informações"
+          ],
+          "fala": "A ficha com dados de segurança, a FDS, tem dezesseis seções padronizadas com as informações de segurança, saúde e meio ambiente do produto químico. Ela é fornecida pelo fabricante ou fornecedor e deve estar disponível aos trabalhadores que usam o produto, em português. A empresa deve manter as fichas atualizadas e acessíveis, inclusive para o atendimento de emergências.",
+          "dica": "Mostre onde as fichas ficam disponíveis na empresa, em papel ou meio eletrônico."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Onde encontrar o que você precisa",
+          "cabecalho": ["Seção", "Informação"],
+          "linhas": [
+            ["2", "Identificação dos perigos, pictogramas e frases"],
+            ["4", "Medidas de primeiros socorros"],
+            ["5 e 6", "Combate a incêndio e controle de vazamentos"],
+            ["7 e 8", "Manuseio, armazenamento, controle de exposição e EPI"],
+            ["13", "Considerações sobre destinação final"]
+          ],
+          "fala": "Algumas seções são consultadas com mais frequência. A seção dois traz os perigos, com pictogramas e frases. A quatro traz os primeiros socorros. A cinco e a seis tratam do combate a incêndio e do controle de vazamentos. A sete e a oito tratam de manuseio, armazenamento, controle de exposição e EPI. E a treze traz as orientações de destinação. Em uma emergência, saber ir direto à seção certa faz diferença.",
+          "pergunta": "Que EPI a ficha indica para o produto que você mais usa?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Responsabilidades",
+          "itens": [
+            "Fornecedor: classificar, rotular e fornecer a ficha com dados de segurança",
+            "Empregador: manter rótulos e fichas disponíveis e treinar os trabalhadores",
+            "Empregador: rotular recipientes de uso interno, como frascos de transferência",
+            "Trabalhador: ler o rótulo antes de usar e seguir as precauções"
+          ],
+          "destaque": "Produto transferido para outro recipiente também precisa de identificação.",
+          "fala": "O fornecedor classifica o produto, faz o rótulo e fornece a ficha. O empregador mantém rótulos e fichas disponíveis, treina os trabalhadores e garante que recipientes de uso interno, como frascos e pulverizadores para os quais o produto é transferido, também sejam identificados. E o trabalhador lê o rótulo antes de usar e segue as precauções. Um frasco sem identificação é um risco para quem vier depois."
+        }
+      ]
+    },
+    {
+      "titulo": "Aplicação no dia a dia",
+      "duracao": 55,
+      "gancho": "Sinalização desbotada, rótulo rasgado e ficha que ninguém sabe onde está. Vamos ver como manter a informação funcionando.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Antes de usar um produto químico",
+          "passos": [
+            {"t": "Ler o rótulo", "d": "Pictogramas, palavra de advertência e frases"},
+            {"t": "Consultar a ficha", "d": "EPI, manuseio e primeiros socorros"},
+            {"t": "Preparar", "d": "Ventilação, EPI e recursos de emergência"},
+            {"t": "Usar", "d": "Somente a quantidade necessária"},
+            {"t": "Guardar", "d": "Recipiente fechado e identificado no local correto"}
+          ],
+          "fala": "Antes de usar um produto químico, leia o rótulo: pictogramas, palavra de advertência e frases. Consulte a ficha para conferir o EPI, os cuidados de manuseio e os primeiros socorros. Prepare o local com ventilação, EPI e recursos de emergência, como lava-olhos. Use apenas a quantidade necessária. E guarde o produto em recipiente fechado e identificado, no local correto, longe de produtos incompatíveis."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Manutenção da sinalização",
+          "itens": [
+            "Substituir placas e rótulos danificados, desbotados ou ilegíveis",
+            "Não cobrir sinalização com materiais ou equipamentos",
+            "Identificar tubulações conforme as normas técnicas",
+            "Incluir a sinalização nas inspeções periódicas",
+            "Atualizar a sinalização após mudanças de layout"
+          ],
+          "destaque": "Sinalização que ninguém consegue ler não sinaliza nada.",
+          "fala": "A sinalização precisa ser mantida. Placas e rótulos danificados, desbotados ou ilegíveis são substituídos. Nenhuma sinalização pode ser coberta por materiais ou equipamentos. Tubulações são identificadas conforme as normas técnicas. A sinalização entra nas inspeções periódicas e é atualizada após mudanças de layout.",
+          "pergunta": "Há alguma placa ou rótulo ilegível no seu setor?"
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "O borrifador sem rótulo",
+    "relato": "Na limpeza de uma indústria alimentícia, uma auxiliar transferia um desengraxante alcalino concentrado para borrifadores, para facilitar o uso. Os borrifadores não eram identificados. Outra colega, do turno seguinte, achou que o borrifador continha água e o usou para umedecer um pano e limpar o rosto suado. Ela sofreu queimadura química na face e nos olhos. A ficha com dados de segurança do produto ficava trancada na sala do supervisor.",
+    "perguntas": ["Que exigência da NR-26 foi descumprida na transferência?", "Que informações do rótulo e da ficha teriam evitado o acidente?", "Como deveria ser o atendimento imediato?", "Que medidas a empresa deve adotar?"],
+    "analise": "O produto foi transferido para recipientes sem identificação, contrariando a exigência de identificar recipientes de uso interno. O rótulo indicaria o pictograma de corrosão e a palavra Perigo, e a ficha traria a necessidade de luvas e proteção facial, além dos primeiros socorros. O atendimento imediato seria lavagem abundante dos olhos e da pele com água corrente por vários minutos e encaminhamento médico. A empresa deve identificar todos os recipientes de transferência, deixar as fichas acessíveis, disponibilizar lava-olhos e treinar as equipes na leitura de rótulos."
+  },
+  "dinamica": {"titulo": "Decifre o rótulo", "objetivo": "Praticar a leitura de rótulos GHS.", "tempo": 20, "passos": ["Entregue a cada grupo o rótulo de um produto químico usado na empresa.", "Os grupos identificam pictogramas, palavra de advertência, perigos e EPI necessário.", "Em seguida, localizam na ficha os primeiros socorros e o procedimento em vazamento.", "Os grupos apresentam e o instrutor corrige."]},
+  "dds": {"titulo": "Sem rótulo, não usa", "texto": "Pessoal, regra simples para hoje: frasco sem rótulo não se usa. Pode parecer água, pode ter cheiro de limpeza, pode ser o mesmo produto de sempre. Mas, se não tem identificação, a gente não sabe o que é. E quem transferir produto para outro recipiente identifica na hora. Antes de usar qualquer produto, uma olhada no rótulo: se tiver a palavra Perigo ou o símbolo de corrosão, luva e óculos sem discussão."},
+  "prova": [
+    {"q": "Na sinalização de segurança, a cor vermelha indica:", "o": ["Condição segura", "Proibição, parada e equipamentos de combate a incêndio", "Obrigação", "Atenção"], "c": 1, "com": "Vermelho é usado para proibição e combate a incêndio."},
+    {"q": "A cor verde indica:", "o": ["Perigo", "Saídas de emergência, condição segura e primeiros socorros", "Proibição", "Obrigação"], "c": 1, "com": "Verde sinaliza condição segura."},
+    {"q": "O sinal de obrigação, como uso de EPI, é:", "o": ["Triângulo amarelo", "Círculo azul", "Círculo vermelho com barra", "Quadrado verde"], "c": 1, "com": "Obrigação é indicada por círculo azul."},
+    {"q": "Os produtos químicos devem ser classificados e rotulados conforme:", "o": ["A preferência do fornecedor", "O GHS e a norma técnica brasileira", "O código de barras", "A cor da embalagem"], "c": 1, "com": "A NR-26 adota o GHS."},
+    {"q": "A palavra de advertência Perigo indica:", "o": ["Categorias menos graves", "Categorias mais graves", "Produto seguro", "Produto vencido"], "c": 1, "com": "Atenção é usada para as categorias menos graves."},
+    {"q": "O pictograma da caveira indica:", "o": ["Produto inflamável", "Toxicidade aguda grave", "Perigo ao meio ambiente", "Gás sob pressão"], "c": 1, "com": "A caveira representa toxicidade aguda grave."},
+    {"q": "A ficha com dados de segurança tem:", "o": ["4 seções", "10 seções", "16 seções", "Nenhuma padronização"], "c": 2, "com": "São 16 seções padronizadas."},
+    {"q": "As medidas de primeiros socorros estão na seção da FDS:", "o": ["2", "4", "8", "13"], "c": 1, "com": "A seção 4 traz os primeiros socorros."},
+    {"q": "Ao transferir um produto químico para outro recipiente, deve-se:", "o": ["Deixar sem identificação", "Identificar o recipiente", "Usar garrafa de refrigerante", "Diluir sempre em água"], "c": 1, "com": "Recipientes de uso interno também devem ser identificados."},
+    {"q": "Os trabalhadores devem ser treinados para:", "o": ["Fabricar rótulos", "Compreender a rotulagem preventiva e a ficha com dados de segurança", "Vender produtos químicos", "Classificar produtos para o fornecedor"], "c": 1, "com": "A NR-26 exige esse treinamento."}
+  ]
+}

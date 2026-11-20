@@ -1,0 +1,195 @@
+{
+  "nr": "38",
+  "titulo": "Atividades de Limpeza Urbana e Manejo de Resíduos Sólidos",
+  "chamada": "Na rua, o caminhão, o trânsito e o próprio resíduo exigem atenção o tempo todo",
+  "icone": "FaTrashCan",
+  "carga": "4 horas (carga sugerida para coletores, motoristas, garis e lideranças; confira no texto vigente a capacitação exigida pela NR-38)",
+  "periodicidade": "A NR-38 exige capacitação dos trabalhadores sobre os riscos e as medidas de prevenção da atividade, na admissão e periodicamente, conforme o texto vigente. Recomenda-se reciclagem anual.",
+  "publico": "Coletores, motoristas, operadores de equipamentos, agentes de varrição e capina, trabalhadores de triagem e de destinação, e suas lideranças.",
+  "prerequisitos": "Avaliação de saúde com aptidão para a função.",
+  "instrutor": "Profissional de segurança do trabalho com experiência em limpeza urbana.",
+  "objetivos": [
+    "Reconhecer os principais riscos da limpeza urbana e do manejo de resíduos",
+    "Aplicar regras seguras na coleta com veículos compactadores",
+    "Proteger-se de atropelamentos, cortes e agentes biológicos",
+    "Prevenir a sobrecarga física e térmica",
+    "Agir em acidentes e emergências na via pública"
+  ],
+  "recursos": ["Projetor e apresentação", "Vestimentas de alta visibilidade e EPIs utilizados", "Fotos ou acesso a um veículo compactador parado", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na prática.",
+  "referencias": ["NR-38 Segurança e Saúde no Trabalho nas Atividades de Limpeza Urbana e Manejo de Resíduos Sólidos, texto vigente", "NR-12 Máquinas e Equipamentos", "NR-17 Ergonomia", "NR-21 Trabalhos a Céu Aberto", "Código de Trânsito Brasileiro"],
+  "modulos": [
+    {
+      "titulo": "Riscos da limpeza urbana",
+      "duracao": 45,
+      "gancho": "O trabalhador da limpeza urbana trabalha no meio do trânsito, carrega peso, enfrenta sol e chuva e manuseia resíduos que podem esconder vidro, agulhas e produtos químicos.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos",
+          "cards": [
+            {"t": "Trânsito", "d": "Atropelamento e colisões durante a coleta e a varrição"},
+            {"t": "Veículo coletor", "d": "Quedas do estribo, prensamento no compactador e na traseira"},
+            {"t": "Resíduos", "d": "Cortes, perfurações, agentes biológicos e produtos químicos"},
+            {"t": "Carga física e clima", "d": "Esforço, corrida, calor, sol e chuva"}
+          ],
+          "fala": "Os principais riscos são o trânsito, com atropelamentos e colisões; o veículo coletor, com quedas do estribo e prensamento no compactador; os próprios resíduos, que podem conter vidro, agulhas, produtos químicos e agentes biológicos; e a carga física, com levantamento de sacos, caminhadas longas e corridas, somada ao calor, ao sol e à chuva. A NR-38 trata desses riscos de forma específica.",
+          "pergunta": "Qual situação na rota de vocês dá mais medo?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Responsabilidades",
+          "itens": [
+            "Empregador: avaliar os riscos de cada rota e atividade no PGR",
+            "Fornecer veículos e equipamentos adequados e com manutenção",
+            "Fornecer EPI e vestimentas de alta visibilidade adequados ao clima",
+            "Garantir acesso a instalações sanitárias, água e local para refeição",
+            "Trabalhadores: seguir os procedimentos e comunicar riscos"
+          ],
+          "destaque": "Quem trabalha na rua também tem direito a banheiro, água e lugar para comer.",
+          "fala": "O empregador deve avaliar os riscos de cada rota e atividade no PGR, fornecer veículos e equipamentos adequados e com manutenção, fornecer EPI e vestimentas de alta visibilidade adequadas ao clima e garantir acesso a instalações sanitárias, água potável e local para refeição durante a jornada, mesmo no trabalho itinerante. Os trabalhadores seguem os procedimentos e comunicam os riscos encontrados nas rotas."
+        }
+      ]
+    },
+    {
+      "titulo": "Coleta com veículo compactador",
+      "duracao": 45,
+      "gancho": "O caminhão compactador é a principal ferramenta da coleta e também a origem de acidentes graves. Vamos ver como trabalhar com ele em segurança.",
+      "slides": [
+        {
+          "tipo": "alerta",
+          "titulo": "Estribo e compactador",
+          "texto": "O estribo só é usado nas condições permitidas pela norma, e ninguém se aproxima do compactador em movimento.",
+          "itens": [
+            "Usar o estribo apenas em deslocamentos curtos e na velocidade permitida, conforme a NR-38",
+            "Subir e descer somente com o veículo parado",
+            "Nunca colocar as mãos ou o corpo na caixa de carga com o compactador acionado",
+            "Usar o botão de parada de emergência em qualquer situação de risco"
+          ],
+          "fala": "O estribo do caminhão só pode ser usado nas condições permitidas pela NR-38, em deslocamentos curtos e na velocidade limitada. Suba e desça somente com o veículo parado, nunca em movimento. Nunca coloque as mãos ou o corpo na caixa de carga com o compactador acionado: o mecanismo tem força para esmagar. E use o botão de parada de emergência sempre que houver risco.",
+          "dica": "Mostre no veículo os botões de emergência e os dispositivos de segurança."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Comunicação na coleta",
+          "itens": [
+            "Sinais combinados entre coletores e motorista",
+            "Motorista só movimenta o veículo após confirmação de todos",
+            "Atenção redobrada em marcha à ré, com apoio de sinaleiro",
+            "Coletores sempre visíveis no espelho do motorista"
+          ],
+          "destaque": "Marcha à ré na coleta só com alguém orientando e ninguém atrás do caminhão.",
+          "fala": "A comunicação entre os coletores e o motorista é essencial. Os sinais devem ser combinados. O motorista só movimenta o veículo após a confirmação de todos. Na marcha à ré, a atenção é redobrada, com um coletor orientando e ninguém atrás do caminhão. E os coletores devem ficar sempre visíveis no espelho do motorista.",
+          "pergunta": "Quais sinais vocês usam com o motorista?"
+        }
+      ]
+    },
+    {
+      "titulo": "Trânsito, resíduos e proteção",
+      "duracao": 45,
+      "gancho": "Um saco de lixo pode esconder um caco de vidro ou uma agulha. E a rua tem motoristas que não esperam encontrar alguém trabalhando ali.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Segurança no trânsito",
+          "itens": [
+            "Vestimenta de alta visibilidade em toda a jornada",
+            "Atravessar com atenção, sem correr entre os veículos",
+            "Sinalização da área de trabalho na varrição e na capina",
+            "Evitar o lado do tráfego ao recolher resíduos",
+            "Cuidado especial em vias de alta velocidade e à noite"
+          ],
+          "destaque": "Correr atrás do caminhão aumenta o risco de queda e atropelamento.",
+          "fala": "No trânsito, use vestimenta de alta visibilidade durante toda a jornada. Atravesse com atenção, sem correr entre os veículos, porque correr atrás do caminhão aumenta o risco de queda e atropelamento. Na varrição e na capina, sinalize a área de trabalho. Ao recolher resíduos, evite ficar do lado do tráfego. E tenha cuidado especial em vias de alta velocidade e no turno da noite."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Manuseio de resíduos",
+          "cards": [
+            {"t": "Não apertar", "d": "Não compactar sacos com as mãos ou com o corpo"},
+            {"t": "Segurar pelo nó", "d": "Pegar o saco pela parte de cima, longe do corpo"},
+            {"t": "Luvas e calçados", "d": "Luvas resistentes a corte e perfuração e calçado fechado"},
+            {"t": "Higiene e vacinas", "d": "Lavar as mãos antes de comer e manter a vacinação em dia"}
+          ],
+          "fala": "No manuseio dos resíduos, nunca aperte os sacos com as mãos ou com o corpo, porque eles podem conter vidro e agulhas. Segure o saco pela parte de cima, longe do corpo. Use luvas resistentes a corte e perfuração e calçado fechado. E cuide da higiene: lave as mãos antes de comer e beber, e mantenha a vacinação em dia, incluindo tétano e hepatite B, conforme o PCMSO.",
+          "pergunta": "Alguém já se feriu com objeto escondido em saco de lixo?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Corte ou perfuração",
+          "passos": [
+            {"t": "Lavar", "d": "Água e sabão no local"},
+            {"t": "Comunicar", "d": "Informar a liderança imediatamente"},
+            {"t": "Atender", "d": "Buscar atendimento para avaliar vacinas e profilaxia"},
+            {"t": "Registrar", "d": "Emitir CAT e acompanhar"}
+          ],
+          "fala": "Se você se cortar ou se perfurar com um resíduo, lave o local com água e sabão, comunique a liderança imediatamente e busque atendimento, porque pode ser necessário avaliar a vacinação contra tétano e medidas preventivas para doenças transmitidas por sangue. O acidente é registrado com CAT e acompanhado."
+        }
+      ]
+    },
+    {
+      "titulo": "Carga física, clima e saúde",
+      "duracao": 45,
+      "gancho": "Um coletor pode caminhar mais de 20 quilômetros e levantar toneladas de resíduos em um único turno. O corpo precisa de cuidado.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Prevenção da sobrecarga física",
+          "itens": [
+            "Dimensionar as rotas e as equipes conforme o volume e a distância",
+            "Pausas ao longo da jornada",
+            "Técnica correta de levantamento, sem torcer o tronco",
+            "Contêineres e equipamentos que reduzam o levantamento manual",
+            "Não correr durante a coleta"
+          ],
+          "destaque": "Rota mal dimensionada leva à corrida, e a corrida leva a quedas e lesões.",
+          "fala": "A sobrecarga física é prevenida com o dimensionamento correto das rotas e das equipes, considerando o volume e a distância, como exige a análise ergonômica. Pausas ao longo da jornada, técnica correta de levantamento, sem torcer o tronco, e o uso de contêineres e equipamentos que reduzam o levantamento manual. E nada de correr durante a coleta: rota mal dimensionada leva à corrida, e a corrida leva a quedas e lesões."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Sol, calor e chuva",
+          "cards": [
+            {"t": "Água", "d": "Água potável e fresca disponível durante toda a rota"},
+            {"t": "Proteção solar", "d": "Boné com proteção de nuca, mangas longas e protetor solar"},
+            {"t": "Calor", "d": "Pausas à sombra e atenção aos sinais de mal-estar"},
+            {"t": "Chuva e raios", "d": "Capa de chuva e interrupção em tempestades com raios"}
+          ],
+          "fala": "O trabalho é a céu aberto, então os cuidados da NR-21 também valem. Água potável e fresca disponível durante toda a rota. Boné com proteção de nuca, mangas longas e protetor solar. Pausas à sombra e atenção aos sinais de mal-estar pelo calor. E capa de chuva, com interrupção do trabalho em tempestades com raios.",
+          "pergunta": "Onde vocês conseguem água e banheiro durante a rota?"
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática no veículo coletor",
+    "duracao": 30,
+    "descricao": "Com o veículo parado e desligado, os participantes praticam os procedimentos de segurança com acompanhamento do instrutor.",
+    "itens": [
+      "Localizou e explicou os botões de parada de emergência",
+      "Demonstrou a subida e descida do estribo com o veículo parado",
+      "Executou os sinais combinados com o motorista",
+      "Demonstrou a forma segura de pegar e lançar sacos",
+      "Descreveu as ações após corte ou perfuração"
+    ]
+  },
+  "caso": {
+    "titulo": "A ré na rua sem saída",
+    "relato": "Ao entrar em uma rua sem saída, o motorista de um caminhão compactador precisou dar marcha à ré para sair. Um dos coletores estava atrás do caminhão recolhendo sacos deixados na calçada e não ouviu o sinal sonoro de ré por causa do barulho do compactador. O outro coletor, que deveria orientar a manobra, estava do outro lado da rua. O coletor foi prensado contra um poste e sofreu fraturas.",
+    "perguntas": ["Que regra de manobra foi descumprida?", "Por que o sinal sonoro de ré não foi suficiente?", "Como a comunicação entre a equipe deveria funcionar?", "Que medidas a empresa deve adotar?"],
+    "analise": "A marcha à ré foi feita sem um coletor orientando a manobra e com uma pessoa atrás do veículo. O sinal sonoro não foi percebido por causa do ruído do compactador, o que mostra que ele não substitui a orientação visual. A equipe deveria combinar que o motorista só manobra após confirmação e com um coletor visível no espelho orientando. A empresa deve planejar as rotas para reduzir manobras de ré, instalar câmeras e sensores de ré nos veículos e reforçar o procedimento com as equipes."
+  },
+  "dinamica": {"titulo": "Rota segura", "objetivo": "Identificar riscos de uma rota real de coleta.", "tempo": 15, "passos": ["Mostre o mapa de uma rota de coleta da empresa.", "Os grupos marcam pontos de risco, como ruas sem saída, vias rápidas, ladeiras e locais com descarte irregular.", "Para cada ponto, propõem uma medida.", "Encaminhe as propostas à liderança da operação."]},
+  "dds": {"titulo": "Estribo, ré e sacos", "texto": "Pessoal, três lembretes para a coleta de hoje. Estribo: sobe e desce só com o caminhão parado. Ré: só com alguém orientando e ninguém atrás do caminhão, mesmo que a ré apite. Sacos: pega pela parte de cima, longe do corpo, e nunca aperta com a mão ou com a perna, porque pode ter vidro ou agulha. E bebam água ao longo da rota. Ninguém precisa correr para terminar mais cedo."},
+  "prova": [
+    {"q": "Subir e descer do estribo do caminhão coletor deve ser feito:", "o": ["Com o caminhão em movimento", "Somente com o veículo parado", "Pulando em velocidade baixa", "De qualquer forma"], "c": 1, "com": "Subir com o veículo em movimento causa quedas graves."},
+    {"q": "Com o compactador acionado, é proibido:", "o": ["Usar luvas", "Colocar as mãos ou o corpo na caixa de carga", "Usar colete refletivo", "Comunicar o motorista"], "c": 1, "com": "O mecanismo pode esmagar."},
+    {"q": "Na marcha à ré do caminhão coletor:", "o": ["O sinal sonoro basta", "Um coletor orienta a manobra e ninguém fica atrás do veículo", "Os coletores podem continuar recolhendo atrás", "Não há cuidados especiais"], "c": 1, "com": "O alarme sonoro pode não ser ouvido."},
+    {"q": "Os sacos de lixo devem ser:", "o": ["Apertados para caber mais", "Segurados pela parte de cima, longe do corpo", "Abraçados contra o peito", "Chutados para o caminhão"], "c": 1, "com": "Podem conter vidro e agulhas."},
+    {"q": "Durante toda a jornada na rua, o trabalhador deve usar:", "o": ["Roupa escura", "Vestimenta de alta visibilidade", "Chinelo", "Fone de ouvido"], "c": 1, "com": "Ser visto reduz o risco de atropelamento."},
+    {"q": "Após corte com resíduo, o trabalhador deve:", "o": ["Continuar a rota", "Lavar, comunicar e buscar atendimento", "Esconder o ferimento", "Aguardar o fim do turno"], "c": 1, "com": "Pode ser necessário avaliar vacinas e profilaxia."},
+    {"q": "Correr durante a coleta:", "o": ["Aumenta a produtividade com segurança", "Aumenta o risco de quedas, atropelamentos e lesões", "É obrigatório", "Não faz diferença"], "c": 1, "com": "As rotas devem ser dimensionadas para evitar a corrida."},
+    {"q": "O empregador deve garantir aos trabalhadores itinerantes:", "o": ["Nada, pois estão na rua", "Acesso a instalações sanitárias, água e local para refeição", "Apenas o uniforme", "Somente o transporte"], "c": 1, "com": "A NR-38 e a NR-24 garantem essas condições."},
+    {"q": "Em tempestade com raios, o trabalho na via pública deve:", "o": ["Continuar normalmente", "Ser interrompido, com abrigo seguro", "Acelerar para terminar", "Continuar com capa de chuva"], "c": 1, "com": "Raios são risco grave em áreas abertas."},
+    {"q": "A vacinação recomendada para trabalhadores da coleta inclui:", "o": ["Somente gripe", "Tétano e hepatite B, conforme o PCMSO", "Nenhuma", "Apenas febre amarela"], "c": 1, "com": "Há risco de cortes e contato com material biológico."}
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "nr": "17",
+  "titulo": "Ergonomia",
+  "chamada": "Adaptar o trabalho às pessoas, e não as pessoas ao trabalho",
+  "icone": "FaChair",
+  "carga": "4 horas (carga sugerida para trabalhadores, lideranças e CIPA)",
+  "periodicidade": "A NR-17 exige treinamento em situações específicas, como o levantamento e transporte manual de cargas e os anexos de checkout e teleatendimento. Recomenda-se reciclagem a cada 2 anos ou após mudanças nos postos de trabalho.",
+  "publico": "Trabalhadores, lideranças, membros da CIPA e equipes de SST.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Ergonomista, fisioterapeuta do trabalho ou profissional de SST com formação em ergonomia.",
+  "objetivos": [
+    "Compreender o objetivo da ergonomia e as exigências da NR-17",
+    "Reconhecer fatores de risco ergonômico em posturas, esforços e organização do trabalho",
+    "Conhecer a avaliação ergonômica preliminar e a análise ergonômica do trabalho",
+    "Aplicar boas práticas em postos de trabalho sentados e em pé",
+    "Identificar medidas de organização do trabalho que reduzem a sobrecarga"
+  ],
+  "recursos": ["Projetor e apresentação", "Cadeira ajustável e mesa para demonstração", "Caixas para prática de levantamento", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na prática.",
+  "referencias": ["NR-17 Ergonomia, texto vigente, e seus anexos", "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais", "Manual de aplicação da NR-17 do Ministério do Trabalho"],
+  "modulos": [
+    {
+      "titulo": "Ergonomia e a NR-17",
+      "duracao": 45,
+      "gancho": "Dor nas costas, no ombro, no punho. Os distúrbios osteomusculares estão entre as principais causas de afastamento do trabalho. A ergonomia existe para que o trabalho não adoeça quem o faz.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "O que a NR-17 abrange",
+          "cards": [
+            {"t": "Levantamento e transporte", "d": "Movimentação manual de cargas"},
+            {"t": "Mobiliário e equipamentos", "d": "Postos de trabalho, assentos e ferramentas"},
+            {"t": "Condições ambientais", "d": "Iluminação, conforto acústico e térmico"},
+            {"t": "Organização do trabalho", "d": "Ritmo, metas, pausas, jornada e conteúdo das tarefas"}
+          ],
+          "fala": "A NR-17 estabelece diretrizes para adaptar as condições de trabalho às características das pessoas, garantindo conforto, segurança, saúde e desempenho. Ela trata do levantamento e transporte de cargas, do mobiliário e dos equipamentos, das condições ambientais de conforto e da organização do trabalho, que inclui ritmo, metas, pausas e jornada. A organização do trabalho costuma ser o fator mais esquecido e um dos que mais adoecem.",
+          "pergunta": "Que queixas de dor são mais comuns no seu setor?"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Avaliação preliminar e análise ergonômica",
+          "esquerda": {"t": "Avaliação ergonômica preliminar", "itens": ["Integrada ao GRO da NR-01", "Identifica e avalia os fatores de risco", "Pode ser feita por abordagens qualitativas ou ferramentas simples"]},
+          "direita": {"t": "Análise ergonômica do trabalho", "itens": ["Aprofundada e participativa", "Exigida em situações previstas na norma", "Quando a preliminar não basta ou há indicação de agravos"]},
+          "fala": "A NR-17 prevê dois níveis de avaliação. A avaliação ergonômica preliminar, integrada ao gerenciamento de riscos da NR-01, que identifica e avalia os fatores de risco ergonômico, podendo usar abordagens qualitativas e ferramentas simples. E a análise ergonômica do trabalho, mais aprofundada e com participação dos trabalhadores, exigida quando a avaliação preliminar não é suficiente, quando há indícios de adoecimento ou em outras situações previstas na norma.",
+          "dica": "Mostre um exemplo de avaliação ergonômica preliminar de um posto da empresa."
+        }
+      ]
+    },
+    {
+      "titulo": "Posturas, esforços e mobiliário",
+      "duracao": 45,
+      "gancho": "Ficar oito horas sentado ou oito horas em pé, repetir o mesmo movimento milhares de vezes por dia. O corpo cobra o preço. Vamos ver como reduzir essa carga.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Fatores de risco biomecânico",
+          "cards": [
+            {"t": "Postura", "d": "Tronco inclinado, braços elevados, punhos dobrados e pescoço flexionado"},
+            {"t": "Força", "d": "Esforço excessivo com mãos, braços e coluna"},
+            {"t": "Repetição", "d": "Mesmos movimentos em ciclos curtos, sem variação"},
+            {"t": "Tempo", "d": "Permanência prolongada na mesma posição, sentado ou em pé"}
+          ],
+          "fala": "Os principais fatores de risco biomecânico são a postura, como trabalhar com o tronco inclinado, os braços acima dos ombros ou os punhos dobrados; a força excessiva; a repetição dos mesmos movimentos em ciclos curtos; e o tempo prolongado na mesma posição. Quando esses fatores se combinam, por exemplo força com repetição e postura inadequada, o risco de lesão aumenta muito.",
+          "pergunta": "Que tarefa da sua rotina combina força, repetição e postura ruim?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Trabalho sentado",
+          "itens": [
+            "Cadeira com altura ajustável, apoio lombar e borda frontal arredondada",
+            "Pés apoiados no chão ou em apoio para os pés",
+            "Tela na altura dos olhos ou ligeiramente abaixo, a um braço de distância",
+            "Teclado e mouse próximos, com cotovelos junto ao corpo",
+            "Alternar posturas e levantar periodicamente"
+          ],
+          "destaque": "A melhor postura é a próxima: variar a posição alivia a carga.",
+          "fala": "Para o trabalho sentado, a cadeira deve ter altura ajustável, apoio para a região lombar e borda frontal arredondada. Os pés ficam apoiados no chão ou em um apoio. A tela fica na altura dos olhos ou um pouco abaixo, a cerca de um braço de distância. Teclado e mouse próximos, com os cotovelos junto ao corpo. E, principalmente, alterne posturas e levante periodicamente, porque não existe postura perfeita para ficar parado o dia todo.",
+          "dica": "Ajuste uma cadeira e uma estação de trabalho ao vivo com um voluntário."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Trabalho em pé",
+          "itens": [
+            "Bancada na altura adequada à tarefa e à pessoa",
+            "Espaço para os pés e possibilidade de alternar o apoio",
+            "Assentos para descanso em locais que possam ser usados nas pausas",
+            "Piso ou tapete que reduza o desconforto em longos períodos",
+            "Materiais e ferramentas dentro da área de alcance"
+          ],
+          "destaque": "A NR-17 exige assentos para descanso para quem trabalha em pé.",
+          "fala": "No trabalho em pé, a bancada deve ter altura adequada à tarefa e à pessoa: mais alta para tarefas de precisão e mais baixa para tarefas com força. Deve haver espaço para os pés e possibilidade de alternar o apoio. A NR-17 exige assentos para descanso em locais que possam ser utilizados durante as pausas. Tapetes antifadiga ajudam em longos períodos. E materiais e ferramentas devem ficar dentro da área de alcance, evitando torções e extensões dos braços."
+        }
+      ]
+    },
+    {
+      "titulo": "Levantamento e transporte de cargas",
+      "duracao": 45,
+      "gancho": "Levantar uma caixa parece simples. Mas a mesma carga pode ser segura ou perigosa dependendo da altura, da distância, da frequência e da pega.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "O que pesa além do peso",
+          "cards": [
+            {"t": "Distância do corpo", "d": "Quanto mais longe a carga, maior o esforço na coluna"},
+            {"t": "Altura", "d": "Pegar no chão ou acima dos ombros aumenta o risco"},
+            {"t": "Frequência", "d": "Muitos levantamentos por minuto sobrecarregam"},
+            {"t": "Pega e torção", "d": "Cargas sem alças e giros do tronco aumentam o risco"}
+          ],
+          "fala": "O risco do levantamento não depende só do peso. Quanto mais longe do corpo a carga estiver, maior o esforço na coluna. Pegar a carga no chão ou acima dos ombros aumenta o risco. Muitos levantamentos por minuto sobrecarregam. E cargas sem pega adequada ou que exigem torção do tronco também. A NR-17 exige que a avaliação considere esses fatores e que os trabalhadores sejam orientados sobre os métodos de trabalho.",
+          "pergunta": "Onde, na empresa, as cargas são pegas no chão ou acima dos ombros?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Medidas para reduzir a carga",
+          "itens": [
+            "Usar carrinhos, paleteiras, talhas e mesas elevatórias",
+            "Armazenar cargas pesadas entre a altura dos joelhos e dos ombros",
+            "Reduzir o peso das embalagens e incluir pegas",
+            "Organizar rodízio e trabalho em equipe",
+            "Treinar a técnica de levantamento"
+          ],
+          "destaque": "Treinar a técnica ajuda, mas mudar o posto de trabalho resolve mais.",
+          "fala": "As medidas mais eficazes mudam a tarefa. Usar carrinhos, paleteiras, talhas e mesas elevatórias. Armazenar as cargas mais pesadas entre a altura dos joelhos e dos ombros. Negociar com fornecedores embalagens mais leves e com pegas. Organizar rodízio e trabalho em equipe. E treinar a técnica de levantamento, com a carga próxima ao corpo e os joelhos flexionados. Treinar ajuda, mas mudar o posto de trabalho resolve mais."
+        }
+      ]
+    },
+    {
+      "titulo": "Organização do trabalho e conforto",
+      "duracao": 45,
+      "gancho": "Às vezes o problema não está na cadeira nem na bancada, mas no ritmo, na meta e na falta de pausas. A organização do trabalho também é ergonomia.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Organização do trabalho",
+          "cards": [
+            {"t": "Ritmo", "d": "Compatível com as capacidades das pessoas, sem pressão excessiva"},
+            {"t": "Metas", "d": "Definidas considerando as variações do processo e das pessoas"},
+            {"t": "Pausas", "d": "Pausas e alternância de tarefas em atividades repetitivas"},
+            {"t": "Conteúdo", "d": "Tarefas com variação, autonomia e informação suficiente"}
+          ],
+          "fala": "A NR-17 exige que a organização do trabalho seja adequada às características das pessoas. O ritmo deve ser compatível com as capacidades humanas. As metas devem considerar as variações do processo e das pessoas. Em atividades repetitivas, deve haver pausas e alternância de tarefas. E as tarefas devem ter variação, alguma autonomia e informação suficiente. Metas que só podem ser cumpridas sem pausas são um fator de adoecimento.",
+          "pergunta": "As metas do seu setor permitem fazer pausas?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Conforto no ambiente",
+          "itens": [
+            "Iluminação adequada à tarefa, sem ofuscamento e reflexos",
+            "Ruído compatível com a atividade, principalmente em tarefas que exigem atenção",
+            "Temperatura, umidade e ventilação adequadas",
+            "Parâmetros de referência indicados no texto da norma e nas normas técnicas"
+          ],
+          "destaque": "Desconforto ambiental aumenta a fadiga e os erros.",
+          "fala": "As condições ambientais também influenciam. A iluminação deve ser adequada à tarefa, sem ofuscamento ou reflexos na tela. O ruído deve ser compatível com a atividade, principalmente onde há exigência de atenção e comunicação. Temperatura, umidade e ventilação devem proporcionar conforto. A NR-17 e as normas técnicas trazem os parâmetros de referência. Um ambiente desconfortável aumenta a fadiga e os erros."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Anexos da NR-17",
+          "cabecalho": ["Anexo", "Atividade"],
+          "linhas": [
+            ["Anexo I", "Trabalho dos operadores de checkout"],
+            ["Anexo II", "Trabalho em teleatendimento e telemarketing"],
+            ["Conteúdo", "Mobiliário, organização, pausas, treinamento e condições específicas"]
+          ],
+          "fala": "A NR-17 tem dois anexos para atividades específicas. O anexo um trata do trabalho dos operadores de checkout, os caixas de supermercado, com regras sobre o posto, a movimentação de mercadorias e a organização. O anexo dois trata do teleatendimento e telemarketing, com regras sobre jornada, pausas, mobiliário, equipamentos e treinamento. Quem atua nesses setores deve conhecer o anexo correspondente.",
+          "dica": "Aprofunde o anexo correspondente se a turma atuar em comércio ou atendimento."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática de ajuste e levantamento",
+    "duracao": 30,
+    "descricao": "Os participantes ajustam um posto de trabalho e praticam o levantamento de cargas com acompanhamento do instrutor.",
+    "itens": [
+      "Ajustou a altura da cadeira, o apoio lombar e o apoio para os pés",
+      "Posicionou tela, teclado e mouse corretamente",
+      "Identificou fatores de risco em um posto de trabalho do próprio setor",
+      "Demonstrou a técnica de levantamento com a carga próxima ao corpo",
+      "Propôs uma melhoria para o próprio posto de trabalho"
+    ]
+  },
+  "caso": {
+    "titulo": "A linha que acelerou",
+    "relato": "Uma indústria de alimentos aumentou a velocidade de uma linha de embalagem em 20% para atender a um novo contrato, sem alterar o número de trabalhadores nem as pausas. As embaladoras passaram a fazer mais de 40 movimentos por minuto com os punhos, em bancadas de altura fixa, onde as mais baixas trabalhavam com os ombros elevados. Em seis meses, o ambulatório registrou aumento de queixas de dor nos ombros e punhos, e quatro trabalhadoras foram afastadas com tendinite.",
+    "perguntas": ["Que fatores de risco ergonômico aumentaram com a mudança?", "A mudança deveria ter passado por alguma avaliação antes?", "Quais medidas de organização do trabalho poderiam ser adotadas?", "Que mudanças no posto de trabalho ajudariam?"],
+    "analise": "O aumento de ritmo elevou a repetição e reduziu o tempo de recuperação, e as bancadas fixas impunham posturas inadequadas às trabalhadoras mais baixas. A mudança no processo exigia revisão da avaliação ergonômica, prevista na NR-01 e na NR-17. Medidas de organização incluem redimensionar a equipe, introduzir pausas, rodízio entre tarefas com exigências diferentes e revisão das metas. No posto, bancadas ou plataformas ajustáveis e a reorganização da área de alcance reduziriam a sobrecarga."
+  },
+  "dinamica": {"titulo": "Raio-X do meu posto", "objetivo": "Aplicar os conceitos de ergonomia ao próprio trabalho.", "tempo": 15, "passos": ["Cada participante desenha ou descreve o seu posto de trabalho e as tarefas principais.", "Identifica posturas, esforços, repetições e fatores de organização.", "Em duplas, propõem uma melhoria simples e uma estrutural.", "Algumas propostas são apresentadas e encaminhadas à CIPA."]},
+  "dds": {"titulo": "Dor não é normal", "texto": "Pessoal, muita gente acha que sentir dor no fim do dia faz parte do trabalho. Não faz. Dor que se repete é um aviso de que algo no posto ou na tarefa está sobrecarregando o corpo. Então ajuste sua cadeira e sua bancada, aproveite as pausas para mudar de posição, use os carrinhos e equipamentos para as cargas pesadas e, principalmente, comunique quando a dor aparecer. Quanto antes a gente souber, mais fácil é corrigir o posto e evitar um afastamento."},
+  "prova": [
+    {"q": "O objetivo da NR-17 é:", "o": ["Aumentar a produtividade a qualquer custo", "Adaptar as condições de trabalho às características das pessoas", "Definir salários", "Tratar de máquinas"], "c": 1, "com": "A ergonomia adapta o trabalho às pessoas."},
+    {"q": "A avaliação ergonômica preliminar está integrada:", "o": ["Ao PCMSO apenas", "Ao Gerenciamento de Riscos Ocupacionais da NR-01", "Ao laudo de insalubridade", "À CIPA"], "c": 1, "com": "Ela faz parte do GRO."},
+    {"q": "A análise ergonômica do trabalho é exigida, por exemplo, quando:", "o": ["Sempre, em qualquer posto", "A avaliação preliminar não basta ou há indícios de adoecimento", "Nunca", "Somente em escritórios"], "c": 1, "com": "É um aprofundamento previsto em situações específicas."},
+    {"q": "São fatores de risco biomecânico:", "o": ["Ruído e calor", "Postura, força, repetição e tempo de permanência", "Poeira e gases", "Vírus e bactérias"], "c": 1, "com": "Esses fatores sobrecarregam o sistema musculoesquelético."},
+    {"q": "Para quem trabalha em pé, a NR-17 exige:", "o": ["Que trabalhe sem pausas", "Assentos para descanso em locais que possam ser usados nas pausas", "Bancadas sempre na altura máxima", "Uso de botas de borracha"], "c": 1, "com": "Os assentos para descanso são obrigatórios."},
+    {"q": "Na estação de trabalho sentada, a tela deve ficar:", "o": ["Muito acima dos olhos", "Na altura dos olhos ou ligeiramente abaixo", "Ao lado do corpo", "No colo"], "c": 1, "com": "Evita a flexão ou extensão excessiva do pescoço."},
+    {"q": "No levantamento manual, aumenta o risco:", "o": ["Carga próxima ao corpo", "Carga longe do corpo e torção do tronco", "Pega adequada", "Carga na altura da cintura"], "c": 1, "com": "Distância e torção aumentam o esforço na coluna."},
+    {"q": "A organização do trabalho inclui:", "o": ["Apenas o mobiliário", "Ritmo, metas, pausas, jornada e conteúdo das tarefas", "Somente a iluminação", "Apenas o salário"], "c": 1, "com": "A NR-17 considera a organização do trabalho um fator ergonômico."},
+    {"q": "O anexo II da NR-17 trata de:", "o": ["Checkout", "Teleatendimento e telemarketing", "Construção civil", "Mineração"], "c": 1, "com": "O anexo I trata do checkout e o anexo II do teleatendimento."},
+    {"q": "A medida mais eficaz contra o risco no levantamento de cargas é:", "o": ["Apenas treinar a técnica", "Mudar a tarefa com equipamentos e reorganização do armazenamento", "Usar cinta lombar", "Aumentar o ritmo"], "c": 1, "com": "Mudanças no posto e na tarefa reduzem a exposição de forma mais efetiva."}
+  ]
+}

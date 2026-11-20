@@ -1,0 +1,202 @@
+{
+  "nr": "30",
+  "titulo": "Segurança e Saúde no Trabalho Aquaviário",
+  "chamada": "A bordo, o socorro está longe: a prevenção e o preparo da tripulação fazem a diferença",
+  "icone": "FaShip",
+  "carga": "8 horas (treinamento de SST a bordo; não substitui a formação e as certificações exigidas pela Autoridade Marítima)",
+  "periodicidade": "A formação dos aquaviários segue a Autoridade Marítima e as convenções internacionais. Recomenda-se este treinamento na integração a bordo e reciclagem anual, além dos exercícios periódicos de emergência.",
+  "publico": "Tripulantes e trabalhadores de embarcações comerciais de navegação marítima, interior e de apoio, e suas lideranças.",
+  "prerequisitos": "Avaliação de saúde com aptidão para o trabalho a bordo e documentação de aquaviário conforme a função.",
+  "instrutor": "Profissional de segurança do trabalho com experiência em atividades aquaviárias ou oficial com formação em segurança a bordo.",
+  "objetivos": [
+    "Conhecer a organização da SST a bordo e o papel do GSSTB",
+    "Reconhecer os riscos das atividades no convés, na praça de máquinas e nos espaços confinados",
+    "Aplicar medidas de prevenção nas tarefas a bordo",
+    "Compreender as condições de habitabilidade e a gestão da fadiga",
+    "Agir em emergências como incêndio, homem ao mar e abandono"
+  ],
+  "recursos": ["Projetor e apresentação", "Plano de emergência e tabela mestra da embarcação", "Colete salva-vidas e equipamentos de demonstração", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-30 Segurança e Saúde no Trabalho Aquaviário, texto vigente, e seus anexos", "Normas da Autoridade Marítima", "Convenções internacionais aplicáveis ao trabalho marítimo", "NR-33 Espaços Confinados"],
+  "modulos": [
+    {
+      "titulo": "SST a bordo",
+      "duracao": 90,
+      "gancho": "Uma embarcação é, ao mesmo tempo, local de trabalho, de descanso e de moradia. E, em alto mar, o socorro pode estar a horas de distância.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Organização da segurança",
+          "cards": [
+            {"t": "Empregador e armador", "d": "Garantem as condições de segurança e saúde a bordo"},
+            {"t": "Comandante", "d": "Autoridade máxima a bordo, responsável pelas decisões de segurança"},
+            {"t": "GSSTB", "d": "Grupo de segurança e saúde no trabalho a bordo, com tripulantes"},
+            {"t": "Tripulação", "d": "Cumpre procedimentos e comunica riscos"}
+          ],
+          "fala": "A NR-30 organiza a segurança a bordo. O empregador e o armador garantem as condições de segurança e saúde. O comandante é a autoridade máxima e responde pelas decisões de segurança. O GSSTB, grupo de segurança e saúde no trabalho a bordo, formado por tripulantes, atua na prevenção, de forma semelhante à CIPA em terra. E cada tripulante cumpre os procedimentos e comunica os riscos.",
+          "pergunta": "Quem compõe o GSSTB da sua embarcação?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos a bordo",
+          "cards": [
+            {"t": "Convés", "d": "Quedas, escorregões, cabos sob tensão, amarração e cargas"},
+            {"t": "Praça de máquinas", "d": "Ruído, calor, partes móveis, eletricidade e inflamáveis"},
+            {"t": "Espaços confinados", "d": "Tanques, porões e compartimentos com atmosfera perigosa"},
+            {"t": "Mar e clima", "d": "Queda na água, balanço, tempestades e isolamento"}
+          ],
+          "fala": "Os riscos a bordo se concentram em algumas áreas. No convés, quedas, escorregões, cabos sob tensão nas manobras de amarração e cargas. Na praça de máquinas, ruído, calor, partes móveis, eletricidade e inflamáveis. Nos espaços confinados, como tanques e porões, a atmosfera perigosa. E o próprio mar, com risco de queda na água, balanço da embarcação, tempestades e o isolamento, que torna o socorro demorado."
+        }
+      ]
+    },
+    {
+      "titulo": "Convés e manobras",
+      "duracao": 90,
+      "gancho": "Um cabo de amarração que se rompe sob tensão pode chicotear com força suficiente para matar. As manobras exigem atenção total.",
+      "slides": [
+        {
+          "tipo": "alerta",
+          "titulo": "Zona de chicoteamento",
+          "texto": "Nunca permaneça na linha de um cabo sob tensão nem na zona de chicoteamento.",
+          "itens": [
+            "Identificar e respeitar as áreas de risco nas manobras de amarração",
+            "Manter comunicação clara entre o passadiço e as equipes de manobra",
+            "Inspecionar cabos, espias e equipamentos antes do uso",
+            "Não pisar sobre cabos nem dentro de laços e seios"
+          ],
+          "fala": "Nas manobras de amarração e de reboque, um cabo sob tensão que se rompe pode chicotear com força suficiente para causar ferimentos fatais. Por isso ninguém permanece na linha do cabo nem na zona de chicoteamento. A comunicação entre o passadiço e as equipes de manobra deve ser clara. Cabos e equipamentos são inspecionados antes do uso. E nunca se pisa sobre cabos ou dentro de laços.",
+          "pergunta": "As áreas de risco nas manobras estão marcadas no convés da sua embarcação?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Trabalho no convés",
+          "itens": [
+            "Calçado antiderrapante e convés limpo, sem óleo e obstáculos",
+            "Colete salva-vidas ao trabalhar próximo à borda ou em embarcações pequenas",
+            "Proteção contra quedas em trabalhos em altura e fora da borda",
+            "Suspender trabalhos externos em mau tempo, conforme decisão do comandante",
+            "Ferramentas e materiais amarrados para não caírem com o balanço"
+          ],
+          "destaque": "Com mar agitado, trabalho no convés só com autorização e proteção.",
+          "fala": "No convés, use calçado antiderrapante e mantenha o piso limpo, sem óleo e obstáculos. Use colete salva-vidas ao trabalhar perto da borda. Trabalhos em altura ou fora da borda exigem proteção contra quedas. Em mau tempo, os trabalhos externos são suspensos por decisão do comandante. E ferramentas e materiais ficam amarrados para não cair com o balanço."
+        }
+      ]
+    },
+    {
+      "titulo": "Praça de máquinas e espaços confinados",
+      "duracao": 90,
+      "gancho": "A praça de máquinas reúne calor, ruído e energia. E os tanques da embarcação estão entre os espaços confinados mais perigosos que existem.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Praça de máquinas",
+          "itens": [
+            "Protetor auricular durante toda a permanência",
+            "Hidratação e pausas em ambiente quente",
+            "Proteções em partes móveis e bloqueio para manutenção",
+            "Controle de vazamentos de combustível e óleo",
+            "Comunicação com o passadiço antes de intervenções"
+          ],
+          "destaque": "Vazamento de combustível sobre superfície quente é uma das principais causas de incêndio a bordo.",
+          "fala": "Na praça de máquinas, o protetor auricular é usado durante toda a permanência. Hidratação e pausas são necessárias por causa do calor. As partes móveis têm proteção e a manutenção é feita com bloqueio de energias. Vazamentos de combustível e óleo são controlados e corrigidos, porque combustível sobre superfície quente é uma das principais causas de incêndio a bordo. E qualquer intervenção é comunicada ao passadiço."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Entrada em tanques e compartimentos",
+          "passos": [
+            {"t": "Autorizar", "d": "Permissão de entrada emitida pelo responsável"},
+            {"t": "Ventilar", "d": "Ventilação do compartimento antes e durante"},
+            {"t": "Medir", "d": "Oxigênio, gases tóxicos e inflamáveis"},
+            {"t": "Vigiar", "d": "Tripulante na entrada, com comunicação"},
+            {"t": "Resgate pronto", "d": "Equipamento e equipe definidos antes da entrada"}
+          ],
+          "fala": "A entrada em tanques, porões e outros compartimentos fechados segue os procedimentos de espaço confinado. É preciso permissão de entrada emitida pelo responsável, ventilação antes e durante a atividade, medição de oxigênio, gases tóxicos e inflamáveis, um vigia na entrada com comunicação constante e equipamento e equipe de resgate definidos antes. Tanques de lastro e de carga podem ter falta de oxigênio mesmo depois de vazios.",
+          "dica": "Relacione com os procedimentos de entrada em compartimentos da embarcação."
+        }
+      ]
+    },
+    {
+      "titulo": "Habitabilidade e fadiga",
+      "duracao": 90,
+      "gancho": "A bordo, o tripulante trabalha e descansa no mesmo lugar por semanas. A qualidade do descanso afeta diretamente a segurança da embarcação.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Condições de habitabilidade",
+          "cards": [
+            {"t": "Alojamentos", "d": "Camarotes com ventilação, iluminação, isolamento de ruído e conforto"},
+            {"t": "Higiene", "d": "Instalações sanitárias e lavanderia adequadas"},
+            {"t": "Alimentação", "d": "Refeições adequadas e água potável"},
+            {"t": "Comunicação", "d": "Meios de contato com a família, quando possível"}
+          ],
+          "fala": "A NR-30 trata das condições de habitabilidade, porque a embarcação é também a moradia do tripulante. Os camarotes devem ter ventilação, iluminação, isolamento de ruído e conforto. As instalações sanitárias e a lavanderia devem ser adequadas. A alimentação e a água potável devem ser garantidas. E, quando possível, deve haver meios de comunicação com a família, o que ajuda na saúde mental de quem passa longos períodos embarcado."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Gestão da fadiga",
+          "itens": [
+            "Respeitar os períodos de trabalho e de descanso previstos",
+            "Escalas de quarto organizadas para permitir sono adequado",
+            "Atenção aos sinais de fadiga: desatenção, irritabilidade, lapsos",
+            "Comunicar ao superior quando não estiver em condições de assumir o quarto",
+            "Cuidar da saúde mental e buscar apoio quando necessário"
+          ],
+          "destaque": "Tripulante cansado no passadiço ou na praça de máquinas é risco para todos a bordo.",
+          "fala": "A fadiga é um fator importante em acidentes marítimos. Os períodos de trabalho e de descanso devem ser respeitados, e as escalas de quarto organizadas para permitir sono adequado. Fique atento aos sinais de fadiga, como desatenção, irritabilidade e lapsos, em você e nos colegas. Comunique ao superior quando não estiver em condições de assumir o quarto. E cuide da saúde mental, buscando apoio quando necessário.",
+          "pergunta": "Como são organizadas as escalas de quarto e descanso na sua embarcação?"
+        }
+      ]
+    },
+    {
+      "titulo": "Emergências a bordo",
+      "duracao": 90,
+      "gancho": "Incêndio, alagamento, homem ao mar e abandono. A bordo, cada tripulante tem uma função definida na emergência, e ela precisa estar treinada.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Preparação",
+          "cards": [
+            {"t": "Tabela mestra", "d": "Função e posto de cada tripulante em cada tipo de emergência"},
+            {"t": "Sinais de alarme", "d": "Conhecidos por todos, com significado de cada sinal"},
+            {"t": "Equipamentos", "d": "Coletes, boias, balsas e baleeiras inspecionados"},
+            {"t": "Exercícios", "d": "Exercícios periódicos de incêndio e abandono"}
+          ],
+          "fala": "A preparação para emergências começa pela tabela mestra, que define a função e o posto de cada tripulante em cada tipo de emergência. Os sinais de alarme e seus significados são conhecidos por todos. Os equipamentos de salvatagem, como coletes, boias, balsas e baleeiras, são inspecionados. E os exercícios periódicos de incêndio e abandono garantem que todos saibam o que fazer.",
+          "pergunta": "Qual é a sua função na tabela mestra para incêndio e para abandono?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Homem ao mar",
+          "passos": [
+            {"t": "Alertar", "d": "Gritar homem ao mar e informar o lado"},
+            {"t": "Lançar", "d": "Lançar a boia com sinalizador"},
+            {"t": "Apontar", "d": "Manter contato visual e apontar"},
+            {"t": "Manobrar", "d": "Passadiço executa a manobra de resgate"},
+            {"t": "Resgatar", "d": "Equipe e meios de recolhimento preparados"}
+          ],
+          "fala": "Em caso de homem ao mar, alerte imediatamente gritando homem ao mar e informando o lado. Lance a boia, de preferência com sinalizador. Mantenha contato visual e aponte continuamente para a vítima. O passadiço executa a manobra de resgate, e a equipe prepara os meios de recolhimento. Perder a vítima de vista no mar pode tornar o resgate impossível."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A manobra de amarração",
+    "relato": "Durante a atracação de um rebocador, um marinheiro se posicionou próximo ao cabeço para ajustar a espia, dentro da área de chicoteamento. O passadiço aumentou a potência para corrigir a posição da embarcação sem confirmar com a equipe de proa. A espia, com desgaste não registrado, se rompeu e atingiu o marinheiro na perna, causando fratura grave. O socorro levou mais de uma hora até o porto mais próximo.",
+    "perguntas": ["Que regras de segurança nas manobras foram descumpridas?", "Qual falha de comunicação contribuiu para o acidente?", "Como a inspeção da espia deveria ser feita?", "Como o isolamento a bordo afeta o atendimento?"],
+    "analise": "O marinheiro estava dentro da zona de chicoteamento durante a aplicação de tensão. O passadiço aumentou a potência sem confirmar com a equipe de manobra. A espia desgastada deveria ter sido identificada na inspeção e substituída. O tempo até o socorro mostra a importância de primeiros socorros a bordo, com tripulantes treinados e material adequado. As medidas incluem marcação das zonas de risco, comunicação padronizada, inspeção registrada dos cabos e treinamento das equipes de manobra."
+  },
+  "dinamica": {"titulo": "Minha função na emergência", "objetivo": "Fixar as funções da tabela mestra.", "tempo": 20, "passos": ["Projete a tabela mestra da embarcação.", "Cada participante localiza sua função e seu posto em incêndio, homem ao mar e abandono.", "Simule verbalmente um alarme e peça que cada um descreva suas ações.", "Discuta as dúvidas e lacunas encontradas."]},
+  "dds": {"titulo": "Fora da linha do cabo", "texto": "Pessoal, hoje temos manobra de atracação. Lembrem: ninguém fica na linha de cabo sob tensão nem na área marcada de chicoteamento. Comunicação com o passadiço por rádio, e se perder o contato, a manobra para. Quem estiver perto da borda, colete vestido. E se algum cabo estiver desgastado, avisa antes de usar. Aqui no mar, o socorro demora. A gente precisa se cuidar antes."},
+  "prova": [
+    {"q": "O grupo de segurança e saúde no trabalho a bordo é o:", "o": ["CPATP", "GSSTB", "SESMT", "CIPAMIN"], "c": 1, "com": "A NR-30 prevê o GSSTB."},
+    {"q": "A autoridade máxima a bordo é:", "o": ["O cozinheiro", "O comandante", "O tripulante mais antigo", "O passageiro"], "c": 1, "com": "O comandante responde pelas decisões de segurança."},
+    {"q": "Durante manobras de amarração, o tripulante deve:", "o": ["Ficar na linha do cabo para controlar", "Ficar fora da zona de chicoteamento", "Pisar sobre os cabos", "Segurar o cabo sob tensão com as mãos"], "c": 1, "com": "Cabos que se rompem podem chicotear com força fatal."},
+    {"q": "Uma das principais causas de incêndio na praça de máquinas é:", "o": ["Iluminação excessiva", "Vazamento de combustível sobre superfície quente", "Uso de protetor auricular", "Ventilação"], "c": 1, "com": "Combustível em superfície quente pode inflamar."},
+    {"q": "A entrada em tanques da embarcação exige:", "o": ["Apenas lanterna", "Permissão, ventilação, medição da atmosfera, vigia e resgate definido", "Somente máscara de pó", "Nenhum procedimento"], "c": 1, "com": "São os procedimentos de espaço confinado."},
+    {"q": "A tabela mestra define:", "o": ["O cardápio de bordo", "A função e o posto de cada tripulante em emergências", "A rota da embarcação", "As férias da tripulação"], "c": 1, "com": "É essencial para a resposta a emergências."},
+    {"q": "Em caso de homem ao mar, deve-se:", "o": ["Pular imediatamente na água", "Alertar, lançar a boia e manter contato visual", "Esperar o fim do turno", "Desligar os motores e aguardar"], "c": 1, "com": "Essas ações aumentam a chance de resgate."},
+    {"q": "Sinais de fadiga incluem:", "o": ["Atenção redobrada", "Desatenção, irritabilidade e lapsos", "Mais disposição", "Fome"], "c": 1, "com": "A fadiga compromete a segurança."},
+    {"q": "Ao trabalhar perto da borda, deve-se usar:", "o": ["Bermuda", "Colete salva-vidas", "Chinelo", "Nada específico"], "c": 1, "com": "Reduz o risco em caso de queda na água."},
+    {"q": "Os trabalhos externos no convés em mau tempo:", "o": ["Continuam normalmente", "São suspensos conforme decisão do comandante", "São feitos sem proteção", "São obrigatórios"], "c": 1, "com": "O mau tempo aumenta o risco de queda ao mar."}
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "nr": "34",
+  "titulo": "Indústria da Construção, Montagem e Reparação Naval",
+  "chamada": "No estaleiro, solda, pintura, altura e espaço confinado acontecem ao mesmo tempo e no mesmo lugar",
+  "icone": "FaShip",
+  "carga": "8 horas (treinamento de SST para trabalhadores de estaleiros; confira na NR-34 as capacitações específicas exigidas para cada atividade)",
+  "periodicidade": "A NR-34 exige capacitações específicas para trabalho a quente, observador, montagem de andaimes, movimentação de cargas, pintura e outras atividades, com periodicidade definida no texto vigente. Recomenda-se este treinamento na integração e reciclagem anual.",
+  "publico": "Trabalhadores próprios e terceirizados da construção, montagem e reparação naval, e suas lideranças.",
+  "prerequisitos": "Avaliação de saúde com aptidão para a função.",
+  "instrutor": "Profissional de segurança do trabalho com experiência em estaleiros, sob responsabilidade de profissional qualificado.",
+  "objetivos": [
+    "Reconhecer os riscos característicos da construção e reparação naval",
+    "Aplicar as regras de trabalho a quente e o papel do observador",
+    "Conhecer os cuidados em pintura, jateamento e testes",
+    "Aplicar medidas de segurança em altura, espaços confinados e movimentação de cargas",
+    "Agir em emergências no estaleiro"
+  ],
+  "recursos": ["Projetor e apresentação", "Modelo de permissão de trabalho a quente", "Detector de gases para demonstração", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-34 Condições e Meio Ambiente de Trabalho na Indústria da Construção, Montagem e Reparação Naval, texto vigente", "NR-33 Espaços Confinados", "NR-35 Trabalho em Altura", "NR-20 Inflamáveis e Combustíveis"],
+  "modulos": [
+    {
+      "titulo": "O estaleiro e seus riscos",
+      "duracao": 90,
+      "gancho": "Um navio em construção ou reparo é um canteiro em várias camadas, com dezenas de frentes de trabalho ao mesmo tempo. A NR-34 organiza a prevenção nesse ambiente.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos",
+          "cards": [
+            {"t": "Trabalho a quente", "d": "Incêndio e explosão em áreas com inflamáveis, tanques e pinturas"},
+            {"t": "Espaços confinados", "d": "Tanques, duplos-fundos e compartimentos com atmosfera perigosa"},
+            {"t": "Altura", "d": "Andaimes, bordas, aberturas no convés e cascos"},
+            {"t": "Cargas e radiação", "d": "Içamento de blocos e radiografia industrial"}
+          ],
+          "fala": "Os riscos característicos do estaleiro são o trabalho a quente, com solda e corte perto de inflamáveis, tanques e pinturas; os espaços confinados, como tanques e duplos-fundos; o trabalho em altura, em andaimes, bordas e cascos; a movimentação de grandes blocos; e a radiografia industrial, usada para inspecionar soldas. Muitas vezes esses riscos acontecem ao mesmo tempo e no mesmo lugar, o que exige coordenação entre as equipes.",
+          "pergunta": "Em que atividades os riscos se sobrepõem no seu dia a dia?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Coordenação das atividades",
+          "itens": [
+            "Análise de risco que considere as atividades simultâneas",
+            "Permissões de trabalho para atividades críticas",
+            "Comunicação entre equipes próprias e terceirizadas",
+            "Liberação das áreas antes de cada atividade",
+            "Direito de recusa diante de risco grave e iminente"
+          ],
+          "destaque": "Solda de um lado e pintura do outro lado da antepara é combinação de alto risco.",
+          "fala": "Por isso a coordenação é essencial. A análise de risco deve considerar as atividades simultâneas, como solda de um lado e pintura do outro lado de uma antepara. As atividades críticas exigem permissão de trabalho. Equipes próprias e terceirizadas precisam se comunicar. As áreas são liberadas antes de cada atividade. E todos têm o direito de recusa diante de risco grave e iminente."
+        }
+      ]
+    },
+    {
+      "titulo": "Trabalho a quente",
+      "duracao": 90,
+      "gancho": "Solda, corte e esmerilhamento são o coração do estaleiro. São também a origem da maioria dos incêndios e explosões a bordo.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Antes de começar",
+          "passos": [
+            {"t": "Permissão", "d": "Permissão de trabalho a quente emitida"},
+            {"t": "Inspeção", "d": "Área, compartimentos adjacentes e equipamentos"},
+            {"t": "Remoção", "d": "Retirar ou proteger materiais combustíveis"},
+            {"t": "Medição", "d": "Avaliar a atmosfera para inflamáveis e oxigênio"},
+            {"t": "Observador", "d": "Observador com extintor durante a atividade"}
+          ],
+          "fala": "O trabalho a quente começa com a permissão de trabalho. Em seguida, a inspeção da área e dos compartimentos adjacentes, porque o calor atravessa chapas e anteparas. Os materiais combustíveis são retirados ou protegidos. A atmosfera é avaliada para gases inflamáveis e oxigênio. E um observador acompanha a atividade com extintor.",
+          "pergunta": "Quem emite a permissão de trabalho a quente na sua área?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "O observador",
+          "cards": [
+            {"t": "Capacitado", "d": "Treinado conforme a NR-34 para a função"},
+            {"t": "Dedicado", "d": "Não realiza outras tarefas durante a atividade"},
+            {"t": "Atento", "d": "Observa faíscas, fumaça e o lado oposto das chapas"},
+            {"t": "Após o término", "d": "Permanece no local pelo tempo definido para detectar focos"}
+          ],
+          "fala": "O observador é uma função crítica. Ele é capacitado para a função, não realiza outras tarefas durante a atividade e acompanha faíscas, fumaça e o lado oposto das chapas, onde pode surgir um foco de incêndio. Após o término, permanece no local pelo tempo definido no procedimento, porque muitos incêndios começam depois que o soldador foi embora.",
+          "dica": "Mostre o procedimento da empresa com o tempo de permanência do observador."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Equipamentos de solda e corte",
+          "itens": [
+            "Cilindros presos, com válvulas e reguladores em bom estado",
+            "Mangueiras sem vazamentos e com dispositivos contra retrocesso de chama",
+            "Cilindros e mangueiras retirados dos espaços confinados nas pausas",
+            "Aterramento correto das máquinas de solda",
+            "Proteção contra fumos de solda com exaustão e respirador adequado"
+          ],
+          "destaque": "Mangueira de gás esquecida em espaço confinado pode encher o compartimento durante a pausa.",
+          "fala": "Os cilindros ficam presos, com válvulas e reguladores em bom estado. As mangueiras não podem ter vazamentos e devem ter dispositivos contra retrocesso de chama. Nas pausas, cilindros e mangueiras são retirados dos espaços confinados, porque um pequeno vazamento pode encher o compartimento de gás. As máquinas de solda são aterradas corretamente. E os fumos de solda são controlados com exaustão e respirador adequado."
+        }
+      ]
+    },
+    {
+      "titulo": "Pintura, jateamento e testes",
+      "duracao": 90,
+      "gancho": "A pintura de tanques e compartimentos cria atmosferas inflamáveis e tóxicas. E o jateamento gera poeira e ruído intensos.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Pintura",
+          "itens": [
+            "Ventilação adequada durante a pintura e a secagem",
+            "Monitoramento contínuo de inflamáveis em espaços confinados",
+            "Proibição de trabalho a quente na área e nas adjacências",
+            "Equipamentos elétricos certificados para atmosferas explosivas",
+            "Proteção respiratória adequada, incluindo suprimento de ar quando necessário"
+          ],
+          "destaque": "Durante a pintura e a secagem, nenhuma fonte de ignição nas proximidades.",
+          "fala": "Na pintura, especialmente em espaços confinados, a ventilação é contínua durante a aplicação e a secagem, com monitoramento de inflamáveis. É proibido trabalho a quente na área e nas adjacências. Os equipamentos elétricos, inclusive a iluminação, são certificados para atmosferas explosivas. E a proteção respiratória é adequada, com suprimento de ar quando necessário."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Jateamento e testes",
+          "cards": [
+            {"t": "Abrasivos", "d": "Proibido o jateamento com areia; usar abrasivos permitidos"},
+            {"t": "Proteção do jatista", "d": "Capacete de jateamento com suprimento de ar e vestimenta própria"},
+            {"t": "Testes de estanqueidade", "d": "Área isolada e procedimentos para pressão e gases"},
+            {"t": "Radiografia industrial", "d": "Área isolada e sinalizada, acesso restrito durante a exposição"}
+          ],
+          "fala": "No jateamento, é proibido usar areia, pela exposição à sílica; usam-se abrasivos permitidos. O jatista usa capacete de jateamento com suprimento de ar e vestimenta própria. Os testes de estanqueidade e de pressão exigem área isolada e procedimentos específicos. E a radiografia industrial, usada para inspecionar soldas, exige isolamento e sinalização da área, com acesso proibido durante a exposição.",
+          "pergunta": "Como você fica sabendo que haverá radiografia na sua área?"
+        }
+      ]
+    },
+    {
+      "titulo": "Altura, espaços confinados e cargas",
+      "duracao": 90,
+      "gancho": "No casco e nos blocos, as quedas, os espaços confinados e as cargas suspensas fazem parte da rotina. Cada um tem regras próprias.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Trabalho em altura",
+          "cards": [
+            {"t": "Andaimes", "d": "Montados por pessoal capacitado e liberados antes do uso"},
+            {"t": "Aberturas", "d": "Aberturas no convés e nos blocos protegidas ou sinalizadas"},
+            {"t": "Proteção individual", "d": "Cinturão conectado quando não houver proteção coletiva"},
+            {"t": "Materiais", "d": "Ferramentas presas e área inferior isolada"}
+          ],
+          "fala": "No estaleiro, os andaimes são montados por pessoal capacitado e liberados antes do uso. As aberturas no convés e nos blocos são protegidas ou sinalizadas. Quando não houver proteção coletiva, o cinturão fica conectado a ponto de ancoragem adequado. E ferramentas e materiais ficam presos, com a área inferior isolada. Valem também as exigências da NR-35."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Espaços confinados e cargas",
+          "itens": [
+            "Tanques, duplos-fundos e compartimentos tratados como espaços confinados",
+            "Permissão de entrada, ventilação, monitoramento e vigia",
+            "Plano de resgate para cada compartimento",
+            "Ninguém sob cargas suspensas durante o içamento de blocos",
+            "Sinaleiro e amarrador capacitados nas operações de içamento"
+          ],
+          "destaque": "Içamento de bloco: área isolada e ninguém embaixo.",
+          "fala": "Tanques, duplos-fundos e muitos compartimentos são espaços confinados, com permissão de entrada, ventilação, monitoramento, vigia e plano de resgate definido para cada local, seguindo a NR-33. No içamento de blocos e equipamentos, ninguém permanece sob cargas suspensas, e as operações contam com sinaleiro e amarrador capacitados.",
+          "pergunta": "Há plano de resgate definido para os compartimentos onde você trabalha?"
+        }
+      ]
+    },
+    {
+      "titulo": "Emergências no estaleiro",
+      "duracao": 90,
+      "gancho": "Um incêndio dentro de um casco, com fumaça em compartimentos estreitos, é um dos cenários mais difíceis de enfrentar. O plano precisa estar pronto antes.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Plano de emergência",
+          "passos": [
+            {"t": "Alarme", "d": "Sinal conhecido por todos os trabalhadores"},
+            {"t": "Rotas", "d": "Rotas de fuga sinalizadas dentro do navio e do estaleiro"},
+            {"t": "Contagem", "d": "Controle de quem está a bordo e nos compartimentos"},
+            {"t": "Brigada", "d": "Equipe treinada para combate e resgate"},
+            {"t": "Simulados", "d": "Exercícios periódicos"}
+          ],
+          "fala": "O plano de emergência do estaleiro define o sinal de alarme, as rotas de fuga sinalizadas dentro do navio e no estaleiro, o controle de quem está a bordo e em cada compartimento, a brigada treinada para combate e resgate e os simulados periódicos. Dentro do casco, a rota de fuga muda conforme a obra avança, por isso a sinalização precisa ser atualizada.",
+          "pergunta": "Qual é a sua rota de fuga do local onde você está trabalhando hoje?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Em caso de incêndio a bordo",
+          "texto": "Acione o alarme, saia pela rota de fuga e não volte para buscar ferramentas.",
+          "itens": [
+            "Fechar as válvulas dos cilindros, se for seguro",
+            "Combater apenas princípio de incêndio, com extintor adequado",
+            "Não entrar em compartimento com fumaça sem equipamento autônomo",
+            "Ir para o ponto de encontro e informar quem pode estar a bordo"
+          ],
+          "fala": "Em caso de incêndio a bordo, acione o alarme e saia pela rota de fuga, sem voltar para buscar ferramentas. Se for seguro, feche as válvulas dos cilindros. Combata apenas princípio de incêndio, com o extintor adequado. Não entre em compartimento com fumaça sem equipamento autônomo e treinamento. E vá para o ponto de encontro, informando quem pode estar a bordo."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A solda do outro lado da antepara",
+    "relato": "Em um reparo naval, uma equipe de pintura aplicava revestimento no interior de um tanque. Do outro lado da antepara, uma equipe terceirizada recebeu ordem para soldar um suporte. A permissão de trabalho a quente foi emitida considerando apenas o compartimento do soldador. O calor atravessou a chapa e inflamou os vapores do tanque, causando um incêndio. Os pintores conseguiram sair, mas um deles sofreu queimaduras ao passar pela boca de visita.",
+    "perguntas": ["Que falha houve na análise de risco e na permissão de trabalho?", "Por que a comunicação entre as equipes foi decisiva?", "Que medidas deveriam ter sido tomadas no tanque?", "Como evitar a repetição?"],
+    "analise": "A permissão de trabalho a quente não considerou o compartimento adjacente, onde havia atmosfera inflamável. As equipes própria e terceirizada não tinham informação sobre as atividades simultâneas. No tanque, a pintura exigia ventilação contínua, monitoramento de inflamáveis e proibição de trabalho a quente nas adjacências. A prevenção exige inspeção dos compartimentos adjacentes antes de emitir a permissão, coordenação centralizada das atividades simultâneas e medição de gases nos dois lados da antepara."
+  },
+  "dinamica": {"titulo": "Mapa das atividades simultâneas", "objetivo": "Identificar conflitos entre atividades.", "tempo": 20, "passos": ["Desenhe o corte simplificado de um bloco do navio com vários compartimentos.", "Distribua cartões com atividades, como solda, pintura, jateamento, radiografia e montagem de andaime.", "Os grupos posicionam as atividades e identificam conflitos.", "Discuta como a permissão de trabalho deve tratar cada conflito."]},
+  "dds": {"titulo": "Olhe o outro lado da chapa", "texto": "Pessoal, no navio a chapa é fina e o calor atravessa. Antes de soldar ou cortar, confirme o que tem do outro lado da antepara, do teto e do piso. Pode ter pintura, tinta secando, óleo ou gente trabalhando. Permissão de trabalho a quente só vale com a inspeção dos compartimentos vizinhos e com observador. E na pausa, cilindro e mangueira saem do espaço confinado. Uma conferência de cinco minutos evita uma tragédia."},
+  "prova": [
+    {"q": "Antes do trabalho a quente, é necessário:", "o": ["Apenas ligar a máquina", "Permissão de trabalho, inspeção da área e adjacências, medição de gases e observador", "Somente óculos de solda", "Avisar o almoxarifado"], "c": 1, "com": "São as medidas básicas para trabalho a quente."},
+    {"q": "O observador do trabalho a quente deve:", "o": ["Ajudar na solda", "Ficar dedicado à observação, com extintor, e permanecer após o término", "Sair quando a solda terminar", "Fazer outras tarefas ao mesmo tempo"], "c": 1, "com": "Focos podem surgir depois do término."},
+    {"q": "Nas pausas, os cilindros e mangueiras de gás devem:", "o": ["Ficar dentro do espaço confinado", "Ser retirados dos espaços confinados", "Ficar com as válvulas abertas", "Ser cobertos com lona"], "c": 1, "com": "Vazamentos podem encher o compartimento de gás."},
+    {"q": "O jateamento com areia é:", "o": ["Recomendado", "Proibido", "Permitido com máscara de pano", "Obrigatório em tanques"], "c": 1, "com": "A areia expõe à sílica e é proibida."},
+    {"q": "Durante a pintura em espaço confinado:", "o": ["Pode haver solda ao lado", "Ventilação contínua, monitoramento e proibição de trabalho a quente nas proximidades", "A ventilação pode ser desligada", "Basta abrir a boca de visita"], "c": 1, "com": "A pintura cria atmosfera inflamável."},
+    {"q": "Durante a radiografia industrial, a área deve estar:", "o": ["Aberta ao trânsito", "Isolada e sinalizada, com acesso proibido", "Com iluminação apagada apenas", "Sem nenhum controle"], "c": 1, "com": "Evita a exposição à radiação."},
+    {"q": "Tanques e duplos-fundos devem ser tratados como:", "o": ["Áreas livres", "Espaços confinados", "Depósitos", "Áreas administrativas"], "c": 1, "com": "Seguem os procedimentos de espaço confinado."},
+    {"q": "No içamento de blocos:", "o": ["Pode-se passar rápido sob a carga", "Ninguém permanece sob cargas suspensas", "O sinaleiro é dispensável", "A área não precisa ser isolada"], "c": 1, "com": "É a regra básica do içamento."},
+    {"q": "A análise de risco no estaleiro deve considerar:", "o": ["Apenas a atividade isolada", "As atividades simultâneas e os compartimentos adjacentes", "Somente o clima", "Apenas o horário"], "c": 1, "com": "Atividades simultâneas criam riscos combinados."},
+    {"q": "Em incêndio a bordo, o trabalhador deve:", "o": ["Voltar para buscar ferramentas", "Acionar o alarme, sair pela rota de fuga e ir ao ponto de encontro", "Entrar em compartimento com fumaça", "Esperar ordens dentro do tanque"], "c": 1, "com": "Saída rápida e contagem no ponto de encontro."}
+  ]
+}

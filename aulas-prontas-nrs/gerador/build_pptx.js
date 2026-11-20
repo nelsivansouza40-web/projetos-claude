@@ -64,7 +64,7 @@ async function build(jsonPath, outPath) {
     pen: await icon("FaPenToSquare", HEX.accent1),
     hands: await icon("FaHandsHolding", HEX.accent1),
   };
-  const rodape = `PREVENÇÃO ATIVA  ·  NR-${d.nr} ${d.titulo}`;
+  const rodape = `PREVENÇÃO ATIVA  ·  NR-${d.nr} ${d.titulo_curto || d.titulo}`;
 
   // ---------- Layouts ----------
   pres.defineSlideMaster({

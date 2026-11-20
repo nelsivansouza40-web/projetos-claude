@@ -1,0 +1,199 @@
+{
+  "nr": "32",
+  "titulo": "Segurança e Saúde no Trabalho em Serviços de Saúde",
+  "chamada": "Quem cuida da saúde dos outros também precisa ser protegido",
+  "icone": "FaSyringe",
+  "carga": "4 horas (capacitação inicial para trabalhadores de serviços de saúde)",
+  "periodicidade": "A NR-32 exige capacitação antes do início das atividades e de forma continuada, sempre que houver mudança das condições de exposição aos agentes biológicos, químicos ou radiações. Recomenda-se reciclagem anual.",
+  "publico": "Trabalhadores de hospitais, clínicas, laboratórios, consultórios e demais serviços de saúde, incluindo limpeza, lavanderia, manutenção e nutrição.",
+  "prerequisitos": "Não há. A vacinação prevista no PCMSO deve ser oferecida antes ou no início das atividades.",
+  "instrutor": "Profissional de segurança do trabalho, enfermeiro do trabalho ou profissional de saúde com experiência em controle de infecção e biossegurança.",
+  "objetivos": [
+    "Reconhecer os riscos biológicos, químicos e de radiações nos serviços de saúde",
+    "Aplicar as medidas de proteção e as proibições da NR-32",
+    "Prevenir acidentes com materiais perfurocortantes",
+    "Agir corretamente após exposição a material biológico",
+    "Manusear e descartar resíduos de serviços de saúde com segurança"
+  ],
+  "recursos": ["Projetor e apresentação", "Recipientes para descarte de perfurocortantes", "Dispositivos de segurança para agulhas", "EPIs utilizados na instituição", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica e participação na prática.",
+  "referencias": ["NR-32 Segurança e Saúde no Trabalho em Serviços de Saúde, texto vigente, e seus anexos", "NR-07 Programa de Controle Médico de Saúde Ocupacional", "Regulamentação da ANVISA sobre resíduos de serviços de saúde", "Normas da CNEN para radiações ionizantes"],
+  "modulos": [
+    {
+      "titulo": "Riscos nos serviços de saúde",
+      "duracao": 45,
+      "gancho": "Uma picada de agulha, um respingo de sangue, um quimioterápico manipulado sem proteção. Os profissionais de saúde estão expostos a riscos que muitas vezes passam despercebidos.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos",
+          "cards": [
+            {"t": "Biológicos", "d": "Vírus, bactérias e fungos em sangue, secreções e materiais"},
+            {"t": "Químicos", "d": "Desinfetantes, quimioterápicos, gases anestésicos e medicamentos"},
+            {"t": "Radiações", "d": "Raios X, medicina nuclear e radioterapia"},
+            {"t": "Ergonômicos e psicossociais", "d": "Movimentação de pacientes, plantões e carga emocional"}
+          ],
+          "fala": "Os serviços de saúde reúnem riscos variados. Os biológicos, como os vírus das hepatites B e C e do HIV, transmitidos por sangue e secreções. Os químicos, como desinfetantes, quimioterápicos e gases anestésicos. As radiações, em raios X, medicina nuclear e radioterapia. E os ergonômicos e psicossociais, como a movimentação de pacientes, os plantões longos e a carga emocional. A NR-32 trata de todos eles.",
+          "pergunta": "Quais desses riscos estão presentes no seu setor?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Proibições da NR-32",
+          "texto": "Nos postos de trabalho com risco biológico, algumas práticas são proibidas.",
+          "itens": [
+            "Usar adornos, como anéis, pulseiras, relógios e colares",
+            "Usar calçados abertos",
+            "Comer, beber e guardar alimentos nos postos de trabalho",
+            "Manusear lentes de contato nos postos de trabalho",
+            "Reencapar ou desconectar manualmente agulhas"
+          ],
+          "fala": "A NR-32 proíbe, nos postos com risco biológico, o uso de adornos, como anéis, pulseiras, relógios e colares, que acumulam microrganismos e dificultam a higiene das mãos. Proíbe calçados abertos, que deixam os pés expostos a perfurocortantes e respingos. Proíbe comer, beber e guardar alimentos nos postos de trabalho e manusear lentes de contato. E proíbe o reencape e a desconexão manual de agulhas, uma das principais causas de acidentes.",
+          "dica": "Pergunte quais dessas proibições são mais difíceis de cumprir e por quê."
+        }
+      ]
+    },
+    {
+      "titulo": "Risco biológico e perfurocortantes",
+      "duracao": 45,
+      "gancho": "A maioria dos acidentes com agulha acontece depois do procedimento, no descarte ou no reencape. São acidentes evitáveis.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Medidas de proteção",
+          "itens": [
+            "Higiene das mãos antes e depois de cada procedimento, em lavatório exclusivo",
+            "EPI conforme o procedimento: luvas, avental, máscara, óculos ou protetor facial",
+            "Vacinação gratuita contra tétano, difteria, hepatite B e as previstas no PCMSO",
+            "Dispositivos de segurança em agulhas e materiais perfurocortantes",
+            "Vestimentas de trabalho que não saem do serviço de saúde"
+          ],
+          "destaque": "A vacina contra hepatite B é gratuita e exige confirmação da imunidade.",
+          "fala": "As medidas de proteção começam pela higiene das mãos, antes e depois de cada procedimento, em lavatório exclusivo. O EPI é escolhido conforme o procedimento: luvas, avental, máscara, óculos ou protetor facial. A vacinação contra tétano, difteria, hepatite B e as previstas no PCMSO é gratuita, com controle da eficácia quando houver exame. Os materiais perfurocortantes devem ter dispositivos de segurança. E as vestimentas de trabalho não saem do serviço de saúde.",
+          "pergunta": "Sua vacinação contra hepatite B está completa e com a imunidade confirmada?"
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Descarte de perfurocortantes",
+          "passos": [
+            {"t": "No local", "d": "Recipiente próximo ao ponto de uso"},
+            {"t": "Imediato", "d": "Descartar logo após o uso, sem reencapar"},
+            {"t": "Quem usou", "d": "Quem usou o material é quem descarta"},
+            {"t": "Limite", "d": "Respeitar a linha de enchimento do recipiente"},
+            {"t": "Fechar", "d": "Fechar e destinar como resíduo"}
+          ],
+          "fala": "O descarte correto evita acidentes. O recipiente para perfurocortantes fica próximo ao ponto de uso. O material é descartado imediatamente após o uso, sem reencapar. Quem usou o material é quem descarta, para que ninguém encontre uma agulha esquecida no leito ou na bandeja. O recipiente não pode ultrapassar a linha de enchimento indicada. E, ao atingir o limite, é fechado e destinado como resíduo.",
+          "dica": "Mostre o recipiente usado na instituição e a linha de enchimento."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Exposição a material biológico",
+          "passos": [
+            {"t": "Lavar", "d": "Pele com água e sabão; mucosas com água ou soro"},
+            {"t": "Não espremer", "d": "Não espremer nem usar substâncias cáusticas"},
+            {"t": "Comunicar", "d": "Informar imediatamente a chefia e o serviço responsável"},
+            {"t": "Avaliar", "d": "Atendimento para avaliar profilaxia o quanto antes"},
+            {"t": "Registrar", "d": "Emitir CAT e acompanhar conforme protocolo"}
+          ],
+          "fala": "Após uma exposição a material biológico, lave a pele com água e sabão ou as mucosas com água ou soro fisiológico. Não esprema o local nem use substâncias cáusticas. Comunique imediatamente a chefia e o serviço responsável, porque a profilaxia, quando indicada, deve começar o quanto antes, idealmente nas primeiras horas. A avaliação considera o paciente fonte e o tipo de exposição. E o acidente é registrado com CAT e acompanhado conforme o protocolo.",
+          "pergunta": "Você sabe a quem procurar, inclusive à noite, após um acidente com agulha?"
+        }
+      ]
+    },
+    {
+      "titulo": "Riscos químicos e radiações",
+      "duracao": 45,
+      "gancho": "Medicamentos e produtos que tratam pacientes podem prejudicar quem os manipula. E as radiações exigem controle rigoroso de dose.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Produtos químicos",
+          "cards": [
+            {"t": "Rotulagem", "d": "Produtos e frascos fracionados identificados"},
+            {"t": "Quimioterápicos", "d": "Preparo em cabine específica, por pessoal capacitado e com EPI"},
+            {"t": "Gases anestésicos", "d": "Sistemas de exaustão e manutenção dos equipamentos"},
+            {"t": "Desinfetantes", "d": "Uso conforme a ficha com dados de segurança, com ventilação e EPI"}
+          ],
+          "fala": "Os produtos químicos devem estar rotulados, inclusive os fracionados. Os quimioterápicos antineoplásicos são preparados em cabine específica, por pessoal capacitado e com EPI, com regras próprias da NR-32. Os gases anestésicos exigem sistemas de exaustão e manutenção dos equipamentos. E os desinfetantes são usados conforme a ficha com dados de segurança, com ventilação e EPI.",
+          "dica": "Relacione com os produtos químicos mais usados na instituição."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Radiações ionizantes",
+          "itens": [
+            "Plano de proteção radiológica aprovado pela autoridade competente",
+            "Dosímetro individual, usado corretamente durante a jornada",
+            "Tempo, distância e blindagem como princípios de proteção",
+            "Aventais, protetores de tireoide e barreiras de chumbo",
+            "Sinalização das áreas controladas e acesso restrito"
+          ],
+          "destaque": "Menos tempo, mais distância e blindagem reduzem a dose.",
+          "fala": "Nos serviços com radiações ionizantes, há um plano de proteção radiológica aprovado pela autoridade competente. Os trabalhadores expostos usam dosímetro individual corretamente. Os princípios de proteção são tempo, distância e blindagem: menos tempo de exposição, maior distância da fonte e uso de barreiras. Aventais, protetores de tireoide e barreiras de chumbo são usados conforme o procedimento. E as áreas controladas são sinalizadas, com acesso restrito."
+        }
+      ]
+    },
+    {
+      "titulo": "Resíduos, limpeza e apoio",
+      "duracao": 45,
+      "gancho": "Equipes de limpeza, lavanderia e manutenção também estão expostas aos riscos do serviço de saúde, muitas vezes sem saber.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Resíduos de serviços de saúde",
+          "itens": [
+            "Segregar no momento da geração, conforme o grupo do resíduo",
+            "Sacos e recipientes identificados e com resistência adequada",
+            "Não compactar sacos com as mãos nem esvaziar recipientes de perfurocortantes",
+            "Transporte interno em carros fechados, por rotas definidas",
+            "Abrigo de resíduos sinalizado e higienizado"
+          ],
+          "destaque": "Agulha no saco de lixo comum é acidente esperando a equipe de limpeza.",
+          "fala": "Os resíduos de serviços de saúde são segregados no momento da geração, conforme o grupo, seguindo a regulamentação da ANVISA. Sacos e recipientes são identificados e resistentes. Ninguém compacta sacos com as mãos nem esvazia recipientes de perfurocortantes. O transporte interno usa carros fechados e rotas definidas. E o abrigo de resíduos é sinalizado e higienizado. Uma agulha descartada no lixo comum fere quem não tem relação com o procedimento.",
+          "pergunta": "A equipe de limpeza já se acidentou com perfurocortantes descartados no lixo comum?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Serviços de apoio",
+          "cards": [
+            {"t": "Limpeza", "d": "Capacitação sobre riscos biológicos e químicos e EPI adequado"},
+            {"t": "Lavanderia", "d": "Separação entre área suja e área limpa e cuidado com objetos esquecidos na roupa"},
+            {"t": "Manutenção", "d": "Equipamentos descontaminados antes da intervenção"},
+            {"t": "Nutrição", "d": "Riscos de cortes, queimaduras e calor"}
+          ],
+          "fala": "Os serviços de apoio também estão na NR-32. A limpeza precisa de capacitação sobre riscos biológicos e químicos. A lavanderia separa a área suja da área limpa e tem cuidado com objetos perfurocortantes esquecidos nas roupas. A manutenção recebe os equipamentos descontaminados antes da intervenção. E a nutrição tem riscos de cortes, queimaduras e calor. Todos devem ser capacitados conforme os riscos da sua atividade."
+        }
+      ]
+    }
+  ],
+  "pratica": {
+    "titulo": "Prática de biossegurança",
+    "duracao": 30,
+    "descricao": "Os participantes praticam técnicas de proteção com acompanhamento do instrutor.",
+    "itens": [
+      "Realizou a higiene das mãos com a técnica correta",
+      "Colocou e retirou luvas e avental sem se contaminar",
+      "Ativou o dispositivo de segurança de uma agulha",
+      "Descartou perfurocortante no recipiente respeitando o limite de enchimento",
+      "Descreveu as ações após exposição a material biológico"
+    ]
+  },
+  "caso": {
+    "titulo": "A agulha na roupa de cama",
+    "relato": "Em um hospital, uma técnica de enfermagem realizou uma punção à beira do leito e, como o recipiente de perfurocortantes estava no posto de enfermagem, colocou a agulha sobre a bandeja para descartar depois. Durante a troca de leito, a agulha caiu entre os lençóis. Na lavanderia, uma auxiliar foi perfurada ao separar as roupas sujas. Ela não comunicou o acidente por achar que não era grave e só procurou atendimento dois dias depois.",
+    "perguntas": ["Que falha deu início à sequência do acidente?", "Por que a auxiliar da lavanderia foi exposta?", "Qual a consequência da comunicação tardia?", "Que medidas a instituição deve adotar?"],
+    "analise": "O recipiente de perfurocortantes não estava próximo ao ponto de uso e a agulha não foi descartada imediatamente por quem a usou. A auxiliar da lavanderia foi exposta a um risco gerado em outro setor, sem relação com o procedimento. A comunicação tardia comprometeu a avaliação e a eventual profilaxia, que deve começar o quanto antes. A instituição deve disponibilizar recipientes à beira do leito ou em carrinhos, adotar dispositivos de segurança, reforçar a regra de descarte imediato por quem usou, orientar a lavanderia e divulgar o fluxo de atendimento após acidentes em todos os turnos."
+  },
+  "dinamica": {"titulo": "Certo ou errado na assistência", "objetivo": "Reforçar as proibições e as práticas seguras.", "tempo": 15, "passos": ["Leia situações como reencapar agulha com as duas mãos, usar sapato aberto no plantão e guardar lanche na geladeira de medicamentos.", "Os participantes indicam se está certo ou errado e qual a regra.", "Discuta as dificuldades práticas para cumprir cada regra.", "Encaminhe sugestões de melhoria à CIPA e ao controle de infecção."]},
+  "dds": {"titulo": "Quem usou, descarta", "texto": "Pessoal, uma regra que salva muita gente: quem usou a agulha é quem descarta, na hora, no recipiente certo, sem reencapar. Agulha deixada na bandeja ou no leito vai ferir alguém da limpeza, da lavanderia ou um colega do próximo plantão. E se acontecer um acidente com material biológico, lavem o local e comuniquem na hora, mesmo de madrugada. O tempo faz diferença no tratamento preventivo."},
+  "prova": [
+    {"q": "Nos postos de trabalho com risco biológico, a NR-32 proíbe:", "o": ["Uso de luvas", "Uso de adornos e calçados abertos", "Higiene das mãos", "Uso de avental"], "c": 1, "com": "Adornos e calçados abertos são proibidos."},
+    {"q": "O reencape de agulhas é:", "o": ["Recomendado", "Proibido", "Obrigatório", "Permitido com uma mão"], "c": 1, "com": "A NR-32 proíbe o reencape e a desconexão manual."},
+    {"q": "A vacina contra hepatite B para trabalhadores de saúde deve ser:", "o": ["Paga pelo trabalhador", "Fornecida gratuitamente pelo empregador", "Opcional e sem registro", "Aplicada somente após acidente"], "c": 1, "com": "A vacinação prevista é gratuita."},
+    {"q": "O material perfurocortante deve ser descartado:", "o": ["No lixo comum", "Por quem usou, imediatamente, em recipiente próprio", "Pela equipe de limpeza no fim do turno", "Na bandeja para depois"], "c": 1, "com": "O descarte imediato evita acidentes com terceiros."},
+    {"q": "O recipiente de perfurocortantes deve:", "o": ["Ser preenchido até transbordar", "Respeitar a linha de enchimento indicada", "Ser esvaziado e reutilizado", "Ficar longe do ponto de uso"], "c": 1, "com": "Ultrapassar o limite aumenta o risco de acidente."},
+    {"q": "Após perfuração com agulha usada, deve-se primeiro:", "o": ["Espremer o local", "Lavar com água e sabão e comunicar imediatamente", "Aplicar álcool e esquecer", "Esperar o fim do plantão"], "c": 1, "com": "A comunicação imediata permite avaliar a profilaxia."},
+    {"q": "Os princípios de proteção contra radiações ionizantes são:", "o": ["Velocidade, força e altura", "Tempo, distância e blindagem", "Cor, forma e tamanho", "Luz, som e calor"], "c": 1, "com": "Reduzir tempo, aumentar distância e usar blindagem diminuem a dose."},
+    {"q": "O trabalhador exposto a radiações ionizantes deve usar:", "o": ["Relógio", "Dosímetro individual", "Anel de identificação", "Calçado aberto"], "c": 1, "com": "O dosímetro registra a dose recebida."},
+    {"q": "Comer e beber nos postos de trabalho com risco biológico é:", "o": ["Permitido", "Proibido", "Recomendado em plantões longos", "Permitido com luvas"], "c": 1, "com": "Evita a ingestão de agentes biológicos e químicos."},
+    {"q": "As vestimentas de trabalho nos serviços de saúde:", "o": ["Podem ser usadas fora do serviço", "Não devem deixar o local de trabalho", "Devem ser lavadas em casa", "São opcionais"], "c": 1, "com": "Evita levar contaminação para fora."}
+  ]
+}

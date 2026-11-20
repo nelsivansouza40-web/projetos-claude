@@ -1,0 +1,137 @@
+{
+  "nr": "28",
+  "titulo": "Fiscalização e Penalidades",
+  "chamada": "Conhecer como a fiscalização funciona para estar sempre preparado, e não para se defender depois",
+  "icone": "FaScaleBalanced",
+  "carga": "2 horas (aula informativa para gestores, RH, jurídico e equipes de SST)",
+  "periodicidade": "A NR-28 não exige treinamento. Recomenda-se revisar o tema quando houver mudança nas normas ou nos valores das multas.",
+  "publico": "Gestores, profissionais de recursos humanos, jurídico e SST.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho ou advogado com experiência em fiscalização trabalhista.",
+  "objetivos": [
+    "Compreender como funciona a fiscalização das normas regulamentadoras",
+    "Conhecer a notificação, o auto de infração e os prazos de defesa",
+    "Entender a graduação das multas e os agravantes",
+    "Organizar a empresa para atender à fiscalização"
+  ],
+  "recursos": ["Projetor e apresentação", "Anexos da NR-28 com a gradação das infrações e valores", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-28 Fiscalização e Penalidades, texto vigente, e seus anexos", "CLT, artigos 626 a 634", "NR-03 Embargo e Interdição"],
+  "modulos": [
+    {
+      "titulo": "Como funciona a fiscalização",
+      "duracao": 30,
+      "gancho": "A fiscalização do trabalho pode chegar a qualquer momento, por rotina, denúncia ou após um acidente. Saber como ela funciona ajuda a empresa a estar preparada.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "A inspeção do trabalho",
+          "cards": [
+            {"t": "Quem fiscaliza", "d": "Auditores fiscais do trabalho do Ministério do Trabalho e Emprego"},
+            {"t": "Origem", "d": "Planejamento, denúncias, acidentes e programas específicos"},
+            {"t": "Acesso", "d": "Livre acesso aos locais de trabalho e aos documentos"},
+            {"t": "Forma", "d": "Inspeção no local ou análise de documentos a distância"}
+          ],
+          "fala": "A fiscalização das normas regulamentadoras é feita pelos auditores fiscais do trabalho. Ela pode surgir do planejamento da inspeção, de denúncias, de acidentes ou de programas específicos. O auditor tem livre acesso aos locais de trabalho e pode solicitar documentos, entrevistar trabalhadores e fazer a análise no local ou a distância, por meio de notificações para apresentação de documentos.",
+          "pergunta": "A empresa já recebeu fiscalização? Como foi?"
+        },
+        {
+          "tipo": "comparar",
+          "titulo": "Notificação e autuação",
+          "esquerda": {"t": "Notificação", "itens": ["Concede prazo para corrigir irregularidades", "Prazos definidos pela norma e pelo auditor", "Usada quando a situação permite regularização"]},
+          "direita": {"t": "Auto de infração", "itens": ["Registro formal da infração", "Gera processo administrativo e multa", "Lavrado sempre que a lei exigir ou após prazo descumprido"]},
+          "fala": "Diante de uma irregularidade, o auditor pode notificar a empresa, concedendo prazo para a correção, nos limites previstos na norma, ou lavrar o auto de infração, que dá início a um processo administrativo que pode resultar em multa. Em algumas situações a lei prevê a dupla visita, com caráter orientador na primeira inspeção. E, se houver grave e iminente risco, podem ser aplicados embargo ou interdição, conforme a NR-03.",
+          "dica": "Explique em linhas gerais o critério da dupla visita previsto na CLT."
+        }
+      ]
+    },
+    {
+      "titulo": "Multas e defesa",
+      "duracao": 30,
+      "gancho": "As multas por infração às NRs variam conforme a gravidade e o porte da empresa. E existem situações em que o valor dobra.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Como a multa é definida",
+          "passos": [
+            {"t": "Infração", "d": "Item da NR descumprido"},
+            {"t": "Gradação", "d": "Cada item tem gradação de 1 a 4 no anexo da NR-28"},
+            {"t": "Natureza", "d": "Segurança ou medicina do trabalho"},
+            {"t": "Porte", "d": "Número de empregados da empresa"},
+            {"t": "Valor", "d": "Faixa definida na tabela da norma"}
+          ],
+          "fala": "O valor da multa segue critérios da NR-28. Cada item das normas regulamentadoras tem uma gradação de um a quatro, indicada no anexo. A natureza da infração, se de segurança ou de medicina do trabalho, e o número de empregados da empresa definem a faixa de valor na tabela da norma. Uma única fiscalização pode gerar vários autos, um para cada item descumprido.",
+          "dica": "Mostre o anexo com a gradação de alguns itens da NR-35 ou da NR-12."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Agravantes e defesa",
+          "itens": [
+            "A multa pode ser aplicada no valor máximo em casos de reincidência",
+            "Também em casos de embaraço, resistência, artifício ou simulação para fraudar a lei",
+            "A empresa pode apresentar defesa no prazo previsto em lei após o recebimento do auto",
+            "Da decisão cabe recurso administrativo",
+            "A correção da irregularidade não anula automaticamente o auto já lavrado"
+          ],
+          "destaque": "Dificultar a fiscalização agrava a penalidade.",
+          "fala": "A NR-28 e a CLT preveem agravantes. Em caso de reincidência, embaraço ou resistência à fiscalização, emprego de artifício ou simulação para fraudar a lei, a multa pode ser aplicada no valor máximo. A empresa pode apresentar defesa no prazo legal após receber o auto e recorrer da decisão. Corrigir a irregularidade é importante, mas não anula automaticamente o auto já lavrado.",
+          "pergunta": "Quem, na empresa, recebe e responde às notificações da fiscalização?"
+        }
+      ]
+    },
+    {
+      "titulo": "Preparação da empresa",
+      "duracao": 30,
+      "gancho": "A melhor preparação para a fiscalização é ter a gestão de SST funcionando no dia a dia. Vamos ver o que costuma ser verificado.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Documentos mais solicitados",
+          "cabecalho": ["Tema", "Documentos"],
+          "linhas": [
+            ["Gestão de riscos", "PGR com inventário de riscos e plano de ação"],
+            ["Saúde", "PCMSO, ASOs e relatório analítico"],
+            ["Treinamentos", "Certificados, listas de presença e conteúdos"],
+            ["EPI", "Fichas de entrega com CA"],
+            ["CIPA e SESMT", "Atas, calendário, registro e dimensionamento"]
+          ],
+          "fala": "Alguns documentos são solicitados com frequência. O PGR, com inventário de riscos e plano de ação. O PCMSO, os ASOs e o relatório analítico. Os certificados e as listas de presença dos treinamentos. As fichas de entrega de EPI com o número do CA. E os documentos da CIPA e do SESMT. Além dos documentos, o auditor verifica as condições reais nos locais de trabalho, que precisam corresponder ao que está no papel."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Boas práticas",
+          "itens": [
+            "Manter os documentos organizados, atualizados e acessíveis",
+            "Designar responsáveis por receber e acompanhar a fiscalização",
+            "Atender com transparência e sem dificultar o acesso",
+            "Registrar as solicitações e os prazos recebidos",
+            "Fazer auditorias internas periódicas com base nas NRs"
+          ],
+          "destaque": "O papel precisa corresponder à realidade do chão de fábrica.",
+          "fala": "Para estar preparada, a empresa mantém os documentos organizados, atualizados e acessíveis; designa responsáveis por receber e acompanhar a fiscalização; atende com transparência, sem dificultar o acesso; registra as solicitações e os prazos; e faz auditorias internas periódicas com base nas normas. Acima de tudo, o que está no papel precisa corresponder à realidade.",
+          "pergunta": "Quando foi a última auditoria interna de SST da empresa?"
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A fiscalização depois do acidente",
+    "relato": "Após um acidente com amputação em uma prensa, o auditor fiscal inspecionou uma indústria de autopeças. Além da interdição da prensa, ele solicitou o PGR, os treinamentos dos operadores e a apreciação de riscos das máquinas. O PGR não citava a prensa, os certificados não traziam conteúdo programático e a apreciação de riscos não existia. Durante a inspeção, um gerente orientou um supervisor a retirar outras máquinas sem proteção da área antes que o auditor passasse.",
+    "perguntas": ["Que irregularidades provavelmente geraram autos de infração?", "Como a atitude do gerente pode agravar a situação?", "Que medidas teriam evitado o acidente e as autuações?", "Como a empresa deve conduzir a defesa e a regularização?"],
+    "analise": "A ausência da prensa no PGR, os certificados incompletos e a falta de apreciação de riscos são infrações a itens da NR-01 e da NR-12, cada uma podendo gerar auto. A tentativa de ocultar máquinas configura embaraço à fiscalização, agravante que pode elevar a multa ao valor máximo. Uma gestão de riscos efetiva, com apreciação e adequação das máquinas e treinamento documentado, teria evitado o acidente e as autuações. A empresa deve apresentar defesa técnica no prazo, regularizar todas as máquinas e revisar a conduta dos gestores."
+  },
+  "dinamica": {"titulo": "Auditoria relâmpago", "objetivo": "Simular uma verificação documental.", "tempo": 15, "passos": ["Liste no quadro dez documentos e evidências de SST.", "Os participantes avaliam se a empresa teria cada um atualizado e acessível.", "Classifique os itens em verde, amarelo e vermelho.", "Transforme os itens vermelhos em ações com responsável e prazo."]},
+  "dds": {"titulo": "Fazemos certo porque é certo", "texto": "Pessoal, a gente não usa EPI, não faz treinamento e não mantém as proteções por causa da fiscalização. A gente faz isso para todo mundo voltar para casa. Mas vale lembrar: se um dia o auditor fiscal vier, ele vai olhar o que está acontecendo de verdade na área. Então o que a gente faz todo dia é o que vale. Nada de arrumar só quando alguém de fora aparece."},
+  "prova": [
+    {"q": "A fiscalização das normas regulamentadoras é feita por:", "o": ["Sindicatos", "Auditores fiscais do trabalho", "Técnicos de segurança da empresa", "Corpo de Bombeiros"], "c": 1, "com": "A inspeção do trabalho é atribuição dos auditores fiscais."},
+    {"q": "A notificação da fiscalização:", "o": ["Aplica multa imediata", "Concede prazo para corrigir irregularidades", "Interdita a empresa", "Não tem efeito"], "c": 1, "com": "Ela permite a regularização no prazo concedido."},
+    {"q": "O auto de infração:", "o": ["É apenas uma orientação", "Registra formalmente a infração e inicia processo que pode gerar multa", "Substitui o PGR", "Só existe em acidentes"], "c": 1, "com": "É o instrumento formal de autuação."},
+    {"q": "A gradação das infrações na NR-28 vai de:", "o": ["1 a 2", "1 a 4", "1 a 10", "A a Z"], "c": 1, "com": "Cada item tem gradação de 1 a 4."},
+    {"q": "O valor da multa considera:", "o": ["Apenas o faturamento", "A gradação, a natureza da infração e o número de empregados", "A idade dos trabalhadores", "O humor do fiscal"], "c": 1, "com": "São os critérios da tabela da norma."},
+    {"q": "Embaraço ou resistência à fiscalização:", "o": ["Reduz a multa", "Pode levar à aplicação da multa no valor máximo", "Não tem efeito", "Anula a autuação"], "c": 1, "com": "É agravante previsto em lei."},
+    {"q": "Uma única fiscalização pode gerar:", "o": ["Apenas um auto", "Vários autos, um para cada item descumprido", "Nenhum auto", "Somente notificação"], "c": 1, "com": "Cada infração pode gerar um auto."},
+    {"q": "Diante de grave e iminente risco, o auditor pode:", "o": ["Apenas orientar", "Aplicar embargo ou interdição conforme a NR-03", "Multar o trabalhador", "Nada fazer"], "c": 1, "com": "Embargo e interdição são medidas de urgência."},
+    {"q": "Corrigir a irregularidade após o auto lavrado:", "o": ["Anula automaticamente o auto", "É necessário, mas não anula automaticamente o auto", "É proibido", "Dobra a multa"], "c": 1, "com": "A regularização é obrigatória, mas o auto segue seu trâmite."},
+    {"q": "A melhor preparação para a fiscalização é:", "o": ["Esconder documentos", "Manter a gestão de SST funcionando e os documentos atualizados", "Fechar a empresa no dia", "Arrumar a área somente na visita"], "c": 1, "com": "A realidade precisa corresponder aos documentos."}
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "nr": "22",
+  "titulo": "Segurança e Saúde Ocupacional na Mineração",
+  "chamada": "Na mina, cada risco é amplificado: controle do terreno, dos equipamentos e da atmosfera",
+  "icone": "FaHillRockslide",
+  "carga": "8 horas (treinamento introdutório de SST na mineração; confira a carga mínima exigida pela NR-22 para a sua atividade)",
+  "periodicidade": "A NR-22 prevê treinamento introdutório geral e treinamentos específicos por função, além de reciclagens periódicas e eventuais. Confira no texto vigente as cargas mínimas para atividades a céu aberto e em subsolo.",
+  "publico": "Trabalhadores da mineração, próprios e terceirizados, em atividades a céu aberto e em subsolo, e suas lideranças.",
+  "prerequisitos": "Avaliação de saúde com aptidão para a função.",
+  "instrutor": "Profissional de segurança do trabalho com experiência em mineração, com apoio de profissionais da operação.",
+  "objetivos": [
+    "Conhecer os principais riscos da atividade de mineração",
+    "Compreender o PGR da mineração e as responsabilidades",
+    "Aplicar regras de circulação e operação de equipamentos pesados",
+    "Reconhecer riscos de instabilidade de taludes, poeiras e explosivos",
+    "Agir em emergências e exercer o direito de recusa"
+  ],
+  "recursos": ["Projetor e apresentação", "Mapa da mina com rotas, áreas de risco e pontos de encontro", "EPIs utilizados na operação", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-22 Segurança e Saúde Ocupacional na Mineração, texto vigente", "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais", "NR-19 Explosivos", "Normas da Agência Nacional de Mineração aplicáveis"],
+  "modulos": [
+    {
+      "titulo": "A mineração e a NR-22",
+      "duracao": 90,
+      "gancho": "A mineração reúne equipamentos gigantes, explosivos, poeira, ruído e terreno instável no mesmo lugar. A NR-22 organiza a prevenção nesse ambiente.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos na mineração",
+          "cards": [
+            {"t": "Instabilidade", "d": "Queda de blocos, ruptura de taludes e desabamentos em subsolo"},
+            {"t": "Equipamentos pesados", "d": "Atropelamento, colisão, tombamento e pontos cegos"},
+            {"t": "Poeiras e ruído", "d": "Sílica, silicose, perda auditiva e vibração"},
+            {"t": "Explosivos e energia", "d": "Detonações, ultralançamentos, eletricidade e máquinas"}
+          ],
+          "fala": "Os principais riscos na mineração são a instabilidade do terreno, com queda de blocos, ruptura de taludes e desabamentos no subsolo; os equipamentos pesados, com atropelamentos, colisões e tombamentos; as poeiras, especialmente a sílica, que causa silicose, além de ruído e vibração; e os explosivos, a eletricidade e as máquinas. No subsolo, somam-se a ventilação e a atmosfera.",
+          "pergunta": "Qual desses riscos está mais presente no seu dia a dia?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Responsabilidades",
+          "itens": [
+            "Empresa ou permissionário: elaborar e implementar o PGR da mineração",
+            "Garantir a interrupção das atividades quando houver risco grave e iminente",
+            "Lideranças: supervisionar as frentes de trabalho e as condições de segurança",
+            "Trabalhadores: cumprir os procedimentos e informar situações de risco",
+            "Direito de recusa diante de risco grave e iminente"
+          ],
+          "destaque": "Na mina, o direito de recusa é garantido pela NR-22.",
+          "fala": "A empresa ou o permissionário de lavra deve elaborar e implementar o programa de gerenciamento de riscos da mineração, interromper as atividades quando houver risco grave e iminente e garantir as condições de segurança. As lideranças supervisionam as frentes de trabalho. Os trabalhadores cumprem os procedimentos e informam as situações de risco. E a NR-22 garante o direito de recusa, que deve ser comunicado ao superior."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "CIPAMIN e participação",
+          "cards": [
+            {"t": "CIPAMIN", "d": "Comissão Interna de Prevenção de Acidentes na Mineração, com regras próprias da NR-22"},
+            {"t": "Inspeções", "d": "Participação dos trabalhadores e da comissão nas inspeções"},
+            {"t": "Diálogos de segurança", "d": "Conversas no início do turno sobre as condições da frente"},
+            {"t": "Comunicação", "d": "Relato de quase acidentes e condições inseguras"}
+          ],
+          "fala": "Na mineração, a comissão de prevenção é a CIPAMIN, com regras próprias definidas na NR-22. Ela participa das inspeções e acompanha a gestão de riscos. Além disso, os diálogos de segurança no início do turno e o relato de quase acidentes e condições inseguras mantêm todos informados sobre as condições das frentes, que mudam diariamente.",
+          "dica": "Apresente os membros da CIPAMIN da unidade."
+        }
+      ]
+    },
+    {
+      "titulo": "Circulação e equipamentos",
+      "duracao": 90,
+      "gancho": "Um caminhão fora de estrada pode não enxergar uma caminhonete ao lado dele. Na mina, as regras de circulação salvam vidas.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Regras de circulação",
+          "itens": [
+            "Respeitar sinalização, limites de velocidade e preferência dos equipamentos pesados",
+            "Veículos leves com sinalização visível, como bandeirola e giroflex",
+            "Comunicação por rádio antes de se aproximar de equipamentos",
+            "Manter distância segura e ficar fora dos pontos cegos",
+            "Estacionar apenas em locais definidos, longe de taludes"
+          ],
+          "destaque": "Se você não vê o operador, ele também não vê você.",
+          "fala": "Na mina, respeite a sinalização, os limites de velocidade e a preferência dos equipamentos pesados. Veículos leves devem ter sinalização visível, como bandeirola e giroflex. Antes de se aproximar de um equipamento, comunique-se pelo rádio. Mantenha distância segura e fique fora dos pontos cegos. E estacione apenas em locais definidos, longe de taludes. Se você não vê o operador, ele também não vê você."
+        },
+        {
+          "tipo": "passos",
+          "titulo": "Operação de equipamentos",
+          "passos": [
+            {"t": "Habilitação", "d": "Operar apenas com treinamento e autorização"},
+            {"t": "Inspeção", "d": "Checklist pré-operacional antes do turno"},
+            {"t": "Operação", "d": "Cinto, velocidade e respeito às bermas"},
+            {"t": "Parada", "d": "Estacionar com freio e calço quando exigido"},
+            {"t": "Comunicar", "d": "Informar falhas e condições da via"}
+          ],
+          "fala": "Cada equipamento só é operado por quem tem treinamento e autorização específicos. Antes do turno, o operador faz o checklist pré-operacional. Durante a operação, usa o cinto, respeita a velocidade e as bermas de segurança nas bordas das pilhas e bancadas. Ao parar, estaciona com freio acionado e calço quando exigido. E comunica falhas no equipamento e condições ruins da via.",
+          "pergunta": "O checklist do seu equipamento é preenchido antes de cada turno?"
+        }
+      ]
+    },
+    {
+      "titulo": "Estabilidade, poeira e explosivos",
+      "duracao": 90,
+      "gancho": "Um talude pode dar sinais antes de romper. Uma nuvem de poeira pode estar levando sílica para o pulmão. Vamos olhar para esses riscos.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Sinais de instabilidade",
+          "cards": [
+            {"t": "Trincas", "d": "Trincas novas no topo do talude ou na pista"},
+            {"t": "Queda de material", "d": "Pequenos blocos ou fragmentos se soltando"},
+            {"t": "Água", "d": "Surgência de água ou umidade anormal na face"},
+            {"t": "Deformações", "d": "Abaulamentos e movimentos visíveis"}
+          ],
+          "fala": "A instabilidade de taludes e do teto em subsolo costuma dar sinais. Trincas novas no topo do talude ou na pista, queda de pequenos blocos, surgência de água ou umidade anormal na face e abaulamentos. Ao perceber esses sinais, afaste-se, isole a área e comunique imediatamente. A empresa deve ter monitoramento geotécnico e procedimentos de inspeção das frentes.",
+          "pergunta": "A quem você comunica uma trinca nova no talude?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Poeiras e sílica",
+          "itens": [
+            "Umidificação de vias, pilhas e pontos de transferência",
+            "Cabines fechadas e pressurizadas nos equipamentos",
+            "Sistemas de captação de poeira em britagem e peneiramento",
+            "Respiradores adequados quando as medidas coletivas não bastam",
+            "Exames periódicos de pulmão previstos no PCMSO"
+          ],
+          "destaque": "A silicose não tem cura. A prevenção é a única proteção.",
+          "fala": "A poeira com sílica cristalina causa silicose, uma doença pulmonar sem cura. As medidas incluem umidificação de vias, pilhas e pontos de transferência; cabines fechadas e pressurizadas nos equipamentos; captação de poeira na britagem e no peneiramento; respiradores adequados quando as medidas coletivas não bastam; e exames periódicos previstos no PCMSO."
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Detonações",
+          "texto": "Durante o fogo, ninguém permanece na área de risco definida no plano.",
+          "itens": [
+            "Respeitar os horários e os sinais sonoros de detonação",
+            "Evacuar para os pontos definidos e aguardar a liberação",
+            "Não se aproximar de furos falhados ou explosivos remanescentes",
+            "Comunicar qualquer explosivo encontrado após a detonação"
+          ],
+          "fala": "As detonações seguem um plano de fogo executado por profissional habilitado. Os trabalhadores respeitam os horários e os sinais sonoros, evacuam para os pontos definidos e só retornam após a liberação. Ninguém se aproxima de furos falhados ou explosivos remanescentes, e qualquer explosivo encontrado após a detonação deve ser comunicado imediatamente."
+        }
+      ]
+    },
+    {
+      "titulo": "Subsolo e atmosfera",
+      "duracao": 90,
+      "gancho": "No subsolo, o ar que você respira depende da ventilação. E a saída depende do plano de emergência.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Ventilação e gases",
+          "itens": [
+            "Ventilação que garanta ar respirável em todas as frentes",
+            "Monitoramento de oxigênio, gases tóxicos e inflamáveis",
+            "Controle dos gases de motores diesel e de detonações",
+            "Proibição de acesso a áreas não ventiladas",
+            "Autorresgatador disponível conforme a norma"
+          ],
+          "destaque": "Área sem ventilação é área proibida.",
+          "fala": "No subsolo, a ventilação deve garantir ar respirável em todas as frentes. A atmosfera é monitorada para oxigênio, gases tóxicos, como o monóxido de carbono das detonações e dos motores, e gases inflamáveis, onde houver. O acesso a áreas não ventiladas é proibido. E o trabalhador deve portar o autorresgatador, quando exigido, que fornece proteção respiratória para a fuga.",
+          "dica": "Demonstre o uso do autorresgatador, se aplicável à unidade."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Controle de acesso e teto",
+          "cards": [
+            {"t": "Controle de entrada", "d": "Registro de quem está no subsolo, para contagem em emergências"},
+            {"t": "Abatimento de chocos", "d": "Remoção de blocos soltos do teto e das paredes"},
+            {"t": "Suporte", "d": "Tirantes, telas e concreto projetado conforme o projeto"},
+            {"t": "Iluminação", "d": "Lanterna individual e iluminação das áreas de trabalho"}
+          ],
+          "fala": "No subsolo, todas as pessoas são registradas na entrada e na saída, para que em uma emergência se saiba quem está lá dentro. Os blocos soltos do teto e das paredes, os chocos, são removidos antes de qualquer trabalho. O suporte, com tirantes, telas e concreto projetado, segue o projeto. E cada trabalhador porta lanterna individual, além da iluminação das áreas de trabalho."
+        }
+      ]
+    },
+    {
+      "titulo": "Emergências",
+      "duracao": 90,
+      "gancho": "Em uma mina, o plano de emergência precisa funcionar mesmo sem energia, sem comunicação e com fumaça. Ele só funciona se for conhecido e treinado.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Plano de emergência",
+          "passos": [
+            {"t": "Alarme", "d": "Sinais conhecidos por todos"},
+            {"t": "Rotas", "d": "Rotas de fuga sinalizadas e desobstruídas"},
+            {"t": "Refúgio ou encontro", "d": "Pontos de encontro e, no subsolo, câmaras de refúgio quando previstas"},
+            {"t": "Contagem", "d": "Confirmar quem saiu e quem falta"},
+            {"t": "Resgate", "d": "Equipe treinada e equipada"}
+          ],
+          "fala": "O plano de emergência da mineração define os sinais de alarme, as rotas de fuga sinalizadas e desobstruídas, os pontos de encontro e, no subsolo, as câmaras de refúgio quando previstas, a contagem de pessoas e a equipe de resgate treinada e equipada. Os simulados periódicos são a única forma de garantir que todos saibam o que fazer.",
+          "pergunta": "Qual é a rota de fuga e o ponto de encontro da sua área?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Barragens e grandes emergências",
+          "itens": [
+            "Conhecer as rotas de fuga e as zonas de autossalvamento, onde houver barragem",
+            "Reconhecer os sinais sonoros de alerta",
+            "Participar dos simulados de emergência",
+            "Áreas administrativas e de vivência fora das zonas de risco"
+          ],
+          "destaque": "Em emergências de grande porte, o tempo de resposta depende do treino prévio.",
+          "fala": "Em minas com barragens, cada trabalhador deve conhecer as rotas de fuga e as zonas de autossalvamento, reconhecer os sinais sonoros de alerta e participar dos simulados. As áreas administrativas e de vivência devem ficar fora das zonas de risco. Em emergências de grande porte, o tempo de resposta depende do treino prévio."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A caminhonete no ponto cego",
+    "relato": "Em uma mina a céu aberto, um técnico de manutenção dirigia uma caminhonete sem bandeirola pela rampa de acesso. Ele não fez contato pelo rádio e parou atrás de um caminhão fora de estrada que estava manobrando para dar ré. O operador do caminhão não viu a caminhonete e iniciou a manobra. O técnico conseguiu sair do veículo segundos antes de a caminhonete ser esmagada.",
+    "perguntas": ["Que regras de circulação foram descumpridas?", "Por que o operador do caminhão não viu a caminhonete?", "Que recursos de engenharia poderiam reduzir esse risco?", "Como a empresa deve tratar esse quase acidente?"],
+    "analise": "O técnico não usou sinalização visível, não fez contato por rádio e parou no ponto cego do caminhão. Caminhões fora de estrada têm grandes áreas sem visibilidade, especialmente na traseira e na lateral. Sistemas de detecção de proximidade, câmeras e segregação de vias para veículos leves reduzem o risco. O quase acidente deve ser investigado, divulgado e usado para reforçar as regras de circulação com todos, inclusive os terceiros."
+  },
+  "dinamica": {"titulo": "Mapa da minha frente", "objetivo": "Identificar riscos e rotas na área de trabalho.", "tempo": 20, "passos": ["Entregue o mapa simplificado da mina ou de uma frente de trabalho.", "Os grupos marcam áreas de risco, pontos cegos, rotas de fuga e pontos de encontro.", "Os grupos apresentam e o instrutor corrige.", "Feche reforçando as regras de circulação."]},
+  "dds": {"titulo": "Rádio antes de chegar perto", "texto": "Pessoal, na mina o tamanho dos equipamentos engana. O operador do caminhão está lá no alto e não enxerga quem está ao lado ou atrás. Então a regra é: antes de se aproximar, chame no rádio e espere a confirmação. Bandeirola e giroflex sempre ligados. Nunca pare atrás de equipamento em manobra. E se você vir uma trinca nova no talude ou bloco se soltando, afaste-se e comunique. Na mina, quem avisa primeiro protege todo mundo."},
+  "prova": [
+    {"q": "A comissão de prevenção de acidentes na mineração é a:", "o": ["CIPA comum", "CIPAMIN", "SESMT", "Brigada"], "c": 1, "com": "A NR-22 prevê a CIPAMIN."},
+    {"q": "A poeira com sílica cristalina pode causar:", "o": ["Perda auditiva", "Silicose, doença pulmonar sem cura", "Dermatite apenas", "Nenhum efeito"], "c": 1, "com": "A silicose é irreversível."},
+    {"q": "Antes de se aproximar de um equipamento pesado, deve-se:", "o": ["Buzinar e seguir", "Fazer contato por rádio e aguardar confirmação", "Piscar o farol", "Nada"], "c": 1, "com": "A comunicação evita que o veículo fique no ponto cego."},
+    {"q": "Um sinal de instabilidade de talude é:", "o": ["Vegetação verde", "Trincas novas no topo ou na pista", "Sinalização nova", "Pista molhada pela umidificação"], "c": 1, "com": "Trincas indicam movimentação do maciço."},
+    {"q": "Durante a detonação, os trabalhadores devem:", "o": ["Observar de perto", "Evacuar para os pontos definidos e aguardar a liberação", "Continuar trabalhando", "Ficar dentro dos veículos na área de risco"], "c": 1, "com": "Ninguém permanece na área de risco."},
+    {"q": "Ao encontrar explosivo remanescente após a detonação, deve-se:", "o": ["Retirar com as mãos", "Não se aproximar e comunicar imediatamente", "Cobrir com material", "Detonar com uma pedra"], "c": 1, "com": "Somente profissionais habilitados tratam furos falhados."},
+    {"q": "No subsolo, o registro de entrada e saída serve para:", "o": ["Controle de ponto apenas", "Saber quem está no subsolo em uma emergência", "Calcular horas extras", "Nada"], "c": 1, "com": "A contagem é essencial nas emergências."},
+    {"q": "Uma medida de controle da poeira é:", "o": ["Varrer a seco", "Umidificação de vias e pontos de transferência", "Abrir as janelas das cabines", "Aumentar a velocidade dos caminhões"], "c": 1, "com": "A umidificação reduz a poeira em suspensão."},
+    {"q": "Área do subsolo sem ventilação:", "o": ["Pode ser acessada rapidamente", "Tem acesso proibido", "Só exige máscara de poeira", "É segura à noite"], "c": 1, "com": "Sem ventilação, a atmosfera pode ser perigosa."},
+    {"q": "O direito de recusa na mineração:", "o": ["Não existe", "É garantido diante de risco grave e iminente, com comunicação ao superior", "Só vale para supervisores", "Gera demissão"], "c": 1, "com": "A NR-22 garante o direito de recusa."}
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "nr": "16",
+  "titulo": "Atividades e Operações Perigosas",
+  "chamada": "Onde o risco é de vida, a prevenção vem antes de qualquer adicional",
+  "icone": "FaRadiation",
+  "carga": "2 horas (aula informativa para equipes de SST, RH e lideranças)",
+  "periodicidade": "A NR-16 não exige treinamento. Recomenda-se revisar o tema quando houver mudança nas atividades, nos laudos ou na norma.",
+  "publico": "Profissionais de SST, recursos humanos, departamento pessoal e lideranças.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Engenheiro de segurança do trabalho, médico do trabalho ou profissional de SST com experiência em caracterização de periculosidade.",
+  "objetivos": [
+    "Compreender o conceito de atividade perigosa",
+    "Conhecer os anexos da NR-16 e as atividades abrangidas",
+    "Entender as regras do adicional de periculosidade",
+    "Relacionar a periculosidade com as medidas de prevenção das demais NRs"
+  ],
+  "recursos": ["Projetor e apresentação", "Cópia dos anexos da NR-16", "Exemplo de laudo de periculosidade", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-16 Atividades e Operações Perigosas, texto vigente, e seus anexos", "CLT, artigos 193 a 197", "NR-10 Eletricidade, NR-19 Explosivos e NR-20 Inflamáveis e Combustíveis"],
+  "modulos": [
+    {
+      "titulo": "Conceito e anexos",
+      "duracao": 30,
+      "gancho": "Na insalubridade, o dano aparece aos poucos. Na periculosidade, um único evento pode ser fatal. Vamos entender quais atividades a lei considera perigosas.",
+      "slides": [
+        {
+          "tipo": "comparar",
+          "titulo": "Insalubridade e periculosidade",
+          "esquerda": {"t": "Insalubridade", "itens": ["Dano à saúde por exposição ao longo do tempo", "Ligada a limites de tolerância e anexos da NR-15", "Adicional de 10%, 20% ou 40%"]},
+          "direita": {"t": "Periculosidade", "itens": ["Risco acentuado de evento súbito e grave", "Atividades listadas nos anexos da NR-16 e na CLT", "Adicional de 30% sobre o salário-base"]},
+          "fala": "A insalubridade trata do dano à saúde que se acumula com o tempo, como a perda auditiva. A periculosidade trata do risco acentuado de um evento súbito e grave, como uma explosão ou um choque elétrico. As atividades perigosas estão definidas na CLT e nos anexos da NR-16. O adicional de periculosidade é de trinta por cento sobre o salário, sem os acréscimos de gratificações, prêmios ou participação nos lucros.",
+          "pergunta": "Quais atividades da empresa geram adicional de periculosidade?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Atividades perigosas",
+          "cards": [
+            {"t": "Explosivos", "d": "Armazenamento, transporte, manuseio e áreas de risco"},
+            {"t": "Inflamáveis", "d": "Operações com líquidos e gases inflamáveis e suas áreas de risco"},
+            {"t": "Segurança pessoal e patrimonial", "d": "Exposição a roubos ou violência física, conforme o anexo"},
+            {"t": "Energia elétrica", "d": "Atividades com exposição ao sistema elétrico, conforme o anexo"}
+          ],
+          "fala": "Os anexos da NR-16 tratam de atividades com explosivos; com inflamáveis, incluindo as áreas de risco em volta de tanques, bombas e pontos de abastecimento; de segurança pessoal ou patrimonial com exposição a roubos ou violência física; e com energia elétrica. Há também previsão para atividades com radiações ionizantes ou substâncias radioativas e para atividades em motocicleta, conforme a regulamentação vigente. Cada anexo define as atividades e as áreas que caracterizam a periculosidade.",
+          "dica": "Detalhe os anexos aplicáveis à empresa e mostre as áreas de risco definidas no anexo de inflamáveis."
+        }
+      ]
+    },
+    {
+      "titulo": "Regras do adicional",
+      "duracao": 30,
+      "gancho": "O adicional de periculosidade tem regras próprias. Entender essas regras evita erros na folha e discussões trabalhistas.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Como funciona",
+          "itens": [
+            "Caracterização por perícia de médico do trabalho ou engenheiro de segurança",
+            "Adicional de 30% sobre o salário, sem gratificações, prêmios ou participação nos lucros",
+            "Não é acumulável com a insalubridade; o trabalhador opta",
+            "Exposição eventual ou por tempo extremamente reduzido pode não gerar direito",
+            "Cessa quando a exposição deixa de existir"
+          ],
+          "destaque": "A caracterização é técnica e deve estar registrada em laudo.",
+          "fala": "A periculosidade é caracterizada por perícia de médico do trabalho ou engenheiro de segurança do trabalho, registrada em laudo. O adicional é de trinta por cento sobre o salário, sem gratificações, prêmios ou participação nos lucros. Não se acumula com a insalubridade: o trabalhador opta pelo que for mais vantajoso. Segundo a jurisprudência, a exposição eventual ou por tempo extremamente reduzido pode não gerar direito. E o adicional cessa quando a exposição deixa de existir.",
+          "pergunta": "Como a empresa controla quem entra nas áreas de risco?"
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Tipos de exposição",
+          "cabecalho": ["Exposição", "Situação usual"],
+          "linhas": [
+            ["Permanente", "Faz parte da rotina diária do trabalhador"],
+            ["Intermitente", "Ocorre de forma habitual, mesmo que não contínua"],
+            ["Eventual", "Fortuita, sem habitualidade"],
+            ["Tempo extremamente reduzido", "Contato rápido e esporádico, avaliado caso a caso"]
+          ],
+          "fala": "Para avaliar o direito ao adicional, analisa-se o tipo de exposição. Permanente, quando faz parte da rotina diária. Intermitente, quando é habitual, ainda que não contínua. Eventual, quando é fortuita, sem habitualidade. E por tempo extremamente reduzido, quando o contato é rápido e esporádico. Em regra, as exposições permanente e intermitente geram o direito. A análise é técnica e deve constar do laudo.",
+          "dica": "Recomende que dúvidas sobre o enquadramento sejam avaliadas pelo jurídico e pelo perito responsável."
+        }
+      ]
+    },
+    {
+      "titulo": "Periculosidade e prevenção",
+      "duracao": 30,
+      "gancho": "O adicional reconhece o risco, mas não o reduz. A prevenção está nas normas específicas de cada atividade.",
+      "slides": [
+        {
+          "tipo": "tabela",
+          "titulo": "Normas de prevenção relacionadas",
+          "cabecalho": ["Atividade perigosa", "Normas de prevenção"],
+          "linhas": [
+            ["Explosivos", "NR-19 e regulamentação do Exército"],
+            ["Inflamáveis", "NR-20 e NR-23"],
+            ["Energia elétrica", "NR-10"],
+            ["Segurança patrimonial", "Procedimentos de segurança, treinamento e legislação de vigilância"],
+            ["Radiações ionizantes", "Normas da CNEN e NR-32, quando aplicável"]
+          ],
+          "fala": "Cada atividade perigosa tem normas de prevenção próprias. Explosivos seguem a NR-19 e a regulamentação do Exército. Inflamáveis seguem a NR-20 e a NR-23. Eletricidade segue a NR-10. A segurança patrimonial tem legislação própria de vigilância e exige procedimentos e treinamento. E as radiações ionizantes seguem as normas da Comissão Nacional de Energia Nuclear. O laudo de periculosidade é um ponto de partida para verificar se essas normas estão sendo cumpridas."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Reduzir a exposição",
+          "itens": [
+            "Delimitar e sinalizar as áreas de risco",
+            "Restringir o acesso a pessoas autorizadas e treinadas",
+            "Reduzir estoques de inflamáveis e explosivos ao necessário",
+            "Automatizar operações e afastar postos de trabalho das áreas de risco",
+            "Revisar o laudo após mudanças"
+          ],
+          "destaque": "Menos pessoas e menos tempo nas áreas de risco significam menos vítimas potenciais.",
+          "fala": "A empresa pode e deve reduzir a exposição. Delimitar e sinalizar as áreas de risco, restringir o acesso a pessoas autorizadas e treinadas, reduzir os estoques de inflamáveis e explosivos ao necessário e afastar os postos de trabalho que não precisam estar ali. Menos pessoas e menos tempo nas áreas de risco significam menos vítimas potenciais em caso de acidente. Depois das mudanças, o laudo deve ser revisado.",
+          "pergunta": "Há postos de trabalho que poderiam sair de uma área de risco?"
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "O escritório ao lado do tanque",
+    "relato": "Uma transportadora instalou seu escritório administrativo e o refeitório a poucos metros de um tanque de diesel e de uma bomba de abastecimento da frota. Depois de uma ação trabalhista, uma perícia concluiu que parte do escritório estava dentro da área de risco definida no anexo de inflamáveis, e a empresa foi condenada a pagar o adicional a doze empregados administrativos. O plano de emergência não considerava a ocupação dessas áreas.",
+    "perguntas": ["Por que empregados administrativos passaram a ter direito ao adicional?", "Qual medida resolveria o problema de forma definitiva?", "Que riscos, além do adicional, a empresa assumiu com esse layout?", "Que normas deveriam ter orientado a instalação do tanque?"],
+    "analise": "Os empregados permaneciam habitualmente dentro da área de risco definida no anexo de inflamáveis, o que caracteriza a periculosidade independentemente da função. A solução definitiva é afastar o escritório e o refeitório da área de risco ou relocar o tanque, com revisão do laudo. Além do custo do adicional, a empresa expôs mais pessoas às consequências de um incêndio ou explosão. A instalação deveria seguir a NR-20, a NR-23, as normas técnicas e as exigências do Corpo de Bombeiros, com avaliação do layout."
+  },
+  "dinamica": {"titulo": "Dentro ou fora da área de risco", "objetivo": "Aplicar o conceito de área de risco.", "tempo": 15, "passos": ["Projete a planta de uma instalação fictícia com tanque de inflamáveis, bomba e edificações próximas.", "Com base no anexo de inflamáveis, os grupos marcam as áreas de risco.", "Os grupos indicam quais postos de trabalho estão expostos e propõem mudanças.", "O instrutor comenta as soluções."]},
+  "dds": {"titulo": "Área de risco é para quem precisa estar lá", "texto": "Pessoal, perto dos tanques de combustível, dos painéis elétricos e dos depósitos de produtos perigosos, existe uma área de risco. Quem trabalha ali recebe adicional porque o perigo é real. Mas isso não quer dizer que qualquer um pode circular, fumar ou deixar materiais por lá. Só entra quem precisa, seguindo as regras do local. E se você notar vazamento, cheiro de combustível ou equipamento danificado, avise na hora."},
+  "prova": [
+    {"q": "O adicional de periculosidade é de:", "o": ["10%", "20%", "30%", "40%"], "c": 2, "com": "É de 30% sobre o salário, sem acréscimos."},
+    {"q": "O adicional de periculosidade é calculado sobre:", "o": ["O salário com todas as gratificações", "O salário, sem gratificações, prêmios ou participação nos lucros", "O salário mínimo sempre", "O faturamento da empresa"], "c": 1, "com": "Regra prevista na CLT."},
+    {"q": "São atividades perigosas pela NR-16:", "o": ["Trabalho em escritório", "Atividades com explosivos, inflamáveis e energia elétrica, entre outras", "Trabalho noturno", "Digitação"], "c": 1, "com": "Os anexos da NR-16 definem as atividades."},
+    {"q": "Insalubridade e periculosidade:", "o": ["São acumuladas", "Não são acumuladas; o trabalhador opta", "Não existem juntas", "Somam 70%"], "c": 1, "com": "A CLT prevê a opção."},
+    {"q": "A caracterização da periculosidade é feita por:", "o": ["Sindicato", "Perícia de médico do trabalho ou engenheiro de segurança", "Técnico de enfermagem", "Contador"], "c": 1, "com": "Exigência da CLT."},
+    {"q": "A exposição eventual ou por tempo extremamente reduzido:", "o": ["Sempre gera adicional em dobro", "Pode não gerar direito ao adicional, conforme a jurisprudência", "É proibida", "Gera 10%"], "c": 1, "com": "A análise é feita caso a caso."},
+    {"q": "Uma norma de prevenção ligada às atividades com inflamáveis é a:", "o": ["NR-17", "NR-20", "NR-36", "NR-24"], "c": 1, "com": "A NR-20 trata de inflamáveis e combustíveis."},
+    {"q": "O adicional de periculosidade:", "o": ["Elimina o risco", "Reconhece o risco, mas não substitui as medidas de prevenção", "Dispensa o uso de EPI", "Dispensa treinamento"], "c": 1, "com": "A prevenção continua obrigatória."},
+    {"q": "Uma forma de reduzir a exposição é:", "o": ["Aumentar os estoques de inflamáveis", "Restringir o acesso às áreas de risco a pessoas autorizadas", "Instalar o refeitório perto do tanque", "Retirar a sinalização"], "c": 1, "com": "Menos pessoas expostas reduz as possíveis vítimas."},
+    {"q": "Quando a exposição deixa de existir, o adicional:", "o": ["Continua para sempre", "Deixa de ser devido", "Dobra", "Vira insalubridade"], "c": 1, "com": "O adicional acompanha a condição de risco."}
+  ]
+}

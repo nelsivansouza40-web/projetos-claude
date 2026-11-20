@@ -1,0 +1,139 @@
+{
+  "nr": "08",
+  "titulo": "Edificações",
+  "chamada": "Pisos, escadas e passagens seguros evitam os acidentes mais comuns do dia a dia",
+  "icone": "FaBuilding",
+  "carga": "2 horas (aula informativa para lideranças, manutenção predial e equipes de SST)",
+  "periodicidade": "A NR-08 não exige treinamento. Recomenda-se revisar o tema em reformas, mudanças de layout e inspeções prediais.",
+  "publico": "Lideranças, equipes de manutenção predial e facilities, profissionais de SST e membros da CIPA.",
+  "prerequisitos": "Não há.",
+  "instrutor": "Profissional de segurança do trabalho com conhecimento de edificações e manutenção predial.",
+  "objetivos": [
+    "Conhecer os requisitos de segurança e conforto das edificações de trabalho",
+    "Identificar riscos em pisos, escadas, rampas, passagens e aberturas",
+    "Reconhecer as medidas de proteção contra quedas e intempéries",
+    "Aplicar um roteiro de inspeção predial com foco em segurança"
+  ],
+  "recursos": ["Projetor e apresentação", "Checklist de inspeção predial", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-08 Edificações, texto vigente", "NR-01 Disposições Gerais e Gerenciamento de Riscos Ocupacionais", "ABNT NBR 9050 Acessibilidade", "Normas técnicas e códigos de obras aplicáveis"],
+  "modulos": [
+    {
+      "titulo": "Requisitos gerais das edificações",
+      "duracao": 30,
+      "gancho": "Escorregões, tropeços e quedas no mesmo nível estão entre os acidentes mais frequentes nas empresas. Muitos deles têm origem na própria edificação.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "O que a NR-08 estabelece",
+          "cards": [
+            {"t": "Estrutura", "d": "Edificações com resistência e estabilidade para as cargas e o uso previstos"},
+            {"t": "Circulação", "d": "Pisos, passagens, escadas e rampas seguros"},
+            {"t": "Proteção contra quedas", "d": "Aberturas e desníveis protegidos"},
+            {"t": "Intempéries", "d": "Proteção contra chuva, insolação excessiva e umidade"}
+          ],
+          "fala": "A NR-08 estabelece requisitos técnicos mínimos para as edificações onde as pessoas trabalham, garantindo segurança e conforto. Ela trata da estrutura, que deve suportar as cargas e o uso previsto; da circulação, com pisos, passagens, escadas e rampas seguros; da proteção contra quedas em aberturas e desníveis; e da proteção contra chuva, insolação excessiva e umidade. Além da NR-08, valem os códigos de obras locais e as normas técnicas.",
+          "pergunta": "Quais acidentes ligados à edificação já aconteceram aqui?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Pisos e passagens",
+          "itens": [
+            "Pisos sem saliências, buracos ou depressões que causem tropeços",
+            "Material antiderrapante onde houver risco de escorregamento",
+            "Passagens livres, sinalizadas e com largura adequada ao fluxo",
+            "Desníveis sinalizados e corrigidos",
+            "Drenagem e limpeza em áreas molhadas"
+          ],
+          "destaque": "Um buraco no piso parece pequeno até alguém torcer o tornozelo carregando uma caixa.",
+          "fala": "Os pisos não podem ter saliências, buracos ou depressões que causem tropeços. Onde houver risco de escorregar, como áreas molhadas, com óleo ou rampas, o piso deve ser antiderrapante. As passagens devem ficar livres, sinalizadas e com largura adequada ao fluxo de pessoas e materiais. Desníveis precisam ser sinalizados e corrigidos. E áreas molhadas precisam de drenagem e rotina de limpeza.",
+          "dica": "Peça que a turma cite os pontos de tropeço e escorregão que conhece na empresa."
+        }
+      ]
+    },
+    {
+      "titulo": "Escadas, rampas e aberturas",
+      "duracao": 30,
+      "gancho": "Uma escada mal construída ou sem corrimão transforma um deslocamento simples em risco de queda com lesão grave.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Escadas e rampas",
+          "cards": [
+            {"t": "Degraus uniformes", "d": "Altura e profundidade constantes ao longo da escada"},
+            {"t": "Corrimão", "d": "Em ambos os lados quando exigido, firme e contínuo"},
+            {"t": "Piso antiderrapante", "d": "Nos degraus e nas rampas"},
+            {"t": "Iluminação", "d": "Suficiente em toda a extensão, inclusive nos patamares"}
+          ],
+          "fala": "Escadas e rampas são pontos críticos. Os degraus devem ter altura e profundidade uniformes, porque o pé se acostuma com o ritmo e um degrau diferente provoca a queda. O corrimão deve ser firme e contínuo. Degraus e rampas precisam de piso antiderrapante. E a iluminação deve ser suficiente em toda a extensão, inclusive nos patamares. As dimensões seguem as normas técnicas e os códigos de obras.",
+          "pergunta": "Há alguma escada na empresa com degrau irregular ou sem corrimão?"
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Aberturas e desníveis",
+          "texto": "Toda abertura em piso ou parede com risco de queda deve ser protegida.",
+          "itens": [
+            "Guarda-corpo em mezaninos, plataformas, passarelas e bordas",
+            "Fechamento resistente de aberturas no piso",
+            "Proteção em janelas e vãos com risco de queda",
+            "Sinalização de desníveis e de áreas de carga"
+          ],
+          "fala": "A NR-08 exige proteção em aberturas e desníveis com risco de queda. Mezaninos, plataformas, passarelas e bordas precisam de guarda-corpo. Aberturas no piso devem ter fechamento resistente. Janelas e vãos com risco de queda também devem ser protegidos. E os desníveis, como docas de carga, precisam de sinalização. Muitos mezaninos de estoque, construídos depois do prédio, não têm guarda-corpo adequado."
+        }
+      ]
+    },
+    {
+      "titulo": "Conforto e inspeção predial",
+      "duracao": 30,
+      "gancho": "A edificação envelhece. Telhados, pisos e guarda-corpos que estavam bons há dez anos podem estar comprometidos hoje.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Proteção contra intempéries",
+          "itens": [
+            "Coberturas sem goteiras e com escoamento das águas pluviais",
+            "Paredes e pisos protegidos contra umidade",
+            "Proteção contra insolação excessiva nos postos de trabalho",
+            "Ventilação e iluminação adequadas às atividades"
+          ],
+          "destaque": "Goteira sobre o piso de circulação é risco de queda, não só de conforto.",
+          "fala": "As edificações devem proteger contra chuva, umidade e insolação excessiva. Coberturas sem goteiras e com escoamento adequado da água. Paredes e pisos protegidos contra umidade. Postos de trabalho sem sol direto excessivo. E ventilação e iluminação adequadas. Uma goteira sobre a área de circulação, por exemplo, não é só desconforto: é risco de queda."
+        },
+        {
+          "tipo": "tabela",
+          "titulo": "Roteiro de inspeção predial",
+          "cabecalho": ["Item", "O que verificar"],
+          "linhas": [
+            ["Pisos", "Buracos, desníveis, piso solto, áreas escorregadias"],
+            ["Escadas e rampas", "Degraus, corrimãos, piso antiderrapante e iluminação"],
+            ["Bordas e aberturas", "Guarda-corpos firmes e aberturas fechadas"],
+            ["Coberturas", "Goteiras, telhas quebradas e acesso seguro para manutenção"],
+            ["Passagens", "Obstruções, largura e sinalização"]
+          ],
+          "fala": "Para manter a edificação segura, vale ter um roteiro de inspeção. Nos pisos, procurar buracos, desníveis e áreas escorregadias. Nas escadas e rampas, degraus, corrimãos, piso e iluminação. Nas bordas e aberturas, guarda-corpos firmes e aberturas fechadas. Nas coberturas, goteiras, telhas quebradas e acesso seguro para manutenção, que é trabalho em altura. E nas passagens, obstruções e sinalização.",
+          "dica": "Entregue o checklist e combine uma inspeção real em um setor após a aula."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "O mezanino do almoxarifado",
+    "relato": "Para ganhar espaço, uma empresa construiu um mezanino metálico no almoxarifado. A estrutura foi montada por um fornecedor sem projeto e sem guarda-corpo na borda frontal, por onde os materiais eram içados com uma talha. A escada de acesso tinha degraus de alturas diferentes e não tinha corrimão. Um auxiliar, ao recuar para puxar uma caixa na borda, caiu de cerca de 3 metros sobre o piso do almoxarifado.",
+    "perguntas": ["Quais requisitos da NR-08 foram descumpridos?", "Que outras normas se aplicam à situação?", "Como deveria ser feita a área de içamento de materiais?", "Que verificação deveria ter ocorrido antes do uso do mezanino?"],
+    "analise": "A borda frontal sem proteção e a escada sem corrimão e com degraus irregulares descumprem os requisitos de proteção contra quedas e de circulação segura. A estrutura sem projeto não garante resistência às cargas. A área de içamento exigia proteção coletiva com cancela ou portão de segurança e, na sua ausência, sistema de proteção contra quedas conforme a NR-35. Antes do uso, o mezanino deveria ter projeto, avaliação de riscos e liberação formal."
+  },
+  "dinamica": {"titulo": "Inspeção relâmpago", "objetivo": "Aplicar o roteiro de inspeção predial.", "tempo": 15, "passos": ["Divida a turma em grupos e designe uma área próxima da sala para cada um.", "Cada grupo tem 10 minutos para percorrer a área com o checklist.", "Os grupos apresentam os itens encontrados.", "Encaminhe os registros à manutenção e à CIPA."]},
+  "dds": {"titulo": "Tropeço também é acidente", "texto": "Pessoal, a maioria das quedas aqui não acontece de altura. Acontece no mesmo nível: piso molhado, buraco, cabo atravessado, degrau quebrado. Por isso, se você vir um piso escorregadio, uma tampa solta, um corrimão bambo ou uma goteira em cima da passagem, avise a manutenção. E enquanto não for corrigido, sinalize. Cuidar do lugar onde a gente trabalha também é prevenção."},
+  "prova": [
+    {"q": "A NR-08 trata de:", "o": ["Máquinas", "Requisitos de segurança e conforto das edificações de trabalho", "Exames médicos", "Equipamentos de proteção individual"], "c": 1, "com": "A NR-08 estabelece requisitos mínimos para edificações."},
+    {"q": "Pisos dos locais de trabalho não devem ter:", "o": ["Sinalização", "Saliências, buracos ou depressões que prejudiquem a circulação", "Revestimento", "Drenagem"], "c": 1, "com": "Irregularidades no piso causam tropeços e quedas."},
+    {"q": "Onde houver risco de escorregamento, o piso deve ser:", "o": ["Encerado", "Antiderrapante", "Pintado com tinta brilhante", "Coberto com papelão"], "c": 1, "com": "Material antiderrapante reduz escorregões."},
+    {"q": "Degraus de escada devem ter:", "o": ["Alturas variadas", "Altura e profundidade uniformes", "Bordas soltas", "Inclinação para frente"], "c": 1, "com": "A uniformidade evita que o pé erre o degrau."},
+    {"q": "Aberturas no piso com risco de queda devem:", "o": ["Ser sinalizadas apenas com fita", "Ter fechamento resistente ou proteção", "Ser cobertas com lona", "Ficar abertas para ventilação"], "c": 1, "com": "A proteção contra quedas é obrigatória."},
+    {"q": "Mezaninos e plataformas devem ter:", "o": ["Guarda-corpo nas bordas com risco de queda", "Apenas pintura amarela", "Escada de mão solta", "Nenhuma proteção"], "c": 0, "com": "Bordas com risco de queda exigem guarda-corpo."},
+    {"q": "Goteiras sobre áreas de circulação representam:", "o": ["Apenas desconforto", "Risco de queda por piso molhado", "Melhoria da ventilação", "Economia de água"], "c": 1, "com": "Piso molhado aumenta o risco de escorregão."},
+    {"q": "Além da NR-08, as edificações devem atender:", "o": ["Somente ao regulamento interno", "Aos códigos de obras locais e às normas técnicas", "Apenas à NR-12", "A nenhuma outra regra"], "c": 1, "com": "A NR-08 se soma à legislação de obras e às normas técnicas."},
+    {"q": "A manutenção de telhados é:", "o": ["Atividade sem risco", "Trabalho em altura que exige as medidas da NR-35", "Atividade administrativa", "Proibida"], "c": 1, "com": "Telhados envolvem risco de queda e exigem planejamento."},
+    {"q": "Passagens e corredores devem estar:", "o": ["Ocupados com estoque temporário", "Livres, sinalizados e com largura adequada", "Sem iluminação", "Fechados durante o expediente"], "c": 1, "com": "Passagens obstruídas causam acidentes e dificultam a evacuação."}
+  ]
+}

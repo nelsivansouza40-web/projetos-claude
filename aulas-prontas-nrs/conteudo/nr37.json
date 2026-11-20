@@ -1,0 +1,214 @@
+{
+  "nr": "37",
+  "titulo": "Segurança e Saúde em Plataformas de Petróleo",
+  "chamada": "Em uma plataforma, todos dependem de todos: cada permissão, cada alarme e cada procedimento conta",
+  "icone": "FaOilWell",
+  "carga": "8 horas (treinamento de SST para trabalhadores embarcados; não substitui os treinamentos obrigatórios previstos na NR-37 e nas normas da Autoridade Marítima)",
+  "periodicidade": "A NR-37 define capacitações obrigatórias para os trabalhadores embarcados, como os treinamentos de segurança, de emergência e de funções específicas, com periodicidade própria. Recomenda-se este conteúdo como complemento na integração e na reciclagem.",
+  "publico": "Trabalhadores próprios e terceirizados que atuam em plataformas de petróleo e suas lideranças.",
+  "prerequisitos": "Avaliação de saúde com aptidão para trabalho embarcado e treinamentos obrigatórios para embarque.",
+  "instrutor": "Profissional de segurança do trabalho com experiência offshore.",
+  "objetivos": [
+    "Conhecer a organização da SST a bordo da plataforma e o papel da CIPLAT",
+    "Reconhecer os riscos de processo, como gases inflamáveis e tóxicos",
+    "Aplicar o sistema de permissão de trabalho e as regras de trabalho a quente",
+    "Compreender as condições de habitabilidade e a gestão da fadiga",
+    "Agir em emergências, incluindo o abandono da plataforma"
+  ],
+  "recursos": ["Projetor e apresentação", "Tabela de postos de emergência e planta da plataforma", "Detector de gases portátil para demonstração", "Lista de presença e provas impressas"],
+  "aprovacao": "Nota mínima de 7,0 na avaliação teórica.",
+  "referencias": ["NR-37 Segurança e Saúde em Plataformas de Petróleo, texto vigente", "Normas da Autoridade Marítima", "Regulamentação da ANP sobre segurança operacional", "NR-20 Inflamáveis e Combustíveis e NR-33 Espaços Confinados"],
+  "modulos": [
+    {
+      "titulo": "SST na plataforma",
+      "duracao": 90,
+      "gancho": "Uma plataforma é uma instalação industrial de alto risco, isolada no mar, onde as pessoas trabalham e moram por semanas. A NR-37 organiza a segurança nesse ambiente.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Organização da segurança",
+          "cards": [
+            {"t": "Operadora", "d": "Responsável pela segurança da instalação e de todos a bordo"},
+            {"t": "Gerência da plataforma", "d": "Autoridade sobre as operações e as emergências"},
+            {"t": "CIPLAT", "d": "Comissão interna de prevenção de acidentes em plataformas"},
+            {"t": "Todos a bordo", "d": "Próprios e terceirizados seguem as mesmas regras"}
+          ],
+          "fala": "Na plataforma, a operadora é responsável pela segurança da instalação e de todas as pessoas a bordo, próprias e terceirizadas. A gerência da plataforma tem autoridade sobre as operações e as emergências. A CIPLAT, comissão interna de prevenção de acidentes em plataformas, atua na prevenção com a participação dos trabalhadores. E todos a bordo seguem as mesmas regras de segurança, independentemente da empresa.",
+          "pergunta": "Quem são os representantes da CIPLAT no seu turno?"
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Principais riscos",
+          "cards": [
+            {"t": "Processo", "d": "Vazamentos de óleo e gás, incêndio e explosão"},
+            {"t": "Gases tóxicos", "d": "Sulfeto de hidrogênio e outros gases do processo"},
+            {"t": "Atividades críticas", "d": "Trabalho a quente, altura, espaço confinado e içamento"},
+            {"t": "Ambiente", "d": "Mar, clima, isolamento, ruído e fadiga"}
+          ],
+          "fala": "Os principais riscos vêm do processo, com vazamentos de óleo e gás que podem causar incêndio e explosão; dos gases tóxicos, como o sulfeto de hidrogênio; das atividades críticas, como trabalho a quente, em altura, em espaço confinado e içamento de cargas; e do próprio ambiente, com o mar, o clima, o isolamento, o ruído e a fadiga dos turnos longos."
+        }
+      ]
+    },
+    {
+      "titulo": "Gases e áreas classificadas",
+      "duracao": 90,
+      "gancho": "Um pequeno vazamento de gás, uma fonte de ignição e pronto: o cenário de um acidente grave está montado. O controle começa pela detecção.",
+      "slides": [
+        {
+          "tipo": "lista",
+          "titulo": "Detecção de gases",
+          "itens": [
+            "Sistemas fixos de detecção de gases inflamáveis e tóxicos",
+            "Detectores portáteis em atividades com risco de exposição",
+            "Alarmes sonoros e visuais conhecidos por todos",
+            "Teste de resposta e calibração dos detectores portáteis",
+            "Ação imediata conforme o procedimento quando o alarme soar"
+          ],
+          "destaque": "Alarme de gás não se discute: siga o procedimento imediatamente.",
+          "fala": "A plataforma tem sistemas fixos de detecção de gases inflamáveis e tóxicos, com alarmes sonoros e visuais. Em atividades com risco de exposição, os trabalhadores também usam detectores portáteis, que passam por teste de resposta e calibração. Todos devem conhecer os alarmes e agir imediatamente conforme o procedimento quando eles soarem."
+        },
+        {
+          "tipo": "alerta",
+          "titulo": "Sulfeto de hidrogênio",
+          "texto": "O H2S paralisa o olfato em concentrações altas. Não confie no cheiro.",
+          "itens": [
+            "Gás tóxico, que pode estar presente no processo",
+            "Em baixas concentrações, cheiro de ovo podre; em altas, o olfato para de funcionar",
+            "Ao alarme, afastar-se para local seguro, contra o vento",
+            "Resgate somente com equipamento autônomo de respiração"
+          ],
+          "fala": "O sulfeto de hidrogênio, o H2S, é um gás tóxico que pode estar presente no processo. Em baixas concentrações tem cheiro de ovo podre, mas em concentrações altas paralisa o olfato, e a pessoa deixa de sentir o cheiro justamente quando o risco é maior. Ao alarme de H2S, afaste-se para local seguro, contra o vento. E o resgate de alguém exposto só pode ser feito com equipamento autônomo de respiração.",
+          "pergunta": "Onde ficam os pontos de reunião seguros em caso de alarme de gás?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Áreas classificadas",
+          "itens": [
+            "Áreas onde pode haver atmosfera explosiva, identificadas na planta",
+            "Somente equipamentos elétricos e eletrônicos certificados",
+            "Proibido portar celular comum, isqueiro ou outras fontes de ignição",
+            "Ferramentas e atividades controladas pela permissão de trabalho"
+          ],
+          "destaque": "Celular comum em área classificada é uma fonte de ignição.",
+          "fala": "As áreas onde pode haver atmosfera explosiva são classificadas e identificadas. Nelas, só entram equipamentos elétricos e eletrônicos certificados. É proibido portar celular comum, isqueiro ou outras fontes de ignição. E as ferramentas e atividades são controladas pela permissão de trabalho."
+        }
+      ]
+    },
+    {
+      "titulo": "Permissão de trabalho e atividades críticas",
+      "duracao": 90,
+      "gancho": "Na plataforma, quase nenhuma atividade de manutenção começa sem uma permissão de trabalho. É ela que garante que o risco foi avaliado e controlado.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Sistema de permissão de trabalho",
+          "passos": [
+            {"t": "Planejar", "d": "Análise de risco da atividade"},
+            {"t": "Isolar", "d": "Bloqueio de energias e isolamento de linhas"},
+            {"t": "Testar", "d": "Medição de gases e verificação das condições"},
+            {"t": "Liberar", "d": "Permissão emitida e assinada pelos responsáveis"},
+            {"t": "Encerrar", "d": "Verificação do local e devolução da permissão"}
+          ],
+          "fala": "O sistema de permissão de trabalho começa com a análise de risco da atividade. Depois, o isolamento: bloqueio de energias e isolamento de linhas de processo. Em seguida, os testes, como a medição de gases. A permissão é emitida e assinada pelos responsáveis. E, ao final, o local é verificado e a permissão é encerrada. Mudou alguma condição, a permissão é suspensa.",
+          "dica": "Mostre o modelo de permissão de trabalho usado na plataforma."
+        },
+        {
+          "tipo": "cards",
+          "titulo": "Atividades críticas",
+          "cards": [
+            {"t": "Trabalho a quente", "d": "Permissão específica, medição contínua de gases e observador"},
+            {"t": "Espaços confinados", "d": "Permissão de entrada, monitoramento, vigia e resgate"},
+            {"t": "Trabalho em altura e sobre o mar", "d": "Proteção contra quedas e colete salva-vidas"},
+            {"t": "Movimentação de cargas", "d": "Guindastes com operador e sinaleiro, área isolada"}
+          ],
+          "fala": "Algumas atividades exigem cuidados adicionais. O trabalho a quente tem permissão específica, medição contínua de gases e observador. Os espaços confinados seguem a NR-33, com permissão de entrada, monitoramento, vigia e resgate. O trabalho em altura, especialmente sobre o mar, exige proteção contra quedas e colete salva-vidas. E a movimentação de cargas com guindastes conta com operador e sinaleiro capacitados, com a área isolada."
+        }
+      ]
+    },
+    {
+      "titulo": "Habitabilidade e fadiga",
+      "duracao": 90,
+      "gancho": "Na plataforma, trabalho e descanso acontecem no mesmo lugar por semanas seguidas. O descanso de qualidade é parte da segurança operacional.",
+      "slides": [
+        {
+          "tipo": "cards",
+          "titulo": "Habitabilidade",
+          "cards": [
+            {"t": "Alojamentos", "d": "Camarotes com conforto térmico e acústico e condições de descanso"},
+            {"t": "Alimentação", "d": "Refeições adequadas e água potável"},
+            {"t": "Higiene", "d": "Instalações sanitárias e lavanderia adequadas"},
+            {"t": "Bem-estar", "d": "Áreas de lazer e comunicação com a família"}
+          ],
+          "fala": "A NR-37 trata das condições de habitabilidade. Os camarotes devem ter conforto térmico e acústico para garantir o descanso. A alimentação e a água potável devem ser adequadas. As instalações sanitárias e a lavanderia, também. E as áreas de lazer e os meios de comunicação com a família ajudam no bem-estar de quem passa longos períodos embarcado."
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Gestão da fadiga",
+          "itens": [
+            "Respeitar os limites de jornada e de descanso",
+            "Atenção na troca de turno e na passagem de serviço",
+            "Reconhecer sinais de fadiga em si e nos colegas",
+            "Comunicar quando não estiver em condições de executar uma tarefa crítica",
+            "Buscar apoio em situações de estresse ou problemas pessoais"
+          ],
+          "destaque": "A passagem de serviço bem feita evita que uma informação crítica se perca na troca de turno.",
+          "fala": "A fadiga é um fator de risco importante. Os limites de jornada e de descanso devem ser respeitados. A passagem de serviço na troca de turno deve ser completa, porque muitos acidentes de processo acontecem por informação perdida nessa troca. Reconheça sinais de fadiga em você e nos colegas, comunique quando não estiver em condições de executar uma tarefa crítica e busque apoio em situações de estresse.",
+          "pergunta": "Como é feita a passagem de serviço no seu posto?"
+        }
+      ]
+    },
+    {
+      "titulo": "Emergência e abandono",
+      "duracao": 90,
+      "gancho": "Em uma emergência na plataforma, não há para onde correr além dos pontos de reunião e dos meios de abandono. Cada pessoa precisa saber exatamente o que fazer.",
+      "slides": [
+        {
+          "tipo": "passos",
+          "titulo": "Ao soar o alarme",
+          "passos": [
+            {"t": "Interromper", "d": "Parar a atividade e deixar o local seguro"},
+            {"t": "Identificar", "d": "Reconhecer o tipo de alarme"},
+            {"t": "Deslocar", "d": "Ir ao ponto de reunião pela rota definida"},
+            {"t": "Apresentar-se", "d": "Participar da contagem"},
+            {"t": "Aguardar", "d": "Seguir as instruções da liderança da emergência"}
+          ],
+          "fala": "Ao soar o alarme, interrompa a atividade e deixe o local em condição segura, se for possível sem se expor. Reconheça o tipo de alarme. Desloque-se ao seu ponto de reunião pela rota definida, considerando a direção do vento em caso de gás. Apresente-se para a contagem. E aguarde as instruções da liderança da emergência. Cada pessoa a bordo tem um ponto de reunião e uma baleeira definidos.",
+          "pergunta": "Qual é o seu ponto de reunião e a sua baleeira?"
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Abandono",
+          "itens": [
+            "Abandono somente por ordem da liderança da emergência",
+            "Colete salva-vidas vestido corretamente",
+            "Embarque ordenado nas baleeiras, conforme a contagem",
+            "Equipamentos de salvatagem inspecionados e exercícios periódicos",
+            "Pular no mar somente como último recurso, conforme o treinamento"
+          ],
+          "destaque": "Os exercícios de abandono são a única forma de garantir que todos saibam o que fazer.",
+          "fala": "O abandono da plataforma acontece somente por ordem da liderança da emergência. O colete salva-vidas é vestido corretamente e o embarque nas baleeiras é ordenado, conforme a contagem. Os equipamentos de salvatagem são inspecionados e os exercícios de abandono são periódicos. Pular no mar é o último recurso, seguindo o que foi treinado. Participar dos exercícios com seriedade é a melhor preparação."
+        }
+      ]
+    }
+  ],
+  "caso": {
+    "titulo": "A permissão da troca de turno",
+    "relato": "Em uma plataforma, a equipe do turno da noite iniciou a manutenção de uma bomba de processo e a deixou desmontada, com uma flange aberta, ao fim do turno. A passagem de serviço foi feita verbalmente e de forma rápida, e a informação sobre a flange aberta não foi registrada. A equipe do turno seguinte, ao ver a permissão encerrada no sistema, iniciou o alinhamento da linha. Houve liberação de gás na área, que acionou o alarme. A área foi evacuada e não houve ignição.",
+    "perguntas": ["Que falha ocorreu na passagem de serviço?", "Por que a permissão encerrada indicava uma condição falsa?", "Que barreiras evitaram uma consequência maior?", "Que medidas devem ser adotadas?"],
+    "analise": "A passagem de serviço não registrou a condição da flange aberta, e a permissão foi encerrada sem verificação do local, contrariando o sistema de permissão de trabalho. A equipe seguinte confiou em uma informação incompleta. A detecção de gás, o alarme e a evacuação funcionaram como barreiras e evitaram a ignição. As medidas incluem passagem de serviço formal e registrada, verificação física antes do encerramento da permissão, bloqueios e etiquetas que indiquem equipamentos abertos e investigação do quase acidente com as equipes."
+  },
+  "dinamica": {"titulo": "Passagem de serviço", "objetivo": "Treinar a passagem de serviço completa.", "tempo": 20, "passos": ["Entregue a duplas um cenário de fim de turno com atividades em andamento, equipamentos isolados e pendências.", "Um participante faz a passagem de serviço e o outro registra.", "Compare os registros com o cenário e identifique informações perdidas.", "Discuta um roteiro padrão de passagem de serviço."]},
+  "dds": {"titulo": "Alarme não se discute", "texto": "Pessoal, aqui na plataforma o alarme de gás ou de emergência não se discute nem se questiona. Tocou, para tudo, deixa o local seguro e vai para o ponto de reunião, olhando a direção do vento. Celular comum fica fora das áreas classificadas. E na troca de turno, passagem de serviço completa: o que ficou aberto, isolado ou pendente tem que estar registrado. A segurança de todos a bordo depende disso."},
+  "prova": [
+    {"q": "A comissão de prevenção de acidentes em plataformas é a:", "o": ["CIPAMIN", "CIPLAT", "CPATP", "GSSTB"], "c": 1, "com": "A NR-37 prevê a CIPLAT."},
+    {"q": "O sulfeto de hidrogênio em concentrações altas:", "o": ["Tem cheiro cada vez mais forte", "Pode paralisar o olfato", "É inofensivo", "É visível"], "c": 1, "com": "Não sentir o cheiro não significa segurança."},
+    {"q": "Em áreas classificadas, é proibido:", "o": ["Usar equipamentos certificados", "Portar celular comum e isqueiro", "Usar EPI", "Seguir a permissão de trabalho"], "c": 1, "com": "São fontes de ignição."},
+    {"q": "O sistema de permissão de trabalho inclui:", "o": ["Apenas a assinatura do executante", "Análise de risco, isolamento, testes, liberação e encerramento", "Somente o horário", "Nenhuma verificação"], "c": 1, "com": "São as etapas do sistema."},
+    {"q": "O trabalho a quente na plataforma exige:", "o": ["Apenas experiência", "Permissão específica, medição contínua de gases e observador", "Somente óculos", "Nada além de autorização verbal"], "c": 1, "com": "A atmosfera pode conter gases inflamáveis."},
+    {"q": "Ao soar o alarme de emergência, o trabalhador deve:", "o": ["Terminar a tarefa", "Interromper, deslocar-se ao ponto de reunião e participar da contagem", "Ir para o camarote", "Ligar para casa"], "c": 1, "com": "A contagem garante que ninguém ficou para trás."},
+    {"q": "O abandono da plataforma acontece:", "o": ["Por decisão individual", "Por ordem da liderança da emergência", "A qualquer alarme", "Somente à noite"], "c": 1, "com": "O abandono é coordenado."},
+    {"q": "Uma passagem de serviço incompleta pode causar:", "o": ["Nada", "Perda de informação crítica e acidentes de processo", "Mais segurança", "Redução da fadiga"], "c": 1, "com": "Muitos acidentes ocorrem na troca de turno."},
+    {"q": "O resgate de uma pessoa exposta a H2S deve ser feito:", "o": ["Por qualquer colega", "Somente com equipamento autônomo de respiração", "Prendendo a respiração", "Com máscara de pó"], "c": 1, "com": "Sem proteção, o socorrista também é atingido."},
+    {"q": "No trabalho sobre o mar, além da proteção contra quedas, usa-se:", "o": ["Chinelo", "Colete salva-vidas", "Fone de ouvido", "Nenhum equipamento"], "c": 1, "com": "Protege em caso de queda na água."}
+  ]
+}
